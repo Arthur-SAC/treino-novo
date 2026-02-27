@@ -36,7 +36,13 @@ const App = {
     // Header greeting
     const headerGreeting = document.getElementById('header-greeting');
     if (headerGreeting) {
-      headerGreeting.innerHTML = `<h1 style="font-size:1.1rem;">${Utils.getGreeting()}, Arthur!</h1>`;
+      headerGreeting.innerHTML = '<h1 style="font-size:1.1rem; font-family: Playfair Display, serif;">' + Utils.getGreeting() + ', Arthur!</h1>';
+    }
+
+    // Header actions: settings gear
+    const headerActions = document.getElementById('header-actions');
+    if (headerActions) {
+      headerActions.innerHTML = '<button class="btn-icon" id="settings-btn" style="font-size:1.3rem; background:none; border:none; cursor:pointer;" title="Configuracoes">&#9881;</button>';
     }
 
     // Initialize feature modules
@@ -48,32 +54,39 @@ const App = {
     NutritionManager.init();
     CareManager.init();         // Task 9
     ProgressManager.init();     // Task 10
+    SettingsManager.init();     // Task 12/13
 
-    Toast.show('Bem-vinda de volta! \u2728', 'success');
+    // Start notification scheduler if already permitted
+    if ('Notification' in window && Notification.permission === 'granted') {
+      SettingsManager.scheduleNotifications();
+    }
+
+    Toast.show('Bem-vinda de volta!', 'success');
   },
 
   /**
    * Update the header to reflect auth state.
-   * Shows avatar + sync indicator when logged in,
-   * or a login button when Firebase is configured but user is not logged in.
+   * Shows avatar + sync indicator alongside settings gear when logged in.
+   * Always keeps the settings gear visible.
    */
   updateAuthUI(user) {
     var headerActions = document.getElementById('header-actions');
     if (!headerActions) return;
 
+    var html = '';
+
     if (user) {
-      headerActions.innerHTML =
+      html +=
         '<div class="auth-status">' +
           '<img src="' + (user.photoURL || '') + '" alt="" class="auth-avatar" onerror="this.style.display=\'none\'">' +
-          '<span class="sync-indicator" title="Sincronizado">\u2601\uFE0F</span>' +
+          '<span class="sync-indicator" title="Sincronizado">&#9729;</span>' +
         '</div>';
-    } else if (FirebaseManager.isConfigured()) {
-      headerActions.innerHTML =
-        '<button class="btn btn-sm btn-outline" onclick="FirebaseManager.loginWithGoogle()">' +
-          'Entrar' +
-        '</button>';
     }
-    // If Firebase is not configured, show nothing (offline mode)
+
+    // Always show settings gear
+    html += '<button class="btn-icon" id="settings-btn" style="font-size:1.3rem; background:none; border:none; cursor:pointer;" title="Configuracoes">&#9881;</button>';
+
+    headerActions.innerHTML = html;
   }
 };
 
@@ -123,16 +136,24 @@ const Router = {
 
   /**
    * Show a specific page and update nav active state.
+   * Applies a subtle fade-in animation on page switch.
    */
   showPage(page) {
     App.currentPage = page;
 
-    // Hide all pages, then show the target
+    // Hide all pages, then show the target with fade animation
     document.querySelectorAll('.page').forEach(function(p) {
       p.classList.remove('active');
+      p.style.animation = '';
     });
     var target = document.getElementById('page-' + page);
-    if (target) target.classList.add('active');
+    if (target) {
+      target.classList.add('active');
+      target.style.animation = 'none';
+      // Force reflow to restart animation
+      void target.offsetHeight;
+      target.style.animation = 'fadeIn 0.3s ease';
+    }
 
     // Update bottom nav active state
     document.querySelectorAll('.nav-item').forEach(function(item) {
@@ -3580,6 +3601,244 @@ const ProgressManager = {
         }
       });
     });
+  }
+};
+
+// =============================================
+// SETTINGS MANAGER — Settings overlay / config panel
+// =============================================
+// Provides settings gear icon, Firebase login/logout,
+// backup export/import, phase selection, notifications,
+// and app info.
+
+const SettingsManager = {
+  init() {
+    document.addEventListener('click', function(e) {
+      if (e.target.id === 'settings-btn' || e.target.closest('#settings-btn')) {
+        SettingsManager.open();
+      }
+    });
+  },
+
+  open() {
+    // Remove existing overlay if present
+    this.close();
+
+    var overlay = document.createElement('div');
+    overlay.id = 'settings-overlay';
+
+    // Build Firebase status section
+    var firebaseHTML = '';
+    if (FirebaseManager.isConfigured()) {
+      if (FirebaseManager.user) {
+        var displayName = FirebaseManager.user.displayName || FirebaseManager.user.email || 'Usuario';
+        firebaseHTML =
+          '<p style="color: var(--success);">Conectado como ' + displayName + '</p>' +
+          '<button class="btn btn-sm btn-outline" id="settings-logout">Sair</button>';
+      } else {
+        firebaseHTML =
+          '<p style="opacity:0.8;">Nao conectado</p>' +
+          '<button class="btn btn-sm btn-primary" id="settings-login">Entrar com Google</button>';
+      }
+    } else {
+      firebaseHTML =
+        '<p style="opacity:0.7;">Firebase nao configurado. O app funciona offline.</p>' +
+        '<p style="font-size:0.8rem; opacity:0.5;">Para ativar sync, configure o Firebase em firebase-config.js</p>';
+    }
+
+    // Build phase selector options
+    var currentPhase = StorageManager.getValue('currentPhase', 1);
+    var phaseOptions = '';
+    var phases = [
+      { value: 1, label: 'Fase 1 -- Fundacao' },
+      { value: 2, label: 'Fase 2 -- Construcao' },
+      { value: 3, label: 'Fase 3 -- Definicao' },
+      { value: 4, label: 'Fase 4 -- Avancado' }
+    ];
+    phases.forEach(function(p) {
+      phaseOptions += '<option value="' + p.value + '"' + (currentPhase == p.value ? ' selected' : '') + '>' + p.label + '</option>';
+    });
+
+    // Build notification button text
+    var notifText = 'Ativar notificacoes';
+    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+      notifText = 'Ativadas';
+    }
+
+    overlay.innerHTML =
+      '<div class="settings-panel glass">' +
+        '<button class="modal-close" id="settings-close">&times;</button>' +
+        '<h2>Configuracoes</h2>' +
+
+        // Firebase Status
+        '<div class="card">' +
+          '<h3>Sincronizacao</h3>' +
+          firebaseHTML +
+        '</div>' +
+
+        // Backup
+        '<div class="card">' +
+          '<h3>Backup</h3>' +
+          '<div style="display:flex; gap:0.5rem; flex-wrap:wrap;">' +
+            '<button class="btn btn-sm btn-primary" id="settings-export">Exportar</button>' +
+            '<label class="btn btn-sm btn-outline" style="cursor:pointer;">' +
+              'Importar' +
+              '<input type="file" accept=".json" style="display:none;" id="settings-import-input">' +
+            '</label>' +
+          '</div>' +
+        '</div>' +
+
+        // Phase Selection
+        '<div class="card">' +
+          '<h3>Fase do Treino</h3>' +
+          '<select id="settings-phase">' +
+            phaseOptions +
+          '</select>' +
+        '</div>' +
+
+        // Notifications
+        '<div class="card">' +
+          '<h3>Notificacoes</h3>' +
+          '<button class="btn btn-sm btn-outline" id="settings-notifications">' +
+            notifText +
+          '</button>' +
+        '</div>' +
+
+        // App Info
+        '<div style="text-align:center; opacity:0.5; font-size:0.8rem; margin-top:1rem;">' +
+          '<p>Arthur -- Transformacao Corporal v1.0</p>' +
+          '<p>Feito com Claude Code</p>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+
+    // Close on overlay background click
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) SettingsManager.close();
+    });
+
+    // Close button
+    document.getElementById('settings-close').addEventListener('click', function() {
+      SettingsManager.close();
+    });
+
+    // Close on Escape key
+    var escHandler = function(e) {
+      if (e.key === 'Escape') {
+        SettingsManager.close();
+        document.removeEventListener('keydown', escHandler);
+      }
+    };
+    document.addEventListener('keydown', escHandler);
+
+    // Export button
+    document.getElementById('settings-export').addEventListener('click', function() {
+      StorageManager.exportData();
+    });
+
+    // Import file input
+    var importInput = document.getElementById('settings-import-input');
+    if (importInput) {
+      importInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          StorageManager.importData(this.files[0]);
+        }
+      });
+    }
+
+    // Phase change handler
+    document.getElementById('settings-phase').addEventListener('change', function() {
+      var newPhase = parseInt(this.value);
+      StorageManager.setValue('currentPhase', newPhase);
+      // Also update WorkoutManager if it exists
+      if (typeof WorkoutManager !== 'undefined') {
+        WorkoutManager.currentPhase = newPhase;
+      }
+      Toast.show('Fase atualizada!', 'success');
+    });
+
+    // Firebase login/logout buttons
+    var loginBtn = document.getElementById('settings-login');
+    if (loginBtn) {
+      loginBtn.addEventListener('click', function() {
+        FirebaseManager.loginWithGoogle().then(function() {
+          SettingsManager.open(); // Refresh panel
+        }).catch(function() {
+          Toast.show('Erro ao conectar', 'error');
+        });
+      });
+    }
+
+    var logoutBtn = document.getElementById('settings-logout');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function() {
+        FirebaseManager.logout().then(function() {
+          SettingsManager.open(); // Refresh panel
+        }).catch(function() {
+          Toast.show('Erro ao desconectar', 'error');
+        });
+      });
+    }
+
+    // Notification handler
+    var notifBtn = document.getElementById('settings-notifications');
+    if (notifBtn) {
+      notifBtn.addEventListener('click', function() {
+        if ('Notification' in window) {
+          Notification.requestPermission().then(function(perm) {
+            if (perm === 'granted') {
+              Toast.show('Notificacoes ativadas!', 'success');
+              SettingsManager.scheduleNotifications();
+              SettingsManager.open(); // Refresh panel
+            } else {
+              Toast.show('Permissao negada pelo navegador', 'info');
+            }
+          });
+        } else {
+          Toast.show('Notificacoes nao suportadas neste navegador', 'info');
+        }
+      });
+    }
+  },
+
+  close() {
+    var overlay = document.getElementById('settings-overlay');
+    if (overlay) overlay.remove();
+  },
+
+  scheduleNotifications() {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+    // Avoid setting multiple intervals
+    if (this._notifInterval) return;
+
+    this._notifInterval = setInterval(function() {
+      var now = new Date();
+      var h = now.getHours();
+      var m = now.getMinutes();
+      var key = 'notif_' + h + '_' + m;
+
+      // Only show once per time slot per day
+      var shown = StorageManager.getForDate('notifications') || {};
+      if (shown[key]) return;
+
+      var message = null;
+      if (h === 6 && m === 15) message = 'Bom dia, Arthur! Skincare + protetor solar';
+      else if (h === 17 && m === 30) message = 'Bora treinar? Nao esquece a garrafinha de agua';
+      else if (h === 19 && m === 30) message = 'Skincare da noite + Kegel!';
+      else if (h === 22 && m === 15) message = 'Hora de descansar. Sono = recuperacao muscular';
+
+      if (message) {
+        try {
+          new Notification('Arthur', { body: message });
+        } catch (e) {
+          // Notification constructor may fail in some contexts
+        }
+        shown[key] = true;
+        StorageManager.setForDate('notifications', shown);
+      }
+    }, 60000); // Check every minute
   }
 };
 
