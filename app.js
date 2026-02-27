@@ -44,7 +44,7 @@ const App = {
     TimerEngine.init();
     BadgeManager.init();
     Dashboard.init();
-    // WorkoutManager.init();   // Task 7
+    WorkoutManager.init();
     // NutritionManager.init(); // Task 8
     // CareManager.init();      // Task 9
     // ProgressManager.init();  // Task 10
@@ -840,7 +840,7 @@ const Dashboard = {
 
     // Get today's workout
     const currentPhase = StorageManager.getValue('currentPhase', 1);
-    const phaseKey = 'phase' + currentPhase;
+    const phaseKey = 'fase' + currentPhase;
     const todayWorkout = WORKOUTS[phaseKey] ? WORKOUTS[phaseKey].days[dayName] : null;
 
     // Get today's meals
@@ -1060,6 +1060,791 @@ const Dashboard = {
     // Check for streak badges
     if (streak >= 7) BadgeManager.unlock('streak-7');
     if (streak >= 30) BadgeManager.unlock('streak-30');
+  }
+};
+
+// =============================================
+// WORKOUT MANAGER — Training tab (Treino)
+// =============================================
+// Renders phase selector, day selector, warmup, exercises with
+// series checkboxes, weight tracking, auto-rest timers,
+// special exercise types (vacuum, cardio, plank), and cooldown.
+
+const WorkoutManager = {
+  currentPhase: 1,
+  selectedDay: null,
+  workoutData: null,
+
+  // ── Lifecycle ──────────────────────────────────────────────
+
+  init() {
+    this.currentPhase = StorageManager.getValue('currentPhase', 1);
+    if (!this.currentPhase || this.currentPhase < 1 || this.currentPhase > 4) {
+      this.currentPhase = 1;
+    }
+    this.selectedDay = Utils.getDayOfWeek();
+
+    document.addEventListener('pageChange', (e) => {
+      if (e.detail.page === 'treino') this.render();
+    });
+  },
+
+  // ── Helpers ────────────────────────────────────────────────
+
+  getPhaseKey() {
+    return 'fase' + this.currentPhase;
+  },
+
+  getPhaseData() {
+    return WORKOUTS[this.getPhaseKey()] || WORKOUTS.fase1;
+  },
+
+  getDayData() {
+    const phase = this.getPhaseData();
+    const dayName = Utils.getDayName(this.selectedDay);
+    return phase.days[dayName] || null;
+  },
+
+  getWorkoutData() {
+    return StorageManager.getForDate('workout') || { series: {}, weights: {} };
+  },
+
+  saveWorkoutData(data) {
+    StorageManager.setForDate('workout', data);
+  },
+
+  getNextExerciseName(exercises, currentIndex) {
+    if (currentIndex + 1 < exercises.length) {
+      return exercises[currentIndex + 1].name;
+    }
+    return 'Cooldown';
+  },
+
+  /**
+   * Detect special exercise types by name/properties.
+   * Returns 'vacuum', 'cardio', 'plank', or 'normal'.
+   */
+  getExerciseType(exercise) {
+    var name = exercise.name.toLowerCase();
+    if (name.indexOf('vacuum') !== -1) return 'vacuum';
+    if (name.indexOf('cardio') !== -1 || (exercise.sets === 1 && typeof exercise.reps === 'string' && exercise.reps.indexOf('min') !== -1)) return 'cardio';
+    if (name.indexOf('prancha') !== -1 && typeof exercise.reps === 'string' && exercise.reps.indexOf('seg') !== -1) return 'plank';
+    return 'normal';
+  },
+
+  /**
+   * Parse reps string for vacuum/plank to get seconds.
+   * E.g. "20-30seg" -> 25 (midpoint), "30seg" -> 30
+   */
+  parseHoldSeconds(repsStr) {
+    if (!repsStr) return 20;
+    var rangeMatch = repsStr.match(/(\d+)-(\d+)/);
+    if (rangeMatch) return Math.round((parseInt(rangeMatch[1]) + parseInt(rangeMatch[2])) / 2);
+    var singleMatch = repsStr.match(/(\d+)/);
+    if (singleMatch) return parseInt(singleMatch[1]);
+    return 20;
+  },
+
+  /**
+   * Parse cardio duration string to seconds.
+   * E.g. "20min" -> 1200, "30-40min" -> 2100 (midpoint)
+   */
+  parseCardioSeconds(repsStr) {
+    if (!repsStr) return 1200;
+    var rangeMatch = repsStr.match(/(\d+)-(\d+)\s*min/);
+    if (rangeMatch) return Math.round((parseInt(rangeMatch[1]) + parseInt(rangeMatch[2])) / 2) * 60;
+    var singleMatch = repsStr.match(/(\d+)\s*min/);
+    if (singleMatch) return parseInt(singleMatch[1]) * 60;
+    return 1200;
+  },
+
+  // ── Render: Main ───────────────────────────────────────────
+
+  render() {
+    var container = document.getElementById('treino-content');
+    if (!container) return;
+
+    var html = '';
+    html += this.renderPhaseSelector();
+    html += this.renderDaySelector();
+
+    var dayData = this.getDayData();
+
+    if (!dayData || dayData.restDay) {
+      html += this.renderRestDay(dayData);
+    } else {
+      html += this.renderWorkoutProgress(dayData);
+      html += this.renderWarmup();
+      html += this.renderExercises(dayData.exercises || []);
+      html += this.renderCooldown();
+    }
+
+    container.innerHTML = html;
+    this.attachListeners();
+  },
+
+  // ── Render: Phase Selector ─────────────────────────────────
+
+  renderPhaseSelector() {
+    var html = '<div class="card glass phase-selector-card">';
+    html += '<div class="phase-tabs">';
+
+    for (var i = 1; i <= 4; i++) {
+      var faseKey = 'fase' + i;
+      var fase = WORKOUTS[faseKey];
+      var activeClass = (i === this.currentPhase) ? ' active' : '';
+      html += '<button class="phase-tab' + activeClass + '" data-phase="' + i + '">';
+      html += '<span class="phase-num">Fase ' + i + '</span>';
+      html += '</button>';
+    }
+
+    html += '</div>';
+
+    // Phase description
+    var phase = this.getPhaseData();
+    html += '<div class="phase-description">';
+    html += '<strong>' + this.escapeHtml(phase.name) + '</strong>';
+    html += '<p style="opacity:0.7; font-size:0.85rem; margin:0.3rem 0 0;">' + this.escapeHtml(phase.weeks) + ' — ' + this.escapeHtml(phase.objective) + '</p>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+  },
+
+  // ── Render: Day Selector ───────────────────────────────────
+
+  renderDaySelector() {
+    var dayLabels = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+    var today = Utils.getDayOfWeek();
+    var html = '<div class="day-selector">';
+
+    for (var i = 0; i < 7; i++) {
+      var activeClass = (i === this.selectedDay) ? ' active' : '';
+      var todayClass = (i === today) ? ' today' : '';
+      html += '<button class="day-tab' + activeClass + todayClass + '" data-day="' + i + '">' + dayLabels[i] + '</button>';
+    }
+
+    html += '</div>';
+
+    // Day title
+    var dayData = this.getDayData();
+    if (dayData && !dayData.restDay) {
+      html += '<div style="text-align:center; padding: 0.5rem 0;">';
+      html += '<strong style="color: var(--primary);">' + this.escapeHtml(dayData.name) + '</strong>';
+      html += '</div>';
+    }
+
+    return html;
+  },
+
+  // ── Render: Workout Progress ───────────────────────────────
+
+  renderWorkoutProgress(dayData) {
+    var exercises = dayData.exercises || [];
+    if (exercises.length === 0) return '';
+
+    var wData = this.getWorkoutData();
+    var totalSeries = 0;
+    var completedSeries = 0;
+
+    exercises.forEach(function(ex) {
+      var type = WorkoutManager.getExerciseType(ex);
+      if (type === 'cardio') {
+        totalSeries += 1;
+        if (wData.series[ex.id] && wData.series[ex.id]['done']) completedSeries++;
+      } else {
+        totalSeries += (ex.sets || 1);
+        for (var s = 1; s <= (ex.sets || 1); s++) {
+          if (wData.series[ex.id] && wData.series[ex.id][s]) completedSeries++;
+        }
+      }
+    });
+
+    var pct = totalSeries > 0 ? Math.round((completedSeries / totalSeries) * 100) : 0;
+
+    var html = '<div class="card glass workout-overall-progress">';
+    html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">';
+    html += '<strong>Progresso do Treino</strong>';
+    html += '<span>' + completedSeries + '/' + totalSeries + ' series (' + pct + '%)</span>';
+    html += '</div>';
+    html += '<div class="progress-bar-container">';
+    html += '<div class="progress-bar" style="width:' + pct + '%"></div>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+  },
+
+  // ── Render: Rest Day ───────────────────────────────────────
+
+  renderRestDay(dayData) {
+    var msg = (dayData && dayData.restMessage) ? dayData.restMessage : 'Dia de descanso. Foque em skincare, hidratacao e autocuidado!';
+    var html = '<div class="card glass" style="text-align:center; padding:2rem 1.5rem;">';
+    html += '<div style="font-size:3rem; margin-bottom:1rem;">&#128524;</div>';
+    html += '<h3>Dia de Descanso</h3>';
+    html += '<p style="opacity:0.8; margin-top:0.5rem;">' + this.escapeHtml(msg) + '</p>';
+    html += '</div>';
+
+    // Still show cooldown/stretching on rest days
+    html += this.renderCooldown();
+    return html;
+  },
+
+  // ── Render: Warmup ─────────────────────────────────────────
+
+  renderWarmup() {
+    var html = '<div class="card glass warmup-card">';
+    html += '<div class="collapsible-header" data-target="warmup-content">';
+    html += '<h3 style="margin:0;">' + this.escapeHtml(WARMUP.name) + ' (' + WARMUP.duration + ') — OBRIGATORIO</h3>';
+    html += '<span class="expand-icon">&#9660;</span>';
+    html += '</div>';
+    html += '<div id="warmup-content" class="collapsible-body hidden">';
+
+    WARMUP.sections.forEach(function(section) {
+      html += '<div class="warmup-section">';
+      html += '<h4 style="color: var(--primary); margin:0.75rem 0 0.5rem;">';
+      html += WorkoutManager.escapeHtml(section.name);
+      if (section.duration) html += ' <small style="opacity:0.6;">(' + section.duration + ')</small>';
+      if (section.required) html += ' <span style="color: var(--accent);">*</span>';
+      html += '</h4>';
+
+      section.exercises.forEach(function(ex) {
+        html += '<div class="warmup-exercise">';
+        html += '<span class="warmup-name">' + WorkoutManager.escapeHtml(ex.name) + '</span>';
+        if (ex.reps) html += '<span class="warmup-meta"> — ' + WorkoutManager.escapeHtml(ex.reps) + '</span>';
+        if (ex.duration) html += '<span class="warmup-meta"> — ' + WorkoutManager.escapeHtml(ex.duration) + '</span>';
+        if (ex.tip) html += '<div class="warmup-tip" style="font-size:0.8rem; opacity:0.7; margin-left:0.5rem;">&#128161; ' + WorkoutManager.escapeHtml(ex.tip) + '</div>';
+        if (ex.videoKey) {
+          html += ' <button class="btn-icon video-btn" data-video-key="' + ex.videoKey + '" data-video-source="exercise">&#127916;</button>';
+        }
+        html += '</div>';
+      });
+
+      html += '</div>';
+    });
+
+    html += '</div></div>';
+    return html;
+  },
+
+  // ── Render: Exercise List ──────────────────────────────────
+
+  renderExercises(exercises) {
+    if (!exercises || exercises.length === 0) return '';
+    var html = '';
+    for (var i = 0; i < exercises.length; i++) {
+      html += this.renderExerciseCard(exercises[i], i, exercises);
+    }
+    return html;
+  },
+
+  renderExerciseCard(exercise, index, allExercises) {
+    var type = this.getExerciseType(exercise);
+    var wData = this.getWorkoutData();
+    var exData = wData.series[exercise.id] || {};
+    var exWeights = wData.weights || {};
+    var restSeconds = Utils.parseRest(exercise.rest);
+
+    var cardClass = 'exercise-card card glass';
+    if (type === 'vacuum') cardClass += ' exercise-vacuum';
+
+    var html = '<div class="' + cardClass + '" data-exercise-id="' + exercise.id + '">';
+
+    // Header
+    html += '<div class="exercise-header" data-toggle="details-' + exercise.id + '">';
+    html += '<span class="exercise-num">#' + (index + 1) + '</span>';
+    html += '<div class="exercise-info">';
+    html += '<strong>' + this.escapeHtml(exercise.name) + '</strong>';
+
+    // Meta line
+    if (type === 'cardio') {
+      html += '<span class="exercise-meta">' + this.escapeHtml(exercise.reps) + ' | Sem descanso</span>';
+    } else if (type === 'vacuum') {
+      html += '<span class="exercise-meta">' + exercise.sets + 'x ' + this.escapeHtml(exercise.reps) + ' | Descanso: ' + this.escapeHtml(exercise.rest) + '</span>';
+    } else {
+      html += '<span class="exercise-meta">' + exercise.sets + 'x' + this.escapeHtml(exercise.reps) + ' | Descanso: ' + this.escapeHtml(exercise.rest) + '</span>';
+    }
+
+    if (exercise.tip) {
+      html += '<span class="exercise-tip">&#128161; ' + this.escapeHtml(exercise.tip) + '</span>';
+    }
+    html += '</div>'; // .exercise-info
+
+    // Video button
+    if (exercise.videoKey) {
+      html += '<button class="btn-icon video-btn" data-video-key="' + exercise.videoKey + '" data-video-source="exercise" title="Ver video">&#127916;</button>';
+    }
+
+    html += '<span class="expand-icon">&#9660;</span>';
+    html += '</div>'; // .exercise-header
+
+    // Details (hidden by default)
+    html += '<div class="exercise-details hidden" id="details-' + exercise.id + '">';
+    if (exercise.details) {
+      html += '<p style="font-size:0.85rem; opacity:0.85; line-height:1.5;">' + this.escapeHtml(exercise.details) + '</p>';
+    }
+    html += '</div>';
+
+    // Start left warning
+    if (exercise.startLeft) {
+      html += '<div class="start-left-warning">&#9888;&#65039; Comece pelo lado ESQUERDO!</div>';
+    }
+
+    // Type-specific content
+    if (type === 'vacuum') {
+      html += this.renderVacuumControls(exercise, exData);
+    } else if (type === 'cardio') {
+      html += this.renderCardioControls(exercise, exData);
+    } else if (type === 'plank') {
+      html += this.renderPlankControls(exercise, index, allExercises, exData, exWeights);
+    } else {
+      html += this.renderNormalSeries(exercise, index, allExercises, exData, exWeights);
+    }
+
+    // Progress indicator (for non-cardio)
+    if (type !== 'cardio') {
+      var completedSets = 0;
+      var totalSets = exercise.sets || 1;
+      for (var s = 1; s <= totalSets; s++) {
+        if (exData[s]) completedSets++;
+      }
+      var pct = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
+
+      html += '<div class="exercise-progress">';
+      html += '<span>' + completedSets + '/' + totalSets + ' series</span>';
+      html += '<div class="progress-bar-container" style="height:4px;">';
+      html += '<div class="progress-bar" style="width:' + pct + '%"></div>';
+      html += '</div>';
+      html += '</div>';
+    }
+
+    html += '</div>'; // .exercise-card
+    return html;
+  },
+
+  // ── Render: Normal Series (checkboxes + weight input) ──────
+
+  renderNormalSeries(exercise, index, allExercises, exData, exWeights) {
+    var html = '<div class="exercise-series">';
+    var totalSets = exercise.sets || 1;
+
+    for (var s = 1; s <= totalSets; s++) {
+      var checked = exData[s] ? 'checked' : '';
+      var weightKey = exercise.id + '_' + s;
+      var savedWeight = (exWeights[weightKey] !== undefined && exWeights[weightKey] !== null) ? exWeights[weightKey] : '';
+
+      html += '<div class="series-row">';
+      html += '<label class="checkbox-wrapper">';
+      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s + '" data-exercise-index="' + index + '" ' + checked + '>';
+      html += '<span class="checkbox-custom"></span>';
+      html += '<span>Serie ' + s + '/' + totalSets + '</span>';
+      html += '</label>';
+      html += '<input type="number" class="weight-input" placeholder="Peso (kg)" data-exercise="' + exercise.id + '" data-set="' + s + '" value="' + savedWeight + '" inputmode="decimal" step="0.5">';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  },
+
+  // ── Render: Plank Controls ─────────────────────────────────
+
+  renderPlankControls(exercise, index, allExercises, exData, exWeights) {
+    var holdSec = this.parseHoldSeconds(exercise.reps);
+    var html = '<div class="exercise-series">';
+    var totalSets = exercise.sets || 1;
+
+    for (var s = 1; s <= totalSets; s++) {
+      var checked = exData[s] ? 'checked' : '';
+
+      html += '<div class="series-row">';
+      html += '<label class="checkbox-wrapper">';
+      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s + '" data-exercise-index="' + index + '" ' + checked + '>';
+      html += '<span class="checkbox-custom"></span>';
+      html += '<span>Serie ' + s + '/' + totalSets + '</span>';
+      html += '</label>';
+      html += '<button class="btn btn-sm btn-outline plank-timer-btn" data-seconds="' + holdSec + '" data-exercise-name="' + this.escapeAttr(exercise.name) + '">&#9201; ' + holdSec + 'seg</button>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  },
+
+  // ── Render: Vacuum Controls ────────────────────────────────
+
+  renderVacuumControls(exercise, exData) {
+    var holdSec = this.parseHoldSeconds(exercise.reps);
+    var restSec = Utils.parseRest(exercise.rest) || 30;
+    var totalSets = exercise.sets || 5;
+
+    var completedSets = 0;
+    for (var s = 1; s <= totalSets; s++) {
+      if (exData[s]) completedSets++;
+    }
+
+    var html = '<div class="vacuum-controls" style="text-align:center; padding:1rem 0;">';
+    html += '<button class="btn btn-primary vacuum-start-btn" data-hold="' + holdSec + '" data-rest="' + restSec + '" data-sets="' + totalSets + '" data-exercise="' + exercise.id + '">';
+    html += '&#128168; Iniciar Vacuum (' + totalSets + 'x ' + holdSec + 'seg)';
+    html += '</button>';
+    html += '<p style="font-size:0.8rem; opacity:0.6; margin-top:0.5rem;">' + completedSets + '/' + totalSets + ' series feitas hoje</p>';
+    html += '</div>';
+
+    // Also show individual checkboxes for manual tracking
+    html += '<div class="exercise-series">';
+    for (var s2 = 1; s2 <= totalSets; s2++) {
+      var checked = exData[s2] ? 'checked' : '';
+      html += '<div class="series-row">';
+      html += '<label class="checkbox-wrapper">';
+      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s2 + '" data-exercise-index="-1" ' + checked + '>';
+      html += '<span class="checkbox-custom"></span>';
+      html += '<span>Serie ' + s2 + '/' + totalSets + '</span>';
+      html += '</label>';
+      html += '</div>';
+    }
+    html += '</div>';
+
+    return html;
+  },
+
+  // ── Render: Cardio Controls ────────────────────────────────
+
+  renderCardioControls(exercise, exData) {
+    var durationSec = this.parseCardioSeconds(exercise.reps);
+    var done = exData['done'] ? true : false;
+
+    var html = '<div class="cardio-controls" style="text-align:center; padding:1rem 0;">';
+    html += '<button class="btn btn-primary cardio-start-btn" data-seconds="' + durationSec + '" data-label="' + this.escapeAttr(exercise.name) + '">';
+    html += '&#127939; Iniciar Cardio (' + exercise.reps + ')';
+    html += '</button>';
+    html += '<div style="margin-top:0.75rem;">';
+    html += '<label class="checkbox-wrapper" style="justify-content:center;">';
+    html += '<input type="checkbox" class="cardio-done-checkbox" data-exercise="' + exercise.id + '" ' + (done ? 'checked' : '') + '>';
+    html += '<span class="checkbox-custom"></span>';
+    html += '<span>Concluido</span>';
+    html += '</label>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+  },
+
+  // ── Render: Cooldown ───────────────────────────────────────
+
+  renderCooldown() {
+    var html = '<div class="card glass cooldown-card">';
+    html += '<div class="collapsible-header" data-target="cooldown-content">';
+    html += '<h3 style="margin:0;">' + this.escapeHtml(COOLDOWN.name) + ' (' + COOLDOWN.duration + ') — OBRIGATORIO</h3>';
+    html += '<span class="expand-icon">&#9660;</span>';
+    html += '</div>';
+    html += '<div id="cooldown-content" class="collapsible-body hidden">';
+
+    COOLDOWN.exercises.forEach(function(ex) {
+      html += '<div class="cooldown-exercise" style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
+      html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
+      html += '<div>';
+      html += '<strong>' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
+      html += '<span style="opacity:0.6; font-size:0.85rem;"> — ' + WorkoutManager.escapeHtml(ex.duration) + '</span>';
+      if (ex.required) html += ' <span style="color: var(--accent); font-size:0.8rem;">obrigatorio</span>';
+      html += '</div>';
+      html += '<div style="display:flex; gap:0.3rem; align-items:center;">';
+
+      // Timer button
+      if (ex.sides) {
+        var secMatch = ex.duration.match(/(\d+)/);
+        var secPerSide = secMatch ? parseInt(secMatch[1]) : 30;
+        html += '<button class="btn btn-sm btn-outline stretch-sides-btn" data-seconds="' + secPerSide + '" data-name="' + WorkoutManager.escapeAttr(ex.name) + '">&#9201; E/D</button>';
+      } else {
+        var secMatch2 = ex.duration.match(/(\d+)/);
+        var sec = secMatch2 ? parseInt(secMatch2[1]) : 30;
+        html += '<button class="btn btn-sm btn-outline stretch-timer-btn" data-seconds="' + sec + '" data-name="' + WorkoutManager.escapeAttr(ex.name) + '">&#9201; ' + sec + 'seg</button>';
+      }
+
+      if (ex.videoKey) {
+        html += '<button class="btn-icon video-btn" data-video-key="' + ex.videoKey + '" data-video-source="exercise">&#127916;</button>';
+      }
+      html += '</div>';
+      html += '</div>';
+      if (ex.tip) {
+        html += '<div style="font-size:0.8rem; opacity:0.65; margin-top:0.25rem;">&#128161; ' + WorkoutManager.escapeHtml(ex.tip) + '</div>';
+      }
+      html += '</div>';
+    });
+
+    html += '</div></div>';
+    return html;
+  },
+
+  // ── Event Listeners ────────────────────────────────────────
+
+  attachListeners() {
+    var self = this;
+
+    // Phase tabs
+    document.querySelectorAll('.phase-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var phase = parseInt(btn.dataset.phase);
+        self.currentPhase = phase;
+        StorageManager.setValue('currentPhase', phase);
+        self.render();
+      });
+    });
+
+    // Day tabs
+    document.querySelectorAll('.day-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        self.selectedDay = parseInt(btn.dataset.day);
+        self.render();
+      });
+    });
+
+    // Collapsible headers (warmup / cooldown)
+    document.querySelectorAll('.collapsible-header').forEach(function(header) {
+      header.addEventListener('click', function() {
+        var targetId = header.dataset.target;
+        var body = document.getElementById(targetId);
+        if (body) {
+          body.classList.toggle('hidden');
+          var icon = header.querySelector('.expand-icon');
+          if (icon) icon.textContent = body.classList.contains('hidden') ? '\u25BC' : '\u25B2';
+        }
+      });
+    });
+
+    // Exercise header expand/collapse (details)
+    document.querySelectorAll('.exercise-header').forEach(function(header) {
+      header.addEventListener('click', function(e) {
+        // Don't toggle if clicking video button
+        if (e.target.closest('.btn-icon') || e.target.closest('.video-btn')) return;
+        var targetId = header.dataset.toggle;
+        var details = document.getElementById(targetId);
+        if (details) {
+          details.classList.toggle('hidden');
+          var icon = header.querySelector('.expand-icon');
+          if (icon) icon.textContent = details.classList.contains('hidden') ? '\u25BC' : '\u25B2';
+        }
+      });
+    });
+
+    // Series checkboxes (auto-timer on check)
+    document.querySelectorAll('.series-checkbox').forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        var exId = cb.dataset.exercise;
+        var setNum = cb.dataset.set;
+        var exIndex = parseInt(cb.dataset.exerciseIndex);
+        self.onSeriesChecked(exId, setNum, cb.checked, exIndex);
+      });
+    });
+
+    // Weight inputs (save on change, debounced)
+    document.querySelectorAll('.weight-input').forEach(function(input) {
+      input.addEventListener('input', Utils.debounce(function() {
+        var exId = input.dataset.exercise;
+        var setNum = input.dataset.set;
+        self.onWeightChanged(exId, setNum, input.value);
+      }, 500));
+    });
+
+    // Video buttons
+    document.querySelectorAll('.video-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var videoKey = btn.dataset.videoKey;
+        var source = btn.dataset.videoSource || 'exercise';
+        VideoModal.open(videoKey, source);
+      });
+    });
+
+    // Vacuum start buttons
+    document.querySelectorAll('.vacuum-start-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var holdSec = parseInt(btn.dataset.hold);
+        var restSec = parseInt(btn.dataset.rest);
+        var sets = parseInt(btn.dataset.sets);
+        var exId = btn.dataset.exercise;
+
+        TimerEngine.startVacuumSeries(holdSec, restSec, sets, function() {
+          // Mark all vacuum sets as complete
+          var wData = self.getWorkoutData();
+          if (!wData.series[exId]) wData.series[exId] = {};
+          for (var s = 1; s <= sets; s++) {
+            wData.series[exId][s] = true;
+          }
+          self.saveWorkoutData(wData);
+          Toast.show('Vacuum concluido! \uD83D\uDCA8', 'success');
+          self.render();
+        });
+      });
+    });
+
+    // Cardio start buttons
+    document.querySelectorAll('.cardio-start-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var seconds = parseInt(btn.dataset.seconds);
+        var label = btn.dataset.label || 'CARDIO';
+        TimerEngine.startCountUp(seconds, label);
+      });
+    });
+
+    // Cardio done checkbox
+    document.querySelectorAll('.cardio-done-checkbox').forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        var exId = cb.dataset.exercise;
+        var wData = self.getWorkoutData();
+        if (!wData.series[exId]) wData.series[exId] = {};
+        wData.series[exId]['done'] = cb.checked;
+        self.saveWorkoutData(wData);
+        self.updateProgressDisplay();
+      });
+    });
+
+    // Plank timer buttons
+    document.querySelectorAll('.plank-timer-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var seconds = parseInt(btn.dataset.seconds);
+        var name = btn.dataset.exerciseName || 'Prancha';
+        TimerEngine.startCountdown(seconds, name.toUpperCase(), null, null);
+      });
+    });
+
+    // Stretch timer buttons (no sides)
+    document.querySelectorAll('.stretch-timer-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var seconds = parseInt(btn.dataset.seconds);
+        var name = btn.dataset.name || 'Alongamento';
+        TimerEngine.startCountdown(seconds, name.toUpperCase(), null, null);
+      });
+    });
+
+    // Stretch with sides buttons
+    document.querySelectorAll('.stretch-sides-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var seconds = parseInt(btn.dataset.seconds);
+        var name = btn.dataset.name || 'Alongamento';
+        TimerEngine.startStretchWithSides(seconds, name, null);
+      });
+    });
+  },
+
+  // ── Event: Series Checked ──────────────────────────────────
+
+  onSeriesChecked(exerciseId, setNum, checked, exerciseIndex) {
+    var wData = this.getWorkoutData();
+    if (!wData.series[exerciseId]) wData.series[exerciseId] = {};
+    wData.series[exerciseId][setNum] = checked;
+    this.saveWorkoutData(wData);
+
+    // Update the exercise progress bar inline (without full re-render)
+    this.updateExerciseProgress(exerciseId);
+    this.updateProgressDisplay();
+
+    // Auto-start rest timer when a series is checked
+    if (checked) {
+      var dayData = this.getDayData();
+      if (dayData && dayData.exercises) {
+        var exercises = dayData.exercises;
+        var exercise = null;
+        var exIdx = -1;
+
+        for (var i = 0; i < exercises.length; i++) {
+          if (exercises[i].id === exerciseId) {
+            exercise = exercises[i];
+            exIdx = i;
+            break;
+          }
+        }
+
+        if (exercise) {
+          var restSeconds = Utils.parseRest(exercise.rest);
+          if (restSeconds > 0) {
+            var nextName = this.getNextExerciseName(exercises, exIdx);
+            TimerEngine.startRest(restSeconds, nextName, null);
+          }
+        }
+      }
+    }
+  },
+
+  // ── Event: Weight Changed ──────────────────────────────────
+
+  onWeightChanged(exerciseId, setNum, weight) {
+    var wData = this.getWorkoutData();
+    if (!wData.weights) wData.weights = {};
+    var key = exerciseId + '_' + setNum;
+    wData.weights[key] = weight;
+    this.saveWorkoutData(wData);
+  },
+
+  // ── Update: Exercise Progress (inline, no full re-render) ──
+
+  updateExerciseProgress(exerciseId) {
+    var card = document.querySelector('.exercise-card[data-exercise-id="' + exerciseId + '"]');
+    if (!card) return;
+
+    var checkboxes = card.querySelectorAll('.series-checkbox');
+    var total = checkboxes.length;
+    var completed = 0;
+    checkboxes.forEach(function(cb) { if (cb.checked) completed++; });
+
+    var progressSpan = card.querySelector('.exercise-progress span');
+    var progressBar = card.querySelector('.exercise-progress .progress-bar');
+    if (progressSpan) progressSpan.textContent = completed + '/' + total + ' series';
+    if (progressBar) progressBar.style.width = (total > 0 ? Math.round((completed / total) * 100) : 0) + '%';
+  },
+
+  // ── Update: Overall Workout Progress (inline) ──────────────
+
+  updateProgressDisplay() {
+    var overallEl = document.querySelector('.workout-overall-progress');
+    if (!overallEl) return;
+
+    var dayData = this.getDayData();
+    if (!dayData || !dayData.exercises) return;
+
+    var exercises = dayData.exercises;
+    var wData = this.getWorkoutData();
+    var totalSeries = 0;
+    var completedSeries = 0;
+
+    var self = this;
+    exercises.forEach(function(ex) {
+      var type = self.getExerciseType(ex);
+      if (type === 'cardio') {
+        totalSeries += 1;
+        if (wData.series[ex.id] && wData.series[ex.id]['done']) completedSeries++;
+      } else {
+        totalSeries += (ex.sets || 1);
+        for (var s = 1; s <= (ex.sets || 1); s++) {
+          if (wData.series[ex.id] && wData.series[ex.id][s]) completedSeries++;
+        }
+      }
+    });
+
+    var pct = totalSeries > 0 ? Math.round((completedSeries / totalSeries) * 100) : 0;
+    var span = overallEl.querySelector('span');
+    var bar = overallEl.querySelector('.progress-bar');
+    if (span) span.textContent = completedSeries + '/' + totalSeries + ' series (' + pct + '%)';
+    if (bar) bar.style.width = pct + '%';
+
+    // Check for workout completion badge
+    if (pct >= 100) {
+      BadgeManager.unlock('first-workout');
+      Toast.show('Treino concluido! Arrasou! \uD83D\uDCAA', 'success');
+    }
+  },
+
+  // ── Utility: Escape HTML ───────────────────────────────────
+
+  escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  },
+
+  escapeAttr(str) {
+    return this.escapeHtml(str);
   }
 };
 
