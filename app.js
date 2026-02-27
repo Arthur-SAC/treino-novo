@@ -47,7 +47,7 @@ const App = {
     WorkoutManager.init();
     NutritionManager.init();
     CareManager.init();         // Task 9
-    // ProgressManager.init();  // Task 10
+    ProgressManager.init();     // Task 10
 
     Toast.show('Bem-vinda de volta! \u2728', 'success');
   },
@@ -427,6 +427,16 @@ const Utils = {
         fn.apply(context, args);
       }, ms);
     };
+  },
+
+  /**
+   * Format a YYYY-MM-DD date string into Brazilian format DD/MM/YYYY.
+   */
+  formatDateBR(dateStr) {
+    if (!dateStr) return '';
+    var parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    return parts[2] + '/' + parts[1] + '/' + parts[0];
   }
 };
 
@@ -2831,6 +2841,745 @@ const CareManager = {
         self.startKegelTimer();
       });
     }
+  }
+};
+
+// =============================================
+// PROGRESS MANAGER — Progresso Tab (Task 10)
+// =============================================
+// Manages the Progress page with 4 sub-tabs:
+//   1. Fotos (progress photos with upload & comparison)
+//   2. Medidas (body measurements)
+//   3. Graficos (Chart.js charts for weight, measurements, ratio)
+//   4. Conquistas (badge grid from BADGES array)
+
+const ProgressManager = {
+  currentSubTab: 'fotos',
+  charts: {},
+  startingWeight: 96,
+  goalWeight: 74,
+  compareMode: false,
+
+  // ── Lifecycle ──────────────────────────────────────────────
+
+  init() {
+    var self = this;
+    document.addEventListener('pageChange', function(e) {
+      if (e.detail.page === 'progresso') self.render();
+    });
+  },
+
+  render() {
+    // Destroy existing charts before re-rendering
+    var self = this;
+    Object.keys(this.charts).forEach(function(k) {
+      try { self.charts[k].destroy(); } catch(e) {}
+    });
+    this.charts = {};
+
+    var container = document.getElementById('progresso-content');
+    if (!container) return;
+
+    var html = this.renderSubTabs();
+
+    switch (this.currentSubTab) {
+      case 'fotos':
+        html += this.renderPhotos();
+        break;
+      case 'medidas':
+        html += this.renderMeasurements();
+        break;
+      case 'graficos':
+        html += this.renderCharts();
+        break;
+      case 'conquistas':
+        html += this.renderBadges();
+        break;
+    }
+
+    container.innerHTML = html;
+    this.attachListeners();
+
+    // Init charts after DOM is ready
+    if (this.currentSubTab === 'graficos') {
+      setTimeout(function() { self.initCharts(); }, 100);
+    }
+  },
+
+  // ── Sub-tab navigation ─────────────────────────────────────
+
+  renderSubTabs() {
+    var tabs = [
+      { id: 'fotos', label: '\uD83D\uDCF8 Fotos' },
+      { id: 'medidas', label: '\uD83D\uDCCF Medidas' },
+      { id: 'graficos', label: '\uD83D\uDCC8 Gr\u00e1ficos' },
+      { id: 'conquistas', label: '\uD83C\uDFC6 Conquistas' }
+    ];
+    var self = this;
+    var html = '<div class="sub-tabs">';
+    tabs.forEach(function(tab) {
+      var activeClass = tab.id === self.currentSubTab ? ' active' : '';
+      html += '<button class="sub-tab' + activeClass + '" data-subtab="' + tab.id + '">' + tab.label + '</button>';
+    });
+    html += '</div>';
+    return html;
+  },
+
+  // ── Sub-tab 1: Fotos de Progresso ──────────────────────────
+
+  renderPhotos() {
+    var photos = StorageManager.getValue('photos', []);
+    var html = '';
+
+    // Upload card
+    html += '<div class="card glass">';
+    html += '<h3>\uD83D\uDCF8 Registrar Progresso</h3>';
+    html += '<p style="opacity:0.7;">Tire fotos de frente, lateral e costas a cada 15 dias</p>';
+    html += '<div style="display:flex; gap:0.5rem; flex-wrap:wrap;">';
+    html += '<label class="btn btn-primary" style="cursor:pointer;">';
+    html += '\uD83D\uDCF7 Frente';
+    html += '<input type="file" accept="image/*" capture="user" data-angle="frente" style="display:none;">';
+    html += '</label>';
+    html += '<label class="btn btn-primary" style="cursor:pointer;">';
+    html += '\uD83D\uDCF7 Lateral';
+    html += '<input type="file" accept="image/*" capture="user" data-angle="lateral" style="display:none;">';
+    html += '</label>';
+    html += '<label class="btn btn-primary" style="cursor:pointer;">';
+    html += '\uD83D\uDCF7 Costas';
+    html += '<input type="file" accept="image/*" capture="user" data-angle="costas" style="display:none;">';
+    html += '</label>';
+    html += '</div>';
+    html += '</div>';
+
+    // Comparison mode
+    if (photos.length > 0) {
+      var dateSet = {};
+      photos.forEach(function(p) { dateSet[p.date] = true; });
+      var dates = Object.keys(dateSet).sort().reverse();
+
+      html += '<div class="card glass">';
+      html += '<h3>\uD83D\uDD0D Comparar Fotos</h3>';
+      if (dates.length >= 2) {
+        html += '<div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">';
+        html += '<select id="compare-date-1" class="form-input" style="flex:1; min-width:120px;">';
+        dates.forEach(function(d, i) {
+          html += '<option value="' + d + '"' + (i === 1 ? ' selected' : '') + '>' + Utils.formatDateBR(d) + '</option>';
+        });
+        html += '</select>';
+        html += '<span style="font-weight:600;">vs</span>';
+        html += '<select id="compare-date-2" class="form-input" style="flex:1; min-width:120px;">';
+        dates.forEach(function(d, i) {
+          html += '<option value="' + d + '"' + (i === 0 ? ' selected' : '') + '>' + Utils.formatDateBR(d) + '</option>';
+        });
+        html += '</select>';
+        html += '<button class="btn btn-primary" id="compare-photos-btn">\uD83D\uDD0D Comparar</button>';
+        html += '</div>';
+        html += '<div id="comparison-result"></div>';
+      } else {
+        html += '<p style="opacity:0.7;">Tire fotos em pelo menos 2 datas diferentes para comparar.</p>';
+      }
+      html += '</div>';
+    }
+
+    // Photo grid by date
+    if (photos.length > 0) {
+      var grouped = {};
+      photos.forEach(function(p) {
+        if (!grouped[p.date]) grouped[p.date] = [];
+        grouped[p.date].push(p);
+      });
+      var sortedDates = Object.keys(grouped).sort().reverse();
+
+      sortedDates.forEach(function(date) {
+        html += '<div class="card glass">';
+        html += '<h4>' + Utils.formatDateBR(date) + '</h4>';
+        html += '<div class="photo-grid">';
+        grouped[date].forEach(function(photo, idx) {
+          html += '<div class="photo-item">';
+          html += '<img src="' + photo.data + '" alt="' + photo.angle + '" loading="lazy">';
+          html += '</div>';
+        });
+        html += '</div>';
+        html += '<div style="display:flex; gap:4px; margin-top:6px;">';
+        grouped[date].forEach(function(photo) {
+          html += '<span class="photo-date" style="flex:1;">' + photo.angle + '</span>';
+        });
+        html += '</div>';
+        html += '<button class="btn btn-sm btn-outline progress-delete-date" data-date="' + date + '" style="margin-top:8px;">\uD83D\uDDD1\uFE0F Apagar fotos deste dia</button>';
+        html += '</div>';
+      });
+    } else {
+      html += '<div class="card glass" style="text-align:center; padding:2rem;">';
+      html += '<p style="font-size:2rem;">\uD83D\uDCF8</p>';
+      html += '<p style="opacity:0.7;">Nenhuma foto registrada ainda.<br>Tire suas primeiras fotos de progresso!</p>';
+      html += '</div>';
+    }
+
+    return html;
+  },
+
+  // ── Sub-tab 2: Medidas Corporais ───────────────────────────
+
+  renderMeasurements() {
+    var measurements = StorageManager.getValue('measurements', []);
+    var html = '';
+
+    // Input form
+    html += '<div class="card glass">';
+    html += '<h3>\uD83D\uDCCF Registrar Medidas</h3>';
+    html += '<p style="opacity:0.7;">Me\u00e7a a cada 15 dias, mesmo dia e hor\u00e1rio</p>';
+    html += '<div class="measurements-form">';
+
+    var fields = [
+      { id: 'peso', label: '\u2696\uFE0F Peso (kg)', placeholder: 'Ex: 96.0' },
+      { id: 'cintura', label: '\uD83D\uDCD0 Cintura (cm) \u2014 no ponto mais fino', placeholder: 'Ex: 85.0' },
+      { id: 'quadril', label: '\uD83C\uDF51 Quadril (cm) \u2014 no ponto mais largo', placeholder: 'Ex: 105.0' },
+      { id: 'coxa', label: '\uD83E\uDDB5 Coxa (cm) \u2014 no meio da coxa', placeholder: 'Ex: 60.0' },
+      { id: 'braco', label: '\uD83D\uDCAA Bra\u00e7o (cm)', placeholder: 'Ex: 30.0' },
+      { id: 'peito', label: '\uD83D\uDC55 Peito (cm) \u2014 na linha do mamilo', placeholder: 'Ex: 100.0' }
+    ];
+
+    fields.forEach(function(f) {
+      html += '<div class="form-group">';
+      html += '<label class="form-label">' + f.label + '</label>';
+      html += '<input type="number" step="0.1" id="measure-' + f.id + '" class="form-input" placeholder="' + f.placeholder + '">';
+      html += '</div>';
+    });
+
+    html += '</div>';
+    html += '<div id="ratio-display" style="margin-bottom:12px;"></div>';
+    html += '<button class="btn btn-primary btn-block" id="save-measurements">\uD83D\uDCBE Salvar Medidas</button>';
+    html += '</div>';
+
+    // History
+    if (measurements.length > 0) {
+      html += '<div class="card glass">';
+      html += '<h3>\uD83D\uDCCB Hist\u00f3rico de Medidas</h3>';
+
+      var sorted = measurements.slice().sort(function(a, b) {
+        return b.date.localeCompare(a.date);
+      });
+
+      sorted.forEach(function(m) {
+        var ratio = (m.cintura && m.quadril) ? (m.cintura / m.quadril).toFixed(2) : null;
+        html += '<div class="measurement-entry">';
+        html += '<div class="measurement-date">' + Utils.formatDateBR(m.date) + '</div>';
+        html += '<div class="measurement-values">';
+        if (m.peso) html += '<span>\u2696\uFE0F ' + m.peso + 'kg</span>';
+        if (m.cintura) html += '<span>\uD83D\uDCD0 Cintura: ' + m.cintura + 'cm</span>';
+        if (m.quadril) html += '<span>\uD83C\uDF51 Quadril: ' + m.quadril + 'cm</span>';
+        if (m.coxa) html += '<span>\uD83E\uDDB5 Coxa: ' + m.coxa + 'cm</span>';
+        if (m.braco) html += '<span>\uD83D\uDCAA Bra\u00e7o: ' + m.braco + 'cm</span>';
+        if (m.peito) html += '<span>\uD83D\uDC55 Peito: ' + m.peito + 'cm</span>';
+        if (ratio) {
+          var ratioClass = parseFloat(ratio) <= 0.75 ? 'ratio-good' : 'ratio-warn';
+          html += '<span class="' + ratioClass + '">Cintura/Quadril: ' + ratio + '</span>';
+        }
+        html += '</div>';
+        html += '<button class="btn btn-sm btn-outline measurement-delete" data-date="' + m.date + '" style="margin-top:4px;">\uD83D\uDDD1\uFE0F</button>';
+        html += '</div>';
+      });
+
+      html += '</div>';
+    }
+
+    return html;
+  },
+
+  // ── Sub-tab 3: Graficos ────────────────────────────────────
+
+  renderCharts() {
+    var measurements = StorageManager.getValue('measurements', []);
+    var html = '';
+
+    if (measurements.length < 2) {
+      html += '<div class="card glass" style="text-align:center; padding:2rem;">';
+      html += '<p style="font-size:2rem;">\uD83D\uDCC8</p>';
+      html += '<p style="opacity:0.7;">Registre suas medidas para ver os gr\u00e1ficos! \uD83D\uDCCA</p>';
+      html += '<p style="opacity:0.5; font-size:0.85rem;">S\u00e3o necess\u00e1rias pelo menos 2 medi\u00e7\u00f5es.</p>';
+      html += '</div>';
+      return html;
+    }
+
+    // Weight chart
+    html += '<div class="card glass">';
+    html += '<h3>\u2696\uFE0F Evolu\u00e7\u00e3o do Peso</h3>';
+    html += '<div class="chart-container"><canvas id="chart-weight"></canvas></div>';
+    html += '</div>';
+
+    // Measurements chart
+    html += '<div class="card glass">';
+    html += '<h3>\uD83D\uDCCF Medidas Corporais</h3>';
+    html += '<div class="chart-container"><canvas id="chart-measurements"></canvas></div>';
+    html += '</div>';
+
+    // Waist-hip ratio chart
+    html += '<div class="card glass">';
+    html += '<h3>\uD83D\uDCCA Raz\u00e3o Cintura/Quadril</h3>';
+    html += '<div class="chart-container"><canvas id="chart-ratio"></canvas></div>';
+    html += '</div>';
+
+    // Goal prediction
+    html += '<div id="goal-prediction"></div>';
+
+    return html;
+  },
+
+  initCharts() {
+    var measurements = StorageManager.getValue('measurements', []);
+    if (measurements.length < 2) return;
+
+    var sorted = measurements.slice().sort(function(a, b) {
+      return a.date.localeCompare(b.date);
+    });
+
+    var dates = sorted.map(function(m) { return Utils.formatDateBR(m.date); });
+    var self = this;
+
+    // ── Weight chart ──
+    var weights = sorted.map(function(m) { return m.peso || null; });
+    var weightCtx = document.getElementById('chart-weight');
+    if (weightCtx && weights.some(function(w) { return w !== null; })) {
+      this.charts.weight = new Chart(weightCtx, {
+        type: 'line',
+        data: {
+          labels: dates,
+          datasets: [{
+            label: 'Peso (kg)',
+            data: weights,
+            borderColor: '#c97bb5',
+            backgroundColor: 'rgba(201, 123, 181, 0.1)',
+            tension: 0.3,
+            fill: true,
+            spanGaps: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: '#f0e6ef' } } },
+          scales: {
+            x: { ticks: { color: '#f0e6ef' } },
+            y: { ticks: { color: '#f0e6ef' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+          }
+        }
+      });
+    }
+
+    // ── Measurements chart ──
+    var measureCtx = document.getElementById('chart-measurements');
+    if (measureCtx) {
+      var bodyParts = [
+        { key: 'cintura', label: 'Cintura', color: '#c97bb5' },
+        { key: 'quadril', label: 'Quadril', color: '#d4a853' },
+        { key: 'coxa', label: 'Coxa', color: '#7bc9a7' },
+        { key: 'braco', label: 'Bra\u00e7o', color: '#7ba3c9' },
+        { key: 'peito', label: 'Peito', color: '#c9917b' }
+      ];
+      var datasets = [];
+      bodyParts.forEach(function(part) {
+        var data = sorted.map(function(m) { return m[part.key] || null; });
+        if (data.some(function(d) { return d !== null; })) {
+          datasets.push({
+            label: part.label + ' (cm)',
+            data: data,
+            borderColor: part.color,
+            backgroundColor: 'transparent',
+            tension: 0.3,
+            spanGaps: true
+          });
+        }
+      });
+
+      if (datasets.length > 0) {
+        this.charts.measurements = new Chart(measureCtx, {
+          type: 'line',
+          data: { labels: dates, datasets: datasets },
+          options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: '#f0e6ef' } } },
+            scales: {
+              x: { ticks: { color: '#f0e6ef' } },
+              y: { ticks: { color: '#f0e6ef' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+            }
+          }
+        });
+      }
+    }
+
+    // ── Waist-hip ratio chart ──
+    var ratioCtx = document.getElementById('chart-ratio');
+    if (ratioCtx) {
+      var ratios = sorted.map(function(m) {
+        return (m.cintura && m.quadril) ? parseFloat((m.cintura / m.quadril).toFixed(3)) : null;
+      });
+
+      if (ratios.some(function(r) { return r !== null; })) {
+        this.charts.ratio = new Chart(ratioCtx, {
+          type: 'line',
+          data: {
+            labels: dates,
+            datasets: [
+              {
+                label: 'Raz\u00e3o C/Q',
+                data: ratios,
+                borderColor: '#d4a853',
+                backgroundColor: 'rgba(212, 168, 83, 0.1)',
+                tension: 0.3,
+                fill: true,
+                spanGaps: true
+              },
+              {
+                label: 'Meta (0.75)',
+                data: dates.map(function() { return 0.75; }),
+                borderColor: 'rgba(123, 201, 167, 0.6)',
+                borderDash: [5, 5],
+                pointRadius: 0,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: '#f0e6ef' } } },
+            scales: {
+              x: { ticks: { color: '#f0e6ef' } },
+              y: { ticks: { color: '#f0e6ef' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+            }
+          }
+        });
+      }
+    }
+
+    // ── Goal prediction ──
+    this.renderGoalPrediction(sorted);
+  },
+
+  renderGoalPrediction: function(sorted) {
+    var predictionDiv = document.getElementById('goal-prediction');
+    if (!predictionDiv) return;
+
+    var weightData = [];
+    sorted.forEach(function(m, i) {
+      if (m.peso) weightData.push({ index: i, weight: m.peso, date: m.date });
+    });
+
+    if (weightData.length < 2) {
+      predictionDiv.innerHTML = '';
+      return;
+    }
+
+    // Simple linear regression on weight data
+    var n = weightData.length;
+    var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+    weightData.forEach(function(d) {
+      sumX += d.index;
+      sumY += d.weight;
+      sumXY += d.index * d.weight;
+      sumX2 += d.index * d.index;
+    });
+    var slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / n;
+
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83C\uDFAF Predi\u00e7\u00e3o de Meta</h3>';
+
+    if (slope >= 0) {
+      html += '<p style="opacity:0.7;">O peso est\u00e1 se mantendo ou subindo. Continue firme nos treinos e alimenta\u00e7\u00e3o! \uD83D\uDCAA</p>';
+    } else {
+      // Estimate how many data points to reach goal
+      var lastIdx = weightData[weightData.length - 1].index;
+      var goalIdx = (this.goalWeight - intercept) / slope;
+      var remainingPoints = goalIdx - lastIdx;
+
+      // Estimate average days between measurements
+      var firstDate = new Date(weightData[0].date);
+      var lastDate = new Date(weightData[weightData.length - 1].date);
+      var daysBetween = (lastDate - firstDate) / (1000 * 60 * 60 * 24);
+      var avgDaysPerPoint = weightData.length > 1 ? daysBetween / (weightData.length - 1) : 15;
+      if (avgDaysPerPoint < 1) avgDaysPerPoint = 15;
+
+      var estimatedDays = Math.round(remainingPoints * avgDaysPerPoint);
+      var estimatedWeeks = Math.round(estimatedDays / 7);
+
+      if (estimatedWeeks > 0 && estimatedWeeks < 200) {
+        html += '<p style="font-size:1.1rem;">Se continuar nesse ritmo, alcan\u00e7ar\u00e1 <strong>' + this.goalWeight + 'kg</strong> em ~<strong>' + estimatedWeeks + ' semanas</strong> \uD83C\uDF1F</p>';
+        html += '<p style="opacity:0.6; font-size:0.8rem;">Baseado na tend\u00eancia atual de perda de peso.</p>';
+      } else {
+        html += '<p style="opacity:0.7;">Continue registrando para uma predi\u00e7\u00e3o mais precisa.</p>';
+      }
+    }
+
+    var currentWeight = weightData[weightData.length - 1].weight;
+    var lost = this.startingWeight - currentWeight;
+    var remaining = currentWeight - this.goalWeight;
+    html += '<div style="display:flex; gap:1rem; margin-top:12px; flex-wrap:wrap;">';
+    html += '<div class="stat-mini"><span style="font-size:1.2rem; font-weight:700; color:var(--primary);">' + lost.toFixed(1) + 'kg</span><br><span style="opacity:0.7; font-size:0.75rem;">perdidos</span></div>';
+    html += '<div class="stat-mini"><span style="font-size:1.2rem; font-weight:700; color:var(--accent);">' + remaining.toFixed(1) + 'kg</span><br><span style="opacity:0.7; font-size:0.75rem;">restantes</span></div>';
+    html += '</div>';
+    html += '</div>';
+
+    predictionDiv.innerHTML = html;
+  },
+
+  // ── Sub-tab 4: Conquistas (Badges) ─────────────────────────
+
+  renderBadges() {
+    var unlockedCount = BadgeManager.unlocked.length;
+    var total = BADGES.length;
+    var html = '';
+
+    html += '<div class="card glass" style="text-align:center;">';
+    html += '<h3>\uD83C\uDFC6 Conquistas</h3>';
+    html += '<p style="font-size:1.3rem; font-weight:700; color:var(--accent);">' + unlockedCount + '/' + total + '</p>';
+    html += '<p style="opacity:0.7; font-size:0.85rem;">conquistas desbloqueadas</p>';
+    html += '</div>';
+
+    html += '<div class="badges-grid">';
+    BADGES.forEach(function(badge) {
+      var isUnlocked = BadgeManager.isUnlocked(badge.id);
+      var cls = isUnlocked ? 'unlocked' : 'locked';
+      html += '<div class="badge ' + cls + '">';
+      html += '<span class="badge-icon">' + badge.emoji + '</span>';
+      html += '<span class="badge-name">' + badge.name + '</span>';
+      html += '<span class="badge-desc">' + badge.description + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    return html;
+  },
+
+  // ── Photo handling ─────────────────────────────────────────
+
+  handlePhotoUpload: function(file, angle) {
+    var self = this;
+    this.compressImage(file, 800, function(base64) {
+      var photos = StorageManager.getValue('photos', []);
+      var today = new Date().toISOString().split('T')[0];
+      photos.push({ date: today, angle: angle, data: base64 });
+      StorageManager.setValue('photos', photos);
+
+      // Check badge for photo sets
+      var dateSet = {};
+      photos.forEach(function(p) { dateSet[p.date] = true; });
+      var uniqueDates = Object.keys(dateSet).length;
+      if (uniqueDates >= 2) BadgeManager.unlock('first-comparison');
+
+      Toast.show('\uD83D\uDCF8 Foto de ' + angle + ' salva!', 'success');
+      self.render();
+    });
+  },
+
+  compressImage: function(file, maxWidth, callback) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = new Image();
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var w = img.width;
+        var h = img.height;
+        if (w > maxWidth) {
+          h = (maxWidth / w) * h;
+          w = maxWidth;
+        }
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        callback(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  },
+
+  // ── Measurement handling ───────────────────────────────────
+
+  saveMeasurements: function() {
+    var peso = parseFloat(document.getElementById('measure-peso').value) || null;
+    var cintura = parseFloat(document.getElementById('measure-cintura').value) || null;
+    var quadril = parseFloat(document.getElementById('measure-quadril').value) || null;
+    var coxa = parseFloat(document.getElementById('measure-coxa').value) || null;
+    var braco = parseFloat(document.getElementById('measure-braco').value) || null;
+    var peito = parseFloat(document.getElementById('measure-peito').value) || null;
+
+    if (!peso && !cintura && !quadril && !coxa && !braco && !peito) {
+      Toast.show('Preencha pelo menos uma medida!', 'warning');
+      return;
+    }
+
+    var today = new Date().toISOString().split('T')[0];
+    var measurements = StorageManager.getValue('measurements', []);
+
+    // Remove any existing entry for today (overwrite)
+    measurements = measurements.filter(function(m) { return m.date !== today; });
+
+    measurements.push({
+      date: today,
+      peso: peso,
+      cintura: cintura,
+      quadril: quadril,
+      coxa: coxa,
+      braco: braco,
+      peito: peito
+    });
+
+    StorageManager.setValue('measurements', measurements);
+
+    // Check weight badges
+    if (peso) {
+      var startW = this.startingWeight;
+      if (peso <= startW - 5) BadgeManager.unlock('minus-5kg');
+      if (peso <= startW - 10) BadgeManager.unlock('minus-10kg');
+      if (peso <= startW - 20) BadgeManager.unlock('minus-20kg');
+    }
+
+    Toast.show('\uD83D\uDCBE Medidas salvas!', 'success');
+    this.render();
+  },
+
+  deleteMeasurement: function(date) {
+    var measurements = StorageManager.getValue('measurements', []);
+    measurements = measurements.filter(function(m) { return m.date !== date; });
+    StorageManager.setValue('measurements', measurements);
+    Toast.show('Medi\u00e7\u00e3o removida.', 'info');
+    this.render();
+  },
+
+  deletePhotosForDate: function(date) {
+    var photos = StorageManager.getValue('photos', []);
+    photos = photos.filter(function(p) { return p.date !== date; });
+    StorageManager.setValue('photos', photos);
+    Toast.show('Fotos removidas.', 'info');
+    this.render();
+  },
+
+  showComparison: function() {
+    var date1 = document.getElementById('compare-date-1').value;
+    var date2 = document.getElementById('compare-date-2').value;
+    var photos = StorageManager.getValue('photos', []);
+    var resultDiv = document.getElementById('comparison-result');
+    if (!resultDiv) return;
+
+    if (date1 === date2) {
+      resultDiv.innerHTML = '<p style="color:var(--danger); margin-top:8px;">Selecione duas datas diferentes!</p>';
+      return;
+    }
+
+    var photos1 = photos.filter(function(p) { return p.date === date1; });
+    var photos2 = photos.filter(function(p) { return p.date === date2; });
+
+    var html = '<div class="comparison-grid" style="margin-top:12px;">';
+    html += '<div class="comparison-col">';
+    html += '<h4 style="text-align:center; margin-bottom:8px;">' + Utils.formatDateBR(date1) + '</h4>';
+    html += '<div class="photo-grid">';
+    photos1.forEach(function(p) {
+      html += '<div class="photo-item"><img src="' + p.data + '" alt="' + p.angle + '"></div>';
+    });
+    if (photos1.length === 0) html += '<p style="opacity:0.5; text-align:center;">Sem fotos</p>';
+    html += '</div>';
+    html += '</div>';
+
+    html += '<div class="comparison-col">';
+    html += '<h4 style="text-align:center; margin-bottom:8px;">' + Utils.formatDateBR(date2) + '</h4>';
+    html += '<div class="photo-grid">';
+    photos2.forEach(function(p) {
+      html += '<div class="photo-item"><img src="' + p.data + '" alt="' + p.angle + '"></div>';
+    });
+    if (photos2.length === 0) html += '<p style="opacity:0.5; text-align:center;">Sem fotos</p>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+
+    resultDiv.innerHTML = html;
+  },
+
+  updateRatioDisplay: function() {
+    var cintura = parseFloat(document.getElementById('measure-cintura').value);
+    var quadril = parseFloat(document.getElementById('measure-quadril').value);
+    var ratioDiv = document.getElementById('ratio-display');
+    if (!ratioDiv) return;
+
+    if (cintura && quadril && quadril > 0) {
+      var ratio = (cintura / quadril).toFixed(2);
+      var color = parseFloat(ratio) <= 0.75 ? 'var(--success)' : 'var(--warning)';
+      var icon = parseFloat(ratio) <= 0.75 ? '\u2705' : '\u26A0\uFE0F';
+      ratioDiv.innerHTML = '<p style="color:' + color + '; font-weight:600;">' + icon + ' Raz\u00e3o cintura/quadril: ' + ratio + ' (meta: \u2264 0.75)</p>';
+    } else {
+      ratioDiv.innerHTML = '';
+    }
+  },
+
+  // ── Event listeners ────────────────────────────────────────
+
+  attachListeners: function() {
+    var self = this;
+
+    // Sub-tab clicks
+    document.querySelectorAll('#progresso-content .sub-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tab = this.getAttribute('data-subtab');
+        if (tab !== self.currentSubTab) {
+          self.currentSubTab = tab;
+          self.render();
+        }
+      });
+    });
+
+    // Photo upload inputs
+    document.querySelectorAll('#progresso-content input[type="file"]').forEach(function(input) {
+      input.addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var angle = input.getAttribute('data-angle');
+        self.handlePhotoUpload(file, angle);
+      });
+    });
+
+    // Compare button
+    var compareBtn = document.getElementById('compare-photos-btn');
+    if (compareBtn) {
+      compareBtn.addEventListener('click', function() {
+        self.showComparison();
+      });
+    }
+
+    // Save measurements
+    var saveBtn = document.getElementById('save-measurements');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', function() {
+        self.saveMeasurements();
+      });
+    }
+
+    // Live ratio calculation
+    var cinturaInput = document.getElementById('measure-cintura');
+    var quadrilInput = document.getElementById('measure-quadril');
+    if (cinturaInput) {
+      cinturaInput.addEventListener('input', function() { self.updateRatioDisplay(); });
+    }
+    if (quadrilInput) {
+      quadrilInput.addEventListener('input', function() { self.updateRatioDisplay(); });
+    }
+
+    // Delete photos by date
+    document.querySelectorAll('.progress-delete-date').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var date = this.getAttribute('data-date');
+        if (confirm('Apagar todas as fotos de ' + Utils.formatDateBR(date) + '?')) {
+          self.deletePhotosForDate(date);
+        }
+      });
+    });
+
+    // Delete measurement
+    document.querySelectorAll('.measurement-delete').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var date = this.getAttribute('data-date');
+        if (confirm('Apagar medi\u00e7\u00e3o de ' + Utils.formatDateBR(date) + '?')) {
+          self.deleteMeasurement(date);
+        }
+      });
+    });
   }
 };
 
