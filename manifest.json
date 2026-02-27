@@ -1,23 +1,17 @@
 {
-  "name": "Arthur - Transformacao Corporal",
+  "name": "Arthur \u2014 Transforma\u00e7\u00e3o Corporal",
   "short_name": "Arthur",
-  "description": "App de Transformacao Corporal - Treino, Nutricao e Cuidados Pessoais",
-  "start_url": ".",
+  "description": "App de acompanhamento de transforma\u00e7\u00e3o corporal",
+  "start_url": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#1a1a2e",
   "theme_color": "#c97bb5",
-  "orientation": "portrait",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%231a1a2e'/%3E%3Ctext x='96' y='130' font-size='120' text-anchor='middle'%3E%F0%9F%A6%8B%3C/text%3E%3C/svg%3E",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]
