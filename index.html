@@ -1410,6 +1410,125 @@
     }
 
     /* ============================================
+       NUTRITION — Meal Cards
+       ============================================ */
+    .protein-counter {
+      margin-bottom: 8px;
+    }
+
+    .meal-card {
+      margin-bottom: 10px;
+    }
+
+    .meal-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .meal-emoji {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .meal-header-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meal-header-info strong {
+      font-size: 0.95rem;
+    }
+
+    .meal-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .meal-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .meal-option {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius-sm);
+    }
+
+    .meal-option strong {
+      color: var(--primary-light);
+    }
+
+    .meal-macros {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ============================================
+       NUTRITION — Recipe Grid
+       ============================================ */
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .recipe-grid .recipe-card {
+      text-align: center;
+      padding: 16px 10px;
+    }
+
+    /* ============================================
+       NUTRITION — Recipe Detail
+       ============================================ */
+    .recipe-detail h2 {
+      font-family: var(--font-title);
+      font-size: 1.3rem;
+    }
+
+    .recipe-detail h3 {
+      font-family: var(--font-title);
+      font-size: 1rem;
+      margin: 16px 0 8px;
+      color: var(--primary-light);
+    }
+
+    .recipe-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .recipe-ingredients,
+    .recipe-steps,
+    .recipe-tips {
+      padding-left: 20px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .recipe-ingredients li,
+    .recipe-steps li,
+    .recipe-tips li {
+      margin-bottom: 4px;
+    }
+
+    .recipe-steps li {
+      margin-bottom: 10px;
+    }
+
+    /* ============================================
        BADGE CARDS
        ============================================ */
     .badges-grid {

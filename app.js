@@ -45,7 +45,7 @@ const App = {
     BadgeManager.init();
     Dashboard.init();
     WorkoutManager.init();
-    // NutritionManager.init(); // Task 8
+    NutritionManager.init();
     // CareManager.init();      // Task 9
     // ProgressManager.init();  // Task 10
 
@@ -1845,6 +1845,414 @@ const WorkoutManager = {
 
   escapeAttr(str) {
     return this.escapeHtml(str);
+  }
+};
+
+// =============================================
+// NUTRITION MANAGER — Nutrição Tab (Task 8)
+// =============================================
+// Manages the Nutrition page with 3 sub-tabs:
+//   1. Plano do Dia (meal plan with logging)
+//   2. Receitas (recipe browser)
+//   3. Lista de Compras (shopping list with checkboxes)
+
+const NutritionManager = {
+  currentSubTab: 'plano',
+  currentRecipe: null,
+
+  init() {
+    var self = this;
+    document.addEventListener('pageChange', function(e) {
+      if (e.detail.page === 'nutricao') self.render();
+    });
+  },
+
+  render() {
+    var container = document.getElementById('nutricao-content');
+    if (!container) return;
+
+    var html = this.renderSubTabs();
+
+    switch (this.currentSubTab) {
+      case 'plano':
+        html += this.renderMealPlan();
+        break;
+      case 'receitas':
+        html += this.currentRecipe ? this.renderRecipeDetail() : this.renderRecipeGrid();
+        break;
+      case 'compras':
+        html += this.renderShoppingList();
+        break;
+    }
+
+    container.innerHTML = html;
+    this.attachListeners();
+  },
+
+  // ── Sub-tab navigation ─────────────────────────────────────
+
+  renderSubTabs() {
+    var tabs = [
+      { id: 'plano', label: '\uD83C\uDF7D\uFE0F Plano do Dia' },
+      { id: 'receitas', label: '\uD83D\uDCD6 Receitas' },
+      { id: 'compras', label: '\uD83D\uDED2 Lista de Compras' }
+    ];
+    var self = this;
+    var html = '<div class="sub-tabs">';
+    tabs.forEach(function(tab) {
+      var activeClass = tab.id === self.currentSubTab ? ' active' : '';
+      html += '<button class="sub-tab' + activeClass + '" data-subtab="' + tab.id + '">' + tab.label + '</button>';
+    });
+    html += '</div>';
+    return html;
+  },
+
+  // ── Sub-tab 1: Plano do Dia ────────────────────────────────
+
+  getMealPlanType() {
+    var day = new Date().getDay(); // 0=Sun, 6=Sat
+    return (day === 0 || day === 6) ? 'descanso' : 'treino';
+  },
+
+  getMealLogData() {
+    return StorageManager.getForDate('nutrition') || { meals: {} };
+  },
+
+  saveMealLogData(data) {
+    StorageManager.setForDate('nutrition', data);
+  },
+
+  calculateProtein(loggedMeals) {
+    var planType = this.getMealPlanType();
+    var meals = MEALS[planType].meals;
+    var total = 0;
+    meals.forEach(function(meal, index) {
+      var mealKey = 'meal_' + index;
+      if (loggedMeals[mealKey]) {
+        // Use average protein from both options
+        var protA = NutritionManager.extractProtein(meal.optionA.macros);
+        var protB = NutritionManager.extractProtein(meal.optionB.macros);
+        total += Math.round((protA + protB) / 2);
+      }
+    });
+    return total;
+  },
+
+  extractProtein(macroStr) {
+    var match = macroStr.match(/(\d+)g\s*prot/);
+    return match ? parseInt(match[1], 10) : 0;
+  },
+
+  renderMealPlan() {
+    var planType = this.getMealPlanType();
+    var plan = MEALS[planType];
+    var logData = this.getMealLogData();
+    var loggedMeals = logData.meals || {};
+    var proteinConsumed = this.calculateProtein(loggedMeals);
+    var proteinTarget = planType === 'treino' ? 170 : 160;
+    var proteinPct = Math.min(100, Math.round((proteinConsumed / proteinTarget) * 100));
+
+    var html = '';
+
+    // Day type note
+    var day = new Date().getDay();
+    if (day === 6) {
+      html += '<div class="card glass" style="text-align:center; margin-bottom: 12px;">';
+      html += '<span style="font-size:1.1rem;">\uD83C\uDF89 Dia livre! Escolha 1 refei\u00E7\u00E3o livre com modera\u00E7\u00E3o</span>';
+      html += '</div>';
+    } else if (day === 0) {
+      html += '<div class="card glass" style="text-align:center; margin-bottom: 12px;">';
+      html += '<span style="font-size:1.1rem;">\uD83D\uDE34 Dia de descanso \u2014 calorias um pouco menores (~2.100-2.200)</span>';
+      html += '</div>';
+    }
+
+    // Protein counter
+    html += '<div class="card glass protein-counter">';
+    html += '  <div class="progress-label" style="margin-bottom:6px;">';
+    html += '    <span>\uD83D\uDCAA Prote\u00EDna: ' + proteinConsumed + 'g / ' + proteinTarget + 'g</span>';
+    html += '    <span>' + proteinPct + '%</span>';
+    html += '  </div>';
+    html += '  <div class="progress-bar-wrapper progress-bar-lg">';
+    html += '    <div class="progress-bar-fill" style="width:' + proteinPct + '%"></div>';
+    html += '  </div>';
+    html += '</div>';
+
+    // Summary macros card
+    html += '<div class="card glass" style="text-align:center; padding:12px;">';
+    if (planType === 'treino') {
+      html += '<span style="font-size:0.85rem; opacity:0.85;">\uD83D\uDCCA Meta di\u00E1ria: ~2.400 kcal | 170g prot | 250g carb | 70g gord</span>';
+    } else {
+      html += '<span style="font-size:0.85rem; opacity:0.85;">\uD83D\uDCCA Meta di\u00E1ria: ~2.150 kcal | 160g prot | 220g carb | 65g gord</span>';
+    }
+    html += '</div>';
+
+    // Meal cards
+    var meals = plan.meals;
+    for (var i = 0; i < meals.length; i++) {
+      var meal = meals[i];
+      var mealKey = 'meal_' + i;
+      var isLogged = !!loggedMeals[mealKey];
+
+      html += '<div class="card glass meal-card">';
+      html += '  <div class="meal-header">';
+      html += '    <span class="meal-emoji">' + meal.emoji + '</span>';
+      html += '    <div class="meal-header-info">';
+      html += '      <strong>' + meal.name + '</strong>';
+      html += '      <span class="meal-time">' + meal.time + '</span>';
+      html += '    </div>';
+      html += '    <button class="btn btn-sm ' + (isLogged ? 'btn-primary' : 'btn-outline') + ' meal-log-btn" data-meal="' + mealKey + '">';
+      html += isLogged ? '\u2705 Comi' : 'Comi \u2713';
+      html += '    </button>';
+      html += '  </div>';
+      html += '  <div class="meal-options">';
+      html += '    <div class="meal-option">';
+      html += '      <strong>Op\u00E7\u00E3o A:</strong> ' + meal.optionA.description;
+      html += '      <span class="meal-macros">' + meal.optionA.macros + '</span>';
+      html += '    </div>';
+      html += '    <div class="meal-option">';
+      html += '      <strong>Op\u00E7\u00E3o B:</strong> ' + meal.optionB.description;
+      html += '      <span class="meal-macros">' + meal.optionB.macros + '</span>';
+      html += '    </div>';
+      html += '  </div>';
+      html += '</div>';
+    }
+
+    return html;
+  },
+
+  // ── Sub-tab 2: Receitas ────────────────────────────────────
+
+  renderRecipeGrid() {
+    var html = '<div class="recipe-grid">';
+    RECIPES.forEach(function(recipe) {
+      html += '<div class="recipe-card glass" data-recipe="' + recipe.id + '">';
+      html += '  <div class="recipe-emoji">' + recipe.emoji + '</div>';
+      html += '  <div class="recipe-name">' + recipe.name + '</div>';
+      html += '  <div class="recipe-meta">' + recipe.calories + ' kcal | ' + recipe.protein + 'g prot</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    return html;
+  },
+
+  renderRecipeDetail() {
+    var recipe = null;
+    for (var i = 0; i < RECIPES.length; i++) {
+      if (RECIPES[i].id === this.currentRecipe) {
+        recipe = RECIPES[i];
+        break;
+      }
+    }
+    if (!recipe) return '<p>Receita n\u00E3o encontrada.</p>';
+
+    var html = '<div class="recipe-detail">';
+
+    // Back button
+    html += '<button class="btn btn-ghost recipe-back-btn">\u2190 Voltar</button>';
+
+    // Title
+    html += '<h2 style="margin:12px 0 8px;">' + recipe.emoji + ' ' + recipe.name + '</h2>';
+
+    // Stats
+    html += '<div class="recipe-stats">';
+    html += '  <span>\uD83D\uDCCA ' + recipe.calories + ' kcal</span>';
+    html += '  <span>\uD83D\uDCAA ' + recipe.protein + 'g prot</span>';
+    html += '  <span>\uD83C\uDF5E ' + recipe.carbs + 'g carb</span>';
+    html += '  <span>\uD83E\uDDC8 ' + recipe.fat + 'g gord</span>';
+    html += '</div>';
+
+    // Servings
+    html += '<p style="opacity:0.7; font-size:0.85rem; margin:8px 0;">Rendimento: ' + recipe.servings + (recipe.servings === 1 ? ' por\u00E7\u00E3o' : ' por\u00E7\u00F5es') + '</p>';
+
+    // Video button
+    if (recipe.videoKey) {
+      html += '<button class="btn btn-sm btn-outline recipe-video-btn" data-video="' + recipe.videoKey + '">';
+      html += '\uD83C\uDFAC Ver receita em v\u00EDdeo';
+      html += '</button>';
+    }
+
+    // Ingredients
+    html += '<h3 style="margin-top:20px;">Ingredientes</h3>';
+    html += '<ul class="recipe-ingredients">';
+    recipe.ingredients.forEach(function(ing) {
+      html += '<li>' + ing + '</li>';
+    });
+    html += '</ul>';
+
+    // Steps
+    html += '<h3>Modo de Preparo</h3>';
+    html += '<ol class="recipe-steps">';
+    recipe.steps.forEach(function(step) {
+      html += '<li>' + step + '</li>';
+    });
+    html += '</ol>';
+
+    // Variations
+    if (recipe.variations && recipe.variations.length > 0) {
+      html += '<h3>Varia\u00E7\u00F5es</h3>';
+      recipe.variations.forEach(function(v) {
+        html += '<div class="card glass" style="padding:12px; margin-bottom:8px;">';
+        html += '  <strong>' + v.name + ':</strong> ' + v.description;
+        html += '</div>';
+      });
+    }
+
+    // Tips
+    if (recipe.tips && recipe.tips.length > 0) {
+      html += '<h3>Dicas</h3>';
+      html += '<ul class="recipe-tips">';
+      recipe.tips.forEach(function(tip) {
+        html += '<li>' + tip + '</li>';
+      });
+      html += '</ul>';
+    }
+
+    html += '</div>';
+    return html;
+  },
+
+  showRecipe(recipeId) {
+    this.currentRecipe = recipeId;
+    this.render();
+  },
+
+  hideRecipe() {
+    this.currentRecipe = null;
+    this.render();
+  },
+
+  // ── Sub-tab 3: Lista de Compras ────────────────────────────
+
+  getShoppingData() {
+    return StorageManager.getValue('shoppingList', {});
+  },
+
+  saveShoppingData(data) {
+    StorageManager.setValue('shoppingList', data);
+  },
+
+  renderShoppingList() {
+    var checkedItems = this.getShoppingData();
+    var categories = Object.keys(SHOPPING_LIST);
+    var html = '';
+
+    categories.forEach(function(catKey) {
+      var cat = SHOPPING_LIST[catKey];
+      html += '<h3 style="margin-top:16px; margin-bottom:8px;">' + cat.emoji + ' ' + cat.label + '</h3>';
+
+      cat.items.forEach(function(item) {
+        var itemKey = catKey + '_' + item.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        var isChecked = !!checkedItems[itemKey];
+
+        html += '<label class="checkbox-wrapper">';
+        html += '  <input type="checkbox" class="shopping-checkbox" data-item="' + itemKey + '"' + (isChecked ? ' checked' : '') + '>';
+        html += '  <span class="checkbox-custom"></span>';
+        html += '  <span class="checkbox-label">' + item.quantity + ' ' + item.name + ' \u2014 ' + item.price + '</span>';
+        html += '</label>';
+      });
+    });
+
+    // Total estimate
+    html += '<div class="card glass" style="text-align:center; margin-top:20px;">';
+    html += '  <strong>Custo semanal estimado: R$180-250</strong>';
+    html += '  <p style="opacity:0.6; font-size:0.8rem; margin-top:4px;">Sem contar whey e itens que duram mais de 1 semana</p>';
+    html += '</div>';
+
+    // Reset button
+    html += '<button class="btn btn-block btn-outline shopping-reset-btn" style="margin-top:12px;">';
+    html += '  Limpar lista \u21BA';
+    html += '</button>';
+
+    return html;
+  },
+
+  resetShoppingList() {
+    StorageManager.setValue('shoppingList', {});
+    Toast.show('Lista de compras limpa!', 'success');
+    this.render();
+  },
+
+  // ── Meal toggling ──────────────────────────────────────────
+
+  toggleMeal(mealKey) {
+    var logData = this.getMealLogData();
+    if (!logData.meals) logData.meals = {};
+    logData.meals[mealKey] = !logData.meals[mealKey];
+    this.saveMealLogData(logData);
+    this.render();
+  },
+
+  // ── Event listeners ────────────────────────────────────────
+
+  attachListeners() {
+    var self = this;
+
+    // Sub-tab clicks
+    document.querySelectorAll('#nutricao-content .sub-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tab = this.getAttribute('data-subtab');
+        if (tab !== self.currentSubTab) {
+          self.currentSubTab = tab;
+          self.currentRecipe = null;
+          self.render();
+        }
+      });
+    });
+
+    // Meal log buttons
+    document.querySelectorAll('.meal-log-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var mealKey = this.getAttribute('data-meal');
+        self.toggleMeal(mealKey);
+      });
+    });
+
+    // Recipe card clicks
+    document.querySelectorAll('.recipe-card[data-recipe]').forEach(function(card) {
+      card.addEventListener('click', function() {
+        var recipeId = this.getAttribute('data-recipe');
+        self.showRecipe(recipeId);
+      });
+    });
+
+    // Recipe back button
+    var backBtn = document.querySelector('.recipe-back-btn');
+    if (backBtn) {
+      backBtn.addEventListener('click', function() {
+        self.hideRecipe();
+      });
+    }
+
+    // Recipe video button
+    var videoBtn = document.querySelector('.recipe-video-btn');
+    if (videoBtn) {
+      videoBtn.addEventListener('click', function() {
+        var videoKey = this.getAttribute('data-video');
+        VideoModal.open(videoKey, 'recipe');
+      });
+    }
+
+    // Shopping checkboxes
+    document.querySelectorAll('.shopping-checkbox').forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        var itemKey = this.getAttribute('data-item');
+        var data = self.getShoppingData();
+        if (this.checked) {
+          data[itemKey] = true;
+        } else {
+          delete data[itemKey];
+        }
+        self.saveShoppingData(data);
+      });
+    });
+
+    // Shopping reset button
+    var resetBtn = document.querySelector('.shopping-reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        self.resetShoppingList();
+      });
+    }
   }
 };
 
