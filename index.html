@@ -1835,6 +1835,244 @@
     }
 
     /* ============================================
+       CARE MODULE — Extended styles
+       ============================================ */
+
+    /* Step number circle */
+    .step-number {
+      min-width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .step-how {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 2px 0;
+      line-height: 1.4;
+    }
+
+    .step-why {
+      margin: 2px 0;
+    }
+
+    /* Alert styling */
+    .care-alert {
+      padding: 10px 14px;
+      background: rgba(255, 170, 50, 0.12);
+      border: 1px solid rgba(255, 170, 50, 0.3);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .care-alert-inline {
+      font-size: 0.82rem;
+      margin: 4px 0;
+      padding: 4px 8px;
+      background: rgba(255, 170, 50, 0.08);
+      border-radius: var(--radius-sm);
+    }
+
+    .care-alerts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Care items (hair routine, depilation areas, etc.) */
+    .care-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .care-item:last-child {
+      border-bottom: none;
+    }
+
+    .care-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .care-item-header strong {
+      font-size: 0.95rem;
+    }
+
+    .care-frequency {
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      background: rgba(201, 123, 181, 0.15);
+      color: var(--primary);
+      border-radius: 20px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .care-item p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 3px 0;
+      line-height: 1.4;
+    }
+
+    .care-item .btn {
+      margin-top: 6px;
+    }
+
+    /* Hair timeline */
+    .hair-length-input {
+      width: 80px;
+      padding: 8px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .hair-length-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .hair-timeline {
+      position: relative;
+      padding-bottom: 50px;
+      margin-top: 1rem;
+    }
+
+    .timeline-bar {
+      width: 100%;
+      height: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .timeline-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+
+    .timeline-milestones {
+      position: relative;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .milestone {
+      position: absolute;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .milestone.reached {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .milestone-length {
+      display: block;
+      font-weight: 700;
+      font-size: 0.78rem;
+    }
+
+    .milestone-label {
+      display: block;
+      font-size: 0.68rem;
+      opacity: 0.8;
+    }
+
+    /* Kegel timer display */
+    .kegel-instructions {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 1rem;
+    }
+
+    .kegel-instructions p {
+      font-size: 0.88rem;
+      margin: 6px 0;
+      line-height: 1.5;
+    }
+
+    .kegel-timer-display {
+      text-align: center;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-top: 1rem;
+    }
+
+    .kegel-timer-phase {
+      font-size: 1.4rem;
+      font-weight: 700;
+      font-family: var(--font-title);
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .kegel-timer-count {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: var(--font-title);
+    }
+
+    .kegel-timer-rep {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Care tip items */
+    .care-tip-item {
+      padding: 10px 14px;
+      background: rgba(201, 123, 181, 0.08);
+      border: 1px solid rgba(201, 123, 181, 0.15);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    /* Depilation steps */
+    .depilation-steps .care-step {
+      margin-bottom: 6px;
+    }
+
+    /* ============================================
        STAT CARDS
        ============================================ */
     .stats-row {

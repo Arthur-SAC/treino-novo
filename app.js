@@ -46,7 +46,7 @@ const App = {
     Dashboard.init();
     WorkoutManager.init();
     NutritionManager.init();
-    // CareManager.init();      // Task 9
+    CareManager.init();         // Task 9
     // ProgressManager.init();  // Task 10
 
     Toast.show('Bem-vinda de volta! \u2728', 'success');
@@ -2251,6 +2251,584 @@ const NutritionManager = {
     if (resetBtn) {
       resetBtn.addEventListener('click', function() {
         self.resetShoppingList();
+      });
+    }
+  }
+};
+
+// =============================================
+// CARE MANAGER — Cuidados tab (Skincare, Hair, Depilation, Kegel)
+// =============================================
+// Renders 4 sub-tabs: Skincare, Cabelo, Depilação, Kegel.
+// Each sub-tab has its own render method with cards, steps, timers, etc.
+
+const CareManager = {
+  currentSubTab: 'skincare',
+  kegelTimerActive: false,
+
+  // ── Lifecycle ──────────────────────────────────────────────
+
+  init() {
+    var self = this;
+    document.addEventListener('pageChange', function(e) {
+      if (e.detail.page === 'cuidados') self.render();
+    });
+  },
+
+  render() {
+    var container = document.getElementById('cuidados-content');
+    if (!container) return;
+
+    var html = this.renderSubTabs();
+
+    switch (this.currentSubTab) {
+      case 'skincare':
+        html += this.renderSkincare();
+        break;
+      case 'cabelo':
+        html += this.renderHair();
+        break;
+      case 'depilacao':
+        html += this.renderDepilation();
+        break;
+      case 'kegel':
+        html += this.renderKegel();
+        break;
+    }
+
+    container.innerHTML = html;
+    this.attachListeners();
+  },
+
+  // ── Sub-tab navigation ─────────────────────────────────────
+
+  renderSubTabs() {
+    var tabs = [
+      { id: 'skincare', label: '\u2728 Skincare' },
+      { id: 'cabelo', label: '\uD83D\uDC87 Cabelo' },
+      { id: 'depilacao', label: '\uD83E\uDE92 Depila\u00E7\u00E3o' },
+      { id: 'kegel', label: '\uD83D\uDCAA Kegel' }
+    ];
+    var self = this;
+    var html = '<div class="sub-tabs">';
+    tabs.forEach(function(tab) {
+      var activeClass = tab.id === self.currentSubTab ? ' active' : '';
+      html += '<button class="sub-tab' + activeClass + '" data-subtab="' + tab.id + '">' + tab.label + '</button>';
+    });
+    html += '</div>';
+    return html;
+  },
+
+  // ── Sub-tab 1: Skincare ────────────────────────────────────
+
+  renderSkincare() {
+    var html = '';
+
+    // Morning routine
+    html += this.renderSkincareRoutine(SKINCARE_ROUTINE.morning, false);
+
+    // Night routine
+    html += this.renderSkincareRoutine(SKINCARE_ROUTINE.night, true);
+
+    // Body care
+    html += this.renderBodyCare();
+
+    // Alerts
+    html += this.renderSkincareAlerts();
+
+    return html;
+  },
+
+  renderSkincareRoutine(routine, isNight) {
+    var html = '<div class="card glass">';
+    html += '<h3>' + routine.emoji + ' ' + routine.label + '</h3>';
+
+    if (isNight && routine.note) {
+      html += '<div class="care-alert" style="margin-bottom: 1rem;">';
+      html += '<span>\u26A0\uFE0F ' + routine.note + '</span>';
+      html += '</div>';
+    }
+
+    html += '<div class="skincare-steps">';
+
+    var today = new Date().getDay(); // 0=Sun, 1=Mon ... 6=Sat
+    routine.steps.forEach(function(step) {
+      // Check if this step has day restrictions (retinol)
+      var isRetinol = step.days && step.days.length > 0;
+      var isRetinolDay = isRetinol && step.days.indexOf(today) !== -1;
+      var dayNames = {1: 'Seg', 3: 'Qua', 5: 'Sex'};
+
+      html += '<div class="care-step">';
+      html += '<div class="step-number">' + step.order + '</div>';
+      html += '<div class="step-content">';
+      html += '<strong>' + step.emoji + ' ' + step.product + '</strong>';
+      html += '<p class="step-how">' + step.howTo + '</p>';
+      html += '<p class="step-why" style="opacity:0.7; font-size:0.85rem;">' + step.why + '</p>';
+
+      if (isRetinol) {
+        var dayLabels = step.days.map(function(d) { return dayNames[d] || d; }).join('/');
+        html += '<p class="care-alert-inline">\u26A0\uFE0F S\u00F3 ' + dayLabels;
+        if (isRetinolDay) {
+          html += ' \u2014 <strong style="color: var(--success);">Hoje \u00E9 dia!</strong>';
+        } else {
+          html += ' \u2014 <span style="opacity:0.7;">Hoje n\u00E3o</span>';
+        }
+        html += '</p>';
+      }
+
+      if (step.videoKey) {
+        html += '<button class="btn btn-sm btn-ghost" onclick="VideoModal.open(\'' + step.videoKey + '\', \'skincare\')">\uD83C\uDFAC Ver como fazer</button>';
+      }
+
+      html += '</div>'; // .step-content
+      html += '</div>'; // .care-step
+    });
+
+    html += '</div>'; // .skincare-steps
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderBodyCare() {
+    var body = SKINCARE_ROUTINE.body;
+    var html = '<div class="card glass">';
+    html += '<h3>' + body.emoji + ' ' + body.label + '</h3>';
+    html += '<div class="skincare-steps">';
+
+    body.steps.forEach(function(step) {
+      html += '<div class="care-step">';
+      html += '<div class="step-number">' + step.order + '</div>';
+      html += '<div class="step-content">';
+      html += '<strong>' + step.emoji + ' ' + step.product + '</strong>';
+      html += '<p class="step-how">' + step.howTo + '</p>';
+      html += '<p class="step-why" style="opacity:0.7; font-size:0.85rem;">' + step.why + '</p>';
+      if (step.frequency) {
+        html += '<p style="font-size:0.8rem; opacity:0.6;">\u23F0 ' + step.frequency + '</p>';
+      }
+      if (step.videoKey) {
+        html += '<button class="btn btn-sm btn-ghost" onclick="VideoModal.open(\'' + step.videoKey + '\', \'skincare\')">\uD83C\uDFAC Ver como fazer</button>';
+      }
+      html += '</div>'; // .step-content
+      html += '</div>'; // .care-step
+    });
+
+    html += '</div>'; // .skincare-steps
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderSkincareAlerts() {
+    var alerts = SKINCARE_ROUTINE.alerts;
+    var html = '<div class="card glass">';
+    html += '<h3>\u26A0\uFE0F Alertas Importantes</h3>';
+    html += '<div class="care-alerts-list">';
+
+    alerts.forEach(function(alert) {
+      html += '<div class="care-alert">';
+      html += '<span>\u26A0\uFE0F ' + alert + '</span>';
+      html += '</div>';
+    });
+
+    html += '</div>'; // .care-alerts-list
+    html += '</div>'; // .card
+    return html;
+  },
+
+  // ── Sub-tab 2: Cabelo (Hair) ───────────────────────────────
+
+  renderHair() {
+    var html = '';
+
+    // Hair care routine
+    html += this.renderHairRoutine();
+
+    // Hair growth timeline
+    html += this.renderHairTimeline();
+
+    // Supplement card
+    html += this.renderHairSupplement();
+
+    return html;
+  },
+
+  renderHairRoutine() {
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDC87 Rotina Capilar (' + HAIR_CARE.type + ')</h3>';
+
+    HAIR_CARE.routine.forEach(function(item) {
+      html += '<div class="care-item">';
+      html += '<div class="care-item-header">';
+      html += '<strong>' + item.care + '</strong>';
+      html += '<span class="care-frequency">' + item.frequency + '</span>';
+      html += '</div>';
+      html += '<p>' + item.details + '</p>';
+      if (item.videoKey) {
+        html += '<button class="btn btn-sm btn-ghost" onclick="VideoModal.open(\'' + item.videoKey + '\', \'hair\')">\uD83C\uDFAC Ver tutorial</button>';
+      }
+      html += '</div>'; // .care-item
+    });
+
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderHairTimeline() {
+    var currentLength = StorageManager.getValue('hairLength', 6);
+    var goalLength = 30;
+    var progressPct = Math.min(100, Math.round((currentLength / goalLength) * 100));
+
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDCCF Timeline de Crescimento</h3>';
+
+    // Current length input
+    html += '<div style="margin-bottom:1rem;">';
+    html += '<label style="font-size:0.9rem; margin-right:0.5rem;">Comprimento atual (cm):</label>';
+    html += '<input type="number" id="hair-length" class="hair-length-input" value="' + currentLength + '" min="0" max="50" step="0.5">';
+    html += '</div>';
+
+    // Visual timeline bar
+    html += '<div class="hair-timeline">';
+    html += '<div class="timeline-bar">';
+    html += '<div class="timeline-progress" style="width: ' + progressPct + '%"></div>';
+    html += '</div>';
+
+    // Milestones
+    html += '<div class="timeline-milestones">';
+    HAIR_CARE.timeline.forEach(function(m, i) {
+      var positions = [0, 43, 67, 100];
+      var pos = positions[i] || 0;
+      var isCurrent = (i === 0);
+      var isPast = (currentLength >= parseInt(m.length));
+      html += '<div class="milestone' + (isPast ? ' reached' : '') + '" style="left:' + pos + '%">';
+      html += '<span class="milestone-length">' + m.length + '</span>';
+      html += '<span class="milestone-label">' + m.milestone + '</span>';
+      html += '</div>';
+    });
+    html += '</div>'; // .timeline-milestones
+    html += '</div>'; // .hair-timeline
+
+    // Current progress text
+    html += '<p style="text-align:center; margin-top:1.5rem; font-size:0.9rem; opacity:0.8;">';
+    html += '\uD83D\uDCCA Progresso: <strong>' + currentLength + 'cm</strong> de ' + goalLength + 'cm (' + progressPct + '%)';
+    html += '</p>';
+
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderHairSupplement() {
+    var sup = HAIR_CARE.supplements;
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDC8A Suplemento</h3>';
+    html += '<div class="care-item">';
+    html += '<div class="care-item-header">';
+    html += '<strong>' + sup.name + '</strong>';
+    html += '<span class="care-frequency">' + sup.dose + '</span>';
+    html += '</div>';
+    html += '<p>' + sup.notes + '</p>';
+    html += '</div>';
+    html += '</div>'; // .card
+    return html;
+  },
+
+  // ── Sub-tab 3: Depilação ───────────────────────────────────
+
+  renderDepilation() {
+    var html = '';
+
+    // Schedule reminder
+    html += this.renderDepilationSchedule();
+
+    // Areas
+    html += this.renderDepilationAreas();
+
+    // Step by step
+    html += this.renderDepilationSteps();
+
+    // Alerts
+    html += this.renderDepilationAlerts();
+
+    return html;
+  },
+
+  renderDepilationSchedule() {
+    var today = new Date().getDay(); // 0=Sun, 1=Mon ... 6=Sat
+    var isDepilationDay = DEPILATION.days.indexOf(today) !== -1;
+    var dayNames = DEPILATION.dayNames;
+
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDCC5 Agenda de Depila\u00E7\u00E3o</h3>';
+    html += '<p style="font-size:1rem; margin-bottom:0.75rem;">Dias de depila\u00E7\u00E3o: <strong>' + dayNames.join(' e ') + '</strong></p>';
+
+    if (isDepilationDay) {
+      html += '<div class="care-alert" style="background: rgba(110,203,139,0.15); border-color: rgba(110,203,139,0.3);">';
+      html += '<span>\u2705 Hoje \u00E9 dia de depila\u00E7\u00E3o!</span>';
+      html += '</div>';
+    } else {
+      // Find next depilation day
+      var nextDay = this.getNextDepilationDay(today);
+      html += '<div class="care-alert">';
+      html += '<span>\uD83D\uDCC6 Pr\u00F3xima depila\u00E7\u00E3o: <strong>' + nextDay + '</strong></span>';
+      html += '</div>';
+    }
+
+    html += '</div>'; // .card
+    return html;
+  },
+
+  getNextDepilationDay(today) {
+    var dayDisplayNames = ['Domingo', 'Segunda', 'Ter\u00E7a', 'Quarta', 'Quinta', 'Sexta', 'S\u00E1bado'];
+    var days = DEPILATION.days; // [2, 6] = Tuesday, Saturday
+    for (var i = 1; i <= 7; i++) {
+      var checkDay = (today + i) % 7;
+      if (days.indexOf(checkDay) !== -1) {
+        var daysUntil = i;
+        return dayDisplayNames[checkDay] + ' (' + (daysUntil === 1 ? 'amanh\u00E3' : 'em ' + daysUntil + ' dias') + ')';
+      }
+    }
+    return dayDisplayNames[days[0]];
+  },
+
+  renderDepilationAreas() {
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83E\uDE92 \u00C1reas de Depila\u00E7\u00E3o</h3>';
+
+    DEPILATION.areas.forEach(function(area) {
+      html += '<div class="care-item" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding:0.75rem 0;">';
+      html += '<strong>' + area.area + '</strong>';
+      html += '<p>\uD83D\uDCCB M\u00E9todo: ' + area.method + '</p>';
+      html += '<p>\u27A1\uFE0F Dire\u00E7\u00E3o: ' + area.direction + '</p>';
+      html += '<p>\u26A0\uFE0F ' + area.specialCare + '</p>';
+      if (area.videoKey) {
+        html += '<button class="btn btn-sm btn-ghost" onclick="VideoModal.open(\'' + area.videoKey + '\', \'depilation\')">\uD83C\uDFAC Ver tutorial</button>';
+      }
+      html += '</div>'; // .care-item
+    });
+
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderDepilationSteps() {
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDCDD Passo a Passo</h3>';
+    html += '<div class="depilation-steps">';
+
+    DEPILATION.steps.forEach(function(step, index) {
+      html += '<div class="care-step">';
+      html += '<div class="step-number">' + (index + 1) + '</div>';
+      html += '<div class="step-content">';
+      html += '<p style="margin:0;">' + step + '</p>';
+      html += '</div>';
+      html += '</div>';
+    });
+
+    html += '</div>'; // .depilation-steps
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderDepilationAlerts() {
+    var html = '<div class="card glass">';
+    html += '<h3>\u26A0\uFE0F Alertas \u2014 Pele Parda</h3>';
+    html += '<div class="care-alerts-list">';
+
+    DEPILATION.alerts.forEach(function(alert) {
+      html += '<div class="care-alert">';
+      html += '<span>\u26A0\uFE0F ' + alert + '</span>';
+      html += '</div>';
+    });
+
+    html += '</div>'; // .care-alerts-list
+    html += '</div>'; // .card
+    return html;
+  },
+
+  // ── Sub-tab 4: Kegel ───────────────────────────────────────
+
+  renderKegel() {
+    var html = '';
+
+    // Standard Kegel exercise
+    html += this.renderKegelStandard();
+
+    // Reverse Kegel
+    html += this.renderKegelReverse();
+
+    // Tips
+    html += this.renderKegelTips();
+
+    return html;
+  },
+
+  renderKegelStandard() {
+    var std = KEGEL_ROUTINE.standard;
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDCAA ' + std.name + ' (Di\u00E1rio)</h3>';
+    html += '<p style="margin-bottom:1rem;">' + std.reps + ' repeti\u00E7\u00F5es \u2014 ' + std.tip + '</p>';
+
+    html += '<div class="kegel-instructions">';
+    html += '<p>1. Identifique o m\u00FAsculo: \u00E9 o mesmo que voc\u00EA usa pra parar o xixi no meio</p>';
+    html += '<p>2. Contraia e segure <strong>' + std.holdSeconds + ' segundos</strong></p>';
+    html += '<p>3. Relaxe <strong>' + std.relaxSeconds + ' segundos</strong></p>';
+    html += '<p>4. Repita <strong>' + std.reps + ' vezes</strong></p>';
+    html += '<p>5. Fa\u00E7a <strong>TODOS os dias</strong></p>';
+    html += '</div>';
+
+    // Kegel timer display area
+    html += '<div id="kegel-timer-display" class="kegel-timer-display" style="display:none;">';
+    html += '<div class="kegel-timer-phase" id="kegel-phase">Pronto?</div>';
+    html += '<div class="kegel-timer-count" id="kegel-count"></div>';
+    html += '<div class="kegel-timer-rep" id="kegel-rep"></div>';
+    html += '</div>';
+
+    // Timer button
+    html += '<button class="btn btn-primary btn-block" id="kegel-start-btn" style="margin-top:1rem;">';
+    html += '\u25B6\uFE0F Iniciar Kegel Guiado (' + std.reps + ' reps)';
+    html += '</button>';
+
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderKegelReverse() {
+    var rev = KEGEL_ROUTINE.reverse;
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83C\uDFAF ' + rev.name + '</h3>';
+    html += '<p style="margin-bottom:0.75rem;">' + rev.description + '</p>';
+
+    html += '<div class="kegel-instructions">';
+    html += '<p>\uD83D\uDD01 Repeti\u00E7\u00F5es: <strong>' + rev.reps + '</strong></p>';
+    html += '<p>\u23F1\uFE0F Segurar: <strong>' + rev.holdSeconds + ' segundos</strong></p>';
+    html += '<p>\uD83D\uDE0C Relaxar: <strong>' + rev.relaxSeconds + ' segundos</strong></p>';
+    html += '<p>\uD83D\uDCC5 Frequ\u00EAncia: <strong>' + rev.frequency + '</strong></p>';
+    html += '</div>';
+
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderKegelTips() {
+    var tips = KEGEL_ROUTINE.tips;
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDCA1 Dicas</h3>';
+    html += '<div class="kegel-tips-list">';
+
+    tips.forEach(function(tip) {
+      html += '<div class="care-tip-item">';
+      html += '<span>\uD83D\uDCA1 ' + tip + '</span>';
+      html += '</div>';
+    });
+
+    html += '</div>'; // .kegel-tips-list
+    html += '</div>'; // .card
+    return html;
+  },
+
+  // ── Kegel Timer Logic ──────────────────────────────────────
+
+  startKegelTimer() {
+    if (this.kegelTimerActive) return;
+    this.kegelTimerActive = true;
+
+    var display = document.getElementById('kegel-timer-display');
+    var startBtn = document.getElementById('kegel-start-btn');
+    if (display) display.style.display = 'block';
+    if (startBtn) startBtn.disabled = true;
+
+    var rep = 1;
+    var totalReps = KEGEL_ROUTINE.standard.reps;
+    var holdTime = KEGEL_ROUTINE.standard.holdSeconds;
+    var relaxTime = KEGEL_ROUTINE.standard.relaxSeconds;
+    var self = this;
+
+    var doRep = function() {
+      if (rep > totalReps) {
+        // Completed all reps
+        self.kegelTimerActive = false;
+        if (startBtn) {
+          startBtn.disabled = false;
+          startBtn.textContent = '\u2705 Completo! Fazer de novo?';
+        }
+        self.updateKegelDisplay('Completo! \uD83D\uDCAA', '', '');
+        Toast.show('Kegel completo! \uD83D\uDCAA', 'success');
+
+        // Vibrate celebration
+        if (navigator.vibrate) {
+          navigator.vibrate([200, 100, 200, 100, 200]);
+        }
+
+        // Reset button text after 3 seconds
+        setTimeout(function() {
+          if (startBtn) {
+            startBtn.textContent = '\u25B6\uFE0F Iniciar Kegel Guiado (' + totalReps + ' reps)';
+          }
+        }, 3000);
+        return;
+      }
+
+      // HOLD phase
+      self.updateKegelDisplay('CONTRAIA!', holdTime + 's', 'Repeti\u00E7\u00E3o ' + rep + '/' + totalReps);
+      if (navigator.vibrate) navigator.vibrate(100);
+
+      TimerEngine.startCountdown(holdTime, 'CONTRAIA! (Rep ' + rep + '/' + totalReps + ')', null, function() {
+        // RELAX phase
+        self.updateKegelDisplay('Relaxe...', relaxTime + 's', 'Repeti\u00E7\u00E3o ' + rep + '/' + totalReps);
+        if (navigator.vibrate) navigator.vibrate([50, 50]);
+
+        TimerEngine.startCountdown(relaxTime, 'Relaxe... (Rep ' + rep + '/' + totalReps + ')', null, function() {
+          rep++;
+          doRep();
+        });
+      });
+    };
+
+    doRep();
+  },
+
+  updateKegelDisplay(phase, count, repText) {
+    var phaseEl = document.getElementById('kegel-phase');
+    var countEl = document.getElementById('kegel-count');
+    var repEl = document.getElementById('kegel-rep');
+    if (phaseEl) phaseEl.textContent = phase;
+    if (countEl) countEl.textContent = count;
+    if (repEl) repEl.textContent = repText;
+  },
+
+  // ── Event Listeners ────────────────────────────────────────
+
+  attachListeners() {
+    var self = this;
+
+    // Sub-tab navigation
+    var subTabs = document.querySelectorAll('#cuidados-content .sub-tab');
+    subTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var targetTab = tab.dataset.subtab;
+        if (targetTab && targetTab !== self.currentSubTab) {
+          self.currentSubTab = targetTab;
+          self.render();
+        }
+      });
+    });
+
+    // Hair length input
+    var hairInput = document.getElementById('hair-length');
+    if (hairInput) {
+      hairInput.addEventListener('change', function() {
+        var val = parseFloat(hairInput.value);
+        if (!isNaN(val) && val >= 0 && val <= 50) {
+          StorageManager.setValue('hairLength', val);
+          self.render(); // Re-render to update timeline
+        }
+      });
+    }
+
+    // Kegel start button
+    var kegelBtn = document.getElementById('kegel-start-btn');
+    if (kegelBtn) {
+      kegelBtn.addEventListener('click', function() {
+        self.startKegelTimer();
       });
     }
   }
