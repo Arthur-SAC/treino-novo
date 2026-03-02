@@ -2152,10 +2152,14 @@ const NutritionManager = {
 
     // Meal cards
     var meals = plan.meals;
+    var mealPrefs = this.getMealPrefs();
     for (var i = 0; i < meals.length; i++) {
       var meal = meals[i];
       var mealKey = 'meal_' + i;
       var isLogged = !!loggedMeals[mealKey];
+      var selectedOpt = mealPrefs[i] || 'A';
+      var option = selectedOpt === 'B' ? meal.optionB : meal.optionA;
+      var toggleLabel = selectedOpt === 'A' ? '\uD83D\uDD04 Op\u00E7\u00E3o B' : '\uD83D\uDD04 Op\u00E7\u00E3o A';
 
       html += '<div class="card glass meal-card">';
       html += '  <div class="meal-header">';
@@ -2170,14 +2174,11 @@ const NutritionManager = {
       html += '  </div>';
       html += '  <div class="meal-options">';
       html += '    <div class="meal-option">';
-      html += '      <strong>Op\u00E7\u00E3o A:</strong> ' + meal.optionA.description;
-      html += '      <span class="meal-macros">' + meal.optionA.macros + '</span>';
-      html += '    </div>';
-      html += '    <div class="meal-option">';
-      html += '      <strong>Op\u00E7\u00E3o B:</strong> ' + meal.optionB.description;
-      html += '      <span class="meal-macros">' + meal.optionB.macros + '</span>';
+      html += '      <strong>Op\u00E7\u00E3o ' + selectedOpt + ':</strong> ' + option.description;
+      html += '      <span class="meal-macros">' + option.macros + '</span>';
       html += '    </div>';
       html += '  </div>';
+      html += '  <button class="btn btn-sm btn-ghost meal-toggle-btn" data-meal-index="' + i + '" data-current="' + selectedOpt + '">' + toggleLabel + '</button>';
       html += '</div>';
     }
 
@@ -2368,6 +2369,17 @@ const NutritionManager = {
       btn.addEventListener('click', function() {
         var mealKey = this.getAttribute('data-meal');
         self.toggleMeal(mealKey);
+      });
+    });
+
+    // Meal option toggle buttons
+    document.querySelectorAll('.meal-toggle-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var idx = btn.dataset.mealIndex;
+        var current = btn.dataset.current;
+        var next = current === 'A' ? 'B' : 'A';
+        NutritionManager.setMealPref(idx, next);
+        NutritionManager.render();
       });
     });
 
