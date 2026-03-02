@@ -42,7 +42,7 @@ const App = {
     // Header actions: settings gear
     const headerActions = document.getElementById('header-actions');
     if (headerActions) {
-      headerActions.innerHTML = '<button class="btn-icon" id="settings-btn" style="font-size:1.3rem; background:none; border:none; cursor:pointer;" title="Configuracoes">&#9881;</button>';
+      headerActions.innerHTML = '<button class="btn-icon" id="settings-btn" style="font-size:1.3rem; background:none; border:none; cursor:pointer;" title="Configurações">&#9881;</button>';
     }
 
     // Initialize feature modules
@@ -84,7 +84,7 @@ const App = {
     }
 
     // Always show settings gear
-    html += '<button class="btn-icon" id="settings-btn" style="font-size:1.3rem; background:none; border:none; cursor:pointer;" title="Configuracoes">&#9881;</button>';
+    html += '<button class="btn-icon" id="settings-btn" style="font-size:1.3rem; background:none; border:none; cursor:pointer;" title="Configurações">&#9881;</button>';
 
     headerActions.innerHTML = html;
   }
@@ -534,7 +534,7 @@ const VideoModal = {
     const videoMap = maps[source] || EXERCISE_VIDEOS;
     const video = videoMap[videoKey];
 
-    if (!video) { Toast.show('Video nao encontrado', 'error'); return; }
+    if (!video) { Toast.show('Vídeo não encontrado', 'error'); return; }
 
     // Check if online
     if (!navigator.onLine && video.youtubeId === 'PLACEHOLDER') {
@@ -960,7 +960,7 @@ const Dashboard = {
           <h3>Treino de Hoje</h3>
           <p style="font-weight:600; color: var(--primary);">${todayWorkout.name}</p>
           <p style="opacity:0.7; font-size:0.9rem;">
-            ${todayWorkout.exercises ? todayWorkout.exercises.length + ' exercicios' : 'Dia de descanso ativo'}
+            ${todayWorkout.exercises ? todayWorkout.exercises.length + ' exercícios' : 'Dia de descanso ativo'}
           </p>
           <span class="btn btn-sm btn-outline" style="margin-top:0.5rem;">Ver treino &#8594;</span>
         </div>`;
@@ -968,7 +968,7 @@ const Dashboard = {
       html += `
         <div class="card glass">
           <h3>Dia de Descanso</h3>
-          <p style="opacity:0.7;">Apenas alongamento leve, skincare, hidratacao e autocuidado!</p>
+          <p style="opacity:0.7;">Apenas alongamento leve, skincare, hidratação e autocuidado!</p>
         </div>`;
     }
 
@@ -976,7 +976,7 @@ const Dashboard = {
     if (todayMeals) {
       html += `
         <div class="card glass" onclick="Router.navigate('nutricao')" style="cursor:pointer;">
-          <h3>Refeicoes de Hoje</h3>
+          <h3>Refeições de Hoje</h3>
           <div style="display:flex; flex-direction:column; gap:0.3rem;">`;
 
       todayMeals.meals.forEach(meal => {
@@ -985,8 +985,8 @@ const Dashboard = {
 
       html += `
           </div>
-          <p style="opacity:0.6; font-size:0.85rem; margin-top:0.5rem;">Meta: ~2.400 kcal | 170g proteina</p>
-          <span class="btn btn-sm btn-outline" style="margin-top:0.5rem;">Ver nutricao &#8594;</span>
+          <p style="opacity:0.6; font-size:0.85rem; margin-top:0.5rem;">Meta: ~2.400 kcal | 170g proteína</p>
+          <span class="btn btn-sm btn-outline" style="margin-top:0.5rem;">Ver nutrição &#8594;</span>
         </div>`;
     }
 
@@ -1295,7 +1295,7 @@ const WorkoutManager = {
     var html = '<div class="card glass workout-overall-progress">';
     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">';
     html += '<strong>Progresso do Treino</strong>';
-    html += '<span>' + completedSeries + '/' + totalSeries + ' series (' + pct + '%)</span>';
+    html += '<span>' + completedSeries + '/' + totalSeries + ' séries (' + pct + '%)</span>';
     html += '</div>';
     html += '<div class="progress-bar-container">';
     html += '<div class="progress-bar" style="width:' + pct + '%"></div>';
@@ -1307,7 +1307,7 @@ const WorkoutManager = {
   // ── Render: Rest Day ───────────────────────────────────────
 
   renderRestDay(dayData) {
-    var msg = (dayData && dayData.restMessage) ? dayData.restMessage : 'Dia de descanso. Foque em skincare, hidratacao e autocuidado!';
+    var msg = (dayData && dayData.restMessage) ? dayData.restMessage : 'Dia de descanso. Foque em skincare, hidratação e autocuidado!';
     var html = '<div class="card glass" style="text-align:center; padding:2rem 1.5rem;">';
     html += '<div style="font-size:3rem; margin-bottom:1rem;">&#128524;</div>';
     html += '<h3>Dia de Descanso</h3>';
@@ -1440,7 +1440,7 @@ const WorkoutManager = {
       var pct = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
 
       html += '<div class="exercise-progress">';
-      html += '<span>' + completedSets + '/' + totalSets + ' series</span>';
+      html += '<span>' + completedSets + '/' + totalSets + ' séries</span>';
       html += '<div class="progress-bar-container" style="height:4px;">';
       html += '<div class="progress-bar" style="width:' + pct + '%"></div>';
       html += '</div>';
@@ -1516,7 +1516,7 @@ const WorkoutManager = {
     html += '<button class="btn btn-primary vacuum-start-btn" data-hold="' + holdSec + '" data-rest="' + restSec + '" data-sets="' + totalSets + '" data-exercise="' + exercise.id + '">';
     html += '&#128168; Iniciar Vacuum (' + totalSets + 'x ' + holdSec + 'seg)';
     html += '</button>';
-    html += '<p style="font-size:0.8rem; opacity:0.6; margin-top:0.5rem;">' + completedSets + '/' + totalSets + ' series feitas hoje</p>';
+    html += '<p style="font-size:0.8rem; opacity:0.6; margin-top:0.5rem;">' + completedSets + '/' + totalSets + ' séries feitas hoje</p>';
     html += '</div>';
 
     // Also show individual checkboxes for manual tracking
@@ -1550,7 +1550,7 @@ const WorkoutManager = {
     html += '<label class="checkbox-wrapper" style="justify-content:center;">';
     html += '<input type="checkbox" class="cardio-done-checkbox" data-exercise="' + exercise.id + '" ' + (done ? 'checked' : '') + '>';
     html += '<span class="checkbox-custom"></span>';
-    html += '<span>Concluido</span>';
+    html += '<span>Concluído</span>';
     html += '</label>';
     html += '</div>';
     html += '</div>';
@@ -1699,7 +1699,7 @@ const WorkoutManager = {
             wData.series[exId][s] = true;
           }
           self.saveWorkoutData(wData);
-          Toast.show('Vacuum concluido! \uD83D\uDCA8', 'success');
+          Toast.show('Vacuum concluído! \uD83D\uDCA8', 'success');
           self.render();
         });
       });
@@ -1817,7 +1817,7 @@ const WorkoutManager = {
 
     var progressSpan = card.querySelector('.exercise-progress span');
     var progressBar = card.querySelector('.exercise-progress .progress-bar');
-    if (progressSpan) progressSpan.textContent = completed + '/' + total + ' series';
+    if (progressSpan) progressSpan.textContent = completed + '/' + total + ' séries';
     if (progressBar) progressBar.style.width = (total > 0 ? Math.round((completed / total) * 100) : 0) + '%';
   },
 
@@ -1852,7 +1852,7 @@ const WorkoutManager = {
     var pct = totalSeries > 0 ? Math.round((completedSeries / totalSeries) * 100) : 0;
     var span = overallEl.querySelector('span');
     var bar = overallEl.querySelector('.progress-bar');
-    if (span) span.textContent = completedSeries + '/' + totalSeries + ' series (' + pct + '%)';
+    if (span) span.textContent = completedSeries + '/' + totalSeries + ' séries (' + pct + '%)';
     if (bar) bar.style.width = pct + '%';
 
     // Check for workout completion badge
@@ -3637,12 +3637,12 @@ const SettingsManager = {
           '<button class="btn btn-sm btn-outline" id="settings-logout">Sair</button>';
       } else {
         firebaseHTML =
-          '<p style="opacity:0.8;">Nao conectado</p>' +
+          '<p style="opacity:0.8;">Não conectado</p>' +
           '<button class="btn btn-sm btn-primary" id="settings-login">Entrar com Google</button>';
       }
     } else {
       firebaseHTML =
-        '<p style="opacity:0.7;">Firebase nao configurado. O app funciona offline.</p>' +
+        '<p style="opacity:0.7;">Firebase não configurado. O app funciona offline.</p>' +
         '<p style="font-size:0.8rem; opacity:0.5;">Para ativar sync, configure o Firebase em firebase-config.js</p>';
     }
 
@@ -3650,17 +3650,17 @@ const SettingsManager = {
     var currentPhase = StorageManager.getValue('currentPhase', 1);
     var phaseOptions = '';
     var phases = [
-      { value: 1, label: 'Fase 1 -- Fundacao' },
-      { value: 2, label: 'Fase 2 -- Construcao' },
-      { value: 3, label: 'Fase 3 -- Definicao' },
-      { value: 4, label: 'Fase 4 -- Avancado' }
+      { value: 1, label: 'Fase 1 -- Fundação' },
+      { value: 2, label: 'Fase 2 -- Construção' },
+      { value: 3, label: 'Fase 3 -- Definição' },
+      { value: 4, label: 'Fase 4 -- Avançado' }
     ];
     phases.forEach(function(p) {
       phaseOptions += '<option value="' + p.value + '"' + (currentPhase == p.value ? ' selected' : '') + '>' + p.label + '</option>';
     });
 
     // Build notification button text
-    var notifText = 'Ativar notificacoes';
+    var notifText = 'Ativar notificações';
     if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
       notifText = 'Ativadas';
     }
@@ -3668,11 +3668,11 @@ const SettingsManager = {
     overlay.innerHTML =
       '<div class="settings-panel glass">' +
         '<button class="modal-close" id="settings-close">&times;</button>' +
-        '<h2>Configuracoes</h2>' +
+        '<h2>Configurações</h2>' +
 
         // Firebase Status
         '<div class="card">' +
-          '<h3>Sincronizacao</h3>' +
+          '<h3>Sincronização</h3>' +
           firebaseHTML +
         '</div>' +
 
@@ -3698,7 +3698,7 @@ const SettingsManager = {
 
         // Notifications
         '<div class="card">' +
-          '<h3>Notificacoes</h3>' +
+          '<h3>Notificações</h3>' +
           '<button class="btn btn-sm btn-outline" id="settings-notifications">' +
             notifText +
           '</button>' +
@@ -3706,7 +3706,7 @@ const SettingsManager = {
 
         // App Info
         '<div style="text-align:center; opacity:0.5; font-size:0.8rem; margin-top:1rem;">' +
-          '<p>Arthur -- Transformacao Corporal v1.0</p>' +
+          '<p>Arthur -- Transformação Corporal v1.0</p>' +
           '<p>Feito com Claude Code</p>' +
         '</div>' +
       '</div>';
@@ -3788,7 +3788,7 @@ const SettingsManager = {
         if ('Notification' in window) {
           Notification.requestPermission().then(function(perm) {
             if (perm === 'granted') {
-              Toast.show('Notificacoes ativadas!', 'success');
+              Toast.show('Notificações ativadas!', 'success');
               SettingsManager.scheduleNotifications();
               SettingsManager.open(); // Refresh panel
             } else {
@@ -3796,7 +3796,7 @@ const SettingsManager = {
             }
           });
         } else {
-          Toast.show('Notificacoes nao suportadas neste navegador', 'info');
+          Toast.show('Notificações não suportadas neste navegador', 'info');
         }
       });
     }
@@ -3825,9 +3825,9 @@ const SettingsManager = {
 
       var message = null;
       if (h === 6 && m === 15) message = 'Bom dia, Arthur! Skincare + protetor solar';
-      else if (h === 17 && m === 30) message = 'Bora treinar? Nao esquece a garrafinha de agua';
+      else if (h === 17 && m === 30) message = 'Bora treinar? Não esquece a garrafinha de água';
       else if (h === 19 && m === 30) message = 'Skincare da noite + Kegel!';
-      else if (h === 22 && m === 15) message = 'Hora de descansar. Sono = recuperacao muscular';
+      else if (h === 22 && m === 15) message = 'Hora de descansar. Sono = recuperação muscular';
 
       if (message) {
         try {
