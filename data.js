@@ -63,71 +63,71 @@ const DAILY_TIPS = [
 
 // ─── 3. EXERCISE_VIDEOS ─────────────────────────────────────
 const EXERCISE_VIDEOS = {
-  "glute-bridge": { youtubeId: "PLACEHOLDER", title: "Glute Bridge — Como fazer corretamente", tips: "Empurre o quadril pro teto, aperte forte no topo 2-3seg" },
-  "sumo-squat": { youtubeId: "PLACEHOLDER", title: "Agachamento Sumo com Halter", tips: "Pés bem abertos, dedos pra fora, desça devagar" },
-  "leg-press": { youtubeId: "PLACEHOLDER", title: "Leg Press pés altos", tips: "Pés no TOPO da plataforma = mais glúteo" },
-  "abdutora": { youtubeId: "PLACEHOLDER", title: "Cadeira Abdutora", tips: "Segure 1seg na abertura máxima" },
-  "adutora": { youtubeId: "PLACEHOLDER", title: "Cadeira Adutora", tips: "Interno de coxa = feminiza silhueta" },
-  "pullover": { youtubeId: "PLACEHOLDER", title: "Pullover com Halter", tips: "Abre a caixa torácica, silhueta ampulheta" },
-  "vacuum": { youtubeId: "PLACEHOLDER", title: "Vacuum Abdominal", tips: "Solte TODO o ar, puxe umbigo pra dentro e pra cima" },
-  "clamshell": { youtubeId: "PLACEHOLDER", title: "Clamshell com Elástico", tips: "SEMPRE comece pelo lado ESQUERDO" },
-  "abducao-pe": { youtubeId: "PLACEHOLDER", title: "Abdução em Pé com Elástico", tips: "Tronco reto, não incline" },
-  "lateral-walk": { youtubeId: "PLACEHOLDER", title: "Lateral Walk com Elástico", tips: "Passos curtos, tensão constante" },
-  "stiff": { youtubeId: "PLACEHOLDER", title: "Stiff com Halteres", tips: "Empurre o quadril PRA TRÁS, sinta atrás da coxa" },
-  "prancha": { youtubeId: "PLACEHOLDER", title: "Prancha Abdominal", tips: "Aperte abdômen e glúteo, corpo RETO" },
-  "prancha-lateral": { youtubeId: "PLACEHOLDER", title: "Prancha Lateral", tips: "Marca a cintura" },
-  "hip-thrust": { youtubeId: "PLACEHOLDER", title: "Hip Thrust", tips: "Apoie costas no banco, empurre quadril pro teto" },
-  "bulgarian-split-squat": { youtubeId: "PLACEHOLDER", title: "Agachamento Búlgaro", tips: "Pé traseiro no banco, foque no glúteo ao subir" },
-  "step-up": { youtubeId: "PLACEHOLDER", title: "Step Up com Halter", tips: "Empurre pelo calcanhar" },
-  "good-morning": { youtubeId: "PLACEHOLDER", title: "Good Morning", tips: "Barra atrás do pescoço, flexione no quadril" },
-  "kickback-polia": { youtubeId: "PLACEHOLDER", title: "Kickback na Polia", tips: "Não arquear a lombar" },
-  "elevacao-pelvica": { youtubeId: "PLACEHOLDER", title: "Elevação Pélvica Pés Elevados", tips: "Pés no banco, quadril bem alto" },
-  "dead-bug": { youtubeId: "PLACEHOLDER", title: "Dead Bug", tips: "Lombar colada no chão" },
-  "cable-pull-through": { youtubeId: "PLACEHOLDER", title: "Cable Pull Through", tips: "Puxe com o quadril, não com os braços" },
-  "glute-ham-raise": { youtubeId: "PLACEHOLDER", title: "Glute Ham Raise", tips: "Controle a descida" },
-  "kegel": { youtubeId: "PLACEHOLDER", title: "Exercício Kegel", tips: "Identifique o músculo correto" },
-  "alongamento-flexor": { youtubeId: "PLACEHOLDER", title: "Alongamento Flexor do Quadril", tips: "Posição correta do quadril" },
-  "worlds-greatest-stretch": { youtubeId: "PLACEHOLDER", title: "World's Greatest Stretch", tips: "Sequência completa" },
-  "cardio-esteira": { youtubeId: "PLACEHOLDER", title: "Cardio Esteira Inclinada", tips: "Inclinação 8-12%, velocidade 5-6km/h" }
+  "glute-bridge": { youtubeId: "Z-dSAVAkC-8", title: "Glute Bridge — Como fazer corretamente", tips: "Empurre o quadril pro teto, aperte forte no topo 2-3seg" },
+  "sumo-squat": { youtubeId: "mOtY705EJYg", title: "Agachamento Sumo com Halter", tips: "Pés bem abertos, dedos pra fora, desça devagar" },
+  "leg-press": { youtubeId: "bfHuhQPa4lc", title: "Leg Press pés altos", tips: "Pés no TOPO da plataforma = mais glúteo" },
+  "abdutora": { youtubeId: "GljAOyT5xLI", title: "Cadeira Abdutora", tips: "Segure 1seg na abertura máxima" },
+  "adutora": { youtubeId: "Wf602gn_9zU", title: "Cadeira Adutora", tips: "Interno de coxa = feminiza silhueta" },
+  "pullover": { youtubeId: "q_Qs9fdwscs", title: "Pullover com Halter", tips: "Abre a caixa torácica, silhueta ampulheta" },
+  "vacuum": { youtubeId: "NcWHmnVN9Ng", title: "Vacuum Abdominal", tips: "Solte TODO o ar, puxe umbigo pra dentro e pra cima" },
+  "clamshell": { youtubeId: "m_ZPapmqeNM", title: "Clamshell com Elástico", tips: "SEMPRE comece pelo lado ESQUERDO" },
+  "abducao-pe": { youtubeId: "Zuw2n3IyMu0", title: "Abdução em Pé com Elástico", tips: "Tronco reto, não incline" },
+  "lateral-walk": { youtubeId: "PhNkkOieB-8", title: "Lateral Walk com Elástico", tips: "Passos curtos, tensão constante" },
+  "stiff": { youtubeId: "_6ElJLyBXcE", title: "Stiff com Halteres", tips: "Empurre o quadril PRA TRÁS, sinta atrás da coxa" },
+  "prancha": { youtubeId: "Wk5paY5G_Qg", title: "Prancha Abdominal", tips: "Aperte abdômen e glúteo, corpo RETO" },
+  "prancha-lateral": { youtubeId: "zt7PjySXWCw", title: "Prancha Lateral", tips: "Marca a cintura" },
+  "hip-thrust": { youtubeId: "WA2Q1auA1zY", title: "Hip Thrust", tips: "Apoie costas no banco, empurre quadril pro teto" },
+  "bulgarian-split-squat": { youtubeId: "HTedLXOg89Y", title: "Agachamento Búlgaro", tips: "Pé traseiro no banco, foque no glúteo ao subir" },
+  "step-up": { youtubeId: "7AtIjR-QqVA", title: "Step Up com Halter", tips: "Empurre pelo calcanhar" },
+  "good-morning": { youtubeId: "aAvJCDyG0m0", title: "Good Morning", tips: "Barra atrás do pescoço, flexione no quadril" },
+  "kickback-polia": { youtubeId: "XYCCcD0MxN8", title: "Kickback na Polia", tips: "Não arquear a lombar" },
+  "elevacao-pelvica": { youtubeId: "mFqvX2-UzoA", title: "Elevação Pélvica Pés Elevados", tips: "Pés no banco, quadril bem alto" },
+  "dead-bug": { youtubeId: "uQfzuKBMJeE", title: "Dead Bug", tips: "Lombar colada no chão" },
+  "cable-pull-through": { youtubeId: "wV4j_CAOze8", title: "Cable Pull Through", tips: "Puxe com o quadril, não com os braços" },
+  "glute-ham-raise": { youtubeId: "m0AIU1dCVkU", title: "Glute Ham Raise", tips: "Controle a descida" },
+  "kegel": { youtubeId: "3Pz2LxtOoPU", title: "Exercício Kegel", tips: "Identifique o músculo correto" },
+  "alongamento-flexor": { youtubeId: "ZrHXejl-rYg", title: "Alongamento Flexor do Quadril", tips: "Posição correta do quadril" },
+  "worlds-greatest-stretch": { youtubeId: "-CiWQ2IvY34", title: "World's Greatest Stretch", tips: "Sequência completa" },
+  "cardio-esteira": { youtubeId: "KegIrmaClFQ", title: "Cardio Esteira Inclinada", tips: "Inclinação 8-12%, velocidade 5-6km/h" }
 };
 
 // ─── 4. RECIPE_VIDEOS ───────────────────────────────────────
 const RECIPE_VIDEOS = {
-  "omelete": { youtubeId: "PLACEHOLDER", title: "Como fazer omelete perfeito" },
-  "frango-grelhado": { youtubeId: "PLACEHOLDER", title: "Como grelhar frango sem ressecar" },
-  "arroz-integral": { youtubeId: "PLACEHOLDER", title: "Arroz integral soltinho" },
-  "batata-doce": { youtubeId: "PLACEHOLDER", title: "Batata doce assada perfeita" },
-  "shake-proteico": { youtubeId: "PLACEHOLDER", title: "Shake proteico pós-treino" },
-  "mingau-aveia": { youtubeId: "PLACEHOLDER", title: "Mingau de aveia fitness" },
-  "salada-completa": { youtubeId: "PLACEHOLDER", title: "Como montar salada completa" }
+  "omelete": { youtubeId: "gY4YpCyxV4Q", title: "Como fazer omelete perfeito" },
+  "frango-grelhado": { youtubeId: "tv8ffdWSUiA", title: "Como grelhar frango sem ressecar" },
+  "arroz-integral": { youtubeId: "J2qcCKiEhTk", title: "Arroz integral soltinho" },
+  "batata-doce": { youtubeId: "TUtiIWV6ZV4", title: "Batata doce assada perfeita" },
+  "shake-proteico": { youtubeId: "ncO4ziU_wh0", title: "Shake proteico pós-treino" },
+  "mingau-aveia": { youtubeId: "fp796Zk9YxU", title: "Mingau de aveia fitness" },
+  "salada-completa": { youtubeId: "QmZ5fTadMv0", title: "Como montar salada completa" }
 };
 
 // ─── 4b. SKINCARE_VIDEOS ────────────────────────────────────
 const SKINCARE_VIDEOS = {
-  "lavar-rosto": { youtubeId: "PLACEHOLDER", title: "Como lavar o rosto corretamente" },
-  "vitamina-c": { youtubeId: "PLACEHOLDER", title: "Como aplicar Vitamina C sérum" },
-  "protetor-solar": { youtubeId: "PLACEHOLDER", title: "Quantidade certa de protetor solar" },
-  "retinol": { youtubeId: "PLACEHOLDER", title: "Como usar retinol sem irritar a pele" },
-  "niacinamida": { youtubeId: "PLACEHOLDER", title: "Como aplicar Niacinamida" },
-  "esfoliacao-corpo": { youtubeId: "PLACEHOLDER", title: "Esfoliação corporal pra queratose pilar" }
+  "lavar-rosto": { youtubeId: "_Oysx4GCbPs", title: "Como lavar o rosto corretamente" },
+  "vitamina-c": { youtubeId: "l_GiJwTRUXQ", title: "Como aplicar Vitamina C sérum" },
+  "protetor-solar": { youtubeId: "5c6j6InQtho", title: "Quantidade certa de protetor solar" },
+  "retinol": { youtubeId: "zfU6VCH3Z7k", title: "Como usar retinol sem irritar a pele" },
+  "niacinamida": { youtubeId: "U2AVMwxUVC0", title: "Como aplicar Niacinamida" },
+  "esfoliacao-corpo": { youtubeId: "P_-a8bNcA5s", title: "Esfoliação corporal pra queratose pilar" }
 };
 
 // ─── 4c. HAIR_VIDEOS ────────────────────────────────────────
 const HAIR_VIDEOS = {
-  "lavar-cabelo-cacheado": { youtubeId: "PLACEHOLDER", title: "Como lavar cabelo cacheado 2C/3A" },
-  "hidratar-cachos": { youtubeId: "PLACEHOLDER", title: "Hidratação pra cabelo cacheado" },
-  "pentear-molhado": { youtubeId: "PLACEHOLDER", title: "Como pentear cachos sem quebrar" },
-  "secar-difusor": { youtubeId: "PLACEHOLDER", title: "Como usar difusor em cabelo cacheado" },
-  "touca-cetim": { youtubeId: "PLACEHOLDER", title: "Como usar touca de cetim pra dormir" }
+  "lavar-cabelo-cacheado": { youtubeId: "9-XzqyXH63A", title: "Como lavar cabelo cacheado 2C/3A" },
+  "hidratar-cachos": { youtubeId: "kakZO_dRAJc", title: "Hidratação pra cabelo cacheado" },
+  "pentear-molhado": { youtubeId: "vm-e2w-XcfI", title: "Como pentear cachos sem quebrar" },
+  "secar-difusor": { youtubeId: "qo1ZaqrPQFc", title: "Como usar difusor em cabelo cacheado" },
+  "touca-cetim": { youtubeId: "v4kGHb65vHM", title: "Como usar touca de cetim pra dormir" }
 };
 
 // ─── 4d. DEPILATION_VIDEOS ──────────────────────────────────
 const DEPILATION_VIDEOS = {
-  "depilar-pernas": { youtubeId: "PLACEHOLDER", title: "Como depilar pernas com gilete sem irritar" },
-  "depilar-axilas": { youtubeId: "PLACEHOLDER", title: "Como depilar axilas sem escurecer" },
-  "depilar-virilha": { youtubeId: "PLACEHOLDER", title: "Como depilar virilha com segurança" },
-  "esfoliar-antes": { youtubeId: "PLACEHOLDER", title: "Como esfoliar antes da depilação" },
-  "pos-depilacao": { youtubeId: "PLACEHOLDER", title: "Cuidados pós-depilação pele parda" }
+  "depilar-pernas": { youtubeId: "kZNqCeXwZow", title: "Como depilar pernas com gilete sem irritar" },
+  "depilar-axilas": { youtubeId: "0CdsTVizU2Q", title: "Como depilar axilas sem escurecer" },
+  "depilar-virilha": { youtubeId: "O9J2CuyH1C4", title: "Como depilar virilha com segurança" },
+  "esfoliar-antes": { youtubeId: "goURZl0zV9s", title: "Como esfoliar antes da depilação" },
+  "pos-depilacao": { youtubeId: "0CdsTVizU2Q", title: "Cuidados pós-depilação pele parda" }
 };
 
 // ─── 5. WORKOUTS ─────────────────────────────────────────────
