@@ -88,7 +88,17 @@ const EXERCISE_VIDEOS = {
   "kegel": { youtubeId: "3Pz2LxtOoPU", title: "Exercício Kegel", tips: "Identifique o músculo correto" },
   "alongamento-flexor": { youtubeId: "ZrHXejl-rYg", title: "Alongamento Flexor do Quadril", tips: "Posição correta do quadril" },
   "worlds-greatest-stretch": { youtubeId: "-CiWQ2IvY34", title: "World's Greatest Stretch", tips: "Sequência completa" },
-  "cardio-esteira": { youtubeId: "KegIrmaClFQ", title: "Cardio Esteira Inclinada", tips: "Inclinação 8-12%, velocidade 5-6km/h" }
+  "cardio-esteira": { youtubeId: "KegIrmaClFQ", title: "Cardio Esteira Inclinada", tips: "Inclinação 8-12%, velocidade 5-6km/h" },
+  "circulos-quadril": { youtubeId: "b3qf3YzFgmU", title: "Círculos de Quadril — Mobilidade", tips: "Mãos na cintura, gira o quadril em círculos" },
+  "balanco-perna": { youtubeId: "jpmSaPEPErw", title: "Balanço de Perna — Aquecimento", tips: "Segure em algo, balance frente/trás e lateral" },
+  "agachamento-profundo": { youtubeId: "iUnwcn6f_7Y", title: "Agachamento Profundo — Mobilidade", tips: "Segure embaixo 30seg, cotovelos empurram joelhos pra fora" },
+  "polichinelo": { youtubeId: "yDSMdd8hiFg", title: "Polichinelo — Aquecimento Cardio", tips: "Cardio leve pra aquecer o corpo" },
+  "clamshell-ativacao": { youtubeId: "845Yzbfg3eY", title: "Clamshell — Ativação Glúteo", tips: "Ativação do glúteo médio antes do treino" },
+  "donkey-kick": { youtubeId: "NPVIiAvi1hM", title: "Donkey Kick — Ativação Glúteo", tips: "De quatro, chuta pra cima apertando o glúteo" },
+  "cat-cow": { youtubeId: "40Y1rukJs4E", title: "Gato e Vaca — Mobilidade Coluna", tips: "Arredonda e arqueia as costas alternando" },
+  "pombo-alongamento": { youtubeId: "fASdWDluHrc", title: "Pombo — Alongamento Quadril", tips: "Perna cruzada na frente, desça o tronco devagar" },
+  "borboleta-alongamento": { youtubeId: "6XT60SbKR3s", title: "Borboleta — Alongamento", tips: "Solas dos pés juntas, pressione joelhos pra baixo" },
+  "glute-bridge-ativacao": { youtubeId: "eu5oejYxPBQ", title: "Glute Bridge — Ativação", tips: "Sem peso, foque em sentir o glúteo" }
 };
 
 // ─── 4. RECIPE_VIDEOS ───────────────────────────────────────
@@ -1729,15 +1739,15 @@ const WARMUP = {
       name: "Cardio Leve",
       duration: "3-5min",
       exercises: [
-        { name: "Caminhada rápida, polichinelo ou marcha no lugar", duration: "3-5min" }
+        { name: "Caminhada rápida, polichinelo ou marcha no lugar", duration: "3-5min", videoKey: "polichinelo" }
       ]
     },
     {
       name: "Mobilidade",
       exercises: [
-        { name: "Círculos de quadril", reps: "10 cada lado", tip: "Mãos na cintura, gira o quadril" },
-        { name: "Balanço de perna", reps: "10 frente/trás + 10 lateral", tip: "Segure em algo" },
-        { name: "Agachamento profundo", duration: "30seg", tip: "Segure lá embaixo, segure em algo se precisar" },
+        { name: "Círculos de quadril", reps: "10 cada lado", tip: "Mãos na cintura, gira o quadril", videoKey: "circulos-quadril" },
+        { name: "Balanço de perna", reps: "10 frente/trás + 10 lateral", tip: "Segure em algo", videoKey: "balanco-perna" },
+        { name: "Agachamento profundo", duration: "30seg", tip: "Segure lá embaixo, segure em algo se precisar", videoKey: "agachamento-profundo" },
         { name: "World's Greatest Stretch", reps: "3 cada lado", tip: "Passo largo, mão no chão, outra gira pro teto, segure 5seg", videoKey: "worlds-greatest-stretch" }
       ]
     },
@@ -1747,8 +1757,8 @@ const WARMUP = {
       required: true,
       exercises: [
         { name: "Toque e aperte: mão no glúteo esquerdo", reps: "10x", tip: "Aperte consciente" },
-        { name: "Clamshell SÓ esquerdo", reps: "10 reps lento", tip: "Só o lado esquerdo!" },
-        { name: "Glute Bridge bilateral", reps: "10 reps", tip: "Foco em sentir o ESQUERDO" }
+        { name: "Clamshell SÓ esquerdo", reps: "10 reps lento", tip: "Só o lado esquerdo!", videoKey: "clamshell-ativacao" },
+        { name: "Glute Bridge bilateral", reps: "10 reps", tip: "Foco em sentir o ESQUERDO", videoKey: "glute-bridge-ativacao" }
       ]
     }
   ]
@@ -1761,8 +1771,8 @@ const COOLDOWN = {
   required: true,
   exercises: [
     { name: "Flexor do quadril", duration: "60seg cada lado", required: true, tip: "Posição de avanço, joelho traseiro no chão. Empurre o quadril pra frente suavemente.", videoKey: "alongamento-flexor", sides: true },
-    { name: "Pombo", duration: "30seg cada lado", tip: "Perna da frente cruzada, desça o tronco devagar", sides: true },
-    { name: "Borboleta", duration: "30seg", tip: "Solas dos pés juntas, pressione joelhos pra baixo com cotovelos" }
+    { name: "Pombo", duration: "30seg cada lado", tip: "Perna da frente cruzada, desça o tronco devagar", videoKey: "pombo-alongamento", sides: true },
+    { name: "Borboleta", duration: "30seg", tip: "Solas dos pés juntas, pressione joelhos pra baixo com cotovelos", videoKey: "borboleta-alongamento" }
   ]
 };
 
