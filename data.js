@@ -2530,3 +2530,97 @@ const DAILY_ROUTINE = [
   { time: "22:00", activity: "Kegel + rotina de dormir", emoji: "💪" },
   { time: "22:30", activity: "Dormir", emoji: "😴" }
 ];
+
+// ─── 18. EDUCATIONAL_CONTENT ────────────────────────────────
+const EDUCATIONAL_CONTENT = {
+  anteriorPelvic: {
+    title: "Anteriorização Pélvica",
+    emoji: "🦴",
+    content: "A anteriorização pélvica é quando a pelve inclina pra frente, causando hiperlordose (curvatura exagerada na lombar). Isso enfraquece o glúteo e encurta o flexor do quadril. Corrigir isso é ESSENCIAL pro glúteo crescer.",
+    howToFix: [
+      "Alongar o flexor do quadril diariamente (60seg cada lado)",
+      "Fortalecer o glúteo (glute bridge, hip thrust)",
+      "Fortalecer o abdômen (prancha, dead bug)",
+      "Consciência postural: imaginar 'enfiar o rabo' levemente"
+    ]
+  },
+  tmbTdee: {
+    title: "TMB e TDEE — Por que 2.300-2.500 kcal?",
+    emoji: "🔢",
+    content: "TMB (Taxa Metabólica Basal) é o que seu corpo gasta em repouso. TDEE (Gasto Energético Diário Total) inclui atividade física. Pra Arthur: TMB ~1.600kcal + atividade = TDEE ~2.100kcal. Comemos 2.300-2.500 nos dias de treino pra ter superávit leve (ganhar músculo) e 2.000-2.200 no descanso pra manutenção.",
+    macroSplit: "Proteína: 160-170g (1.8g/kg) | Carboidrato: 45-50% | Gordura: 25-30%"
+  },
+  mindMuscle: {
+    title: "Conexão Mente-Músculo",
+    emoji: "🧠",
+    content: "Pensar no músculo que está trabalhando aumenta a ativação em até 20%. Antes de cada série, toque o músculo com a mão (especialmente o glúteo esquerdo), visualize ele contraindo, e durante o exercício mantenha o foco nele.",
+    leftGlute: "O glúteo esquerdo é tipicamente mais fraco (dominância do lado direito). Por isso SEMPRE começamos exercícios unilaterais pelo ESQUERDO — quando está mais descansada e focada."
+  },
+  hydration: {
+    title: "Hidratação — Por que 2.5L?",
+    emoji: "💧",
+    content: "Água é essencial pra síntese proteica (construção muscular), pra pele saudável, e pra performance no treino. 2.5L é o mínimo pra quem treina. Desidratação de 2% já reduz força em 10%.",
+    tips: "Beba 500ml ao acordar. Tenha sempre uma garrafa por perto. Coloque alarme a cada 2h."
+  }
+};
+
+// ─── 19. NIGHT_ROUTINE ──────────────────────────────────────
+const NIGHT_ROUTINE = {
+  name: "Rotina Noturna",
+  emoji: "🌙",
+  steps: [
+    {
+      name: "Skincare Noturno",
+      emoji: "✨",
+      items: [
+        "Limpar o rosto com sabonete facial",
+        "Aplicar Niacinamida (uniformizar tom)",
+        "Aplicar Retinol (renovação celular) — 2-3x por semana",
+        "Hidratante facial"
+      ],
+      videoKey: "retinol",
+      videoSource: "skincare"
+    },
+    {
+      name: "Clareamento de Regiões",
+      emoji: "🧴",
+      items: [
+        "Aplicar creme clareador nas axilas",
+        "Aplicar nas virilhas",
+        "Aplicar nos cotovelos e joelhos"
+      ]
+    },
+    {
+      name: "Kegel",
+      emoji: "💪",
+      items: [
+        "10 contrações de 5 segundos",
+        "10 contrações rápidas (1seg)",
+        "Descansar 30seg entre séries"
+      ],
+      videoKey: "kegel",
+      videoSource: "exercise"
+    },
+    {
+      name: "Alongamento Noturno",
+      emoji: "🧘",
+      items: [
+        "Flexor do quadril: 60seg cada lado",
+        "Borboleta: 30seg",
+        "Cat-cow: 10 repetições lentas"
+      ],
+      videoKey: "alongamento-flexor",
+      videoSource: "exercise"
+    },
+    {
+      name: "Preparar pra Dormir",
+      emoji: "😴",
+      items: [
+        "Touca de cetim no cabelo",
+        "Sem tela 30min antes de dormir",
+        "Quarto escuro e fresco",
+        "Meta: 7-8 horas de sono"
+      ]
+    }
+  ]
+};
