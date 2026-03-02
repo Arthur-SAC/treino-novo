@@ -486,6 +486,74 @@ const BadgeManager = {
 
   isUnlocked(badgeId) {
     return this.unlocked.includes(badgeId);
+  },
+
+  checkAll() {
+    var streak = StorageManager.getValue('streak', 0);
+    if (streak >= 7) this.unlock('streak-7');
+    if (streak >= 30) this.unlock('streak-30');
+
+    var phase = StorageManager.getValue('currentPhase', 1);
+    if (phase >= 2) this.unlock('phase-2');
+    if (phase >= 3) this.unlock('phase-3');
+    if (phase >= 4) this.unlock('phase-4');
+
+    var gluteDays = this.countDaysWithChecklist('treino', 365);
+    if (gluteDays >= 14) this.unlock('glute-awakened');
+    if (gluteDays >= 1) this.unlock('first-workout');
+
+    var waterStreak = this.countConsecutiveDays('agua');
+    if (waterStreak >= 7) this.unlock('hydrated-7');
+
+    var skinStreak = this.countConsecutiveSkincareDays();
+    if (skinStreak >= 30) this.unlock('skin-30');
+  },
+
+  countDaysWithChecklist(itemId, lookbackDays) {
+    var count = 0;
+    var today = new Date();
+    for (var i = 0; i < lookbackDays; i++) {
+      var d = new Date(today);
+      d.setDate(d.getDate() - i);
+      var dateStr = d.toISOString().slice(0, 10);
+      var data = StorageManager.getForDate('checklist', dateStr);
+      if (data && data[itemId]) count++;
+    }
+    return count;
+  },
+
+  countConsecutiveDays(itemId) {
+    var count = 0;
+    var today = new Date();
+    for (var i = 0; i < 365; i++) {
+      var d = new Date(today);
+      d.setDate(d.getDate() - i);
+      var dateStr = d.toISOString().slice(0, 10);
+      var data = StorageManager.getForDate('checklist', dateStr);
+      if (data && data[itemId]) {
+        count++;
+      } else {
+        break;
+      }
+    }
+    return count;
+  },
+
+  countConsecutiveSkincareDays() {
+    var count = 0;
+    var today = new Date();
+    for (var i = 0; i < 365; i++) {
+      var d = new Date(today);
+      d.setDate(d.getDate() - i);
+      var dateStr = d.toISOString().slice(0, 10);
+      var data = StorageManager.getForDate('checklist', dateStr);
+      if (data && data['skincare-manha'] && data['skincare-noite']) {
+        count++;
+      } else {
+        break;
+      }
+    }
+    return count;
   }
 };
 
@@ -1098,12 +1166,9 @@ const Dashboard = {
   },
 
   updateStreak() {
-    const streak = this.calculateStreak();
+    var streak = this.calculateStreak();
     StorageManager.setValue('streak', streak);
-
-    // Check for streak badges
-    if (streak >= 7) BadgeManager.unlock('streak-7');
-    if (streak >= 30) BadgeManager.unlock('streak-30');
+    BadgeManager.checkAll();
   }
 };
 
@@ -1627,6 +1692,7 @@ const WorkoutManager = {
         var phase = parseInt(btn.dataset.phase);
         self.currentPhase = phase;
         StorageManager.setValue('currentPhase', phase);
+        BadgeManager.checkAll();
         self.render();
       });
     });
@@ -1870,7 +1936,6 @@ const WorkoutManager = {
 
     // Check for workout completion badge
     if (pct >= 100) {
-      BadgeManager.unlock('first-workout');
       Toast.show('Treino concluido! Arrasou! \uD83D\uDCAA', 'success');
     }
   },
@@ -3764,6 +3829,7 @@ const SettingsManager = {
     document.getElementById('settings-phase').addEventListener('change', function() {
       var newPhase = parseInt(this.value);
       StorageManager.setValue('currentPhase', newPhase);
+      BadgeManager.checkAll();
       // Also update WorkoutManager if it exists
       if (typeof WorkoutManager !== 'undefined') {
         WorkoutManager.currentPhase = newPhase;
