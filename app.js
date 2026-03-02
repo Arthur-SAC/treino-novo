@@ -1045,6 +1045,25 @@ const Dashboard = {
         </p>
       </div>`;
 
+    // Photo reminder — check if > 14 days since last photo
+    var lastPhotoDate = StorageManager.getValue('lastPhotoDate', null);
+    var photoReminder = '';
+    if (lastPhotoDate) {
+      var daysSince = Math.floor((Date.now() - new Date(lastPhotoDate).getTime()) / 86400000);
+      if (daysSince >= 14) {
+        photoReminder = '<div class="card glass photo-reminder" style="border-left:3px solid var(--accent); cursor:pointer;" onclick="Router.navigate(\'progresso\')">';
+        photoReminder += '<p style="margin:0;">\uD83D\uDCF8 <strong>Hora de tirar fotos de progresso!</strong></p>';
+        photoReminder += '<p style="margin:0.25rem 0 0; font-size:0.85rem; opacity:0.7;">\u00DAltima foto: ' + Utils.formatDateBR(lastPhotoDate) + ' (' + daysSince + ' dias atr\u00E1s)</p>';
+        photoReminder += '</div>';
+      }
+    } else {
+      photoReminder = '<div class="card glass photo-reminder" style="border-left:3px solid var(--accent); cursor:pointer;" onclick="Router.navigate(\'progresso\')">';
+      photoReminder += '<p style="margin:0;">\uD83D\uDCF8 <strong>Tire sua primeira foto de progresso!</strong></p>';
+      photoReminder += '<p style="margin:0.25rem 0 0; font-size:0.85rem; opacity:0.7;">Fotos a cada 15 dias mostram a transforma\u00E7\u00E3o</p>';
+      photoReminder += '</div>';
+    }
+    html += photoReminder;
+
     // Streak
     if (streak > 0) {
       html += `
@@ -3595,6 +3614,7 @@ const ProgressManager = {
       var today = new Date().toISOString().split('T')[0];
       photos.push({ date: today, angle: angle, data: base64 });
       StorageManager.setValue('photos', photos);
+      StorageManager.setValue('lastPhotoDate', new Date().toISOString().slice(0, 10));
 
       // Check badge for photo sets
       var dateSet = {};
