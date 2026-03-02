@@ -36,7 +36,7 @@ const App = {
     // Header greeting
     const headerGreeting = document.getElementById('header-greeting');
     if (headerGreeting) {
-      headerGreeting.innerHTML = '<h1 style="font-size:1.1rem; font-family: Playfair Display, serif;">' + Utils.getGreeting() + ', Arthur!</h1>';
+      headerGreeting.innerHTML = '<h1 style="font-size:1.1rem; font-family: Playfair Display, serif;">' + Utils.getContextGreeting() + '</h1>';
     }
 
     // Header actions: settings gear
@@ -429,6 +429,36 @@ const Utils = {
     if (hour < 12) return 'Bom dia';
     if (hour < 18) return 'Boa tarde';
     return 'Boa noite';
+  },
+
+  getContextGreeting() {
+    var base = this.getGreeting();
+    var streak = StorageManager.getValue('streak', 0);
+    var phase = StorageManager.getValue('currentPhase', 1);
+
+    var days = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+    var today = days[new Date().getDay()];
+    var phaseKey = 'fase' + phase;
+    var dayData = WORKOUTS[phaseKey] && WORKOUTS[phaseKey].days[today];
+    var workoutName = dayData && !dayData.restDay ? dayData.name : null;
+
+    var parts = [base + ', Arthur!'];
+
+    if (workoutName) {
+      parts.push('Hoje: ' + workoutName + ' \uD83D\uDCAA');
+    } else if (dayData && dayData.restDay) {
+      parts.push('Dia de descanso \uD83D\uDE0C');
+    }
+
+    if (streak >= 7) {
+      parts.push(streak + ' dias de streak \uD83D\uDD25');
+    }
+
+    if (phase >= 4) {
+      parts.push('Modo Amazona \uD83D\uDC51');
+    }
+
+    return parts.join(' | ');
   },
 
   /**
@@ -966,7 +996,7 @@ const Dashboard = {
     html += `
       <div class="card glass" style="text-align:center; padding: 1.5rem;">
         <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">
-          ${Utils.getGreeting()}, Arthur!
+          ${Utils.getContextGreeting()}
         </h2>
         <p style="opacity: 0.8; font-style: italic;">
           "${Utils.randomFrom(MOTIVATIONAL_QUOTES)}"
@@ -2029,6 +2059,18 @@ const NutritionManager = {
 
   saveMealLogData(data) {
     StorageManager.setForDate('nutrition', data);
+  },
+
+  getMealPrefs() {
+    var dateStr = new Date().toISOString().slice(0, 10);
+    return StorageManager.getValue('mealPrefs_' + dateStr, {});
+  },
+
+  setMealPref(mealIndex, option) {
+    var dateStr = new Date().toISOString().slice(0, 10);
+    var prefs = this.getMealPrefs();
+    prefs[mealIndex] = option;
+    StorageManager.setValue('mealPrefs_' + dateStr, prefs);
   },
 
   calculateProtein(loggedMeals) {
