@@ -553,6 +553,17 @@ const VideoModal = {
     document.getElementById('video-title').textContent = video.title || '';
     document.getElementById('video-tips').textContent = video.tips || '';
 
+    var mistakesEl = document.getElementById('video-mistakes');
+    if (mistakesEl) {
+      if (video.commonMistakes) {
+        mistakesEl.textContent = '\u26a0\ufe0f Erros comuns: ' + video.commonMistakes;
+        mistakesEl.classList.add('visible');
+      } else {
+        mistakesEl.textContent = '';
+        mistakesEl.classList.remove('visible');
+      }
+    }
+
     this.modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden'; // Prevent background scroll
   },
@@ -560,6 +571,8 @@ const VideoModal = {
   close() {
     this.modal.classList.add('hidden');
     this.iframe.src = ''; // Stop video
+    var mistakesEl = document.getElementById('video-mistakes');
+    if (mistakesEl) { mistakesEl.textContent = ''; mistakesEl.classList.remove('visible'); }
     document.body.style.overflow = '';
   }
 };

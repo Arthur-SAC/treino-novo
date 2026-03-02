@@ -774,6 +774,20 @@
       line-height: 1.5;
     }
 
+    .video-mistakes {
+      color: var(--warning);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: rgba(232, 201, 110, 0.1);
+      border-left: 3px solid var(--warning);
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+    .video-mistakes.visible {
+      display: block;
+    }
+
     /* ============================================
        TIMER OVERLAY
        ============================================ */
@@ -2854,6 +2868,7 @@
       <div id="video-info">
         <h3 id="video-title"></h3>
         <p id="video-tips"></p>
+        <p id="video-mistakes" class="video-mistakes"></p>
       </div>
     </div>
   </div>
