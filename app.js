@@ -2012,6 +2012,19 @@ const NutritionManager = {
 
     var html = this.renderSubTabs();
 
+    // Nutrition info card — daily macro/calorie goals
+    var infoHtml = '<div class="card glass nutrition-info-card">';
+    infoHtml += '<h3>\uD83D\uDD22 Suas Metas Nutricionais</h3>';
+    infoHtml += '<div class="nutrition-macros">';
+    infoHtml += '<div class="macro-item"><span class="macro-value">2.300-2.500</span><span class="macro-label">kcal treino</span></div>';
+    infoHtml += '<div class="macro-item"><span class="macro-value">2.000-2.200</span><span class="macro-label">kcal descanso</span></div>';
+    infoHtml += '<div class="macro-item"><span class="macro-value">160-170g</span><span class="macro-label">proteína</span></div>';
+    infoHtml += '<div class="macro-item"><span class="macro-value">2.5L</span><span class="macro-label">água</span></div>';
+    infoHtml += '</div>';
+    infoHtml += '<p style="font-size:0.8rem; opacity:0.7; margin-top:0.5rem;">TMB ~1.600kcal + atividade = superávit leve pra ganho muscular</p>';
+    infoHtml += '</div>';
+    html += infoHtml;
+
     switch (this.currentSubTab) {
       case 'plano':
         html += this.renderMealPlan();
@@ -2076,14 +2089,14 @@ const NutritionManager = {
   calculateProtein(loggedMeals) {
     var planType = this.getMealPlanType();
     var meals = MEALS[planType].meals;
+    var prefs = this.getMealPrefs();
     var total = 0;
     meals.forEach(function(meal, index) {
       var mealKey = 'meal_' + index;
       if (loggedMeals[mealKey]) {
-        // Use average protein from both options
-        var protA = NutritionManager.extractProtein(meal.optionA.macros);
-        var protB = NutritionManager.extractProtein(meal.optionB.macros);
-        total += Math.round((protA + protB) / 2);
+        var selected = prefs[index] || 'A';
+        var option = selected === 'B' ? meal.optionB : meal.optionA;
+        total += NutritionManager.extractProtein(option.macros);
       }
     });
     return total;
