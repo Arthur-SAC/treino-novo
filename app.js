@@ -130,6 +130,8 @@ const Router = {
     // Show initial page from current hash, or default to 'inicio'
     var initial = location.hash.replace('#', '') || 'inicio';
     Router.showPage(Router.pages.includes(initial) ? initial : 'inicio');
+
+    this.initSwipe();
   },
 
   /**
@@ -172,6 +174,39 @@ const Router = {
 
     // Emit pageChange event for feature modules to react
     document.dispatchEvent(new CustomEvent('pageChange', { detail: { page: page } }));
+  },
+
+  /**
+   * Set up swipe gestures on the main content container
+   * to navigate between tabs with horizontal swipes.
+   */
+  initSwipe() {
+    var startX = 0;
+    var startY = 0;
+    var container = document.getElementById('app-content');
+    if (!container) return;
+
+    container.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    container.addEventListener('touchend', function(e) {
+      var endX = e.changedTouches[0].clientX;
+      var endY = e.changedTouches[0].clientY;
+      var diffX = endX - startX;
+      var diffY = endY - startY;
+
+      // Only trigger if horizontal swipe > 50px and more horizontal than vertical
+      if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+        var currentIdx = Router.pages.indexOf(Router.currentPage);
+        if (diffX < 0 && currentIdx < Router.pages.length - 1) {
+          Router.navigate(Router.pages[currentIdx + 1]);
+        } else if (diffX > 0 && currentIdx > 0) {
+          Router.navigate(Router.pages[currentIdx - 1]);
+        }
+      }
+    }, { passive: true });
   }
 };
 
