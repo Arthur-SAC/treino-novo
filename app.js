@@ -2982,6 +2982,31 @@ const CareManager = {
     if (repEl) repEl.textContent = repText;
   },
 
+  // ── Night Routine ─────────────────────────────────────────
+
+  renderNightRoutine() {
+    if (typeof NIGHT_ROUTINE === 'undefined') return '';
+    var html = '<div class="card glass night-routine-card">';
+    html += '<h3>' + NIGHT_ROUTINE.emoji + ' ' + NIGHT_ROUTINE.name + '</h3>';
+
+    NIGHT_ROUTINE.steps.forEach(function(step) {
+      html += '<div class="night-routine-step">';
+      html += '<h4 style="color: var(--primary); margin:0.5rem 0 0.25rem;">' + step.emoji + ' ' + step.name + '</h4>';
+      html += '<ul style="margin:0; padding-left:1.2rem;">';
+      step.items.forEach(function(item) {
+        html += '<li style="font-size:0.85rem; margin:0.2rem 0; opacity:0.9;">' + item + '</li>';
+      });
+      html += '</ul>';
+      if (step.videoKey) {
+        html += '<button class="btn btn-sm btn-ghost" onclick="VideoModal.open(\'' + step.videoKey + '\', \'' + (step.videoSource || 'exercise') + '\')">\uD83C\uDFAC Ver como fazer</button>';
+      }
+      html += '</div>';
+    });
+
+    html += '</div>';
+    return html;
+  },
+
   // ── Event Listeners ────────────────────────────────────────
 
   attachListeners() {

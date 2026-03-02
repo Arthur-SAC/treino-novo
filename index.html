@@ -1244,16 +1244,21 @@
       background: rgba(212, 168, 83, 0.05);
     }
 
-    .start-left-warning {
-      background: rgba(255, 193, 7, 0.1);
-      border: 1px solid rgba(255, 193, 7, 0.25);
+    .start-left-indicator {
+      background: linear-gradient(135deg, rgba(232, 113, 113, 0.2), rgba(232, 113, 113, 0.05));
+      border: 1px solid var(--danger);
       border-radius: var(--radius-sm);
-      padding: 8px 16px;
-      margin: 0 16px 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #ffc107;
+      padding: 0.5rem 0.75rem;
+      margin: 0.5rem 0;
       text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--danger);
+      animation: pulse-left 2s infinite;
+    }
+    @keyframes pulse-left {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
     }
 
     /* ============================================
@@ -2838,6 +2843,17 @@
     .macro-label {
       font-size: 0.75rem;
       opacity: 0.7;
+    }
+    /* Night Routine card */
+    .night-routine-card {
+      border-left: 3px solid var(--primary);
+    }
+    .night-routine-step {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .night-routine-step:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
