@@ -61,7 +61,14 @@ const App = {
       SettingsManager.scheduleNotifications();
     }
 
-    Toast.show('Bem-vinda de volta!', 'success');
+    var phase = StorageManager.getValue('currentPhase', 1);
+    var welcomeMsgs = {
+      1: 'Bora construir a fundação! \uD83D\uDCAA',
+      2: 'Fase de construção — cada série conta! \uD83D\uDD25',
+      3: 'Definição ativada — brilha, Arthur! \u2728',
+      4: 'Amazona mode ON! Você é imparável! \uD83D\uDC51'
+    };
+    Toast.show(welcomeMsgs[phase] || 'Bem-vinda de volta!', 'success');
   },
 
   /**
@@ -1524,7 +1531,9 @@ const WorkoutManager = {
 
     // Start left warning
     if (exercise.startLeft) {
-      html += '<div class="start-left-warning">&#9888;&#65039; Comece pelo lado ESQUERDO!</div>';
+      html += '<div class="start-left-indicator">';
+      html += '\uD83D\uDD34 COMECE PELO LADO ESQUERDO';
+      html += '</div>';
     }
 
     // Type-specific content
@@ -2471,6 +2480,8 @@ const CareManager = {
         html += this.renderKegel();
         break;
     }
+
+    html += this.renderNightRoutine();
 
     container.innerHTML = html;
     this.attachListeners();
@@ -3969,11 +3980,37 @@ const SettingsManager = {
       var shown = StorageManager.getForDate('notifications') || {};
       if (shown[key]) return;
 
+      var phase = StorageManager.getValue('currentPhase', 1);
       var message = null;
-      if (h === 6 && m === 15) message = 'Bom dia, Arthur! Skincare + protetor solar';
-      else if (h === 17 && m === 30) message = 'Bora treinar? Não esquece a garrafinha de água';
-      else if (h === 19 && m === 30) message = 'Skincare da noite + Kegel!';
-      else if (h === 22 && m === 15) message = 'Hora de descansar. Sono = recuperação muscular';
+      if (h === 6 && m === 15) {
+        message = {
+          1: 'Bom dia, Arthur! Skincare + protetor solar \u2600\uFE0F Fundação começa cedo!',
+          2: 'Bom dia! Skincare + protetor — construção exige cuidado por dentro e por fora \uD83D\uDD25',
+          3: 'Bom dia, Arthur! Skincare + protetor — pele definida brilha mais \u2728',
+          4: 'Bom dia, Amazona! Skincare + protetor — sua pele merece esse cuidado \uD83D\uDC51'
+        }[phase] || 'Bom dia, Arthur! Skincare + protetor solar';
+      } else if (h === 17 && m === 30) {
+        message = {
+          1: 'Bora treinar? Fundação se constrói um treino por vez \uD83D\uDCAA',
+          2: 'Bora treinar? Cada série conta na construção \uD83D\uDD25',
+          3: 'Bora treinar? Definição pede consistência \u2728',
+          4: 'Amazona, bora treinar? Você é imparável \uD83D\uDC51'
+        }[phase] || 'Bora treinar? Não esquece a garrafinha de água';
+      } else if (h === 19 && m === 30) {
+        message = {
+          1: 'Skincare da noite + Kegel! Cuidado é parte da fundação \uD83D\uDCAA',
+          2: 'Skincare da noite + Kegel! Construção também é recuperação \uD83D\uDD25',
+          3: 'Skincare da noite + Kegel! Definição vem com disciplina \u2728',
+          4: 'Amazona, skincare da noite + Kegel! Ritual completo \uD83D\uDC51'
+        }[phase] || 'Skincare da noite + Kegel!';
+      } else if (h === 22 && m === 15) {
+        message = {
+          1: 'Hora de descansar. Sono = fundação forte \uD83D\uDCAA',
+          2: 'Hora de descansar. Sono = músculos em construção \uD83D\uDD25',
+          3: 'Hora de descansar. Sono = definição real \u2728',
+          4: 'Amazona descansa também. Sono = recuperação da guerreira \uD83D\uDC51'
+        }[phase] || 'Hora de descansar. Sono = recuperação muscular';
+      }
 
       if (message) {
         try {
