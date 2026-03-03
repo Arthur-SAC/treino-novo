@@ -58,7 +58,14 @@ const DAILY_TIPS = [
   "Anote o peso usado em cada exercício. Progressão de carga = resultados.",
   "Estresse menos. Cortisol alto atrapalha perda de gordura e ganho muscular.",
   "Coloque alarme pra beber água a cada 2 horas. Desidratação afeta TUDO.",
-  "Tire fotos de progresso a cada 15 dias. O espelho engana, a foto não."
+  "Tire fotos de progresso a cada 15 dias. O espelho engana, a foto não.",
+  "Levante a cada 50min do computador. Seu flexor do quadril agradece e o glúteo ativa.",
+  "Melatonina: tome 30-60min ANTES de deitar. Dose baixa (0.5-1mg) já funciona.",
+  "Multivitamínico com zinco e selênio ajuda na função íntima e recuperação muscular.",
+  "Colágeno hidrolisado (10g/dia) melhora pele, cabelo e articulações.",
+  "Distribua proteína ao longo do dia (a cada 3-4h). Corpo absorve melhor ~40g por vez.",
+  "Ômega-3: anti-inflamatório natural. 1 cápsula no almoço se não come peixe.",
+  "Ficar sentada muito tempo? Aperte o glúteo 10x a cada hora — ativação isométrica."
 ];
 
 // ─── 3. EXERCISE_VIDEOS ─────────────────────────────────────
@@ -2922,6 +2929,30 @@ const EDUCATIONAL_CONTENT = {
     emoji: "💧",
     content: "Água é essencial pra síntese proteica (construção muscular), pra pele saudável, e pra performance no treino. 2.5L é o mínimo pra quem treina. Desidratação de 2% já reduz força em 10%.",
     tips: "Beba 500ml ao acordar. Tenha sempre uma garrafa por perto. Coloque alarme a cada 2h."
+  },
+  sedentaryLife: {
+    title: "Vida Sedentária + Treino",
+    emoji: "🪑",
+    content: "Ficar sentada 8h+ encurta o flexor do quadril, enfraquece o glúteo e piora a postura. Mas treinar 1h por dia COMPENSA — o importante é não ficar 8h sem se mover.",
+    tips: [
+      "A cada 50min: levante, ande 2min, faça 10 agachamentos ou alongue o flexor",
+      "No trabalho: sente na ponta da cadeira 5min por hora (ativa o core)",
+      "Ergonomia: monitor na altura dos olhos, pés no chão, costas apoiadas",
+      "Hidratação: beber água te força a levantar pro banheiro (win-win)"
+    ]
+  },
+  supplements: {
+    title: "Suplementos",
+    emoji: "💊",
+    content: "Suplementos complementam, não substituem a alimentação. Os essenciais pro teu objetivo:",
+    tips: [
+      "Whey Protein: 1 scoop/dia pra atingir meta de proteína (já tá no shake \u2713)",
+      "Creatina: 5g/dia todo dia, qualquer horário (já tá no shake \u2713)",
+      "Multivitamínico (Vita Supraz): tá ótimo, o zinco e selênio ajudam na performance íntima",
+      "Melatonina: 0.5-1mg, 30-60min antes de dormir, dose baixa funciona melhor",
+      "Colágeno hidrolisado: 10g/dia (pele + cabelo + articulações)",
+      "Ômega-3: 1g/dia se não come peixe 2x/semana"
+    ]
   }
 };
 
