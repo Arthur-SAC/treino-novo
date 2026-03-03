@@ -88,7 +88,11 @@
 
     body {
       font-family: var(--font-body);
-      background-color: var(--bg-dark);
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(201, 123, 181, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(212, 168, 83, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgba(110, 203, 139, 0.03) 0%, transparent 50%),
+        var(--bg-dark);
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
@@ -96,6 +100,21 @@
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.015;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
     }
 
     a {
@@ -2515,6 +2534,12 @@
       max-width: 320px;
     }
 
+    /* Firefox scrollbar */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    }
+
     /* ============================================
        SCROLLBAR STYLING
        ============================================ */
@@ -2604,7 +2629,11 @@
 
     @media screen and (min-width: 768px) {
       body {
-        background: #111122;
+        background:
+          radial-gradient(ellipse at 20% 50%, rgba(201, 123, 181, 0.06) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 20%, rgba(212, 168, 83, 0.04) 0%, transparent 50%),
+          radial-gradient(ellipse at 50% 100%, rgba(110, 203, 139, 0.03) 0%, transparent 50%),
+          #111122;
       }
 
       #app-header,
