@@ -2435,6 +2435,16 @@
       }
     }
 
+    @keyframes slideFromLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideFromRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
     @keyframes glow {
       0%, 100% {
         box-shadow: 0 0 5px rgba(201, 123, 181, 0.3);

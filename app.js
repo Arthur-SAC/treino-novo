@@ -148,9 +148,14 @@ const Router = {
    * Applies a subtle fade-in animation on page switch.
    */
   showPage(page) {
+    // Determine direction based on page index difference
+    var prevIdx = Router.pages.indexOf(App.currentPage);
+    var nextIdx = Router.pages.indexOf(page);
+    var animName = (nextIdx >= prevIdx) ? 'slideFromRight 0.3s ease' : 'slideFromLeft 0.3s ease';
+
     App.currentPage = page;
 
-    // Hide all pages, then show the target with fade animation
+    // Hide all pages, show target with directional animation
     document.querySelectorAll('.page').forEach(function(p) {
       p.classList.remove('active');
       p.style.animation = '';
@@ -159,9 +164,8 @@ const Router = {
     if (target) {
       target.classList.add('active');
       target.style.animation = 'none';
-      // Force reflow to restart animation
       void target.offsetHeight;
-      target.style.animation = 'fadeIn 0.3s ease';
+      target.style.animation = animName;
     }
 
     // Update bottom nav active state
@@ -169,10 +173,7 @@ const Router = {
       item.classList.toggle('active', item.dataset.page === page);
     });
 
-    // Scroll to top of the page content
     if (target) target.scrollTop = 0;
-
-    // Emit pageChange event for feature modules to react
     document.dispatchEvent(new CustomEvent('pageChange', { detail: { page: page } }));
   },
 
@@ -199,7 +200,7 @@ const Router = {
 
       // Only trigger if horizontal swipe > 50px and more horizontal than vertical
       if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
-        var currentIdx = Router.pages.indexOf(Router.currentPage);
+        var currentIdx = Router.pages.indexOf(App.currentPage);
         if (diffX < 0 && currentIdx < Router.pages.length - 1) {
           Router.navigate(Router.pages[currentIdx + 1]);
         } else if (diffX > 0 && currentIdx > 0) {
