@@ -280,6 +280,23 @@
       display: block;
     }
 
+    /* Section-colored card left borders */
+    #page-treino .card {
+      border-left: 3px solid rgba(201, 123, 181, 0.3);
+    }
+
+    #page-nutricao .card {
+      border-left: 3px solid rgba(110, 203, 139, 0.3);
+    }
+
+    #page-cuidados .card {
+      border-left: 3px solid rgba(168, 130, 210, 0.3);
+    }
+
+    #page-progresso .card {
+      border-left: 3px solid rgba(212, 168, 83, 0.3);
+    }
+
     /* ============================================
        BOTTOM NAVIGATION
        ============================================ */
@@ -335,6 +352,19 @@
 
     .nav-item.active::before {
       transform: translateX(-50%) scaleX(1);
+    }
+
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 32px;
+      border-radius: var(--radius-xl);
+      background: rgba(201, 123, 181, 0.10);
+      z-index: -1;
     }
 
     .nav-item.active .nav-icon {
