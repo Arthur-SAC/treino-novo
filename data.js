@@ -1781,21 +1781,21 @@ const MEALS = {
   treino: {
     label: "Dia de Treino (Seg-Sex)",
     totalCalories: "~2.300-2.500 kcal",
-    totalProtein: "~160-170g",
+    totalProtein: "~165-172g",
     meals: [
       {
         name: "Café da Manhã",
         time: "06:30",
         emoji: "☀️",
         optionA: {
-          name: "Mingau de Aveia",
-          description: "Mingau de aveia + fruta + pasta de amendoim",
-          macros: "~380 kcal, 18g prot"
+          name: "Shake Proteico",
+          description: "1 scoop whey (30g) + 40g aveia + 1 banana + 5g creatina + 1 col. pasta de amendoim (15g) + 200ml leite",
+          macros: "~480 kcal, 38g prot, 52g carb, 14g gord"
         },
         optionB: {
           name: "Ovos + Pão Integral",
-          description: "3 ovos mexidos + 2 fatias pão integral + queijo",
-          macros: "~400 kcal, 25g prot"
+          description: "3 ovos mexidos + 2 fatias pão integral (50g) + 1 fatia queijo muçarela (20g)",
+          macros: "~420 kcal, 28g prot, 30g carb, 22g gord"
         }
       },
       {
@@ -1803,14 +1803,14 @@ const MEALS = {
         time: "10:00",
         emoji: "🍎",
         optionA: {
-          name: "Banana + Castanhas",
-          description: "1 banana + 20g castanhas (10 unidades)",
-          macros: "~200 kcal, 6g prot"
+          name: "Fruta + Castanhas",
+          description: "1 banana ou maçã + 20g castanhas (10 unidades) + 1 col. mel (opcional)",
+          macros: "~220 kcal, 5g prot, 30g carb, 10g gord"
         },
         optionB: {
           name: "Iogurte + Granola",
-          description: "Iogurte natural + 1 colher de granola",
-          macros: "~200 kcal, 8g prot"
+          description: "170g iogurte natural + 30g granola + 1 col. mel",
+          macros: "~230 kcal, 10g prot, 32g carb, 7g gord"
         }
       },
       {
@@ -1818,51 +1818,66 @@ const MEALS = {
         time: "12:30",
         emoji: "🍽️",
         optionA: {
-          name: "Frango + Arroz Integral",
-          description: "150g frango grelhado + 100g arroz integral + salada completa + 1 fio de azeite",
-          macros: "~550 kcal, 40g prot"
+          name: "Frango + Arroz + Feijão",
+          description: "150g frango grelhado + 100g arroz branco (cozido) + 1 concha feijão (80g) + salada à vontade + 1 fio azeite",
+          macros: "~580 kcal, 45g prot, 55g carb, 16g gord"
         },
         optionB: {
-          name: "Carne Moída + Batata Doce",
-          description: "150g carne moída refogada + 100g batata doce + salada + feijão",
-          macros: "~600 kcal, 45g prot"
+          name: "Carne Moída + Arroz + Feijão",
+          description: "150g carne moída refogada + 100g arroz branco + 1 concha feijão (80g) + salada à vontade + 1 fio azeite",
+          macros: "~620 kcal, 42g prot, 55g carb, 22g gord"
         }
       },
       {
-        name: "Pré-Treino",
-        time: "16:00",
-        emoji: "🍌",
+        name: "Lanche/Pré-Treino",
+        time: "16:30",
+        emoji: "💪",
         optionA: {
-          name: "Shake Proteico",
-          description: "Shake proteico (whey + banana + aveia)",
-          macros: "~350 kcal, 35g prot"
+          name: "Patê de Frango com Cottage",
+          description: "Patê de frango com cottage e milho (1 porção) + 2 fatias pão integral (50g)",
+          macros: "~390 kcal, 32g prot, 38g carb, 10g gord"
         },
         optionB: {
-          name: "Pão + Ovos + Fruta",
-          description: "2 fatias pão integral + 2 ovos + fruta",
-          macros: "~350 kcal, 30g prot"
+          name: "Tapioca + Ovo + Banana",
+          description: "2 col. goma de tapioca (40g) + 2 ovos mexidos + 1 banana",
+          macros: "~370 kcal, 18g prot, 45g carb, 12g gord"
         }
       },
       {
-        name: "Jantar (pós-treino)",
+        name: "Jantar (Pós-Treino)",
         time: "20:00",
         emoji: "🌙",
         optionA: {
-          name: "Omelete Proteico",
-          description: "Omelete proteico (3 ovos + 2 claras + recheio) + salada",
-          macros: "~420 kcal, 38g prot"
+          name: "Frango + Batata Doce",
+          description: "150g frango grelhado + 150g batata doce + salada completa + 1 fio azeite",
+          macros: "~480 kcal, 42g prot, 45g carb, 12g gord"
         },
         optionB: {
-          name: "Frango + Salada",
-          description: "150g frango + salada grande + 1/2 batata doce",
-          macros: "~450 kcal, 40g prot"
+          name: "Carne Moída + Arroz Integral",
+          description: "150g carne moída + 80g arroz integral (cozido) + legumes refogados (brócolis, cenoura)",
+          macros: "~520 kcal, 40g prot, 40g carb, 20g gord"
+        }
+      },
+      {
+        name: "Ceia",
+        time: "22:00",
+        emoji: "😴",
+        optionA: {
+          name: "Queijo Cottage + Fruta",
+          description: "100g queijo cottage + 1 fruta (morango, kiwi ou banana) + canela",
+          macros: "~160 kcal, 14g prot, 15g carb, 4g gord"
+        },
+        optionB: {
+          name: "Iogurte Grego + Castanhas",
+          description: "120g iogurte grego natural + 15g castanhas + 1 col. mel",
+          macros: "~180 kcal, 12g prot, 14g carb, 8g gord"
         }
       }
     ]
   },
   descanso: {
     label: "Dia de Descanso (Sáb-Dom)",
-    totalCalories: "~2.100-2.200 kcal",
+    totalCalories: "~2.000-2.200 kcal",
     totalProtein: "~150-160g",
     meals: [
       {
@@ -1870,14 +1885,14 @@ const MEALS = {
         time: "08:00",
         emoji: "☀️",
         optionA: {
-          name: "Mingau de Aveia",
-          description: "Mingau de aveia + fruta + pasta de amendoim",
-          macros: "~380 kcal, 18g prot"
+          name: "Shake Proteico",
+          description: "1 scoop whey (30g) + 40g aveia + 1 banana + 5g creatina + 1 col. pasta de amendoim (15g) + 200ml leite",
+          macros: "~480 kcal, 38g prot, 52g carb, 14g gord"
         },
         optionB: {
           name: "Ovos + Pão Integral",
-          description: "3 ovos mexidos + 2 fatias pão integral + queijo",
-          macros: "~400 kcal, 25g prot"
+          description: "3 ovos mexidos + 2 fatias pão integral (50g) + 1 fatia queijo muçarela (20g)",
+          macros: "~420 kcal, 28g prot, 30g carb, 22g gord"
         }
       },
       {
@@ -1885,14 +1900,14 @@ const MEALS = {
         time: "10:30",
         emoji: "🍎",
         optionA: {
-          name: "Banana + Castanhas",
-          description: "1 banana + 20g castanhas",
-          macros: "~200 kcal, 6g prot"
+          name: "Fruta + Castanhas",
+          description: "1 banana ou maçã + 20g castanhas (10 unidades) + 1 col. mel (opcional)",
+          macros: "~220 kcal, 5g prot, 30g carb, 10g gord"
         },
         optionB: {
           name: "Iogurte + Granola",
-          description: "Iogurte natural + 1 colher de granola",
-          macros: "~200 kcal, 8g prot"
+          description: "170g iogurte natural + 30g granola + 1 col. mel",
+          macros: "~230 kcal, 10g prot, 32g carb, 7g gord"
         }
       },
       {
@@ -1900,9 +1915,9 @@ const MEALS = {
         time: "12:30",
         emoji: "🍽️",
         optionA: {
-          name: "Frango + Arroz Integral",
-          description: "150g frango grelhado + 100g arroz integral + salada",
-          macros: "~550 kcal, 40g prot"
+          name: "Frango + Arroz + Feijão",
+          description: "130g frango grelhado + 80g arroz branco (cozido) + 1 concha feijão (80g) + salada à vontade",
+          macros: "~480 kcal, 38g prot, 48g carb, 12g gord"
         },
         optionB: {
           name: "Refeição Livre (Sábado)",
@@ -1916,13 +1931,13 @@ const MEALS = {
         emoji: "🍌",
         optionA: {
           name: "Fruta + Castanhas",
-          description: "1 maçã ou pera + 20g castanhas",
-          macros: "~200 kcal, 5g prot"
+          description: "1 maçã ou pera + 20g castanhas (10 unidades)",
+          macros: "~200 kcal, 5g prot, 28g carb, 10g gord"
         },
         optionB: {
           name: "Iogurte + Fruta",
-          description: "Iogurte natural + fruta picada",
-          macros: "~180 kcal, 8g prot"
+          description: "170g iogurte natural + fruta picada",
+          macros: "~180 kcal, 8g prot, 22g carb, 5g gord"
         }
       },
       {
@@ -1931,13 +1946,28 @@ const MEALS = {
         emoji: "🌙",
         optionA: {
           name: "Omelete Leve",
-          description: "Omelete (3 ovos + vegetais) + salada",
-          macros: "~350 kcal, 30g prot"
+          description: "Omelete (3 ovos + vegetais) + salada completa",
+          macros: "~350 kcal, 30g prot, 8g carb, 22g gord"
         },
         optionB: {
           name: "Sopa Proteica",
-          description: "Sopa de legumes com frango desfiado",
-          macros: "~300 kcal, 28g prot"
+          description: "Sopa de legumes com 100g frango desfiado + batata",
+          macros: "~300 kcal, 28g prot, 25g carb, 8g gord"
+        }
+      },
+      {
+        name: "Ceia",
+        time: "22:00",
+        emoji: "😴",
+        optionA: {
+          name: "Queijo Cottage + Fruta",
+          description: "100g queijo cottage + 1 fruta (morango, kiwi ou banana) + canela",
+          macros: "~160 kcal, 14g prot, 15g carb, 4g gord"
+        },
+        optionB: {
+          name: "Iogurte Grego + Castanhas",
+          description: "120g iogurte grego natural + 15g castanhas + 1 col. mel",
+          macros: "~180 kcal, 12g prot, 14g carb, 8g gord"
         }
       }
     ]
