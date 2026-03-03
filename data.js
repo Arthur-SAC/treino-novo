@@ -2587,7 +2587,10 @@ const SHOPPING_LIST = {
       { name: "Peito de frango", quantity: "1kg", price: "R$15-20", checked: false },
       { name: "Ovos", quantity: "2 dúzias", price: "R$15-18", checked: false },
       { name: "Carne moída magra", quantity: "500g", price: "R$20-25", checked: false },
-      { name: "Whey protein", quantity: "1 pote (dura ~1 mês)", price: "R$80-120", checked: false }
+      { name: "Whey protein", quantity: "1 pote (dura ~1 mês)", price: "R$80-120", checked: false },
+      { name: "Queijo cottage", quantity: "200g", price: "R$8-12", checked: false },
+      { name: "Atum em lata (em água)", quantity: "2 latas", price: "R$8-12", checked: false },
+      { name: "Requeijão light", quantity: "1 pote", price: "R$6-9", checked: false }
     ]
   },
   carboidratos: {
@@ -2597,7 +2600,10 @@ const SHOPPING_LIST = {
       { name: "Arroz integral", quantity: "1kg", price: "R$8-10", checked: false },
       { name: "Batata doce", quantity: "1kg", price: "R$5-8", checked: false },
       { name: "Aveia em flocos", quantity: "500g", price: "R$5-7", checked: false },
-      { name: "Pão integral", quantity: "1 pacote", price: "R$7-10", checked: false }
+      { name: "Pão integral", quantity: "1 pacote", price: "R$7-10", checked: false },
+      { name: "Feijão carioca", quantity: "1kg", price: "R$8-10", checked: false },
+      { name: "Tapioca/goma", quantity: "500g", price: "R$5-8", checked: false },
+      { name: "Milho verde", quantity: "1 lata", price: "R$4", checked: false }
     ]
   },
   vegetais_frutas: {
@@ -2630,7 +2636,8 @@ const SHOPPING_LIST = {
     items: [
       { name: "Leite desnatado", quantity: "2L", price: "R$8-10", checked: false },
       { name: "Queijo muçarela", quantity: "200g", price: "R$8-10", checked: false },
-      { name: "Iogurte natural", quantity: "1 pote", price: "R$5-7", checked: false }
+      { name: "Iogurte natural", quantity: "1 pote", price: "R$5-7", checked: false },
+      { name: "Iogurte grego natural", quantity: "1 pote", price: "R$7-10", checked: false }
     ]
   },
   temperos: {
@@ -2638,9 +2645,10 @@ const SHOPPING_LIST = {
     emoji: "🧂",
     items: [
       { name: "Orégano, páprica, pimenta do reino", quantity: "1x (dura meses)", price: "R$5-10", checked: false },
-      { name: "Milho verde em lata", quantity: "1 lata", price: "R$4", checked: false },
-      { name: "Feijão", quantity: "1kg", price: "R$8-10", checked: false },
-      { name: "Granola", quantity: "1 pacote", price: "R$8-12", checked: false }
+      { name: "Granola", quantity: "1 pacote", price: "R$8-12", checked: false },
+      { name: "Louro (folhas)", quantity: "1 pacote", price: "R$3-5", checked: false },
+      { name: "Cominho", quantity: "1 pote", price: "R$3-5", checked: false },
+      { name: "Salsinha", quantity: "1 maço", price: "R$2-3", checked: false }
     ]
   }
 };
