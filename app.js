@@ -670,10 +670,31 @@ const BadgeManager = {
 const VideoModal = {
   modal: null,
   iframe: null,
+  gifContainer: null,
+  gifImage: null,
+  gifLoading: null,
+  videoContainer: null,
+  youtubeLink: null,
+  _currentVideo: null,
 
   init() {
     this.modal = document.getElementById('video-modal');
     this.iframe = document.getElementById('video-iframe');
+    this.gifContainer = document.getElementById('gif-container');
+    this.gifImage = document.getElementById('gif-image');
+    this.gifLoading = document.getElementById('gif-loading');
+    this.videoContainer = document.getElementById('video-container');
+    this.youtubeLink = document.getElementById('video-youtube-link');
+
+    var self = this;
+    this.gifImage.addEventListener('load', function() {
+      this.classList.add('loaded');
+      document.getElementById('gif-loading').style.display = 'none';
+    });
+    this.gifImage.addEventListener('error', function() {
+      document.getElementById('gif-container').classList.add('hidden');
+      self.showYouTube(self._currentVideo);
+    });
 
     // Close button
     document.getElementById('video-modal-close').addEventListener('click', () => this.close());
@@ -687,6 +708,16 @@ const VideoModal = {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !this.modal.classList.contains('hidden')) this.close();
     });
+  },
+
+  showYouTube(video) {
+    if (!video || !video.youtubeId || video.youtubeId === 'PLACEHOLDER') return;
+    if (!navigator.onLine) {
+      Toast.show('Conecte a internet pra ver o video', 'info');
+      return;
+    }
+    this.iframe.src = 'https://www.youtube-nocookie.com/embed/' + video.youtubeId + '?rel=0&autoplay=0';
+    this.videoContainer.classList.remove('hidden');
   },
 
   /**
@@ -708,18 +739,30 @@ const VideoModal = {
 
     if (!video) { Toast.show('Vídeo não encontrado', 'error'); return; }
 
-    // Check if online
-    if (!navigator.onLine && video.youtubeId === 'PLACEHOLDER') {
-      Toast.show('Conecte a internet pra ver o video', 'info');
-      return;
-    }
+    this._currentVideo = video;
 
-    // Set iframe src (youtube-nocookie for privacy)
-    if (video.youtubeId && video.youtubeId !== 'PLACEHOLDER') {
-      this.iframe.src = `https://www.youtube-nocookie.com/embed/${video.youtubeId}?rel=0&autoplay=0`;
+    // Reset both containers
+    this.gifContainer.classList.add('hidden');
+    this.videoContainer.classList.add('hidden');
+    this.gifImage.src = '';
+    this.gifImage.classList.remove('loaded');
+    this.gifLoading.style.display = '';
+    this.iframe.src = '';
+    this.youtubeLink.classList.add('hidden');
+    this.youtubeLink.href = '#';
+
+    // GIF or YouTube
+    if (video.gifUrl) {
+      this.gifContainer.classList.remove('hidden');
+      this.gifImage.src = video.gifUrl;
+      this.gifImage.alt = video.title || '';
+      // Show YouTube as secondary link
+      if (video.youtubeId && video.youtubeId !== 'PLACEHOLDER') {
+        this.youtubeLink.href = 'https://www.youtube.com/watch?v=' + video.youtubeId;
+        this.youtubeLink.classList.remove('hidden');
+      }
     } else {
-      // Placeholder: show message
-      this.iframe.src = '';
+      this.showYouTube(video);
     }
 
     document.getElementById('video-title').textContent = video.title || '';
@@ -737,12 +780,17 @@ const VideoModal = {
     }
 
     this.modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // Prevent background scroll
+    document.body.style.overflow = 'hidden';
   },
 
   close() {
     this.modal.classList.add('hidden');
-    this.iframe.src = ''; // Stop video
+    this.iframe.src = '';
+    this.gifImage.src = '';
+    this.gifContainer.classList.add('hidden');
+    this.videoContainer.classList.add('hidden');
+    this.youtubeLink.classList.add('hidden');
+    this._currentVideo = null;
     var mistakesEl = document.getElementById('video-mistakes');
     if (mistakesEl) { mistakesEl.textContent = ''; mistakesEl.classList.remove('visible'); }
     document.body.style.overflow = '';
@@ -1783,6 +1831,14 @@ const WorkoutManager = {
     if (exercise.tip) {
       html += '<span class="exercise-tip">&#128161; ' + this.escapeHtml(exercise.tip) + '</span>';
     }
+    // Weight suggestion badge
+    if (exercise.videoKey && typeof WEIGHT_GUIDE !== 'undefined') {
+      var guide = WEIGHT_GUIDE[exercise.videoKey];
+      var phaseKey = this.getPhaseKey();
+      if (guide && guide[phaseKey]) {
+        html += '<span class="weight-suggestion">\u2696 ' + this.escapeHtml(guide[phaseKey].suggestedKg) + '</span>';
+      }
+    }
     html += '</div>'; // .exercise-info
 
     // Video button
@@ -1797,6 +1853,19 @@ const WorkoutManager = {
     html += '<div class="exercise-details hidden" id="details-' + exercise.id + '">';
     if (exercise.details) {
       html += '<p style="font-size:0.85rem; opacity:0.85; line-height:1.5;">' + this.escapeHtml(exercise.details) + '</p>';
+    }
+    // Weight progression info
+    if (exercise.videoKey && typeof WEIGHT_GUIDE !== 'undefined') {
+      var wGuide = WEIGHT_GUIDE[exercise.videoKey];
+      var wPhaseKey = this.getPhaseKey();
+      if (wGuide && wGuide[wPhaseKey]) {
+        html += '<div class="weight-progression-info">';
+        html += '<span class="weight-progression-label">\uD83C\uDFCB Peso sugerido:</span> <strong>' + this.escapeHtml(wGuide[wPhaseKey].suggestedKg) + '</strong>';
+        if (wGuide[wPhaseKey].progression) {
+          html += '<br><span class="weight-progression-label">\uD83D\uDCC8 Quando progredir:</span> ' + this.escapeHtml(wGuide[wPhaseKey].progression);
+        }
+        html += '</div>';
+      }
     }
     html += '</div>';
 

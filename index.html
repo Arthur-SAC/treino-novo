@@ -861,6 +861,43 @@
     .video-mistakes.visible {
       display: block;
     }
+    .gif-container {
+      position: relative;
+      width: 100%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #111;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gif-container.hidden { display: none; }
+    .gif-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--radius-md);
+    }
+    .gif-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .youtube-fallback-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .youtube-fallback-link.hidden { display: none; }
+    #video-container.hidden { display: none; }
 
     /* ============================================
        TIMER OVERLAY
@@ -1319,6 +1356,30 @@
       font-size: 0.78rem;
       color: var(--accent-light, var(--primary));
       opacity: 0.85;
+    }
+    .weight-suggestion {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      color: var(--accent-light, #e0be7a);
+      background: rgba(212, 168, 83, 0.1);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      margin-top: 2px;
+    }
+    .weight-progression-info {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: rgba(212, 168, 83, 0.08);
+      border-left: 3px solid var(--accent, #e0be7a);
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+    .weight-progression-label {
+      font-weight: 600;
+      color: var(--accent-light, #e0be7a);
     }
 
     .expand-icon {
@@ -3055,13 +3116,18 @@
   <div id="video-modal" class="modal-overlay hidden">
     <div class="video-modal glass">
       <button class="modal-close" id="video-modal-close">&times;</button>
-      <div class="video-container">
+      <div id="gif-container" class="gif-container hidden">
+        <img id="gif-image" src="" alt="" class="gif-image" loading="lazy">
+        <div class="gif-loading" id="gif-loading">Carregando...</div>
+      </div>
+      <div id="video-container" class="video-container hidden">
         <iframe id="video-iframe" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"></iframe>
       </div>
       <div id="video-info">
         <h3 id="video-title"></h3>
         <p id="video-tips"></p>
         <p id="video-mistakes" class="video-mistakes"></p>
+        <a id="video-youtube-link" class="btn btn-sm btn-outline youtube-fallback-link hidden" href="#" target="_blank" rel="noopener">&#127909; Ver video completo no YouTube</a>
       </div>
     </div>
   </div>

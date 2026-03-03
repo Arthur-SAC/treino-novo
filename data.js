@@ -70,42 +70,172 @@ const DAILY_TIPS = [
 
 // ─── 3. EXERCISE_VIDEOS ─────────────────────────────────────
 const EXERCISE_VIDEOS = {
-  "glute-bridge": { youtubeId: "Z-dSAVAkC-8", title: "Glute Bridge — Como fazer corretamente", tips: "Empurre o quadril pro teto, aperte forte no topo 2-3seg", commonMistakes: "Hiperextender a lombar no topo. Empurrar com as costas em vez do glúteo. Pés muito longe do corpo." },
-  "sumo-squat": { youtubeId: "mOtY705EJYg", title: "Agachamento Sumo com Halter", tips: "Pés bem abertos, dedos pra fora, desça devagar", commonMistakes: "Joelhos caindo pra dentro. Inclinar o tronco pra frente. Não descer o suficiente." },
-  "leg-press": { youtubeId: "bfHuhQPa4lc", title: "Leg Press pés altos", tips: "Pés no TOPO da plataforma = mais glúteo", commonMistakes: "Pés baixos na plataforma (tira ênfase do glúteo). Travar os joelhos no topo. Tirar a lombar do apoio." },
-  "abdutora": { youtubeId: "GljAOyT5xLI", title: "Cadeira Abdutora", tips: "Segure 1seg na abertura máxima", commonMistakes: "Usar impulso em vez de força. Não segurar na abertura máxima. Inclinar o tronco." },
-  "adutora": { youtubeId: "Wf602gn_9zU", title: "Cadeira Adutora", tips: "Interno de coxa = feminiza silhueta", commonMistakes: "Usar impulso. Não controlar a volta. Sentar torta na máquina." },
-  "pullover": { youtubeId: "FK4rHfWKEac", title: "Pullover com Halter", tips: "Abre a caixa torácica, silhueta ampulheta", commonMistakes: "Dobrar demais os cotovelos. Usar peso excessivo. Arquear a lombar." },
-  "vacuum": { youtubeId: "NcWHmnVN9Ng", title: "Vacuum Abdominal", tips: "Solte TODO o ar, puxe umbigo pra dentro e pra cima", commonMistakes: "Não soltar todo o ar antes. Prender a respiração errado. Forçar o abdômen pra fora." },
-  "clamshell": { youtubeId: "m_ZPapmqeNM", title: "Clamshell com Elástico", tips: "SEMPRE comece pelo lado ESQUERDO", commonMistakes: "Girar o quadril junto (só o joelho abre). Fazer rápido demais. Não manter os pés juntos." },
-  "abducao-pe": { youtubeId: "Zuw2n3IyMu0", title: "Abdução em Pé com Elástico", tips: "Tronco reto, não incline", commonMistakes: "Inclinar o tronco pro lado oposto. Usar impulso. Não manter o core ativado." },
-  "lateral-walk": { youtubeId: "PhNkkOieB-8", title: "Lateral Walk com Elástico", tips: "Passos curtos, tensão constante", commonMistakes: "Passos muito largos. Arrastar os pés. Perder a tensão do elástico." },
-  "stiff": { youtubeId: "CN_7cz3P-1U", title: "Stiff com Halteres", tips: "Empurre o quadril PRA TRÁS, sinta atrás da coxa", commonMistakes: "Arredondar as costas. Dobrar os joelhos demais. Não empurrar o quadril pra trás." },
-  "prancha": { youtubeId: "ASdvN_XEl_c", title: "Prancha Abdominal", tips: "Aperte abdômen e glúteo, corpo RETO", commonMistakes: "Quadril subindo (montanha). Quadril descendo (banana). Não ativar o core." },
-  "prancha-lateral": { youtubeId: "zt7PjySXWCw", title: "Prancha Lateral", tips: "Marca a cintura", commonMistakes: "Quadril caindo. Ombro não alinhado com o pulso. Não ativar o oblíquo." },
-  "hip-thrust": { youtubeId: "WA2Q1auA1zY", title: "Hip Thrust", tips: "Apoie costas no banco, empurre quadril pro teto", commonMistakes: "Hiperextender a lombar. Posição errada das costas no banco. Pés muito perto ou longe." },
-  "bulgarian-split-squat": { youtubeId: "HTedLXOg89Y", title: "Agachamento Búlgaro", tips: "Pé traseiro no banco, foque no glúteo ao subir", commonMistakes: "Joelho passando do pé. Tronco inclinado demais. Pé traseiro muito tenso." },
-  "step-up": { youtubeId: "7AtIjR-QqVA", title: "Step Up com Halter", tips: "Empurre pelo calcanhar", commonMistakes: "Empurrar com o pé de baixo. Não subir pelo calcanhar. Tronco inclinado." },
-  "good-morning": { youtubeId: "aAvJCDyG0m0", title: "Good Morning", tips: "Barra atrás do pescoço, flexione no quadril", commonMistakes: "Arredondar as costas. Dobrar os joelhos demais. Descer rápido demais." },
-  "kickback-polia": { youtubeId: "XYCCcD0MxN8", title: "Kickback na Polia", tips: "Não arquear a lombar", commonMistakes: "Arquear a lombar. Usar impulso. Não controlar a volta." },
-  "elevacao-pelvica": { youtubeId: "mFqvX2-UzoA", title: "Elevação Pélvica Pés Elevados", tips: "Pés no banco, quadril bem alto", commonMistakes: "Não subir o quadril o suficiente. Pés escorregando. Lombar compensando." },
-  "dead-bug": { youtubeId: "uQfzuKBMJeE", title: "Dead Bug", tips: "Lombar colada no chão", commonMistakes: "Lombar saindo do chão. Movimentos rápidos sem controle. Prender a respiração." },
-  "cable-pull-through": { youtubeId: "wV4j_CAOze8", title: "Cable Pull Through", tips: "Puxe com o quadril, não com os braços", commonMistakes: "Puxar com os braços. Não flexionar no quadril. Arredondar as costas." },
-  "glute-ham-raise": { youtubeId: "m0AIU1dCVkU", title: "Glute Ham Raise", tips: "Controle a descida", commonMistakes: "Cair sem controle. Usar as mãos pra ajudar. Não ativar o posterior." },
-  "kegel": { youtubeId: "3Pz2LxtOoPU", title: "Exercício Kegel", tips: "Identifique o músculo correto", commonMistakes: "Contrair o abdômen em vez do assoalho pélvico. Prender a respiração. Fazer rápido demais." },
-  "alongamento-flexor": { youtubeId: "ZrHXejl-rYg", title: "Alongamento Flexor do Quadril", tips: "Posição correta do quadril", commonMistakes: "Joelho passando do pé. Não empurrar o quadril pra frente. Arquear a lombar." },
-  "worlds-greatest-stretch": { youtubeId: "-CiWQ2IvY34", title: "World's Greatest Stretch", tips: "Sequência completa", commonMistakes: "Pular etapas da sequência. Não segurar tempo suficiente. Respiração presa." },
-  "cardio-esteira": { youtubeId: "KegIrmaClFQ", title: "Cardio Esteira Inclinada", tips: "Inclinação 8-12%, velocidade 5-6km/h", commonMistakes: "Segurar nas barras laterais. Inclinação muito baixa. Velocidade alta demais." },
-  "circulos-quadril": { youtubeId: "b3qf3YzFgmU", title: "Círculos de Quadril — Mobilidade", tips: "Mãos na cintura, gira o quadril em círculos", commonMistakes: "" },
-  "balanco-perna": { youtubeId: "jpmSaPEPErw", title: "Balanço de Perna — Aquecimento", tips: "Segure em algo, balance frente/trás e lateral", commonMistakes: "" },
-  "agachamento-profundo": { youtubeId: "iUnwcn6f_7Y", title: "Agachamento Profundo — Mobilidade", tips: "Segure embaixo 30seg, cotovelos empurram joelhos pra fora", commonMistakes: "" },
-  "polichinelo": { youtubeId: "yDSMdd8hiFg", title: "Polichinelo — Aquecimento Cardio", tips: "Cardio leve pra aquecer o corpo", commonMistakes: "" },
-  "clamshell-ativacao": { youtubeId: "845Yzbfg3eY", title: "Clamshell — Ativação Glúteo", tips: "Ativação do glúteo médio antes do treino", commonMistakes: "" },
-  "donkey-kick": { youtubeId: "NPVIiAvi1hM", title: "Donkey Kick — Ativação Glúteo", tips: "De quatro, chuta pra cima apertando o glúteo", commonMistakes: "" },
-  "cat-cow": { youtubeId: "40Y1rukJs4E", title: "Gato e Vaca — Mobilidade Coluna", tips: "Arredonda e arqueia as costas alternando", commonMistakes: "" },
-  "pombo-alongamento": { youtubeId: "fASdWDluHrc", title: "Pombo — Alongamento Quadril", tips: "Perna cruzada na frente, desça o tronco devagar", commonMistakes: "" },
-  "borboleta-alongamento": { youtubeId: "6XT60SbKR3s", title: "Borboleta — Alongamento", tips: "Solas dos pés juntas, pressione joelhos pra baixo", commonMistakes: "" },
-  "glute-bridge-ativacao": { youtubeId: "eu5oejYxPBQ", title: "Glute Bridge — Ativação", tips: "Sem peso, foque em sentir o glúteo", commonMistakes: "" }
+  "glute-bridge": { youtubeId: "Z-dSAVAkC-8", gifUrl: "https://static.exercisedb.dev/media/u0cNiij.gif", title: "Glute Bridge — Como fazer corretamente", tips: "Empurre o quadril pro teto, aperte forte no topo 2-3seg", commonMistakes: "Hiperextender a lombar no topo. Empurrar com as costas em vez do glúteo. Pés muito longe do corpo." },
+  "sumo-squat": { youtubeId: "mOtY705EJYg", gifUrl: "https://static.exercisedb.dev/media/dzz6BiV.gif", title: "Agachamento Sumo com Halter", tips: "Pés bem abertos, dedos pra fora, desça devagar", commonMistakes: "Joelhos caindo pra dentro. Inclinar o tronco pra frente. Não descer o suficiente." },
+  "leg-press": { youtubeId: "bfHuhQPa4lc", gifUrl: "https://static.exercisedb.dev/media/2Qh2J1e.gif", title: "Leg Press pés altos", tips: "Pés no TOPO da plataforma = mais glúteo", commonMistakes: "Pés baixos na plataforma (tira ênfase do glúteo). Travar os joelhos no topo. Tirar a lombar do apoio." },
+  "abdutora": { youtubeId: "GljAOyT5xLI", gifUrl: "https://static.exercisedb.dev/media/CHpahtl.gif", title: "Cadeira Abdutora", tips: "Segure 1seg na abertura máxima", commonMistakes: "Usar impulso em vez de força. Não segurar na abertura máxima. Inclinar o tronco." },
+  "adutora": { youtubeId: "Wf602gn_9zU", gifUrl: "https://static.exercisedb.dev/media/oHsrypV.gif", title: "Cadeira Adutora", tips: "Interno de coxa = feminiza silhueta", commonMistakes: "Usar impulso. Não controlar a volta. Sentar torta na máquina." },
+  "pullover": { youtubeId: "FK4rHfWKEac", gifUrl: "https://static.exercisedb.dev/media/9XjtHvS.gif", title: "Pullover com Halter", tips: "Abre a caixa torácica, silhueta ampulheta", commonMistakes: "Dobrar demais os cotovelos. Usar peso excessivo. Arquear a lombar." },
+  "vacuum": { youtubeId: "NcWHmnVN9Ng", gifUrl: null, title: "Vacuum Abdominal", tips: "Solte TODO o ar, puxe umbigo pra dentro e pra cima", commonMistakes: "Não soltar todo o ar antes. Prender a respiração errado. Forçar o abdômen pra fora." },
+  "clamshell": { youtubeId: "m_ZPapmqeNM", gifUrl: null, title: "Clamshell com Elástico", tips: "SEMPRE comece pelo lado ESQUERDO", commonMistakes: "Girar o quadril junto (só o joelho abre). Fazer rápido demais. Não manter os pés juntos." },
+  "abducao-pe": { youtubeId: "Zuw2n3IyMu0", gifUrl: "https://static.exercisedb.dev/media/7WaDzyL.gif", title: "Abdução em Pé com Elástico", tips: "Tronco reto, não incline", commonMistakes: "Inclinar o tronco pro lado oposto. Usar impulso. Não manter o core ativado." },
+  "lateral-walk": { youtubeId: "PhNkkOieB-8", gifUrl: null, title: "Lateral Walk com Elástico", tips: "Passos curtos, tensão constante", commonMistakes: "Passos muito largos. Arrastar os pés. Perder a tensão do elástico." },
+  "stiff": { youtubeId: "CN_7cz3P-1U", gifUrl: "https://static.exercisedb.dev/media/hrVQWvE.gif", title: "Stiff com Halteres", tips: "Empurre o quadril PRA TRÁS, sinta atrás da coxa", commonMistakes: "Arredondar as costas. Dobrar os joelhos demais. Não empurrar o quadril pra trás." },
+  "prancha": { youtubeId: "ASdvN_XEl_c", gifUrl: null, title: "Prancha Abdominal", tips: "Aperte abdômen e glúteo, corpo RETO", commonMistakes: "Quadril subindo (montanha). Quadril descendo (banana). Não ativar o core." },
+  "prancha-lateral": { youtubeId: "zt7PjySXWCw", gifUrl: null, title: "Prancha Lateral", tips: "Marca a cintura", commonMistakes: "Quadril caindo. Ombro não alinhado com o pulso. Não ativar o oblíquo." },
+  "hip-thrust": { youtubeId: "WA2Q1auA1zY", gifUrl: null, title: "Hip Thrust", tips: "Apoie costas no banco, empurre quadril pro teto", commonMistakes: "Hiperextender a lombar. Posição errada das costas no banco. Pés muito perto ou longe." },
+  "bulgarian-split-squat": { youtubeId: "HTedLXOg89Y", gifUrl: null, title: "Agachamento Búlgaro", tips: "Pé traseiro no banco, foque no glúteo ao subir", commonMistakes: "Joelho passando do pé. Tronco inclinado demais. Pé traseiro muito tenso." },
+  "step-up": { youtubeId: "7AtIjR-QqVA", gifUrl: "https://static.exercisedb.dev/media/gFyFj9z.gif", title: "Step Up com Halter", tips: "Empurre pelo calcanhar", commonMistakes: "Empurrar com o pé de baixo. Não subir pelo calcanhar. Tronco inclinado." },
+  "good-morning": { youtubeId: "aAvJCDyG0m0", gifUrl: "https://static.exercisedb.dev/media/XlZ4lAC.gif", title: "Good Morning", tips: "Barra atrás do pescoço, flexione no quadril", commonMistakes: "Arredondar as costas. Dobrar os joelhos demais. Descer rápido demais." },
+  "kickback-polia": { youtubeId: "XYCCcD0MxN8", gifUrl: "https://static.exercisedb.dev/media/HEJ6DIX.gif", title: "Kickback na Polia", tips: "Não arquear a lombar", commonMistakes: "Arquear a lombar. Usar impulso. Não controlar a volta." },
+  "elevacao-pelvica": { youtubeId: "mFqvX2-UzoA", gifUrl: "https://static.exercisedb.dev/media/aWedzZX.gif", title: "Elevação Pélvica Pés Elevados", tips: "Pés no banco, quadril bem alto", commonMistakes: "Não subir o quadril o suficiente. Pés escorregando. Lombar compensando." },
+  "dead-bug": { youtubeId: "uQfzuKBMJeE", gifUrl: "https://static.exercisedb.dev/media/iny3m5y.gif", title: "Dead Bug", tips: "Lombar colada no chão", commonMistakes: "Lombar saindo do chão. Movimentos rápidos sem controle. Prender a respiração." },
+  "cable-pull-through": { youtubeId: "wV4j_CAOze8", gifUrl: "https://static.exercisedb.dev/media/OM46QHm.gif", title: "Cable Pull Through", tips: "Puxe com o quadril, não com os braços", commonMistakes: "Puxar com os braços. Não flexionar no quadril. Arredondar as costas." },
+  "glute-ham-raise": { youtubeId: "m0AIU1dCVkU", gifUrl: null, title: "Glute Ham Raise", tips: "Controle a descida", commonMistakes: "Cair sem controle. Usar as mãos pra ajudar. Não ativar o posterior." },
+  "kegel": { youtubeId: "3Pz2LxtOoPU", gifUrl: null, title: "Exercício Kegel", tips: "Identifique o músculo correto", commonMistakes: "Contrair o abdômen em vez do assoalho pélvico. Prender a respiração. Fazer rápido demais." },
+  "alongamento-flexor": { youtubeId: "ZrHXejl-rYg", gifUrl: null, title: "Alongamento Flexor do Quadril", tips: "Posição correta do quadril", commonMistakes: "Joelho passando do pé. Não empurrar o quadril pra frente. Arquear a lombar." },
+  "worlds-greatest-stretch": { youtubeId: "-CiWQ2IvY34", gifUrl: null, title: "World's Greatest Stretch", tips: "Sequência completa", commonMistakes: "Pular etapas da sequência. Não segurar tempo suficiente. Respiração presa." },
+  "cardio-esteira": { youtubeId: "KegIrmaClFQ", gifUrl: null, title: "Cardio Esteira Inclinada", tips: "Inclinação 8-12%, velocidade 5-6km/h", commonMistakes: "Segurar nas barras laterais. Inclinação muito baixa. Velocidade alta demais." },
+  "circulos-quadril": { youtubeId: "b3qf3YzFgmU", gifUrl: null, title: "Círculos de Quadril — Mobilidade", tips: "Mãos na cintura, gira o quadril em círculos", commonMistakes: "" },
+  "balanco-perna": { youtubeId: "jpmSaPEPErw", gifUrl: null, title: "Balanço de Perna — Aquecimento", tips: "Segure em algo, balance frente/trás e lateral", commonMistakes: "" },
+  "agachamento-profundo": { youtubeId: "iUnwcn6f_7Y", gifUrl: null, title: "Agachamento Profundo — Mobilidade", tips: "Segure embaixo 30seg, cotovelos empurram joelhos pra fora", commonMistakes: "" },
+  "polichinelo": { youtubeId: "yDSMdd8hiFg", gifUrl: null, title: "Polichinelo — Aquecimento Cardio", tips: "Cardio leve pra aquecer o corpo", commonMistakes: "" },
+  "clamshell-ativacao": { youtubeId: "845Yzbfg3eY", gifUrl: null, title: "Clamshell — Ativação Glúteo", tips: "Ativação do glúteo médio antes do treino", commonMistakes: "" },
+  "donkey-kick": { youtubeId: "NPVIiAvi1hM", gifUrl: null, title: "Donkey Kick — Ativação Glúteo", tips: "De quatro, chuta pra cima apertando o glúteo", commonMistakes: "" },
+  "cat-cow": { youtubeId: "40Y1rukJs4E", gifUrl: null, title: "Gato e Vaca — Mobilidade Coluna", tips: "Arredonda e arqueia as costas alternando", commonMistakes: "" },
+  "pombo-alongamento": { youtubeId: "fASdWDluHrc", gifUrl: null, title: "Pombo — Alongamento Quadril", tips: "Perna cruzada na frente, desça o tronco devagar", commonMistakes: "" },
+  "borboleta-alongamento": { youtubeId: "6XT60SbKR3s", gifUrl: null, title: "Borboleta — Alongamento", tips: "Solas dos pés juntas, pressione joelhos pra baixo", commonMistakes: "" },
+  "glute-bridge-ativacao": { youtubeId: "eu5oejYxPBQ", gifUrl: "https://static.exercisedb.dev/media/u0cNiij.gif", title: "Glute Bridge — Ativação", tips: "Sem peso, foque em sentir o glúteo", commonMistakes: "" }
+};
+
+// ─── 3b. WEIGHT_GUIDE — Pesos sugeridos por fase ────────────
+const WEIGHT_GUIDE = {
+  "glute-bridge": {
+    fase1: { suggestedKg: "Sem peso ou 5-8kg", progression: "Quando segurar 3seg no topo ficar fácil" },
+    fase2: { suggestedKg: "8-12kg", progression: "Quando 15 reps ficarem fáceis" },
+    fase3: { suggestedKg: "12-20kg", progression: "Quando completar todas as séries sem dificuldade" },
+    fase4: { suggestedKg: "20-30kg", progression: "Aumente 2kg quando completar todas as séries com forma perfeita" }
+  },
+  "sumo-squat": {
+    fase1: { suggestedKg: "8-10kg", progression: "Quando 12 reps ficarem fáceis com forma perfeita" },
+    fase2: { suggestedKg: "10-14kg", progression: "Quando completar 4x12 sem dificuldade" },
+    fase3: { suggestedKg: "14-20kg", progression: "Quando manter forma perfeita em todas as séries" },
+    fase4: { suggestedKg: "20-26kg", progression: "Aumente 2kg quando completar todas as séries controlado" }
+  },
+  "leg-press": {
+    fase1: { suggestedKg: "30-50kg", progression: "Quando 12 reps ficarem fáceis" },
+    fase2: { suggestedKg: "50-70kg", progression: "Quando completar 4x12 controlado" },
+    fase3: { suggestedKg: "70-100kg", progression: "Quando manter amplitude completa em todas as séries" },
+    fase4: { suggestedKg: "100-130kg", progression: "Aumente 10kg quando completar todas as séries com controle" }
+  },
+  "abdutora": {
+    fase1: { suggestedKg: "15-25kg", progression: "Quando segurar 1seg aberto ficar fácil" },
+    fase2: { suggestedKg: "25-35kg", progression: "Quando 15 reps ficarem fáceis" },
+    fase3: { suggestedKg: "35-45kg", progression: "Quando completar todas as séries controlado" },
+    fase4: { suggestedKg: "45-60kg", progression: "Aumente 5kg quando completar todas as séries" }
+  },
+  "adutora": {
+    fase1: { suggestedKg: "15-25kg", progression: "Quando 15 reps ficarem fáceis" },
+    fase2: { suggestedKg: "25-35kg", progression: "Quando completar 4x15 controlado" },
+    fase3: { suggestedKg: "35-45kg", progression: "Quando manter controle na volta em todas as séries" },
+    fase4: { suggestedKg: "45-60kg", progression: "Aumente 5kg quando completar todas as séries" }
+  },
+  "pullover": {
+    fase1: { suggestedKg: "6-8kg", progression: "Quando 12 reps ficarem fáceis sem dor" },
+    fase2: { suggestedKg: "8-10kg", progression: "Quando completar 3x12 com amplitude completa" },
+    fase3: { suggestedKg: "10-14kg", progression: "Quando manter controle total do movimento" },
+    fase4: { suggestedKg: "14-18kg", progression: "Aumente 2kg quando completar todas as séries com forma perfeita" }
+  },
+  "vacuum": {
+    fase1: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 20seg → 30seg quando ficar fácil" },
+    fase2: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 30seg → 40seg" },
+    fase3: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 40seg → 50seg" },
+    fase4: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 50seg → 60seg" }
+  },
+  "clamshell": {
+    fase1: { suggestedKg: "Elástico leve", progression: "Quando 15 reps ficarem fáceis sem compensar" },
+    fase2: { suggestedKg: "Elástico médio", progression: "Quando completar 3x15 com controle" },
+    fase3: { suggestedKg: "Elástico médio-forte", progression: "Quando manter quadril estável em todas as reps" },
+    fase4: { suggestedKg: "Elástico forte", progression: "Quando completar todas as séries sem compensação" }
+  },
+  "abducao-pe": {
+    fase1: { suggestedKg: "Elástico leve", progression: "Quando 15 reps ficarem fáceis sem inclinar" },
+    fase2: { suggestedKg: "Elástico médio", progression: "Quando completar 3x15 com tronco reto" },
+    fase3: { suggestedKg: "Elástico médio-forte", progression: "Quando manter equilíbrio perfeito" },
+    fase4: { suggestedKg: "Elástico forte", progression: "Quando completar todas as séries com controle total" }
+  },
+  "lateral-walk": {
+    fase1: { suggestedKg: "Elástico leve", progression: "Quando 12 passos ficarem fáceis" },
+    fase2: { suggestedKg: "Elástico médio", progression: "Quando completar 3x12 com tensão constante" },
+    fase3: { suggestedKg: "Elástico médio-forte", progression: "Quando manter semi-agachamento o tempo todo" },
+    fase4: { suggestedKg: "Elástico forte", progression: "Quando completar todas as séries sem perder tensão" }
+  },
+  "stiff": {
+    fase1: { suggestedKg: "6-8kg (cada halter)", progression: "Quando 12 reps ficarem fáceis sentindo posterior" },
+    fase2: { suggestedKg: "8-12kg (cada halter)", progression: "Quando completar 4x12 com controle" },
+    fase3: { suggestedKg: "12-16kg (cada halter)", progression: "Quando manter costas retas em toda amplitude" },
+    fase4: { suggestedKg: "16-20kg (cada halter)", progression: "Aumente 2kg quando completar todas as séries" }
+  },
+  "hip-thrust": {
+    fase2: { suggestedKg: "20-30kg", progression: "Quando 12 reps ficarem fáceis com squeeze no topo" },
+    fase3: { suggestedKg: "30-50kg", progression: "Quando completar 4x12 controlado" },
+    fase4: { suggestedKg: "50-70kg", progression: "Aumente 5kg quando completar todas as séries com forma perfeita" }
+  },
+  "bulgarian-split-squat": {
+    fase2: { suggestedKg: "6-8kg (cada halter)", progression: "Quando 10 reps ficarem fáceis com equilíbrio" },
+    fase3: { suggestedKg: "8-12kg (cada halter)", progression: "Quando completar 4x10 com controle" },
+    fase4: { suggestedKg: "12-16kg (cada halter)", progression: "Aumente 2kg quando completar todas as séries" }
+  },
+  "step-up": {
+    fase2: { suggestedKg: "6-8kg (cada halter)", progression: "Quando 12 reps ficarem fáceis empurrando pelo calcanhar" },
+    fase3: { suggestedKg: "8-12kg (cada halter)", progression: "Quando completar 3x12 sem usar pé de baixo" },
+    fase4: { suggestedKg: "12-16kg (cada halter)", progression: "Aumente 2kg quando completar todas as séries" }
+  },
+  "good-morning": {
+    fase3: { suggestedKg: "10-15kg (barra)", progression: "Quando 12 reps ficarem fáceis com costas retas" },
+    fase4: { suggestedKg: "15-25kg (barra)", progression: "Aumente 2.5kg quando completar todas as séries" }
+  },
+  "kickback-polia": {
+    fase3: { suggestedKg: "10-15kg", progression: "Quando 12 reps ficarem fáceis sem arquear lombar" },
+    fase4: { suggestedKg: "15-25kg", progression: "Aumente 2.5kg quando completar todas as séries com controle" }
+  },
+  "elevacao-pelvica": {
+    fase3: { suggestedKg: "Sem peso ou 5-10kg", progression: "Quando 15 reps ficarem fáceis" },
+    fase4: { suggestedKg: "10-20kg", progression: "Aumente 2kg quando completar todas as séries" }
+  },
+  "dead-bug": {
+    fase3: { suggestedKg: "Sem peso", progression: "Aumente reps: 10 → 12 → 15 quando ficar fácil" },
+    fase4: { suggestedKg: "Sem peso", progression: "Aumente reps ou adicione caneleira leve (1-2kg)" }
+  },
+  "cable-pull-through": {
+    fase4: { suggestedKg: "15-25kg", progression: "Aumente 2.5kg quando completar todas as séries com forma perfeita" }
+  },
+  "glute-ham-raise": {
+    fase4: { suggestedKg: "Sem peso", progression: "Quando controlar a descida completa, adicione peso no peito (5kg)" }
+  },
+  "prancha": {
+    fase1: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 20seg → 30seg → 45seg" },
+    fase2: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 30seg → 45seg → 60seg" },
+    fase3: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 45seg → 60seg" },
+    fase4: { suggestedKg: "Sem peso", progression: "Mantenha 60seg com forma perfeita" }
+  },
+  "prancha-lateral": {
+    fase2: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 20seg → 30seg cada lado" },
+    fase3: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 30seg → 45seg cada lado" },
+    fase4: { suggestedKg: "Sem peso", progression: "Mantenha 45seg+ com quadril alto" }
+  },
+  "cardio-esteira": {
+    fase1: { suggestedKg: "Sem peso", progression: "Aumente inclinação: 8% → 10% → 12%" },
+    fase2: { suggestedKg: "Sem peso", progression: "Aumente duração: 15min → 20min → 25min" },
+    fase3: { suggestedKg: "Sem peso", progression: "Aumente velocidade: 5 → 5.5 → 6km/h" },
+    fase4: { suggestedKg: "Sem peso", progression: "Mantenha 25-30min a 6km/h inclinação 12%" }
+  },
+  "kegel": {
+    fase1: { suggestedKg: "Sem peso", progression: "Aumente contrações: 5seg → 8seg → 10seg" },
+    fase2: { suggestedKg: "Sem peso", progression: "Aumente séries e duração das contrações" },
+    fase3: { suggestedKg: "Sem peso", progression: "Aumente séries e duração das contrações" },
+    fase4: { suggestedKg: "Sem peso", progression: "Mantenha 3x15 contrações de 10seg" }
+  }
 };
 
 // ─── 4. RECIPE_VIDEOS ───────────────────────────────────────

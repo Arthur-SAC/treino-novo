@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'arthur-app-v6';
+const CACHE_VERSION = 'arthur-app-v7';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -49,6 +49,23 @@ self.addEventListener('fetch', function(event) {
       url.hostname.includes('firestore.googleapis.com')) {
     event.respondWith(
       fetch(event.request).catch(function() { return caches.match(event.request); })
+    );
+    return;
+  }
+
+  // Cache-first for ExerciseDB GIFs
+  if (url.hostname.includes('exercisedb.dev') || url.pathname.endsWith('.gif')) {
+    event.respondWith(
+      caches.match(event.request).then(function(cached) {
+        if (cached) return cached;
+        return fetch(event.request).then(function(response) {
+          if (response.ok) {
+            var clone = response.clone();
+            caches.open(CACHE_VERSION).then(function(cache) { cache.put(event.request, clone); });
+          }
+          return response;
+        });
+      })
     );
     return;
   }
