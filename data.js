@@ -2240,6 +2240,334 @@ const RECIPES = [
       "Overnight oats é perfeito pra quem não tem tempo de manhã"
     ],
     videoKey: "mingau-aveia"
+  },
+  {
+    id: "feijao-caseiro",
+    name: "Feijão Caseiro",
+    emoji: "🫘",
+    servings: 10,
+    calories: 110,
+    protein: 7,
+    carbs: 18,
+    fat: 1,
+    ingredients: [
+      "500g feijão carioca (deixar de molho 8-12h)",
+      "1 cebola média picada",
+      "4 dentes de alho amassados",
+      "2 folhas de louro",
+      "1 colher de sopa de azeite",
+      "Sal a gosto",
+      "Pimenta do reino a gosto",
+      "Água suficiente pra cobrir (~1,5L)"
+    ],
+    steps: [
+      "Deixar de molho: Na noite anterior, coloque o feijão em uma tigela com bastante água (3x o volume). Deixe 8-12h. Descarte a água depois (reduz gases).",
+      "Cozinhar: Na panela de pressão, coloque o feijão com água nova até cobrir + 2 dedos acima. Adicione as folhas de louro. Feche e cozinhe por 25-30min após pegar pressão.",
+      "Temperar: Em outra panela, aqueça o azeite em fogo médio. Refogue a cebola até dourar (~3min), depois o alho (~30seg).",
+      "Juntar: Abra a pressão, retire 1 concha de feijão e amasse com garfo (engrossar o caldo). Junte o refogado ao feijão, adicione sal e pimenta. Cozinhe mais 10min sem tampa pra apurar.",
+      "Guardar: Rende ~10 porções. Separe em potes e congele — dura até 3 meses no freezer."
+    ],
+    variations: [
+      { name: "Feijão Tropeiro", description: "Adicione bacon, linguiça, farinha de mandioca, ovo e couve" },
+      { name: "Feijão com Legumes", description: "Adicione cenoura e abóbora picada no cozimento" }
+    ],
+    tips: [
+      "Sempre deixe de molho — cozinha mais rápido e reduz gases",
+      "Congele em porções individuais pra facilitar a semana",
+      "Louro dá sabor e ajuda na digestão",
+      "Na panela comum: cozinhe 1h30-2h em fogo baixo"
+    ]
+  },
+  {
+    id: "carne-moida-refogada",
+    name: "Carne Moída Refogada",
+    emoji: "🥩",
+    servings: 4,
+    calories: 180,
+    protein: 26,
+    carbs: 3,
+    fat: 8,
+    ingredients: [
+      "500g carne moída magra (patinho ou acém)",
+      "1 cebola média picada",
+      "3 dentes de alho amassados",
+      "2 tomates maduros picados em cubos",
+      "1 colher de sopa de azeite",
+      "Sal a gosto",
+      "Pimenta do reino",
+      "1 colher de chá de páprica doce",
+      "Cheiro-verde picado (opcional)"
+    ],
+    steps: [
+      "Refogar: Em uma panela grande, aqueça o azeite em fogo médio-alto. Refogue a cebola até ficar transparente (~2min), depois o alho (~30seg).",
+      "Carne: Adicione a carne moída e mexa bem pra desmanchar os pedaços. Cozinhe até perder a cor rosa (~5-7min).",
+      "Temperar: Adicione sal, pimenta e páprica. Misture bem.",
+      "Tomate: Adicione os tomates picados, abaixe o fogo pra médio. Deixe cozinhar por 10-15min mexendo de vez em quando, até o molho reduzir.",
+      "Finalizar: Salpique cheiro-verde. Sirva com arroz e feijão."
+    ],
+    variations: [
+      { name: "Carne Moída com Legumes", description: "Adicione cenoura ralada, vagem e milho — fica completo" },
+      { name: "Molho Bolonhesa", description: "Adicione molho de tomate (200ml) e sirva com macarrão integral" }
+    ],
+    tips: [
+      "Fogo alto no início pra selar a carne (evita cozinhar na água)",
+      "Escolha carne moída magra pra menos gordura",
+      "Prepare 500g no domingo — rende 4 refeições na semana",
+      "Congela bem por até 3 meses"
+    ]
+  },
+  {
+    id: "frango-grelhado-temperado",
+    name: "Frango Grelhado Temperado",
+    emoji: "🍗",
+    servings: 4,
+    calories: 200,
+    protein: 35,
+    carbs: 1,
+    fat: 6,
+    ingredients: [
+      "600g peito de frango (4 filés de ~150g)",
+      "2 colheres de sopa de azeite",
+      "3 dentes de alho amassados",
+      "Suco de 1 limão",
+      "1 colher de chá de páprica defumada",
+      "1 colher de chá de cúrcuma (açafrão)",
+      "Sal a gosto",
+      "Pimenta do reino",
+      "Orégano a gosto",
+      "1 colher de chá de mostarda (opcional)"
+    ],
+    steps: [
+      "Preparar: Lave os filés e seque com papel toalha. Se muito grossos, abra ao meio (butterfly) ou bata entre dois plásticos até ~1,5cm de espessura uniforme.",
+      "Marinada: Em um bowl, misture azeite + alho + limão + páprica + cúrcuma + sal + pimenta + orégano + mostarda. Passe nos filés dos dois lados. Marine por 30min na geladeira (mínimo 15min).",
+      "Grelhar: Aqueça uma frigideira/grill em fogo médio-alto até BEM quente. Coloque os filés SEM MEXER por 5min.",
+      "Virar: Vire UMA VEZ. Mais 4-5min do outro lado. Não aperte com espátula!",
+      "Verificar: Corte no meio — deve estar branco, sem rosa. Se rosa, tampe e dê mais 2min em fogo baixo.",
+      "Descansar: Retire do fogo, espere 3-5min antes de cortar. Mantém o suco dentro."
+    ],
+    variations: [
+      { name: "Frango Desfiado", description: "Cozinhe em água temperada (alho, cebola, louro, sal) por 25min, desfie com garfo" },
+      { name: "Frango ao Forno", description: "Mesma marinada, asse a 200°C por 25-30min virando na metade" }
+    ],
+    tips: [
+      "Páprica defumada + cúrcuma = cor de restaurante e sabor incrível",
+      "Prepare 4-6 filés no domingo, guarde em potes — dura 4 dias na geladeira",
+      "Vire APENAS UMA VEZ pro suco não escapar",
+      "Mostarda na marinada amacia a carne"
+    ]
+  },
+  {
+    id: "shake-arthur",
+    name: "Shake Proteico da Arthur",
+    emoji: "🥤",
+    servings: 1,
+    calories: 480,
+    protein: 38,
+    carbs: 52,
+    fat: 14,
+    ingredients: [
+      "1 scoop whey protein (30g)",
+      "40g aveia em flocos (4 colheres de sopa)",
+      "1 banana madura",
+      "5g creatina monohidratada (1 colher de chá rasa)",
+      "1 colher de sopa de pasta de amendoim (15g)",
+      "200ml de leite (integral ou desnatado)"
+    ],
+    steps: [
+      "Coloque o leite no liquidificador primeiro.",
+      "Adicione a banana picada, aveia e pasta de amendoim.",
+      "Bata por 20 segundos até a aveia quebrar.",
+      "Adicione o whey e a creatina.",
+      "Bata mais 15-20 segundos até ficar homogêneo (não bata demais pra não esquentar).",
+      "Sirva imediatamente — creatina dissolve melhor fresca."
+    ],
+    variations: [
+      { name: "Versão Cacau", description: "Adicione 1 colher de sopa de cacau em pó — sabor chocolate" },
+      { name: "Versão Morango", description: "Troque banana por 100g de morango congelado" },
+      { name: "Mais Calórico", description: "Adicione 1/2 abacate pra +100 kcal e textura cremosa" }
+    ],
+    tips: [
+      "Tomar como café da manhã ou pós-treino",
+      "Creatina não tem sabor — some no shake",
+      "Banana madura (com pintinhas) fica mais doce e bate melhor",
+      "Se ficar grosso demais, adicione +50ml de leite"
+    ]
+  },
+  {
+    id: "tapioca-proteica",
+    name: "Tapioca Proteica",
+    emoji: "🫓",
+    servings: 1,
+    calories: 370,
+    protein: 25,
+    carbs: 40,
+    fat: 14,
+    ingredients: [
+      "2 colheres de sopa de goma de tapioca (40g)",
+      "2 ovos",
+      "1 colher de chá de azeite",
+      "Sal a gosto",
+      "Recheio: 50g frango desfiado OU queijo muçarela (20g)"
+    ],
+    steps: [
+      "Tapioca: Aqueça uma frigideira antiaderente em fogo médio. Espalhe a goma de tapioca uniformemente formando um disco. Espere hidratar (~1min).",
+      "Virar: Quando a tapioca soltar da frigideira, vire com cuidado. Mais 30seg.",
+      "Ovos: Em outra frigideira com azeite, mexe os 2 ovos com sal até ficarem cremosos (~2min).",
+      "Montar: Coloque os ovos mexidos e o frango/queijo no centro da tapioca. Dobre ao meio.",
+      "Servir: Coma quente, acompanhada de 1 banana (se pré-treino)."
+    ],
+    variations: [
+      { name: "Tapioca Doce", description: "Recheie com banana + pasta de amendoim + canela" },
+      { name: "Tapioca Fitness", description: "Adicione 1 scoop de whey aos ovos mexidos (+25g proteína)" }
+    ],
+    tips: [
+      "Goma de tapioca hidratada (úmida) funciona melhor que a seca",
+      "Fogo médio — fogo alto queima rápido",
+      "Ótima opção de pré-treino: carboidrato rápido + proteína",
+      "Prepare o frango desfiado com antecedência"
+    ]
+  },
+  {
+    id: "ceia-noturna",
+    name: "Ceia Noturna",
+    emoji: "😴",
+    servings: 1,
+    calories: 160,
+    protein: 14,
+    carbs: 15,
+    fat: 4,
+    ingredients: [
+      "100g queijo cottage",
+      "1 fruta: 5 morangos OU 1 kiwi OU 1/2 banana",
+      "1 pitada de canela",
+      "1 colher de chá de mel (opcional)"
+    ],
+    steps: [
+      "Coloque o cottage em um bowl.",
+      "Corte a fruta em pedaços pequenos e coloque por cima.",
+      "Salpique canela generosamente.",
+      "Se quiser mais doce, adicione 1 fio de mel.",
+      "Coma devagar, 30-60min antes de dormir."
+    ],
+    variations: [
+      { name: "Versão Iogurte", description: "Troque cottage por 120g iogurte grego natural + 15g castanhas" },
+      { name: "Versão Caseína", description: "Adicione 1/2 scoop de caseína ao cottage — proteína de absorção lenta" }
+    ],
+    tips: [
+      "Cottage tem caseína (proteína lenta) — ideal pra noite",
+      "Comer 30-60min antes de deitar",
+      "Evite frutas muito doces à noite (prefira morango, kiwi)",
+      "Canela ajuda no controle de glicose noturna"
+    ]
+  },
+  {
+    id: "pate-frango-cottage",
+    name: "Patê de Frango com Cottage e Milho",
+    emoji: "🥪",
+    servings: 2,
+    calories: 250,
+    protein: 28,
+    carbs: 12,
+    fat: 8,
+    ingredients: [
+      "200g frango desfiado (cozido)",
+      "100g queijo cottage",
+      "2 colheres de sopa de milho verde",
+      "1/4 cebola picada bem fina",
+      "Sal a gosto",
+      "Pimenta do reino",
+      "1 colher de chá de azeite",
+      "Cebolinha picada (opcional)"
+    ],
+    steps: [
+      "Desfiar: Se o frango não estiver desfiado, cozinhe em água com sal e alho por 20min. Desfie com 2 garfos.",
+      "Misturar: Em um bowl, misture o frango desfiado + cottage + milho + cebola. Mexa bem.",
+      "Temperar: Adicione sal, pimenta, azeite e cebolinha. Prove e ajuste.",
+      "Guardar: Coloque em um pote com tampa. Dura 3-4 dias na geladeira.",
+      "Servir: Com pão integral (pré-treino) ou torrada (ceia). 1 porção = metade do pote."
+    ],
+    variations: [
+      { name: "Patê Apimentado", description: "Adicione 1 colher de pimenta calabresa" },
+      { name: "Patê com Requeijão", description: "Troque o cottage por 2 col. requeijão light (mais cremoso)" }
+    ],
+    tips: [
+      "Prepare no domingo — rende 2 porções pra semana",
+      "Funciona como pré-treino (com pão) ou ceia (com torrada)",
+      "Frango desfiado congela bem — prepare bastante de uma vez",
+      "Cottage dá cremosidade com menos gordura que requeijão"
+    ]
+  },
+  {
+    id: "pate-frango-legumes",
+    name: "Patê de Frango com Legumes",
+    emoji: "🥕",
+    servings: 2,
+    calories: 200,
+    protein: 25,
+    carbs: 5,
+    fat: 8,
+    ingredients: [
+      "200g frango desfiado (cozido)",
+      "2 colheres de sopa de requeijão light",
+      "1/2 cenoura ralada fina",
+      "Salsinha picada (1 colher de sopa)",
+      "Sal a gosto",
+      "Pimenta do reino",
+      "Suco de 1/2 limão"
+    ],
+    steps: [
+      "Desfiar: Se o frango não estiver desfiado, cozinhe em água com sal e alho por 20min. Desfie.",
+      "Misturar: Em um bowl, misture frango + requeijão + cenoura ralada + salsinha.",
+      "Temperar: Adicione sal, pimenta e suco de limão. Misture bem.",
+      "Guardar: Coloque em pote com tampa — dura 3-4 dias na geladeira.",
+      "Servir: Com pão integral, torrada, ou como recheio de tapioca."
+    ],
+    variations: [
+      { name: "Versão com Cottage", description: "Troque requeijão por 100g cottage (mais proteína)" },
+      { name: "Com Beterraba", description: "Troque cenoura por beterraba ralada — fica rosa e nutritivo" }
+    ],
+    tips: [
+      "Cenoura ralada fina integra melhor no patê",
+      "Limão dá frescor e ajuda na conservação",
+      "Ótimo pra levar de lanche no trabalho",
+      "Salsinha é rica em vitamina C e ferro"
+    ]
+  },
+  {
+    id: "pasta-de-atum",
+    name: "Pasta de Atum",
+    emoji: "🐟",
+    servings: 1,
+    calories: 180,
+    protein: 26,
+    carbs: 2,
+    fat: 7,
+    ingredients: [
+      "1 lata de atum em água (escorrido, ~120g)",
+      "1 colher de sopa de requeijão light",
+      "1/4 cebola picada bem fina",
+      "Suco de 1/2 limão",
+      "Sal a gosto",
+      "Pimenta do reino",
+      "Cebolinha picada (opcional)"
+    ],
+    steps: [
+      "Escorrer: Abra a lata de atum e escorra toda a água. Coloque em um bowl.",
+      "Desfiar: Com um garfo, desfie o atum até ficar em lascas.",
+      "Misturar: Adicione requeijão, cebola, limão, sal e pimenta. Misture bem.",
+      "Finalizar: Salpique cebolinha por cima.",
+      "Servir: Com pão integral, torrada, ou dentro de uma tapioca."
+    ],
+    variations: [
+      { name: "Pasta Cremosa", description: "Adicione 50g cottage pra mais cremosidade (+6g prot)" },
+      { name: "Pasta Apimentada", description: "Adicione pimenta calabresa e tomate seco picado" }
+    ],
+    tips: [
+      "Atum em ÁGUA (não em óleo) — menos gordura, mais proteína",
+      "Limão corta o sabor forte do atum",
+      "Pronta em 3 minutos — perfeita pra quando não tem tempo",
+      "Rica em ômega-3 naturalmente"
+    ]
   }
 ];
 
