@@ -429,6 +429,31 @@
       border: 1px solid var(--glass-border);
     }
 
+    /* Dashboard hero card */
+    .card.glass.dashboard-hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(
+        135deg,
+        rgba(201, 123, 181, 0.12) 0%,
+        rgba(212, 168, 83, 0.08) 50%,
+        rgba(110, 203, 139, 0.06) 100%
+      );
+      border: 1px solid rgba(201, 123, 181, 0.15);
+    }
+
+    .card.glass.dashboard-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 123, 181, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
     /* ============================================
        BUTTONS
        ============================================ */
@@ -887,6 +912,7 @@
       line-height: 1;
       margin-bottom: 16px;
       text-shadow: 0 0 30px rgba(201, 123, 181, 0.3);
+      font-variant-numeric: tabular-nums;
     }
 
     .timer-progress {
@@ -1666,6 +1692,7 @@
       font-weight: 700;
       color: var(--accent);
       line-height: 1;
+      font-variant-numeric: tabular-nums;
     }
 
     .streak-label {
@@ -2135,6 +2162,7 @@
       font-weight: 700;
       color: var(--primary);
       line-height: 1;
+      font-variant-numeric: tabular-nums;
     }
 
     .stat-label {

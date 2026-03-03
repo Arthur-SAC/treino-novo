@@ -1036,7 +1036,7 @@ const Dashboard = {
 
     // Greeting + motivational quote
     html += `
-      <div class="card glass" style="text-align:center; padding: 1.5rem;">
+      <div class="card glass dashboard-hero" style="text-align:center; padding: 1.5rem;">
         <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">
           ${Utils.getContextGreeting()}
         </h2>
