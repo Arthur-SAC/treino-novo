@@ -2395,7 +2395,8 @@ const NutritionManager = {
       html += '  </div>';
       html += '  <div class="meal-options">';
       html += '    <div class="meal-option">';
-      html += '      <strong>Op\u00E7\u00E3o ' + selectedOpt + ':</strong> ' + option.description;
+      html += '      <strong>Op\u00E7\u00E3o ' + selectedOpt + ': ' + option.name + '</strong>';
+      html += '      <div style="margin-top:4px; font-size:0.85rem; opacity:0.85;">' + option.description + '</div>';
       html += '      <span class="meal-macros">' + option.macros + '</span>';
       html += '    </div>';
       html += '  </div>';
