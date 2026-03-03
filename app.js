@@ -147,7 +147,14 @@ const Router = {
    * Show a specific page and update nav active state.
    * Applies a subtle fade-in animation on page switch.
    */
+  _navigating: false,
+
   showPage(page) {
+    // Guard: skip if already on this page or mid-navigation
+    if (page === App.currentPage && document.querySelector('#page-' + page + '.active')) return;
+    if (Router._navigating) return;
+    Router._navigating = true;
+
     // Determine direction based on page index difference
     var prevIdx = Router.pages.indexOf(App.currentPage);
     var nextIdx = Router.pages.indexOf(page);
@@ -175,6 +182,9 @@ const Router = {
 
     if (target) target.scrollTop = 0;
     document.dispatchEvent(new CustomEvent('pageChange', { detail: { page: page } }));
+
+    // Release navigation lock after animation completes
+    setTimeout(function() { Router._navigating = false; }, 350);
   },
 
   /**
@@ -184,22 +194,34 @@ const Router = {
   initSwipe() {
     var startX = 0;
     var startY = 0;
+    var swipeValid = false;
     var container = document.getElementById('app-content');
     if (!container) return;
 
     container.addEventListener('touchstart', function(e) {
+      // Ignore swipes that start on interactive elements
+      var tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON' ||
+          e.target.closest('button') || e.target.closest('a') || e.target.closest('label') ||
+          e.target.closest('.sub-tabs') || e.target.closest('.phase-selector-card') ||
+          e.target.closest('.day-selector')) {
+        swipeValid = false;
+        return;
+      }
+      swipeValid = true;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
     }, { passive: true });
 
     container.addEventListener('touchend', function(e) {
+      if (!swipeValid) return;
       var endX = e.changedTouches[0].clientX;
       var endY = e.changedTouches[0].clientY;
       var diffX = endX - startX;
       var diffY = endY - startY;
 
-      // Only trigger if horizontal swipe > 50px and more horizontal than vertical
-      if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+      // Only trigger if horizontal swipe > 70px and strongly horizontal
+      if (Math.abs(diffX) > 70 && Math.abs(diffX) > Math.abs(diffY) * 2) {
         var currentIdx = Router.pages.indexOf(App.currentPage);
         if (diffX < 0 && currentIdx < Router.pages.length - 1) {
           Router.navigate(Router.pages[currentIdx + 1]);
@@ -207,6 +229,7 @@ const Router = {
           Router.navigate(Router.pages[currentIdx - 1]);
         }
       }
+      swipeValid = false;
     }, { passive: true });
   }
 };
@@ -1029,11 +1052,54 @@ const TimerEngine = {
 
 const Dashboard = {
   init() {
+    var self = this;
+
+    // Event delegation — set up ONCE, works for all future renders
+    var dashContainer = document.getElementById('dashboard-content');
+    if (dashContainer) {
+      dashContainer.addEventListener('change', function(e) {
+        var cb = e.target.closest('.checklist-checkbox');
+        if (cb) {
+          if (cb.checked && navigator.vibrate) navigator.vibrate(10);
+          var id = cb.dataset.id;
+          var checklistData = StorageManager.getForDate('checklist') || {};
+          checklistData[id] = cb.checked;
+          StorageManager.setForDate('checklist', checklistData);
+          self.updateStreak();
+        }
+      });
+      dashContainer.addEventListener('click', function(e) {
+        var cup = e.target.closest('.water-cup');
+        if (cup) {
+          var cupNum = parseInt(cup.dataset.cup);
+          StorageManager.setForDate('water', cupNum);
+          self.render();
+          return;
+        }
+        if (e.target.closest('#water-add')) {
+          var current = StorageManager.getForDate('water') || 0;
+          if (current < 15) {
+            StorageManager.setForDate('water', current + 1);
+            self.render();
+          }
+          return;
+        }
+        if (e.target.closest('#water-remove')) {
+          var current = StorageManager.getForDate('water') || 0;
+          if (current > 0) {
+            StorageManager.setForDate('water', current - 1);
+            self.render();
+          }
+          return;
+        }
+      });
+    }
+
     this.render();
 
     // Re-render when navigating to dashboard
-    document.addEventListener('pageChange', (e) => {
-      if (e.detail.page === 'inicio') this.render();
+    document.addEventListener('pageChange', function(e) {
+      if (e.detail.page === 'inicio') self.render();
     });
   },
 
@@ -1200,61 +1266,9 @@ const Dashboard = {
 
     // Set innerHTML
     container.innerHTML = html;
-
-    // Attach event listeners
-    this.attachChecklistListeners();
-    this.attachWaterListeners();
   },
 
-  attachChecklistListeners() {
-    document.querySelectorAll('.checklist-checkbox').forEach(cb => {
-      cb.addEventListener('change', (e) => {
-        if (e.target.checked && navigator.vibrate) navigator.vibrate(10);
-        const id = e.target.dataset.id;
-        const checklistData = StorageManager.getForDate('checklist') || {};
-        checklistData[id] = e.target.checked;
-        StorageManager.setForDate('checklist', checklistData);
-
-        // Update streak
-        this.updateStreak();
-      });
-    });
-  },
-
-  attachWaterListeners() {
-    // Cup buttons
-    document.querySelectorAll('.water-cup').forEach(cup => {
-      cup.addEventListener('click', (e) => {
-        const cupNum = parseInt(e.target.dataset.cup);
-        StorageManager.setForDate('water', cupNum);
-        this.render(); // Re-render to update display
-      });
-    });
-
-    // Add/Remove buttons
-    const addBtn = document.getElementById('water-add');
-    const removeBtn = document.getElementById('water-remove');
-
-    if (addBtn) {
-      addBtn.addEventListener('click', () => {
-        const current = StorageManager.getForDate('water') || 0;
-        if (current < 15) { // Max 15 cups
-          StorageManager.setForDate('water', current + 1);
-          this.render();
-        }
-      });
-    }
-
-    if (removeBtn) {
-      removeBtn.addEventListener('click', () => {
-        const current = StorageManager.getForDate('water') || 0;
-        if (current > 0) {
-          StorageManager.setForDate('water', current - 1);
-          this.render();
-        }
-      });
-    }
-  },
+  // Event listeners are now handled via delegation in init()
 
   calculateStreak() {
     let streak = 0;
@@ -1314,8 +1328,155 @@ const WorkoutManager = {
     }
     this.selectedDay = Utils.getDayOfWeek();
 
-    document.addEventListener('pageChange', (e) => {
-      if (e.detail.page === 'treino') this.render();
+    // Event delegation — set up ONCE on the container
+    var self = this;
+    var container = document.getElementById('treino-content');
+    if (container) {
+      container.addEventListener('click', function(e) {
+        // Phase tabs
+        var phaseTab = e.target.closest('.phase-tab');
+        if (phaseTab) {
+          var phase = parseInt(phaseTab.dataset.phase);
+          self.currentPhase = phase;
+          StorageManager.setValue('currentPhase', phase);
+          BadgeManager.checkAll();
+          self.render();
+          return;
+        }
+        // Day tabs
+        var dayTab = e.target.closest('.day-tab');
+        if (dayTab) {
+          self.selectedDay = parseInt(dayTab.dataset.day);
+          self.render();
+          return;
+        }
+        // Collapsible headers (warmup / cooldown)
+        var collHeader = e.target.closest('.collapsible-header');
+        if (collHeader) {
+          var targetId = collHeader.dataset.target;
+          var body = document.getElementById(targetId);
+          if (body) {
+            body.classList.toggle('hidden');
+            var icon = collHeader.querySelector('.expand-icon');
+            if (icon) icon.textContent = body.classList.contains('hidden') ? '\u25BC' : '\u25B2';
+          }
+          return;
+        }
+        // Video buttons (check before exercise-header)
+        var videoBtn = e.target.closest('.video-btn');
+        if (videoBtn) {
+          e.stopPropagation();
+          var videoKey = videoBtn.dataset.videoKey;
+          var source = videoBtn.dataset.videoSource || 'exercise';
+          VideoModal.open(videoKey, source);
+          return;
+        }
+        // Exercise header expand/collapse
+        var exHeader = e.target.closest('.exercise-header');
+        if (exHeader) {
+          if (e.target.closest('.btn-icon') || e.target.closest('.video-btn')) return;
+          var toggleId = exHeader.dataset.toggle;
+          var details = document.getElementById(toggleId);
+          if (details) {
+            details.classList.toggle('hidden');
+            var icon = exHeader.querySelector('.expand-icon');
+            if (icon) icon.textContent = details.classList.contains('hidden') ? '\u25BC' : '\u25B2';
+          }
+          return;
+        }
+        // Vacuum start buttons
+        var vacuumBtn = e.target.closest('.vacuum-start-btn');
+        if (vacuumBtn) {
+          var holdSec = parseInt(vacuumBtn.dataset.hold);
+          var restSec = parseInt(vacuumBtn.dataset.rest);
+          var sets = parseInt(vacuumBtn.dataset.sets);
+          var exId = vacuumBtn.dataset.exercise;
+          TimerEngine.startVacuumSeries(holdSec, restSec, sets, function() {
+            var wData = self.getWorkoutData();
+            if (!wData.series[exId]) wData.series[exId] = {};
+            for (var s = 1; s <= sets; s++) {
+              wData.series[exId][s] = true;
+            }
+            self.saveWorkoutData(wData);
+            Toast.show('Vacuum concluído! \uD83D\uDCA8', 'success');
+            self.render();
+          });
+          return;
+        }
+        // Cardio start buttons
+        var cardioBtn = e.target.closest('.cardio-start-btn');
+        if (cardioBtn) {
+          var seconds = parseInt(cardioBtn.dataset.seconds);
+          var label = cardioBtn.dataset.label || 'CARDIO';
+          TimerEngine.startCountUp(seconds, label);
+          return;
+        }
+        // Plank timer buttons
+        var plankBtn = e.target.closest('.plank-timer-btn');
+        if (plankBtn) {
+          e.stopPropagation();
+          var plankSec = parseInt(plankBtn.dataset.seconds);
+          var plankName = plankBtn.dataset.exerciseName || 'Prancha';
+          TimerEngine.startCountdown(plankSec, plankName.toUpperCase(), null, null);
+          return;
+        }
+        // Stretch timer buttons (no sides)
+        var stretchBtn = e.target.closest('.stretch-timer-btn');
+        if (stretchBtn) {
+          var stretchSec = parseInt(stretchBtn.dataset.seconds);
+          var stretchName = stretchBtn.dataset.name || 'Alongamento';
+          TimerEngine.startCountdown(stretchSec, stretchName.toUpperCase(), null, null);
+          return;
+        }
+        // Stretch with sides buttons
+        var sidesBtn = e.target.closest('.stretch-sides-btn');
+        if (sidesBtn) {
+          var sidesSec = parseInt(sidesBtn.dataset.seconds);
+          var sidesName = sidesBtn.dataset.name || 'Alongamento';
+          TimerEngine.startStretchWithSides(sidesSec, sidesName, null);
+          return;
+        }
+      });
+      // Change events (checkboxes)
+      container.addEventListener('change', function(e) {
+        // Series checkboxes
+        var seriesCb = e.target.closest('.series-checkbox');
+        if (seriesCb) {
+          if (seriesCb.checked && navigator.vibrate) navigator.vibrate(10);
+          var exId = seriesCb.dataset.exercise;
+          var setNum = seriesCb.dataset.set;
+          var exIndex = parseInt(seriesCb.dataset.exerciseIndex);
+          self.onSeriesChecked(exId, setNum, seriesCb.checked, exIndex);
+          return;
+        }
+        // Cardio done checkbox
+        var cardioCb = e.target.closest('.cardio-done-checkbox');
+        if (cardioCb) {
+          var cardioExId = cardioCb.dataset.exercise;
+          var wData = self.getWorkoutData();
+          if (!wData.series[cardioExId]) wData.series[cardioExId] = {};
+          wData.series[cardioExId]['done'] = cardioCb.checked;
+          self.saveWorkoutData(wData);
+          self.updateProgressDisplay();
+          return;
+        }
+      });
+      // Input events (weight with debounce)
+      container.addEventListener('input', function(e) {
+        var weightInput = e.target.closest('.weight-input');
+        if (weightInput) {
+          if (weightInput._debounceTimer) clearTimeout(weightInput._debounceTimer);
+          weightInput._debounceTimer = setTimeout(function() {
+            var exId = weightInput.dataset.exercise;
+            var setNum = weightInput.dataset.set;
+            self.onWeightChanged(exId, setNum, weightInput.value);
+          }, 500);
+        }
+      });
+    }
+
+    document.addEventListener('pageChange', function(e) {
+      if (e.detail.page === 'treino') self.render();
     });
   },
 
@@ -1410,7 +1571,6 @@ const WorkoutManager = {
     }
 
     container.innerHTML = html;
-    this.attachListeners();
   },
 
   // ── Render: Phase Selector ─────────────────────────────────
@@ -1804,159 +1964,7 @@ const WorkoutManager = {
     return html;
   },
 
-  // ── Event Listeners ────────────────────────────────────────
-
-  attachListeners() {
-    var self = this;
-
-    // Phase tabs
-    document.querySelectorAll('.phase-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var phase = parseInt(btn.dataset.phase);
-        self.currentPhase = phase;
-        StorageManager.setValue('currentPhase', phase);
-        BadgeManager.checkAll();
-        self.render();
-      });
-    });
-
-    // Day tabs
-    document.querySelectorAll('.day-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        self.selectedDay = parseInt(btn.dataset.day);
-        self.render();
-      });
-    });
-
-    // Collapsible headers (warmup / cooldown)
-    document.querySelectorAll('.collapsible-header').forEach(function(header) {
-      header.addEventListener('click', function() {
-        var targetId = header.dataset.target;
-        var body = document.getElementById(targetId);
-        if (body) {
-          body.classList.toggle('hidden');
-          var icon = header.querySelector('.expand-icon');
-          if (icon) icon.textContent = body.classList.contains('hidden') ? '\u25BC' : '\u25B2';
-        }
-      });
-    });
-
-    // Exercise header expand/collapse (details)
-    document.querySelectorAll('.exercise-header').forEach(function(header) {
-      header.addEventListener('click', function(e) {
-        // Don't toggle if clicking video button
-        if (e.target.closest('.btn-icon') || e.target.closest('.video-btn')) return;
-        var targetId = header.dataset.toggle;
-        var details = document.getElementById(targetId);
-        if (details) {
-          details.classList.toggle('hidden');
-          var icon = header.querySelector('.expand-icon');
-          if (icon) icon.textContent = details.classList.contains('hidden') ? '\u25BC' : '\u25B2';
-        }
-      });
-    });
-
-    // Series checkboxes (auto-timer on check)
-    document.querySelectorAll('.series-checkbox').forEach(function(cb) {
-      cb.addEventListener('change', function() {
-        if (cb.checked && navigator.vibrate) navigator.vibrate(10);
-        var exId = cb.dataset.exercise;
-        var setNum = cb.dataset.set;
-        var exIndex = parseInt(cb.dataset.exerciseIndex);
-        self.onSeriesChecked(exId, setNum, cb.checked, exIndex);
-      });
-    });
-
-    // Weight inputs (save on change, debounced)
-    document.querySelectorAll('.weight-input').forEach(function(input) {
-      input.addEventListener('input', Utils.debounce(function() {
-        var exId = input.dataset.exercise;
-        var setNum = input.dataset.set;
-        self.onWeightChanged(exId, setNum, input.value);
-      }, 500));
-    });
-
-    // Video buttons
-    document.querySelectorAll('.video-btn').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var videoKey = btn.dataset.videoKey;
-        var source = btn.dataset.videoSource || 'exercise';
-        VideoModal.open(videoKey, source);
-      });
-    });
-
-    // Vacuum start buttons
-    document.querySelectorAll('.vacuum-start-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var holdSec = parseInt(btn.dataset.hold);
-        var restSec = parseInt(btn.dataset.rest);
-        var sets = parseInt(btn.dataset.sets);
-        var exId = btn.dataset.exercise;
-
-        TimerEngine.startVacuumSeries(holdSec, restSec, sets, function() {
-          // Mark all vacuum sets as complete
-          var wData = self.getWorkoutData();
-          if (!wData.series[exId]) wData.series[exId] = {};
-          for (var s = 1; s <= sets; s++) {
-            wData.series[exId][s] = true;
-          }
-          self.saveWorkoutData(wData);
-          Toast.show('Vacuum concluído! \uD83D\uDCA8', 'success');
-          self.render();
-        });
-      });
-    });
-
-    // Cardio start buttons
-    document.querySelectorAll('.cardio-start-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var seconds = parseInt(btn.dataset.seconds);
-        var label = btn.dataset.label || 'CARDIO';
-        TimerEngine.startCountUp(seconds, label);
-      });
-    });
-
-    // Cardio done checkbox
-    document.querySelectorAll('.cardio-done-checkbox').forEach(function(cb) {
-      cb.addEventListener('change', function() {
-        var exId = cb.dataset.exercise;
-        var wData = self.getWorkoutData();
-        if (!wData.series[exId]) wData.series[exId] = {};
-        wData.series[exId]['done'] = cb.checked;
-        self.saveWorkoutData(wData);
-        self.updateProgressDisplay();
-      });
-    });
-
-    // Plank timer buttons
-    document.querySelectorAll('.plank-timer-btn').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var seconds = parseInt(btn.dataset.seconds);
-        var name = btn.dataset.exerciseName || 'Prancha';
-        TimerEngine.startCountdown(seconds, name.toUpperCase(), null, null);
-      });
-    });
-
-    // Stretch timer buttons (no sides)
-    document.querySelectorAll('.stretch-timer-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var seconds = parseInt(btn.dataset.seconds);
-        var name = btn.dataset.name || 'Alongamento';
-        TimerEngine.startCountdown(seconds, name.toUpperCase(), null, null);
-      });
-    });
-
-    // Stretch with sides buttons
-    document.querySelectorAll('.stretch-sides-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var seconds = parseInt(btn.dataset.seconds);
-        var name = btn.dataset.name || 'Alongamento';
-        TimerEngine.startStretchWithSides(seconds, name, null);
-      });
-    });
-  },
+  // Event listeners are now handled via delegation in init()
 
   // ── Event: Series Checked ──────────────────────────────────
 
@@ -2101,6 +2109,82 @@ const NutritionManager = {
 
   init() {
     var self = this;
+
+    // Event delegation — set up ONCE on the container
+    var container = document.getElementById('nutricao-content');
+    if (container) {
+      container.addEventListener('click', function(e) {
+        // Sub-tab clicks
+        var subTab = e.target.closest('#nutricao-content .sub-tab');
+        if (subTab) {
+          var tab = subTab.getAttribute('data-subtab');
+          if (tab !== self.currentSubTab) {
+            self.currentSubTab = tab;
+            self.currentRecipe = null;
+            self.render();
+          }
+          return;
+        }
+        // Meal log buttons
+        var mealLogBtn = e.target.closest('.meal-log-btn');
+        if (mealLogBtn) {
+          var mealKey = mealLogBtn.getAttribute('data-meal');
+          self.toggleMeal(mealKey);
+          return;
+        }
+        // Meal option toggle buttons
+        var mealToggle = e.target.closest('.meal-toggle-btn');
+        if (mealToggle) {
+          var idx = mealToggle.dataset.mealIndex;
+          var current = mealToggle.dataset.current;
+          var next = current === 'A' ? 'B' : 'A';
+          self.setMealPref(idx, next);
+          self.render();
+          return;
+        }
+        // Recipe card clicks
+        var recipeCard = e.target.closest('.recipe-card[data-recipe]');
+        if (recipeCard) {
+          var recipeId = recipeCard.getAttribute('data-recipe');
+          self.showRecipe(recipeId);
+          return;
+        }
+        // Recipe back button
+        var backBtn = e.target.closest('.recipe-back-btn');
+        if (backBtn) {
+          self.hideRecipe();
+          return;
+        }
+        // Recipe video button
+        var recipeVideo = e.target.closest('.recipe-video-btn');
+        if (recipeVideo) {
+          var videoKey = recipeVideo.getAttribute('data-video');
+          VideoModal.open(videoKey, 'recipe');
+          return;
+        }
+        // Shopping reset button
+        var resetBtn = e.target.closest('.shopping-reset-btn');
+        if (resetBtn) {
+          self.resetShoppingList();
+          return;
+        }
+      });
+      container.addEventListener('change', function(e) {
+        // Shopping checkboxes
+        var shoppingCb = e.target.closest('.shopping-checkbox');
+        if (shoppingCb) {
+          var itemKey = shoppingCb.getAttribute('data-item');
+          var data = self.getShoppingData();
+          if (shoppingCb.checked) {
+            data[itemKey] = true;
+          } else {
+            delete data[itemKey];
+          }
+          self.saveShoppingData(data);
+        }
+      });
+    }
+
     document.addEventListener('pageChange', function(e) {
       if (e.detail.page === 'nutricao') self.render();
     });
@@ -2138,7 +2222,6 @@ const NutritionManager = {
     }
 
     container.innerHTML = html;
-    this.attachListeners();
   },
 
   // ── Sub-tab navigation ─────────────────────────────────────
@@ -2447,89 +2530,7 @@ const NutritionManager = {
     this.render();
   },
 
-  // ── Event listeners ────────────────────────────────────────
-
-  attachListeners() {
-    var self = this;
-
-    // Sub-tab clicks
-    document.querySelectorAll('#nutricao-content .sub-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var tab = this.getAttribute('data-subtab');
-        if (tab !== self.currentSubTab) {
-          self.currentSubTab = tab;
-          self.currentRecipe = null;
-          self.render();
-        }
-      });
-    });
-
-    // Meal log buttons
-    document.querySelectorAll('.meal-log-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var mealKey = this.getAttribute('data-meal');
-        self.toggleMeal(mealKey);
-      });
-    });
-
-    // Meal option toggle buttons
-    document.querySelectorAll('.meal-toggle-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var idx = btn.dataset.mealIndex;
-        var current = btn.dataset.current;
-        var next = current === 'A' ? 'B' : 'A';
-        NutritionManager.setMealPref(idx, next);
-        NutritionManager.render();
-      });
-    });
-
-    // Recipe card clicks
-    document.querySelectorAll('.recipe-card[data-recipe]').forEach(function(card) {
-      card.addEventListener('click', function() {
-        var recipeId = this.getAttribute('data-recipe');
-        self.showRecipe(recipeId);
-      });
-    });
-
-    // Recipe back button
-    var backBtn = document.querySelector('.recipe-back-btn');
-    if (backBtn) {
-      backBtn.addEventListener('click', function() {
-        self.hideRecipe();
-      });
-    }
-
-    // Recipe video button
-    var videoBtn = document.querySelector('.recipe-video-btn');
-    if (videoBtn) {
-      videoBtn.addEventListener('click', function() {
-        var videoKey = this.getAttribute('data-video');
-        VideoModal.open(videoKey, 'recipe');
-      });
-    }
-
-    // Shopping checkboxes
-    document.querySelectorAll('.shopping-checkbox').forEach(function(cb) {
-      cb.addEventListener('change', function() {
-        var itemKey = this.getAttribute('data-item');
-        var data = self.getShoppingData();
-        if (this.checked) {
-          data[itemKey] = true;
-        } else {
-          delete data[itemKey];
-        }
-        self.saveShoppingData(data);
-      });
-    });
-
-    // Shopping reset button
-    var resetBtn = document.querySelector('.shopping-reset-btn');
-    if (resetBtn) {
-      resetBtn.addEventListener('click', function() {
-        self.resetShoppingList();
-      });
-    }
-  }
+  // Event listeners are now handled via delegation in init()
 };
 
 // =============================================
@@ -2546,6 +2547,39 @@ const CareManager = {
 
   init() {
     var self = this;
+
+    // Event delegation — set up ONCE on the container
+    var container = document.getElementById('cuidados-content');
+    if (container) {
+      container.addEventListener('click', function(e) {
+        // Sub-tab navigation
+        var subTab = e.target.closest('#cuidados-content .sub-tab');
+        if (subTab) {
+          var targetTab = subTab.dataset.subtab;
+          if (targetTab && targetTab !== self.currentSubTab) {
+            self.currentSubTab = targetTab;
+            self.render();
+          }
+          return;
+        }
+        // Kegel start button
+        if (e.target.closest('#kegel-start-btn')) {
+          self.startKegelTimer();
+          return;
+        }
+      });
+      container.addEventListener('change', function(e) {
+        // Hair length input
+        if (e.target.id === 'hair-length') {
+          var val = parseFloat(e.target.value);
+          if (!isNaN(val) && val >= 0 && val <= 50) {
+            StorageManager.setValue('hairLength', val);
+            self.render();
+          }
+        }
+      });
+    }
+
     document.addEventListener('pageChange', function(e) {
       if (e.detail.page === 'cuidados') self.render();
     });
@@ -2575,7 +2609,6 @@ const CareManager = {
     html += this.renderNightRoutine();
 
     container.innerHTML = html;
-    this.attachListeners();
   },
 
   // ── Sub-tab navigation ─────────────────────────────────────
@@ -3098,43 +3131,7 @@ const CareManager = {
     return html;
   },
 
-  // ── Event Listeners ────────────────────────────────────────
-
-  attachListeners() {
-    var self = this;
-
-    // Sub-tab navigation
-    var subTabs = document.querySelectorAll('#cuidados-content .sub-tab');
-    subTabs.forEach(function(tab) {
-      tab.addEventListener('click', function() {
-        var targetTab = tab.dataset.subtab;
-        if (targetTab && targetTab !== self.currentSubTab) {
-          self.currentSubTab = targetTab;
-          self.render();
-        }
-      });
-    });
-
-    // Hair length input
-    var hairInput = document.getElementById('hair-length');
-    if (hairInput) {
-      hairInput.addEventListener('change', function() {
-        var val = parseFloat(hairInput.value);
-        if (!isNaN(val) && val >= 0 && val <= 50) {
-          StorageManager.setValue('hairLength', val);
-          self.render(); // Re-render to update timeline
-        }
-      });
-    }
-
-    // Kegel start button
-    var kegelBtn = document.getElementById('kegel-start-btn');
-    if (kegelBtn) {
-      kegelBtn.addEventListener('click', function() {
-        self.startKegelTimer();
-      });
-    }
-  }
+  // Event listeners are now handled via delegation in init()
 };
 
 // =============================================
@@ -3157,6 +3154,67 @@ const ProgressManager = {
 
   init() {
     var self = this;
+
+    // Event delegation — set up ONCE on the container
+    var container = document.getElementById('progresso-content');
+    if (container) {
+      container.addEventListener('click', function(e) {
+        // Sub-tab clicks
+        var subTab = e.target.closest('#progresso-content .sub-tab');
+        if (subTab) {
+          var tab = subTab.getAttribute('data-subtab');
+          if (tab !== self.currentSubTab) {
+            self.currentSubTab = tab;
+            self.render();
+          }
+          return;
+        }
+        // Compare button
+        if (e.target.closest('#compare-photos-btn')) {
+          self.showComparison();
+          return;
+        }
+        // Save measurements
+        if (e.target.closest('#save-measurements')) {
+          self.saveMeasurements();
+          return;
+        }
+        // Delete photos by date
+        var deleteDate = e.target.closest('.progress-delete-date');
+        if (deleteDate) {
+          var date = deleteDate.getAttribute('data-date');
+          if (confirm('Apagar todas as fotos de ' + Utils.formatDateBR(date) + '?')) {
+            self.deletePhotosForDate(date);
+          }
+          return;
+        }
+        // Delete measurement
+        var deleteMeas = e.target.closest('.measurement-delete');
+        if (deleteMeas) {
+          var mdate = deleteMeas.getAttribute('data-date');
+          if (confirm('Apagar medi\u00e7\u00e3o de ' + Utils.formatDateBR(mdate) + '?')) {
+            self.deleteMeasurement(mdate);
+          }
+          return;
+        }
+      });
+      container.addEventListener('change', function(e) {
+        // Photo upload inputs
+        if (e.target.matches('input[type="file"]')) {
+          var file = e.target.files[0];
+          if (!file) return;
+          var angle = e.target.getAttribute('data-angle');
+          self.handlePhotoUpload(file, angle);
+        }
+      });
+      container.addEventListener('input', function(e) {
+        // Live ratio calculation
+        if (e.target.id === 'measure-cintura' || e.target.id === 'measure-quadril') {
+          self.updateRatioDisplay();
+        }
+      });
+    }
+
     document.addEventListener('pageChange', function(e) {
       if (e.detail.page === 'progresso') self.render();
     });
@@ -3191,7 +3249,6 @@ const ProgressManager = {
     }
 
     container.innerHTML = html;
-    this.attachListeners();
 
     // Init charts after DOM is ready
     if (this.currentSubTab === 'graficos') {
@@ -3803,78 +3860,7 @@ const ProgressManager = {
     }
   },
 
-  // ── Event listeners ────────────────────────────────────────
-
-  attachListeners: function() {
-    var self = this;
-
-    // Sub-tab clicks
-    document.querySelectorAll('#progresso-content .sub-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var tab = this.getAttribute('data-subtab');
-        if (tab !== self.currentSubTab) {
-          self.currentSubTab = tab;
-          self.render();
-        }
-      });
-    });
-
-    // Photo upload inputs
-    document.querySelectorAll('#progresso-content input[type="file"]').forEach(function(input) {
-      input.addEventListener('change', function(e) {
-        var file = e.target.files[0];
-        if (!file) return;
-        var angle = input.getAttribute('data-angle');
-        self.handlePhotoUpload(file, angle);
-      });
-    });
-
-    // Compare button
-    var compareBtn = document.getElementById('compare-photos-btn');
-    if (compareBtn) {
-      compareBtn.addEventListener('click', function() {
-        self.showComparison();
-      });
-    }
-
-    // Save measurements
-    var saveBtn = document.getElementById('save-measurements');
-    if (saveBtn) {
-      saveBtn.addEventListener('click', function() {
-        self.saveMeasurements();
-      });
-    }
-
-    // Live ratio calculation
-    var cinturaInput = document.getElementById('measure-cintura');
-    var quadrilInput = document.getElementById('measure-quadril');
-    if (cinturaInput) {
-      cinturaInput.addEventListener('input', function() { self.updateRatioDisplay(); });
-    }
-    if (quadrilInput) {
-      quadrilInput.addEventListener('input', function() { self.updateRatioDisplay(); });
-    }
-
-    // Delete photos by date
-    document.querySelectorAll('.progress-delete-date').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var date = this.getAttribute('data-date');
-        if (confirm('Apagar todas as fotos de ' + Utils.formatDateBR(date) + '?')) {
-          self.deletePhotosForDate(date);
-        }
-      });
-    });
-
-    // Delete measurement
-    document.querySelectorAll('.measurement-delete').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var date = this.getAttribute('data-date');
-        if (confirm('Apagar medi\u00e7\u00e3o de ' + Utils.formatDateBR(date) + '?')) {
-          self.deleteMeasurement(date);
-        }
-      });
-    });
-  }
+  // Event listeners are now handled via delegation in init()
 };
 
 // =============================================

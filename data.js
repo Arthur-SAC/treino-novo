@@ -2464,27 +2464,30 @@ const DEPILATION = {
 // ─── 14. KEGEL_ROUTINE ───────────────────────────────────────
 const KEGEL_ROUTINE = {
   standard: {
-    name: "Kegel",
-    description: "Identifique o músculo: é o mesmo que você usa pra parar o xixi no meio. Contraia e segure.",
+    name: "Kegel Clássico",
+    description: "Contraia o músculo do assoalho pélvico (o mesmo que para o xixi). Segure firme, relaxe e repita. Fortalece o controle e a sustentação.",
     reps: 10,
     holdSeconds: 5,
     relaxSeconds: 5,
     frequency: "Todos os dias",
-    tip: "Pode fazer sentado, em pé, em qualquer lugar"
+    tip: "Pode fazer em qualquer lugar — sentada, em pé, deitada"
   },
   reverse: {
-    name: "Ereção Reversa",
-    description: "Com ereção, contraia o músculo do Kegel. O pênis deve pular levemente pra cima. Se não pular, tá contraindo o músculo errado.",
+    name: "Kegel Reverso (Performance)",
+    description: "Com ereção, contraia o músculo pélvico — o pênis deve se mover levemente pra cima. Treina controle de ereção, rigidez e resistência durante o sexo.",
     reps: "10-20",
     holdSeconds: 3,
     relaxSeconds: 3,
     frequency: "Quando tiver ereção"
   },
   tips: [
-    "Resultado aparece em 4-8 semanas de prática consistente",
-    "Cardio regular melhora circulação (já tá fazendo!)",
-    "Sono de qualidade (7-8h) afeta diretamente",
-    "Evitar death grip na masturbação (segurar forte demais dessensibiliza)"
+    "Resultado aparece em 4-8 semanas de prática diária",
+    "Cardio melhora circulação e sustentação (já tá fazendo!)",
+    "Sono de qualidade (7-8h) impacta diretamente a função",
+    "Evitar death grip — desensibiliza e prejudica o controle",
+    "Treino de glúteo e core fortalece toda a região pélvica",
+    "Manter boa hidratação ajuda na qualidade da ereção",
+    "Consistência > intensidade — melhor 10 reps todo dia do que 50 uma vez por semana"
   ]
 };
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arthur-app-v1';
+const CACHE_VERSION = 'arthur-app-v3';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -9,45 +9,53 @@ const STATIC_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nunito:wght@400;600;700&display=swap'
 ];
 
-// Install: cache static assets
-self.addEventListener('install', (event) => {
+// App files that should use network-first (always get latest when online)
+const APP_FILES = ['index.html', 'app.js', 'data.js', 'firebase-config.js', 'manifest.json'];
+
+function isAppFile(url) {
+  return APP_FILES.some(function(f) { return url.pathname.endsWith(f) || url.pathname === '/' || url.pathname.endsWith('/'); });
+}
+
+// Install: cache static assets, skip waiting to activate immediately
+self.addEventListener('install', function(event) {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_VERSION).then(function(cache) {
       return cache.addAll(STATIC_ASSETS);
     })
   );
   self.skipWaiting();
 });
 
-// Activate: clean old caches
-self.addEventListener('activate', (event) => {
+// Activate: clean ALL old caches
+self.addEventListener('activate', function(event) {
   event.waitUntil(
-    caches.keys().then((keys) => {
+    caches.keys().then(function(keys) {
       return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+        keys.filter(function(key) { return key !== CACHE_VERSION; })
+            .map(function(key) { return caches.delete(key); })
       );
     })
   );
   self.clients.claim();
 });
 
-// Fetch: cache-first for static, network-first for API/Firebase
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
+// Fetch strategy
+self.addEventListener('fetch', function(event) {
+  var url = new URL(event.request.url);
 
   // Network-first for Firebase and external APIs
   if (url.hostname.includes('firebaseio.com') ||
-      url.hostname.includes('googleapis.com') && url.pathname.includes('/v1/') ||
+      (url.hostname.includes('googleapis.com') && url.pathname.includes('/v1/')) ||
       url.hostname.includes('firestore.googleapis.com')) {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match(event.request))
+      fetch(event.request).catch(function() { return caches.match(event.request); })
     );
     return;
   }
 
-  // Network-first for YouTube embeds (don't cache videos)
+  // Network-first for YouTube embeds
   if (url.hostname.includes('youtube') || url.hostname.includes('ytimg')) {
-    event.respondWith(fetch(event.request).catch(() => {
+    event.respondWith(fetch(event.request).catch(function() {
       return new Response('Conecte à internet para ver o vídeo', {
         headers: { 'Content-Type': 'text/plain' }
       });
@@ -55,19 +63,36 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first for everything else (static assets, fonts, CDN)
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
-        // Cache new resources dynamically
-        if (response.ok && response.type === 'basic') {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+  // Network-first for app files (HTML, JS) — always get latest, cache for offline
+  if (isAppFile(url)) {
+    event.respondWith(
+      fetch(event.request).then(function(response) {
+        if (response.ok) {
+          var clone = response.clone();
+          caches.open(CACHE_VERSION).then(function(cache) { cache.put(event.request, clone); });
         }
         return response;
-      }).catch(() => {
-        // Offline fallback for navigation
+      }).catch(function() {
+        return caches.match(event.request).then(function(cached) {
+          if (cached) return cached;
+          if (event.request.mode === 'navigate') return caches.match('./index.html');
+        });
+      })
+    );
+    return;
+  }
+
+  // Cache-first for external resources (fonts, CDN, images)
+  event.respondWith(
+    caches.match(event.request).then(function(cached) {
+      if (cached) return cached;
+      return fetch(event.request).then(function(response) {
+        if (response.ok && response.type === 'basic') {
+          var clone = response.clone();
+          caches.open(CACHE_VERSION).then(function(cache) { cache.put(event.request, clone); });
+        }
+        return response;
+      }).catch(function() {
         if (event.request.mode === 'navigate') {
           return caches.match('./index.html');
         }
