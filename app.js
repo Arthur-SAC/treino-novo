@@ -554,6 +554,14 @@ const BadgeManager = {
     const badge = BADGES.find(b => b.id === badgeId);
     if (badge) {
       Toast.show(`${badge.emoji} Conquista desbloqueada: ${badge.name}!`, 'success', 4000);
+      var bid = badgeId;
+      setTimeout(function() {
+        var badgeEl = document.querySelector('.badge[data-badge-id="' + bid + '"]');
+        if (badgeEl) {
+          badgeEl.classList.add('just-unlocked');
+          setTimeout(function() { badgeEl.classList.remove('just-unlocked'); }, 900);
+        }
+      }, 200);
     }
   },
 
@@ -935,7 +943,27 @@ const TimerEngine = {
       display.textContent = Utils.formatTime(Math.max(0, this.currentSeconds));
       const pct = this.totalSeconds > 0 ? ((this.totalSeconds - this.currentSeconds) / this.totalSeconds) * 100 : 0;
       bar.style.width = pct + '%';
+
+      // Color transition: rosa(201,123,181) -> dourado(212,168,83) -> verde(110,203,139)
+      var progress = this.totalSeconds > 0 ? 1 - (this.currentSeconds / this.totalSeconds) : 0;
+      var r, g, b, t;
+      if (progress < 0.5) {
+        t = progress / 0.5;
+        r = Math.round(201 + (212 - 201) * t);
+        g = Math.round(123 + (168 - 123) * t);
+        b = Math.round(181 + (83 - 181) * t);
+      } else {
+        t = (progress - 0.5) / 0.5;
+        r = Math.round(212 + (110 - 212) * t);
+        g = Math.round(168 + (203 - 168) * t);
+        b = Math.round(83 + (139 - 83) * t);
+      }
+      bar.style.background = 'rgb(' + r + ',' + g + ',' + b + ')';
     }
+
+    // Subtle pulse on seconds
+    display.style.transform = 'scale(1.02)';
+    setTimeout(function() { display.style.transform = 'scale(1)'; }, 150);
   },
 
   onTimerComplete() {
@@ -1992,6 +2020,12 @@ const WorkoutManager = {
     var progressBar = card.querySelector('.exercise-progress .progress-bar');
     if (progressSpan) progressSpan.textContent = completed + '/' + total + ' séries';
     if (progressBar) progressBar.style.width = (total > 0 ? Math.round((completed / total) * 100) : 0) + '%';
+
+    // Celebrate when all series are complete
+    if (total > 0 && completed === total) {
+      card.classList.add('celebrate');
+      setTimeout(function() { card.classList.remove('celebrate'); }, 700);
+    }
   },
 
   // ── Update: Overall Workout Progress (inline) ──────────────
@@ -3595,7 +3629,7 @@ const ProgressManager = {
     BADGES.forEach(function(badge) {
       var isUnlocked = BadgeManager.isUnlocked(badge.id);
       var cls = isUnlocked ? 'unlocked' : 'locked';
-      html += '<div class="badge ' + cls + '">';
+      html += '<div class="badge ' + cls + '" data-badge-id="' + badge.id + '">';
       html += '<span class="badge-icon">' + badge.emoji + '</span>';
       html += '<span class="badge-name">' + badge.name + '</span>';
       html += '<span class="badge-desc">' + badge.description + '</span>';
