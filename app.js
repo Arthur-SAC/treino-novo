@@ -247,7 +247,23 @@ const StorageManager = {
    * Initialize storage (nothing special needed currently).
    */
   init() {
-    // Reserved for future initialization logic
+    // Migrate double-wrapped data from previous bug
+    // Old setValue created: { value: { value: X, timestamp: T1 }, timestamp: T2 }
+    // Correct format is: { value: X, timestamp: T }
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      if (key && key.startsWith(this.prefix)) {
+        try {
+          var raw = JSON.parse(localStorage.getItem(key));
+          if (raw && typeof raw.value === 'object' && raw.value !== null
+              && raw.value.value !== undefined && raw.value.timestamp !== undefined
+              && Object.keys(raw.value).length === 2) {
+            raw.value = raw.value.value;
+            localStorage.setItem(key, JSON.stringify(raw));
+          }
+        } catch(e) { /* skip unparseable entries */ }
+      }
+    }
   },
 
   /**
@@ -299,10 +315,10 @@ const StorageManager = {
   },
 
   /**
-   * Set just the value (wraps in {value, timestamp} automatically).
+   * Set just the value (wraps in {value, timestamp} automatically via set()).
    */
   setValue(key, value) {
-    this.set(key, { value: value, timestamp: Date.now() });
+    this.set(key, value);
   },
 
   /**
@@ -693,7 +709,12 @@ const VideoModal = {
     });
     this.gifImage.addEventListener('error', function() {
       document.getElementById('gif-container').classList.add('hidden');
-      self.showYouTube(self._currentVideo);
+      if (self._currentVideo && self._currentVideo.youtubeId
+          && self._currentVideo.youtubeId !== 'PLACEHOLDER') {
+        self.showYouTube(self._currentVideo);
+      } else {
+        Toast.show('V\u00eddeo indispon\u00edvel. Leia as instru\u00e7\u00f5es escritas.', 'info');
+      }
     });
 
     // Close button
@@ -3380,9 +3401,11 @@ const ProgressManager = {
 
     container.innerHTML = html;
 
-    // Init charts after DOM is ready
+    // Init charts after DOM is painted
     if (this.currentSubTab === 'graficos') {
-      setTimeout(function() { self.initCharts(); }, 100);
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { self.initCharts(); });
+      });
     }
   },
 
@@ -3837,8 +3860,14 @@ const ProgressManager = {
       var photos = StorageManager.getValue('photos', []);
       var today = new Date().toISOString().split('T')[0];
       photos.push({ date: today, angle: angle, data: base64 });
-      StorageManager.setValue('photos', photos);
-      StorageManager.setValue('lastPhotoDate', new Date().toISOString().slice(0, 10));
+      try {
+        StorageManager.setValue('photos', photos);
+        StorageManager.setValue('lastPhotoDate', new Date().toISOString().slice(0, 10));
+      } catch(err) {
+        photos.pop();
+        Toast.show('Sem espa\u00e7o! Apague fotos antigas primeiro.', 'error');
+        return;
+      }
 
       // Check badge for photo sets
       var dateSet = {};

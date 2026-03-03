@@ -11,7 +11,7 @@
 
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='32' fill='%231a1a2e'/%3E%3Ctext x='90' y='125' font-size='110' text-anchor='middle'%3E%F0%9F%A6%8B%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3194,7 +3194,20 @@
   <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(function() {});
+      navigator.serviceWorker.register('sw.js').then(function(reg) {
+        reg.addEventListener('updatefound', function() {
+          var newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', function() {
+            if (newWorker.state === 'activated') {
+              if (typeof Toast !== 'undefined') {
+                Toast.show('App atualizado! Recarregando...', 'info');
+              }
+              setTimeout(function() { location.reload(); }, 2000);
+            }
+          });
+        });
+      }).catch(function() {});
     }
   </script>
 
