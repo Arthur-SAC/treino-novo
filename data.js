@@ -2575,6 +2575,46 @@ const RECIPES = [
       "Pronta em 3 minutos — perfeita pra quando não tem tempo",
       "Rica em ômega-3 naturalmente"
     ]
+  },
+  {
+    id: "frango-cozido-desfiado",
+    name: "Frango Cozido e Desfiado",
+    emoji: "🍗",
+    servings: 5,
+    calories: 165,
+    protein: 31,
+    carbs: 0,
+    fat: 4,
+    ingredients: [
+      "500g peito de frango (~3 filés)",
+      "1 cebola pequena cortada ao meio",
+      "3 dentes de alho inteiros (amassados levemente)",
+      "2 folhas de louro",
+      "1 colher de chá de sal",
+      "Água suficiente pra cobrir o frango",
+      "Pimenta do reino a gosto"
+    ],
+    steps: [
+      "Preparar: Lave os filés de frango e coloque numa panela média.",
+      "Temperos: Adicione a cebola, alho, louro, sal e pimenta. Cubra com água (uns 2 dedos acima do frango).",
+      "Cozinhar: Leve ao fogo alto até ferver. Quando ferver, abaixe pra fogo baixo e tampe. Cozinhe por 20-25 minutos.",
+      "Testar: Espete com garfo — se sair fácil e o frango estiver branco por dentro, tá pronto. Se rosa, mais 5 minutos.",
+      "Desfiar: Retire o frango (guarde o caldo!). Espere esfriar 5 minutos. Desfie com 2 garfos puxando em direções opostas.",
+      "Guardar: Separe em porções de ~100g em potes. Dura 4 dias na geladeira ou 3 meses no freezer.",
+      "Caldo: O caldo que sobrou é ouro — use pra cozinhar arroz, sopas, ou congele em formas de gelo."
+    ],
+    variations: [
+      { name: "Frango Desfiado Temperado", description: "Após desfiar, refogue com azeite + alho + páprica + salsinha" },
+      { name: "Frango pra Patê", description: "Desfie mais fino e use nos patês de cottage ou requeijão" },
+      { name: "Frango pra Sopa", description: "Desfie e volte pro caldo com legumes picados (cenoura, batata)" }
+    ],
+    tips: [
+      "Desfie QUENTE (mais fácil) — só espere o suficiente pra não queimar a mão",
+      "500g rende ~5 porções de 100g — prepare no domingo pra semana",
+      "O caldo congela em formas de gelo pra usar quando quiser",
+      "Base pra: patês, saladas, tapioca, panqueca, sopa",
+      "Na panela de pressão: 12-15 minutos após pegar pressão (mais rápido)"
+    ]
   }
 ];
 

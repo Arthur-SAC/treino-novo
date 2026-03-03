@@ -1509,7 +1509,10 @@ const WorkoutManager = {
   },
 
   getWorkoutData() {
-    return StorageManager.getForDate('workout') || { series: {}, weights: {} };
+    var data = StorageManager.getForDate('workout') || {};
+    if (!data.series) data.series = {};
+    if (!data.weights) data.weights = {};
+    return data;
   },
 
   saveWorkoutData(data) {
@@ -2177,6 +2180,11 @@ const NutritionManager = {
           var current = mealToggle.dataset.current;
           var next = current === 'A' ? 'B' : 'A';
           self.setMealPref(idx, next);
+          // Get the option name to show feedback
+          var planType = self.getMealPlanType();
+          var meal = MEALS[planType].meals[parseInt(idx)];
+          var optionName = next === 'B' ? (meal.optionB && meal.optionB.name) : (meal.optionA && meal.optionA.name);
+          Toast.show('\uD83D\uDD04 Op\u00E7\u00E3o ' + next + ': ' + (optionName || ''), 'info', 2000);
           self.render();
           return;
         }

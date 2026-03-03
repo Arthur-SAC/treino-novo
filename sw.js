@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'arthur-app-v3';
+const CACHE_VERSION = 'arthur-app-v5';
 const STATIC_ASSETS = [
   './',
   './index.html',
