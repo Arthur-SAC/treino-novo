@@ -1209,6 +1209,7 @@ const Dashboard = {
   attachChecklistListeners() {
     document.querySelectorAll('.checklist-checkbox').forEach(cb => {
       cb.addEventListener('change', (e) => {
+        if (e.target.checked && navigator.vibrate) navigator.vibrate(10);
         const id = e.target.dataset.id;
         const checklistData = StorageManager.getForDate('checklist') || {};
         checklistData[id] = e.target.checked;
@@ -1858,6 +1859,7 @@ const WorkoutManager = {
     // Series checkboxes (auto-timer on check)
     document.querySelectorAll('.series-checkbox').forEach(function(cb) {
       cb.addEventListener('change', function() {
+        if (cb.checked && navigator.vibrate) navigator.vibrate(10);
         var exId = cb.dataset.exercise;
         var setNum = cb.dataset.set;
         var exIndex = parseInt(cb.dataset.exerciseIndex);
