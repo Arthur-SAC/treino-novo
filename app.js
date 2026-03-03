@@ -2180,12 +2180,26 @@ const NutritionManager = {
           var current = mealToggle.dataset.current;
           var next = current === 'A' ? 'B' : 'A';
           self.setMealPref(idx, next);
-          // Get the option name to show feedback
+          // Get the new option data
           var planType = self.getMealPlanType();
           var meal = MEALS[planType].meals[parseInt(idx)];
-          var optionName = next === 'B' ? (meal.optionB && meal.optionB.name) : (meal.optionA && meal.optionA.name);
-          Toast.show('\uD83D\uDD04 Op\u00E7\u00E3o ' + next + ': ' + (optionName || ''), 'info', 2000);
-          self.render();
+          var option = next === 'B' ? meal.optionB : meal.optionA;
+          if (option) {
+            // Update the card inline (no full re-render needed)
+            var card = mealToggle.closest('.meal-card');
+            if (card) {
+              var optEl = card.querySelector('.meal-option');
+              if (optEl) {
+                optEl.innerHTML = '<strong>Op\u00E7\u00E3o ' + next + ': ' + option.name + '</strong>'
+                  + '<div style="margin-top:4px; font-size:0.85rem; opacity:0.85;">' + option.description + '</div>'
+                  + '<span class="meal-macros">' + option.macros + '</span>';
+              }
+              // Update the button itself
+              mealToggle.dataset.current = next;
+              mealToggle.textContent = next === 'A' ? '\uD83D\uDD04 Op\u00E7\u00E3o B' : '\uD83D\uDD04 Op\u00E7\u00E3o A';
+            }
+            Toast.show('\uD83D\uDD04 Op\u00E7\u00E3o ' + next + ': ' + option.name, 'info', 1500);
+          }
           return;
         }
         // Recipe card clicks
