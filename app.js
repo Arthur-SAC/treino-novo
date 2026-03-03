@@ -1436,6 +1436,18 @@ const WorkoutManager = {
           TimerEngine.startStretchWithSides(sidesSec, sidesName, null);
           return;
         }
+        // Rest time selector buttons
+        var restBtn = e.target.closest('.rest-btn');
+        if (restBtn) {
+          var exId = restBtn.dataset.exercise;
+          var seconds = parseInt(restBtn.dataset.restSeconds);
+          self.setRestOverride(exId, seconds);
+          // Update visual: remove active from siblings, add to clicked
+          var selector = restBtn.parentElement;
+          selector.querySelectorAll('.rest-btn').forEach(function(b) { b.classList.remove('active'); });
+          restBtn.classList.add('active');
+          return;
+        }
       });
       // Change events (checkboxes)
       container.addEventListener('change', function(e) {
@@ -1502,6 +1514,18 @@ const WorkoutManager = {
 
   saveWorkoutData(data) {
     StorageManager.setForDate('workout', data);
+  },
+
+  getRestOverride(exerciseId) {
+    var wData = this.getWorkoutData();
+    return (wData.restOverrides && wData.restOverrides[exerciseId]) || null;
+  },
+
+  setRestOverride(exerciseId, seconds) {
+    var wData = this.getWorkoutData();
+    if (!wData.restOverrides) wData.restOverrides = {};
+    wData.restOverrides[exerciseId] = seconds;
+    this.saveWorkoutData(wData);
   },
 
   getNextExerciseName(exercises, currentIndex) {
@@ -1815,8 +1839,22 @@ const WorkoutManager = {
   // ── Render: Normal Series (checkboxes + weight input) ──────
 
   renderNormalSeries(exercise, index, allExercises, exData, exWeights) {
+    var self = this;
     var html = '<div class="exercise-series">';
     var totalSets = exercise.sets || 1;
+
+    // Rest time selector
+    var defaultRest = Utils.parseRest(exercise.rest);
+    var currentRest = self.getRestOverride(exercise.id) || defaultRest;
+    var restOptions = [30, 45, 60, 90, 120];
+
+    html += '<div class="rest-selector">';
+    html += '<span class="rest-selector-label">\u23F1 Descanso:</span>';
+    restOptions.forEach(function(sec) {
+      var activeClass = (sec === currentRest) ? ' active' : '';
+      html += '<button class="rest-btn' + activeClass + '" data-exercise="' + exercise.id + '" data-rest-seconds="' + sec + '">' + sec + 's</button>';
+    });
+    html += '</div>';
 
     for (var s = 1; s <= totalSets; s++) {
       var checked = exData[s] ? 'checked' : '';
@@ -1995,7 +2033,7 @@ const WorkoutManager = {
         }
 
         if (exercise) {
-          var restSeconds = Utils.parseRest(exercise.rest);
+          var restSeconds = this.getRestOverride(exerciseId) || Utils.parseRest(exercise.rest);
           if (restSeconds > 0) {
             var nextName = this.getNextExerciseName(exercises, exIdx);
             TimerEngine.startRest(restSeconds, nextName, null);
