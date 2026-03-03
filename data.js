@@ -77,9 +77,9 @@ const EXERCISE_VIDEOS = {
   "adutora": { youtubeId: "Wf602gn_9zU", gifUrl: "https://static.exercisedb.dev/media/oHsrypV.gif", title: "Cadeira Adutora", tips: "Interno de coxa = feminiza silhueta", commonMistakes: "Usar impulso. Não controlar a volta. Sentar torta na máquina." },
   "pullover": { youtubeId: "FK4rHfWKEac", gifUrl: "https://static.exercisedb.dev/media/9XjtHvS.gif", title: "Pullover com Halter", tips: "Abre a caixa torácica, silhueta ampulheta", commonMistakes: "Dobrar demais os cotovelos. Usar peso excessivo. Arquear a lombar." },
   "vacuum": { youtubeId: "NcWHmnVN9Ng", gifUrl: null, title: "Vacuum Abdominal", tips: "Solte TODO o ar, puxe umbigo pra dentro e pra cima", commonMistakes: "Não soltar todo o ar antes. Prender a respiração errado. Forçar o abdômen pra fora." },
-  "clamshell": { youtubeId: "m_ZPapmqeNM", gifUrl: null, title: "Clamshell com Elástico", tips: "SEMPRE comece pelo lado ESQUERDO", commonMistakes: "Girar o quadril junto (só o joelho abre). Fazer rápido demais. Não manter os pés juntos." },
-  "abducao-pe": { youtubeId: "Zuw2n3IyMu0", gifUrl: "https://static.exercisedb.dev/media/7WaDzyL.gif", title: "Abdução em Pé com Elástico", tips: "Tronco reto, não incline", commonMistakes: "Inclinar o tronco pro lado oposto. Usar impulso. Não manter o core ativado." },
-  "lateral-walk": { youtubeId: "PhNkkOieB-8", gifUrl: null, title: "Lateral Walk com Elástico", tips: "Passos curtos, tensão constante", commonMistakes: "Passos muito largos. Arrastar os pés. Perder a tensão do elástico." },
+  "abducao-deitada": { youtubeId: "7HWdwvAQFuY", gifUrl: "https://static.exercisedb.dev/media/7WaDzyL.gif", title: "Abdução Lateral Deitada com Caneleira", tips: "SEMPRE comece pelo lado ESQUERDO. Levante a perna até ~45 graus", commonMistakes: "Levantar a perna além do ponto de contração do glúteo. Girar o quadril pra trás. Fazer rápido demais sem controle." },
+  "abducao-pe": { youtubeId: "o5KcItusG64", gifUrl: "https://static.exercisedb.dev/media/7WaDzyL.gif", title: "Abdução em Pé com Caneleira", tips: "Tronco reto, não incline. Caneleira no tornozelo", commonMistakes: "Inclinar o tronco pro lado oposto. Usar impulso. Não manter o core ativado." },
+  "fire-hydrant": { youtubeId: "BLx5wSzafxg", gifUrl: null, title: "Fire Hydrant com Caneleira", tips: "De quatro apoios, levante o joelho pro lado mantendo 90 graus", commonMistakes: "Girar o tronco junto. Não manter o core ativado. Subir o joelho além da altura do quadril." },
   "stiff": { youtubeId: "CN_7cz3P-1U", gifUrl: "https://static.exercisedb.dev/media/hrVQWvE.gif", title: "Stiff com Halteres", tips: "Empurre o quadril PRA TRÁS, sinta atrás da coxa", commonMistakes: "Arredondar as costas. Dobrar os joelhos demais. Não empurrar o quadril pra trás." },
   "prancha": { youtubeId: "ASdvN_XEl_c", gifUrl: null, title: "Prancha Abdominal", tips: "Aperte abdômen e glúteo, corpo RETO", commonMistakes: "Quadril subindo (montanha). Quadril descendo (banana). Não ativar o core." },
   "prancha-lateral": { youtubeId: "zt7PjySXWCw", gifUrl: null, title: "Prancha Lateral", tips: "Marca a cintura", commonMistakes: "Quadril caindo. Ombro não alinhado com o pulso. Não ativar o oblíquo." },
@@ -100,7 +100,7 @@ const EXERCISE_VIDEOS = {
   "balanco-perna": { youtubeId: "jpmSaPEPErw", gifUrl: null, title: "Balanço de Perna — Aquecimento", tips: "Segure em algo, balance frente/trás e lateral", commonMistakes: "" },
   "agachamento-profundo": { youtubeId: "iUnwcn6f_7Y", gifUrl: null, title: "Agachamento Profundo — Mobilidade", tips: "Segure embaixo 30seg, cotovelos empurram joelhos pra fora", commonMistakes: "" },
   "polichinelo": { youtubeId: "yDSMdd8hiFg", gifUrl: null, title: "Polichinelo — Aquecimento Cardio", tips: "Cardio leve pra aquecer o corpo", commonMistakes: "" },
-  "clamshell-ativacao": { youtubeId: "845Yzbfg3eY", gifUrl: null, title: "Clamshell — Ativação Glúteo", tips: "Ativação do glúteo médio antes do treino", commonMistakes: "" },
+  "fire-hydrant-ativacao": { youtubeId: "BLx5wSzafxg", gifUrl: null, title: "Fire Hydrant — Ativação Glúteo", tips: "Sem caneleira, só ativação do glúteo médio", commonMistakes: "" },
   "donkey-kick": { youtubeId: "NPVIiAvi1hM", gifUrl: null, title: "Donkey Kick — Ativação Glúteo", tips: "De quatro, chuta pra cima apertando o glúteo", commonMistakes: "" },
   "cat-cow": { youtubeId: "40Y1rukJs4E", gifUrl: null, title: "Gato e Vaca — Mobilidade Coluna", tips: "Arredonda e arqueia as costas alternando", commonMistakes: "" },
   "pombo-alongamento": { youtubeId: "fASdWDluHrc", gifUrl: null, title: "Pombo — Alongamento Quadril", tips: "Perna cruzada na frente, desça o tronco devagar", commonMistakes: "" },
@@ -152,23 +152,23 @@ const WEIGHT_GUIDE = {
     fase3: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 40seg → 50seg" },
     fase4: { suggestedKg: "Sem peso", progression: "Aumente o tempo: 50seg → 60seg" }
   },
-  "clamshell": {
-    fase1: { suggestedKg: "Elástico leve", progression: "Quando 15 reps ficarem fáceis sem compensar" },
-    fase2: { suggestedKg: "Elástico médio", progression: "Quando completar 3x15 com controle" },
-    fase3: { suggestedKg: "Elástico médio-forte", progression: "Quando manter quadril estável em todas as reps" },
-    fase4: { suggestedKg: "Elástico forte", progression: "Quando completar todas as séries sem compensação" }
+  "abducao-deitada": {
+    fase1: { suggestedKg: "Sem caneleira ou 1kg", progression: "Quando 15 reps ficarem fáceis sem compensar" },
+    fase2: { suggestedKg: "2-3kg (caneleira)", progression: "Quando completar 3x15 com controle" },
+    fase3: { suggestedKg: "3-4kg (caneleira)", progression: "Quando manter quadril estável em todas as reps" },
+    fase4: { suggestedKg: "4-5kg (caneleira)", progression: "Quando completar todas as séries sem compensação" }
   },
   "abducao-pe": {
-    fase1: { suggestedKg: "Elástico leve", progression: "Quando 15 reps ficarem fáceis sem inclinar" },
-    fase2: { suggestedKg: "Elástico médio", progression: "Quando completar 3x15 com tronco reto" },
-    fase3: { suggestedKg: "Elástico médio-forte", progression: "Quando manter equilíbrio perfeito" },
-    fase4: { suggestedKg: "Elástico forte", progression: "Quando completar todas as séries com controle total" }
+    fase1: { suggestedKg: "Sem caneleira ou 1kg", progression: "Quando 15 reps ficarem fáceis sem inclinar" },
+    fase2: { suggestedKg: "2-3kg (caneleira)", progression: "Quando completar 3x15 com tronco reto" },
+    fase3: { suggestedKg: "3-4kg (caneleira)", progression: "Quando manter equilíbrio perfeito" },
+    fase4: { suggestedKg: "4-5kg (caneleira)", progression: "Quando completar todas as séries com controle total" }
   },
-  "lateral-walk": {
-    fase1: { suggestedKg: "Elástico leve", progression: "Quando 12 passos ficarem fáceis" },
-    fase2: { suggestedKg: "Elástico médio", progression: "Quando completar 3x12 com tensão constante" },
-    fase3: { suggestedKg: "Elástico médio-forte", progression: "Quando manter semi-agachamento o tempo todo" },
-    fase4: { suggestedKg: "Elástico forte", progression: "Quando completar todas as séries sem perder tensão" }
+  "fire-hydrant": {
+    fase1: { suggestedKg: "Sem caneleira", progression: "Quando 15 reps ficarem fáceis com controle" },
+    fase2: { suggestedKg: "1-2kg (caneleira)", progression: "Quando completar 3x15 sem girar o tronco" },
+    fase3: { suggestedKg: "2-3kg (caneleira)", progression: "Quando manter core estável em todas as reps" },
+    fase4: { suggestedKg: "3-4kg (caneleira)", progression: "Quando completar todas as séries com forma perfeita" }
   },
   "stiff": {
     fase1: { suggestedKg: "6-8kg (cada halter)", progression: "Quando 12 reps ficarem fáceis sentindo posterior" },
@@ -354,30 +354,30 @@ const WORKOUTS = {
         exercises: [
           {
             id: "f1-ter-1",
-            name: "Clamshell com elástico",
+            name: "Abdução lateral deitada com caneleira",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "SEMPRE comece pelo lado ESQUERDO",
-            details: "Deite de lado com elástico acima dos joelhos. Joelhos dobrados a 90 graus, pés juntos. Abra o joelho de cima como uma concha, mantendo os pés unidos. Controle a volta. SEMPRE comece pelo lado esquerdo pra ativar o glúteo mais fraco.",
-            videoKey: "clamshell",
+            details: "Deite de lado, caneleira no tornozelo. Pernas estendidas e alinhadas. Levante a perna de cima até ~45 graus, controlando a subida e descida. Foque na contração do glúteo médio. SEMPRE comece pelo lado esquerdo.",
+            videoKey: "abducao-deitada",
             unilateral: true, startLeft: true
           },
           {
             id: "f1-ter-2",
-            name: "Abdução em pé com elástico",
+            name: "Abdução em pé com caneleira",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "Tronco reto, não incline",
-            details: "Em pé com elástico nos tornozelos. Mantenha o tronco reto e o core ativado. Leve uma perna pro lado, controlando o movimento. Não incline o tronco pro lado oposto. Comece pelo lado esquerdo.",
+            details: "Em pé com caneleira no tornozelo. Mantenha o tronco reto e o core ativado. Leve uma perna pro lado, controlando o movimento. Não incline o tronco pro lado oposto. Comece pelo lado esquerdo.",
             videoKey: "abducao-pe",
             unilateral: true, startLeft: true
           },
           {
             id: "f1-ter-3",
-            name: "Lateral Walk com elástico",
-            sets: 3, reps: "12 cada lado", rest: "30seg",
-            tip: "Passos curtos, tensão constante no elástico",
-            details: "Elástico acima dos joelhos ou nos tornozelos. Posição de semi-agachamento. Dê passos laterais curtos mantendo tensão constante no elástico. Não junte os pés completamente. Faça pro lado e volte.",
-            videoKey: "lateral-walk",
-            unilateral: false, startLeft: false
+            name: "Fire Hydrant com caneleira",
+            sets: 3, reps: "15 cada", rest: "30seg",
+            tip: "De quatro apoios, levante o joelho pro lado. Core ativado!",
+            details: "De quatro apoios (mãos sob ombros, joelhos sob quadril), caneleira no tornozelo. Levante o joelho pro lado mantendo 90 graus, como um cachorro no hidrante. Suba até a altura do quadril e desça devagar. Não gire o tronco. Comece pelo esquerdo.",
+            videoKey: "fire-hydrant",
+            unilateral: true, startLeft: true
           },
           {
             id: "f1-ter-4",
@@ -474,30 +474,30 @@ const WORKOUTS = {
         exercises: [
           {
             id: "f1-qui-1",
-            name: "Clamshell com elástico",
+            name: "Abdução lateral deitada com caneleira",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "Lado ESQUERDO primeiro",
-            details: "Deite de lado, elástico acima dos joelhos. Abra o joelho de cima mantendo pés juntos. Foque na contração do glúteo médio. Sempre comece pelo lado esquerdo.",
-            videoKey: "clamshell",
+            details: "Deite de lado, caneleira no tornozelo. Levante a perna de cima controlando o movimento. Foque na contração do glúteo médio. Sempre comece pelo lado esquerdo.",
+            videoKey: "abducao-deitada",
             unilateral: true, startLeft: true
           },
           {
             id: "f1-qui-2",
-            name: "Abdução em pé com elástico",
+            name: "Abdução em pé com caneleira",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "Movimento controlado",
-            details: "Em pé, elástico nos tornozelos. Leve a perna pro lado com controle total. Sem balançar o tronco. Comece pelo esquerdo.",
+            details: "Em pé, caneleira no tornozelo. Leve a perna pro lado com controle total. Sem balançar o tronco. Comece pelo esquerdo.",
             videoKey: "abducao-pe",
             unilateral: true, startLeft: true
           },
           {
             id: "f1-qui-3",
-            name: "Lateral Walk",
-            sets: 3, reps: "12 cada", rest: "30seg",
-            tip: "Mantenha semi-agachamento",
-            details: "Elástico acima dos joelhos. Mantenha posição de semi-agachamento durante todo o movimento. Passos laterais curtos. Tensão constante no elástico.",
-            videoKey: "lateral-walk",
-            unilateral: false, startLeft: false
+            name: "Fire Hydrant com caneleira",
+            sets: 3, reps: "15 cada", rest: "30seg",
+            tip: "Core ativado, não gire o tronco",
+            details: "De quatro apoios, caneleira no tornozelo. Levante o joelho pro lado mantendo 90 graus. Suba até a altura do quadril. Controle a descida. Comece pelo esquerdo.",
+            videoKey: "fire-hydrant",
+            unilateral: true, startLeft: true
           },
           {
             id: "f1-qui-4",
@@ -714,30 +714,30 @@ const WORKOUTS = {
         exercises: [
           {
             id: "f2-ter-1",
-            name: "Clamshell (elástico mais forte)",
+            name: "Abdução lateral deitada (caneleira mais pesada)",
             sets: 3, reps: "20 cada", rest: "30seg",
             tip: "Lado ESQUERDO primeiro",
-            details: "Use elástico de maior resistência que na Fase 1. 20 reps em vez de 15. Mantenha pés juntos, abra o joelho. Lado esquerdo sempre primeiro.",
-            videoKey: "clamshell",
+            details: "Caneleira mais pesada que na Fase 1. 20 reps em vez de 15. Deite de lado, levante a perna controlando o movimento. Lado esquerdo sempre primeiro.",
+            videoKey: "abducao-deitada",
             unilateral: true, startLeft: true
           },
           {
             id: "f2-ter-2",
-            name: "Abdução em pé (elástico forte)",
+            name: "Abdução em pé (caneleira mais pesada)",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "Controle total",
-            details: "Elástico mais forte nos tornozelos. Mantenha controle total do movimento, sem balançar. Tronco reto. Comece pelo esquerdo.",
+            details: "Caneleira mais pesada no tornozelo. Mantenha controle total do movimento, sem balançar. Tronco reto. Comece pelo esquerdo.",
             videoKey: "abducao-pe",
             unilateral: true, startLeft: true
           },
           {
             id: "f2-ter-3",
-            name: "Lateral Walk (elástico forte)",
+            name: "Fire Hydrant (caneleira mais pesada)",
             sets: 3, reps: "15 cada", rest: "30seg",
-            tip: "Mais passos, mais tensão",
-            details: "15 passos cada lado (progressão de 12). Elástico mais forte. Mantenha semi-agachamento profundo durante todo o movimento.",
-            videoKey: "lateral-walk",
-            unilateral: false, startLeft: false
+            tip: "Core firme, não gire o tronco",
+            details: "Caneleira mais pesada. De quatro apoios, levante o joelho pro lado. 15 reps cada lado (progressão). Controle total. Comece pelo esquerdo.",
+            videoKey: "fire-hydrant",
+            unilateral: true, startLeft: true
           },
           {
             id: "f2-ter-4",
@@ -843,30 +843,30 @@ const WORKOUTS = {
         exercises: [
           {
             id: "f2-qui-1",
-            name: "Clamshell (forte)",
+            name: "Abdução lateral deitada (caneleira)",
             sets: 3, reps: "20 cada", rest: "30seg",
             tip: "Esquerdo primeiro",
-            details: "Elástico forte, 20 reps. Foco na contração do glúteo médio. Esquerdo sempre primeiro pra corrigir assimetria.",
-            videoKey: "clamshell",
+            details: "Caneleira no tornozelo, 20 reps. Foco na contração do glúteo médio. Esquerdo sempre primeiro pra corrigir assimetria.",
+            videoKey: "abducao-deitada",
             unilateral: true, startLeft: true
           },
           {
             id: "f2-qui-2",
-            name: "Abdução em pé",
+            name: "Abdução em pé (caneleira)",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "Controle",
-            details: "Elástico nos tornozelos, movimento controlado. Sem balançar o corpo. Foque no glúteo médio.",
+            details: "Caneleira no tornozelo, movimento controlado. Sem balançar o corpo. Foque no glúteo médio.",
             videoKey: "abducao-pe",
             unilateral: true, startLeft: true
           },
           {
             id: "f2-qui-3",
-            name: "Lateral Walk",
+            name: "Fire Hydrant (caneleira)",
             sets: 3, reps: "15 cada", rest: "30seg",
-            tip: "Mantenha agachamento baixo",
-            details: "Agachamento mais profundo que na Fase 1 durante o lateral walk. Mais passos (15 vs 12). Tensão constante.",
-            videoKey: "lateral-walk",
-            unilateral: false, startLeft: false
+            tip: "Core ativado, controle total",
+            details: "De quatro apoios, caneleira no tornozelo. Levante o joelho pro lado. 15 reps cada lado. Controle total. Comece pelo esquerdo.",
+            videoKey: "fire-hydrant",
+            unilateral: true, startLeft: true
           },
           {
             id: "f2-qui-4",
@@ -1101,30 +1101,30 @@ const WORKOUTS = {
         exercises: [
           {
             id: "f3-ter-1",
-            name: "Clamshell (elástico forte)",
+            name: "Abdução lateral deitada (caneleira pesada)",
             sets: 3, reps: "20 cada", rest: "30seg",
             tip: "Lado ESQUERDO primeiro, pausa 2seg",
-            details: "Elástico de alta resistência. 20 reps com pausa de 2seg na abertura máxima. Foco na ativação do glúteo médio. Esquerdo primeiro.",
-            videoKey: "clamshell",
+            details: "Caneleira pesada. 20 reps com pausa de 2seg no topo. Foco na ativação do glúteo médio. Esquerdo primeiro.",
+            videoKey: "abducao-deitada",
             unilateral: true, startLeft: true
           },
           {
             id: "f3-ter-2",
-            name: "Abdução em pé (elástico forte)",
+            name: "Abdução em pé (caneleira pesada)",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "Controle e pausa no topo",
-            details: "Elástico forte. Pause 1-2seg no ponto máximo de abdução. Controle total do movimento. Tronco reto.",
+            details: "Caneleira pesada no tornozelo. Pause 1-2seg no ponto máximo de abdução. Controle total do movimento. Tronco reto.",
             videoKey: "abducao-pe",
             unilateral: true, startLeft: true
           },
           {
             id: "f3-ter-3",
-            name: "Lateral Walk (elástico forte)",
+            name: "Fire Hydrant (caneleira pesada)",
             sets: 3, reps: "15 cada", rest: "30seg",
-            tip: "Agachamento mais profundo",
-            details: "Elástico forte, agachamento mais baixo que Fase 2. 15 passos cada lado. Tensão constante. Queima intensa no glúteo médio.",
-            videoKey: "lateral-walk",
-            unilateral: false, startLeft: false
+            tip: "Core firme, squeeze no topo",
+            details: "Caneleira pesada. De quatro apoios, levante o joelho pro lado. Pause 1seg no topo apertando o glúteo. 15 reps cada lado. Comece pelo esquerdo.",
+            videoKey: "fire-hydrant",
+            unilateral: true, startLeft: true
           },
           {
             id: "f3-ter-4",
@@ -1248,30 +1248,30 @@ const WORKOUTS = {
         exercises: [
           {
             id: "f3-qui-1",
-            name: "Clamshell (forte, pausa)",
+            name: "Abdução lateral deitada (caneleira, pausa)",
             sets: 3, reps: "20 cada", rest: "30seg",
             tip: "Esquerdo primeiro, pausa 2seg",
-            details: "Elástico forte, 20 reps com pausa de 2seg na abertura. Esquerdo primeiro.",
-            videoKey: "clamshell",
+            details: "Caneleira pesada, 20 reps com pausa de 2seg no topo. Esquerdo primeiro.",
+            videoKey: "abducao-deitada",
             unilateral: true, startLeft: true
           },
           {
             id: "f3-qui-2",
-            name: "Abdução em pé",
+            name: "Abdução em pé (caneleira)",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "Controle máximo",
-            details: "Elástico forte. Controle total. Pausa no topo do movimento. Esquerdo primeiro.",
+            details: "Caneleira pesada no tornozelo. Controle total. Pausa no topo do movimento. Esquerdo primeiro.",
             videoKey: "abducao-pe",
             unilateral: true, startLeft: true
           },
           {
             id: "f3-qui-3",
-            name: "Lateral Walk",
+            name: "Fire Hydrant (caneleira)",
             sets: 3, reps: "15 cada", rest: "30seg",
-            tip: "Agachamento profundo",
-            details: "Agachamento profundo mantido durante todo o deslocamento lateral. 15 passos cada lado.",
-            videoKey: "lateral-walk",
-            unilateral: false, startLeft: false
+            tip: "Pausa no topo, core firme",
+            details: "De quatro apoios, caneleira pesada. Levante o joelho pro lado com pausa de 1seg no topo. 15 reps cada lado. Comece pelo esquerdo.",
+            videoKey: "fire-hydrant",
+            unilateral: true, startLeft: true
           },
           {
             id: "f3-qui-4",
@@ -1524,21 +1524,21 @@ const WORKOUTS = {
         exercises: [
           {
             id: "f4-ter-1",
-            name: "SUPERSET: Clamshell + Abdução em pé",
+            name: "SUPERSET: Abdução deitada + Abdução em pé",
             sets: 3, reps: "20 cada + 15 cada", rest: "45seg",
             tip: "Sem descanso entre exercícios, esquerdo primeiro",
-            details: "SUPERSET: 20 reps Clamshell (cada lado) direto pra 15 reps Abdução em pé (cada lado). Sem descanso entre eles. Esquerdo primeiro. Elástico forte.",
-            videoKey: "clamshell",
+            details: "SUPERSET: 20 reps Abdução deitada com caneleira (cada lado) direto pra 15 reps Abdução em pé com caneleira (cada lado). Sem descanso entre eles. Esquerdo primeiro. Caneleira pesada.",
+            videoKey: "abducao-deitada",
             unilateral: true, startLeft: true
           },
           {
             id: "f4-ter-2",
-            name: "Lateral Walk (elástico forte)",
+            name: "Fire Hydrant (caneleira pesada)",
             sets: 3, reps: "20 cada", rest: "30seg",
-            tip: "Agachamento bem baixo, 20 passos",
-            details: "20 passos cada lado (progressão). Agachamento bem baixo. Elástico de alta resistência. Queima intensa.",
-            videoKey: "lateral-walk",
-            unilateral: false, startLeft: false
+            tip: "Pausa 2seg no topo, core firme",
+            details: "20 reps cada lado (progressão). Caneleira pesada. Pausa de 2seg no topo apertando o glúteo. Queima intensa. Comece pelo esquerdo.",
+            videoKey: "fire-hydrant",
+            unilateral: true, startLeft: true
           },
           {
             id: "f4-ter-3",
@@ -1671,19 +1671,19 @@ const WORKOUTS = {
         exercises: [
           {
             id: "f4-qui-1",
-            name: "SUPERSET: Clamshell + Lateral Walk",
+            name: "SUPERSET: Abdução deitada + Fire Hydrant",
             sets: 3, reps: "20 cada + 15 cada", rest: "45seg",
             tip: "Sem descanso, esquerdo primeiro",
-            details: "SUPERSET: 20 reps Clamshell cada lado + 15 passos Lateral Walk cada lado. Sem descanso entre eles. Esquerdo primeiro.",
-            videoKey: "clamshell",
+            details: "SUPERSET: 20 reps Abdução deitada com caneleira cada lado + 15 reps Fire Hydrant com caneleira cada lado. Sem descanso entre eles. Esquerdo primeiro.",
+            videoKey: "abducao-deitada",
             unilateral: true, startLeft: true
           },
           {
             id: "f4-qui-2",
-            name: "Abdução em pé (elástico forte)",
+            name: "Abdução em pé (caneleira pesada)",
             sets: 3, reps: "15 cada", rest: "30seg",
             tip: "Pausa 2seg no topo",
-            details: "Elástico forte. Pausa de 2seg no ponto máximo de abdução. Controle total.",
+            details: "Caneleira pesada. Pausa de 2seg no ponto máximo de abdução. Controle total.",
             videoKey: "abducao-pe",
             unilateral: true, startLeft: true
           },
@@ -1894,7 +1894,7 @@ const WARMUP = {
       required: true,
       exercises: [
         { name: "Toque e aperte: mão no glúteo esquerdo", reps: "10x", tip: "Aperte consciente" },
-        { name: "Clamshell SÓ esquerdo", reps: "10 reps lento", tip: "Só o lado esquerdo!", videoKey: "clamshell-ativacao" },
+        { name: "Fire Hydrant SÓ esquerdo", reps: "10 reps lento", tip: "Só o lado esquerdo, sem caneleira!", videoKey: "fire-hydrant-ativacao" },
         { name: "Glute Bridge bilateral", reps: "10 reps", tip: "Foco em sentir o ESQUERDO", videoKey: "glute-bridge-ativacao" }
       ]
     }
