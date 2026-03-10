@@ -3113,8 +3113,8 @@ const SKINCARE_ROUTINE = {
       {
         order: 4,
         product: "Protetor solar FPS 50+",
-        howTo: "2 dedos de produto (indicador e médio), espalhe no rosto TODO, incluindo orelhas e pescoço",
-        why: "ESSENCIAL: sem protetor, NADA funciona",
+        howTo: "2 dedos de produto (indicador e médio), espalhe no rosto TODO, incluindo orelhas e pescoço. DICA PELE PARDA: escolha protetor com cor (tipo La Roche-Posay com cor, Nivea Sun Facial com cor) ou fórmula que não deixe white cast (aspecto esbranquiçado)",
+        why: "ESSENCIAL: sem protetor, NADA funciona. Pele parda mancha mais fácil sem proteção",
         videoKey: "protetor-solar",
         emoji: "🛡️"
       }
@@ -3209,7 +3209,8 @@ const SKINCARE_ROUTINE = {
     "Resultados de clareamento: 4-8 semanas pra começar a notar",
     "Queratose pilar: melhora em 4-6 semanas com ácido salicílico + ureia",
     "Skincare da noite é SEMPRE pós-academia, pós-banho. Fazer antes do treino = jogar produto fora",
-    "Double cleansing à noite é ESSENCIAL: água micelar PRIMEIRO, sabonete DEPOIS. Sem isso protetor solar entope os poros"
+    "Double cleansing à noite é ESSENCIAL: água micelar PRIMEIRO, sabonete DEPOIS. Sem isso protetor solar entope os poros",
+    "Protetor solar pra pele parda: evite protetores que deixam white cast (aspecto branco/roxo). Prefira com cor ou base com FPS"
   ]
 };
 
@@ -3386,7 +3387,7 @@ const EDUCATIONAL_CONTENT = {
   tmbTdee: {
     title: "TMB e TDEE — Por que 2.300-2.500 kcal?",
     emoji: "🔢",
-    content: "TMB (Taxa Metabólica Basal) é o que seu corpo gasta em repouso. TDEE (Gasto Energético Diário Total) inclui atividade física. Pra Arthur: TMB ~1.600kcal + atividade = TDEE ~2.100kcal. Comemos 2.300-2.500 nos dias de treino pra ter superávit leve (ganhar músculo) e 2.000-2.200 no descanso pra manutenção.",
+    content: "TMB (Taxa Metabólica Basal) é o que seu corpo gasta em repouso. TDEE (Gasto Energético Diário Total) inclui atividade física. Pra Arthur (96kg, 1.73m): TMB ~1.900-2.000kcal + treino 6x/semana = TDEE ~2.800-3.000kcal. Seu TDEE é ~2.800-3.000 kcal. Comendo 2.300-2.500, você está em déficit de ~400-500 kcal/dia — perfeito pra perder gordura sem perder músculo. Nos dias de descanso, 2.000-2.200 aumenta o déficit pra acelerar a perda.",
     macroSplit: "Proteína: 160-170g (1.8g/kg) | Carboidrato: 45-50% | Gordura: 25-30%"
   },
   mindMuscle: {
@@ -3422,7 +3423,8 @@ const EDUCATIONAL_CONTENT = {
       "Multivitamínico (Vita Supraz): tá ótimo, o zinco e selênio ajudam na performance íntima",
       "Melatonina: 0.5-1mg, 30-60min antes de dormir, dose baixa funciona melhor",
       "Colágeno hidrolisado: 10g/dia (pele + cabelo + articulações)",
-      "Ômega-3: 1g/dia se não come peixe 2x/semana"
+      "Ômega-3: 1g/dia se não come peixe 2x/semana",
+      "Vitamina D3: 2000-4000 UI/dia — pele parda produz menos vitamina D pelo sol. Essencial pra humor, energia, recuperação muscular e ossos. Barata (~R$15/mês)"
     ]
   },
   deload: {
@@ -3430,6 +3432,12 @@ const EDUCATIONAL_CONTENT = {
     emoji: "🔄",
     content: "A cada 4-6 semanas (ou entre fases), faça 1 semana com 60% da carga e do volume normal. Isso NÃO é preguiça — é estratégia. O músculo cresce no DESCANSO, não no treino. Sem deload, o corpo platôa e o risco de lesão aumenta.",
     tips: "Na semana de deload: mesmos exercícios, metade das séries, 60% do peso. Foque na técnica perfeita e na conexão mente-músculo. Mantenha a alimentação normal."
+  },
+  jointCare: {
+    title: "Cuidado com Articulações — Joelhos e Quadril",
+    emoji: "🦴",
+    content: "Com 96kg, seus joelhos recebem 3-4x o peso corporal em agachamentos e lunges (~300-400kg de força!). Cuidar das articulações agora evita problemas no futuro e permite treinar mais pesado com segurança.",
+    tips: "Sempre aqueça os joelhos com 1-2 séries leves antes de ir pesado. Forma perfeita > carga pesada — SEMPRE. Se sentir dor (não desconforto muscular) no joelho, PARE. Ômega-3 e colágeno ajudam na saúde articular. Não trave o joelho no topo dos movimentos — mantenha levemente flexionado."
   }
 };
 
