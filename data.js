@@ -1051,9 +1051,9 @@ const WORKOUTS = {
           {
             id: "f3-seg-1",
             name: "Hip Thrust pesado",
-            sets: 4, reps: "15", rest: "60seg",
-            tip: "Pausa 3seg no topo",
-            details: "Hip Thrust com pausa de 3 segundos no topo de cada rep. Isso aumenta o tempo sob tensão e força a contração máxima do glúteo. Carga pesada.",
+            sets: 5, reps: "15", rest: "60seg",
+            tip: "Volume aumentado: 5 séries! Pausa 3seg no topo",
+            details: "Hip Thrust com pausa de 3 segundos no topo de cada rep. Isso aumenta o tempo sob tensão e força a contração máxima do glúteo. Carga pesada. Volume aumentado pra 5 séries nesta fase.",
             videoKey: "hip-thrust",
             unilateral: false, startLeft: false
           },
@@ -1483,9 +1483,9 @@ const WORKOUTS = {
           {
             id: "f4-seg-1",
             name: "Hip Thrust pesado",
-            sets: 5, reps: "12", rest: "90seg",
-            tip: "Semana pesada: carga máxima, pausa 3seg",
-            details: "5 séries pesadas de 12 reps com pausa de 3seg no topo. Carga máxima mantendo boa forma. Periodização: alterne semanas pesadas/leves/moderadas.",
+            sets: 6, reps: "12", rest: "90seg",
+            tip: "Volume MÁXIMO: 6 séries! Carga máxima, pausa 3seg",
+            details: "6 séries pesadas de 12 reps com pausa de 3seg no topo — volume máximo da fase avançada. Carga máxima mantendo boa forma. Periodização: alterne semanas pesadas/leves/moderadas.",
             videoKey: "hip-thrust",
             unilateral: false, startLeft: false
           },
@@ -1908,6 +1908,32 @@ const WARMUP = {
   duration: "7 min",
   required: true,
   sections: [
+    {
+      name: "Liberação Miofascial (Foam Roller)",
+      duration: "3-5 min",
+      required: false,
+      note: "Especialmente importante pra quem fica sentada 8h+. Liberar antes de treinar ativa MUITO mais o glúteo.",
+      exercises: [
+        {
+          name: "Rolo no Quadríceps",
+          reps: "30-60seg cada perna",
+          tip: "Deite de bruços, rolo na frente da coxa. Role devagar do quadril até o joelho. Pare nos pontos doloridos.",
+          gifUrl: null
+        },
+        {
+          name: "Rolo no TFL (lateral do quadril)",
+          reps: "30-60seg cada lado",
+          tip: "De lado, rolo na parte lateral do quadril/coxa. Essa região fica MUITO tensa em quem senta o dia todo.",
+          gifUrl: null
+        },
+        {
+          name: "Rolo no Piriforme (glúteo profundo)",
+          reps: "30-60seg cada lado",
+          tip: "Sentada no rolo, cruze uma perna sobre a outra e role devagar sobre o glúteo. Libera o piriforme e melhora ativação.",
+          gifUrl: null
+        }
+      ]
+    },
     {
       name: "Cardio Leve",
       duration: "3-5min",
@@ -2781,6 +2807,191 @@ const RECIPES = [
       "Base pra: patês, saladas, tapioca, panqueca, sopa",
       "Na panela de pressão: 12-15 minutos após pegar pressão (mais rápido)"
     ]
+  },
+  {
+    id: "tilapia-grelhada-limao",
+    name: "Tilápia Grelhada com Limão",
+    emoji: "🐟",
+    servings: 1,
+    calories: 180,
+    protein: 34,
+    carbs: 2,
+    fat: 4,
+    ingredients: [
+      "1 filé de tilápia (~150g)",
+      "Suco de 1/2 limão",
+      "1 dente de alho picado",
+      "Sal e pimenta a gosto",
+      "1 colher de chá de azeite",
+      "Salsa picada pra finalizar"
+    ],
+    steps: [
+      "Tempere o filé com limão, alho, sal e pimenta — deixe 10min",
+      "Aqueça a frigideira antiaderente com 1 colher de chá de azeite",
+      "Coloque o filé e cozinhe 4-5min de cada lado em fogo médio",
+      "Não mexa muito — deixe dourar de cada lado",
+      "Finalize com salsa picada e mais um fio de limão"
+    ],
+    variations: [
+      { name: "Outro Peixe", description: "Substitua tilápia por pescada ou merluza" },
+      { name: "Com Alcaparras", description: "Adicione alcaparras pra mais sabor" },
+      { name: "Na Airfryer", description: "Faça na airfryer: 180°C por 12-15min" }
+    ],
+    tips: [
+      "Tilápia é o peixe mais barato e tem 34g de proteína por filé",
+      "Compre filés congelados — mais barato e dura semanas",
+      "Ótimo com arroz integral e salada",
+      "Peixe 2x/semana elimina a necessidade de suplemento de ômega-3"
+    ],
+    videoKey: null
+  },
+  {
+    id: "sardinha-assada-forno",
+    name: "Sardinha Assada no Forno",
+    emoji: "🐟",
+    servings: 2,
+    calories: 200,
+    protein: 25,
+    carbs: 0,
+    fat: 11,
+    ingredients: [
+      "1 lata de sardinha em óleo (ou 4 sardinhas frescas)",
+      "Suco de 1 limão",
+      "1 dente de alho fatiado",
+      "Pimenta do reino a gosto",
+      "Sal a gosto",
+      "Azeite pra regar"
+    ],
+    steps: [
+      "Se fresca: limpe e tempere com limão, alho, sal — 15min",
+      "Se em lata: escorra o óleo, coloque numa forma",
+      "Leve ao forno a 200°C por 15-20min (fresca) ou 10min (lata)",
+      "Regue com azeite e limão ao servir"
+    ],
+    variations: [
+      { name: "Sardinha em Lata", description: "Sardinha em lata é a opção mais rápida e barata" },
+      { name: "Com Tomate Cereja", description: "Adicione tomate cereja cortado ao meio por cima" },
+      { name: "Com Farofa", description: "Sirva com farofa de alho" }
+    ],
+    tips: [
+      "Sardinha tem MAIS ômega-3 que salmão e custa 1/5 do preço",
+      "1 lata = ~25g de proteína",
+      "Compre em promoção — dura anos na despensa",
+      "Rica em cálcio (os ossinhos são comestíveis)"
+    ],
+    videoKey: null
+  },
+  {
+    id: "wrap-frango-rapido",
+    name: "Wrap de Frango Rápido",
+    emoji: "🌯",
+    servings: 1,
+    calories: 350,
+    protein: 32,
+    carbs: 28,
+    fat: 12,
+    ingredients: [
+      "1 tortilha/wrap integral",
+      "100g de frango desfiado (do meal prep)",
+      "1 colher de requeijão light",
+      "Alface picada",
+      "Tomate fatiado",
+      "Sal e orégano a gosto"
+    ],
+    steps: [
+      "Espalhe o requeijão na tortilha toda",
+      "Coloque o frango desfiado no centro",
+      "Adicione alface e tomate",
+      "Tempere com sal e orégano",
+      "Enrole apertado e corte no meio"
+    ],
+    variations: [
+      { name: "Wrap de Atum", description: "Use atum em vez de frango" },
+      { name: "Com Queijo", description: "Adicione queijo mussarela" },
+      { name: "Wrap Crocante", description: "Leve pra selar na frigideira 1min cada lado (fica crocante)" }
+    ],
+    tips: [
+      "Perfeito pra levar pro trabalho — monta em 3 minutos",
+      "Faça o frango desfiado no domingo (meal prep) e use a semana toda",
+      "Wrap integral tem mais fibra que pão",
+      "Embala em papel alumínio pra transportar"
+    ],
+    videoKey: null
+  },
+  {
+    id: "ovos-cozidos-batch",
+    name: "Ovos Cozidos em Batch",
+    emoji: "🥚",
+    servings: 6,
+    calories: 78,
+    protein: 6,
+    carbs: 1,
+    fat: 5,
+    notes: "Macros por OVO",
+    ingredients: [
+      "6 ovos",
+      "Água suficiente pra cobrir",
+      "1 colher de chá de vinagre (evita rachar)",
+      "Gelo pra banho de gelo"
+    ],
+    steps: [
+      "Coloque os ovos em panela com água fria cobrindo",
+      "Adicione vinagre e leve ao fogo alto",
+      "Quando ferver, conte 10 minutos",
+      "Transfira imediatamente pra banho de gelo (água + gelo)",
+      "Deixe 5 minutos no gelo — descasca fácil",
+      "Guarde na geladeira em pote fechado — dura 5 dias"
+    ],
+    variations: [
+      { name: "Puro", description: "Coma puro com sal e pimenta" },
+      { name: "Pasta de Ovo", description: "Amasse com requeijão pra fazer pasta" },
+      { name: "Na Salada", description: "Corte ao meio e coloque na salada" },
+      { name: "Temperado", description: "Tempere com paprika e azeite" }
+    ],
+    tips: [
+      "Faça 6-12 de uma vez no domingo — snack pronto a semana toda",
+      "78 kcal e 6g proteína por ovo — snack perfeito",
+      "Leve 2 pro trabalho como lanche da manhã",
+      "O banho de gelo é o segredo pra descascar fácil"
+    ],
+    videoKey: null
+  },
+  {
+    id: "salmao-airfryer",
+    name: "Salmão na Airfryer",
+    emoji: "🐟",
+    servings: 1,
+    calories: 280,
+    protein: 30,
+    carbs: 0,
+    fat: 17,
+    ingredients: [
+      "1 filé de salmão (~150g)",
+      "Suco de 1/2 limão",
+      "1 colher de chá de azeite",
+      "Sal, pimenta e páprica a gosto",
+      "Alecrim (opcional)"
+    ],
+    steps: [
+      "Tempere o salmão com limão, azeite, sal, pimenta e páprica",
+      "Deixe marinar 10-15min",
+      "Pré-aqueça a airfryer a 200°C por 3min",
+      "Coloque o salmão com a pele pra baixo",
+      "Cozinhe por 8-10min a 200°C",
+      "Não precisa virar — fica perfeito"
+    ],
+    variations: [
+      { name: "Truta", description: "Substitua por truta (mais barata, mesmo sabor)" },
+      { name: "Mel e Mostarda", description: "Adicione mel + mostarda por cima antes de assar" },
+      { name: "No Forno", description: "Sem airfryer: forno a 200°C por 15-18min" }
+    ],
+    tips: [
+      "Salmão é rei do ômega-3 — excelente pra pele e inflamação",
+      "Mais caro, mas vale como refeição especial 1x/semana",
+      "Compre congelado — muito mais barato que fresco",
+      "A pele fica crocante na airfryer — pode comer"
+    ],
+    videoKey: null
   }
 ];
 
@@ -2796,7 +3007,9 @@ const SHOPPING_LIST = {
       { name: "Whey protein", quantity: "1 pote (dura ~1 mês)", price: "R$80-120", checked: false },
       { name: "Queijo cottage", quantity: "200g", price: "R$8-12", checked: false },
       { name: "Atum em lata (em água)", quantity: "2 latas", price: "R$8-12", checked: false },
-      { name: "Requeijão light", quantity: "1 pote", price: "R$6-9", checked: false }
+      { name: "Requeijão light", quantity: "1 pote", price: "R$6-9", checked: false },
+      { name: "Filé de tilápia congelado", quantity: "1kg", price: "~R$25-35", checked: false },
+      { name: "Sardinha em lata", quantity: "3 unidades", price: "~R$15-20", checked: false }
     ]
   },
   carboidratos: {
@@ -2856,6 +3069,13 @@ const SHOPPING_LIST = {
       { name: "Cominho", quantity: "1 pote", price: "R$3-5", checked: false },
       { name: "Salsinha", quantity: "1 maço", price: "R$2-3", checked: false }
     ]
+  },
+  higiene_skincare: {
+    label: "Higiene e Skincare",
+    emoji: "🧴",
+    items: [
+      { name: "Água micelar (Garnier ou Simple)", quantity: "1 frasco", price: "~R$20-30", checked: false }
+    ]
   }
 };
 
@@ -2906,6 +3126,14 @@ const SKINCARE_ROUTINE = {
     emoji: "🌙",
     note: "SEMPRE depois do treino e banho. Nunca antes da academia.",
     steps: [
+      {
+        order: 0,
+        product: "Água micelar (ou óleo de limpeza)",
+        howTo: "Algodão com água micelar, passe no rosto TODO — remove protetor solar e sujeira pesada. SÓ DEPOIS lave com sabonete facial",
+        why: "Double cleansing: sem isso o protetor não sai e o retinol/niacinamida não penetram",
+        videoKey: null,
+        emoji: "🧹"
+      },
       {
         order: 1,
         product: "Sabonete facial",
@@ -2980,7 +3208,8 @@ const SKINCARE_ROUTINE = {
     "Protetor solar reaplicar a cada 2-3h se estiver no sol",
     "Resultados de clareamento: 4-8 semanas pra começar a notar",
     "Queratose pilar: melhora em 4-6 semanas com ácido salicílico + ureia",
-    "Skincare da noite é SEMPRE pós-academia, pós-banho. Fazer antes do treino = jogar produto fora"
+    "Skincare da noite é SEMPRE pós-academia, pós-banho. Fazer antes do treino = jogar produto fora",
+    "Double cleansing à noite é ESSENCIAL: água micelar PRIMEIRO, sabonete DEPOIS. Sem isso protetor solar entope os poros"
   ]
 };
 
@@ -3027,8 +3256,9 @@ const DEPILATION = {
       "Cabeçote largo (pernas) + cabeçote área sensível (virilha/axilas)"
     ]
   },
-  days: [2, 6],
-  dayNames: ["Terça", "Sábado"],
+  days: [6],
+  dayNames: ["Sábado"],
+  frequencyNote: "Com epilator o pelo demora 2-4 semanas pra voltar. Comece 1x/semana e depois pode espaçar pra 1x a cada 2 semanas quando o pelo ficar mais ralo.",
   areas: [
     { area: "Pernas", method: "Epilator — cabeçote largo, velocidade 2", direction: "Contra o pelo (de baixo pra cima)", specialCare: "Esticar a pele com a outra mão. Área menos sensível — comece por aqui", videoKey: "depilar-pernas" },
     { area: "Barriga/Peito", method: "Epilator — cabeçote largo, velocidade 1", direction: "Contra o pelo (de baixo pra cima)", specialCare: "Velocidade 1 (mais suave). Esticar bem a pele", videoKey: null },
@@ -3122,7 +3352,7 @@ const CHECKLIST_ITEMS = [
   { id: "treino", label: "Treino do dia", time: "18:00", emoji: "🏋️", days: [1, 2, 3, 4, 5, 6], link: "treino" },
   { id: "skincare-noite", label: "Skincare noite", time: "19:30", emoji: "🌙", days: null, link: "cuidados" },
   { id: "kegel", label: "Kegel (10 reps)", time: "22:00", emoji: "💪", days: null, link: "cuidados" },
-  { id: "depilacao", label: "Depilação", time: null, emoji: "🪒", days: [2, 6], link: "cuidados" }
+  { id: "depilacao", label: "Depilação", time: null, emoji: "🪒", days: [6], link: "cuidados" }
 ];
 
 // ─── 17. DAILY_ROUTINE ───────────────────────────────────────
@@ -3194,6 +3424,12 @@ const EDUCATIONAL_CONTENT = {
       "Colágeno hidrolisado: 10g/dia (pele + cabelo + articulações)",
       "Ômega-3: 1g/dia se não come peixe 2x/semana"
     ]
+  },
+  deload: {
+    title: "Semana de Deload — Por que descansar te faz crescer",
+    emoji: "🔄",
+    content: "A cada 4-6 semanas (ou entre fases), faça 1 semana com 60% da carga e do volume normal. Isso NÃO é preguiça — é estratégia. O músculo cresce no DESCANSO, não no treino. Sem deload, o corpo platôa e o risco de lesão aumenta.",
+    tips: "Na semana de deload: mesmos exercícios, metade das séries, 60% do peso. Foque na técnica perfeita e na conexão mente-músculo. Mantenha a alimentação normal."
   }
 };
 
@@ -3206,6 +3442,7 @@ const NIGHT_ROUTINE = {
       name: "Skincare Noturno",
       emoji: "✨",
       items: [
+        "Remover protetor com água micelar (double cleansing)",
         "Limpar o rosto com sabonete facial",
         "Aplicar Niacinamida (uniformizar tom)",
         "Aplicar Retinol (renovação celular) — 2-3x por semana",

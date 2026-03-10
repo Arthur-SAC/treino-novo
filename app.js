@@ -1608,6 +1608,55 @@ const WorkoutManager = {
   },
 
   /**
+   * Progressive overload suggestion.
+   * Looks at last week's data for the same day-of-week.
+   * If ALL sets were completed and a weight was logged, suggests +2kg.
+   * Returns a suggestion string or null.
+   */
+  getProgressionSuggestion(exerciseId, totalSets) {
+    try {
+      // Calculate the date 7 days ago (same day of week, last week)
+      var today = new Date();
+      var lastWeek = new Date(today);
+      lastWeek.setDate(today.getDate() - 7);
+      var lastWeekStr = lastWeek.toISOString().split('T')[0];
+
+      var prevData = StorageManager.getForDate('workout', lastWeekStr);
+      if (!prevData || !prevData.series || !prevData.weights) return null;
+
+      var prevSeries = prevData.series[exerciseId];
+      if (!prevSeries) return null;
+
+      // Check if ALL sets were completed
+      for (var s = 1; s <= totalSets; s++) {
+        if (!prevSeries[s]) return null;
+      }
+
+      // Find the weight used (check all sets, use the max logged weight)
+      var maxWeight = 0;
+      var foundWeight = false;
+      for (var s = 1; s <= totalSets; s++) {
+        var wKey = exerciseId + '_' + s;
+        var w = prevData.weights[wKey];
+        if (w !== undefined && w !== null && w !== '') {
+          var parsed = parseFloat(w);
+          if (!isNaN(parsed) && parsed > 0) {
+            foundWeight = true;
+            if (parsed > maxWeight) maxWeight = parsed;
+          }
+        }
+      }
+
+      if (!foundWeight || maxWeight <= 0) return null;
+
+      var suggested = maxWeight + 2;
+      return '\u2705 Semana passada completou tudo com ' + maxWeight + 'kg \u2014 tenta ' + suggested + 'kg!';
+    } catch (e) {
+      return null;
+    }
+  },
+
+  /**
    * Detect special exercise types by name/properties.
    * Returns 'vacuum', 'cardio', 'plank', or 'normal'.
    */
@@ -1961,6 +2010,14 @@ const WorkoutManager = {
       html += '<span>Serie ' + s + '/' + totalSets + '</span>';
       html += '</label>';
       html += '<input type="number" class="weight-input" placeholder="Peso (kg)" data-exercise="' + exercise.id + '" data-set="' + s + '" value="' + savedWeight + '" inputmode="decimal" step="0.5">';
+      html += '</div>';
+    }
+
+    // Progressive overload suggestion
+    var suggestion = this.getProgressionSuggestion(exercise.id, totalSets);
+    if (suggestion) {
+      html += '<div style="font-size:0.75rem; color:var(--success); margin-top:0.25rem; opacity:0.9; padding:0.25rem 0.5rem;">';
+      html += suggestion;
       html += '</div>';
     }
 
