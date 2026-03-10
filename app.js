@@ -2998,6 +2998,9 @@ const CareManager = {
   renderDepilation() {
     var html = '';
 
+    // Device info
+    html += this.renderDepilationDevice();
+
     // Schedule reminder
     html += this.renderDepilationSchedule();
 
@@ -3007,9 +3010,35 @@ const CareManager = {
     // Step by step
     html += this.renderDepilationSteps();
 
+    // First time guide
+    html += this.renderDepilationFirstTimeGuide();
+
     // Alerts
     html += this.renderDepilationAlerts();
 
+    return html;
+  },
+
+  renderDepilationDevice() {
+    var device = DEPILATION.device;
+    if (!device) return '';
+
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDD0C Seu Equipamento</h3>';
+    html += '<div style="text-align:center; margin-bottom:0.75rem;">';
+    html += '<strong style="font-size:1.1rem; color:var(--primary-light);">' + device.name + '</strong>';
+    html += '<p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">' + device.howItWorks + '</p>';
+    html += '</div>';
+
+    html += '<div style="display:flex; flex-direction:column; gap:0.4rem;">';
+    device.features.forEach(function(feature) {
+      html += '<div style="font-size:0.85rem; padding:0.35rem 0.5rem; background:rgba(255,255,255,0.04); border-radius:8px;">';
+      html += '\u2705 ' + feature;
+      html += '</div>';
+    });
+    html += '</div>';
+
+    html += '</div>'; // .card
     return html;
   },
 
@@ -3053,7 +3082,7 @@ const CareManager = {
 
   renderDepilationAreas() {
     var html = '<div class="card glass">';
-    html += '<h3>\uD83E\uDE92 \u00C1reas de Depila\u00E7\u00E3o</h3>';
+    html += '<h3>\uD83E\uDE92 \u00C1reas \u2014 Como usar em cada regi\u00E3o</h3>';
 
     DEPILATION.areas.forEach(function(area) {
       html += '<div class="care-item" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding:0.75rem 0;">';
@@ -3086,6 +3115,28 @@ const CareManager = {
     });
 
     html += '</div>'; // .depilation-steps
+    html += '</div>'; // .card
+    return html;
+  },
+
+  renderDepilationFirstTimeGuide() {
+    var guide = DEPILATION.firstTimeGuide;
+    if (!guide) return '';
+
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83C\uDD95 Primeira Vez? Guia de Adapta\u00E7\u00E3o</h3>';
+    html += '<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">V\u00E1 aos poucos \u2014 seu corpo acostuma e a dor diminui muito!</p>';
+
+    guide.forEach(function(step, index) {
+      var emoji = index < 4 ? '\uD83D\uDCC5' : '\u2728';
+      html += '<div class="care-step">';
+      html += '<div class="step-number">' + (index + 1) + '</div>';
+      html += '<div class="step-content">';
+      html += '<p style="margin:0;">' + step + '</p>';
+      html += '</div>';
+      html += '</div>';
+    });
+
     html += '</div>'; // .card
     return html;
   },

@@ -602,6 +602,15 @@ const WORKOUTS = {
             unilateral: false, startLeft: false
           },
           {
+            id: "f1-sab-1b",
+            name: "🔄 OU Escada do Prédio",
+            sets: 1, reps: "20-25min", rest: "-",
+            tip: "Alternativa à esteira — sobe escada, desce de elevador",
+            details: "ALTERNATIVA À ESTEIRA: Use a escada do prédio!\n\n🔑 TÉCNICA (faz toda a diferença):\n• Incline o tronco levemente pra frente — ativa glúteo em vez de quadríceps\n• Empurre pelo CALCANHAR, não pela ponta do pé\n• Aperte o glúteo no topo de cada degrau\n• Não se apoie no corrimão (só pra equilíbrio)\n\n📋 EXECUÇÃO (Fase 1 — Steady State):\n• Sobe a escada toda em ritmo constante e moderado\n• Desce de elevador (descer não trabalha glúteo e pega o joelho)\n• Repete por 20-25 minutos\n• Ritmo: conseguir falar frases curtas mas não conversar de boa\n\n🍑 Por que escada > sprint: queima gordura da barriga enquanto CONSTRÓI glúteo ao mesmo tempo. Sprint é quadríceps-dominante.",
+            videoKey: null,
+            unilateral: false, startLeft: false
+          },
+          {
             id: "f1-sab-2",
             name: "Alongamento completo",
             sets: 1, reps: "10min", rest: "-",
@@ -986,6 +995,15 @@ const WORKOUTS = {
             tip: "30seg sprint (velocidade 10-12) + 60seg caminhada. Repita 12-15x",
             details: "NOVO na Fase 2: HIIT! 30 segundos correndo (velocidade 10-12km/h) seguidos de 60 segundos caminhando (5km/h). Repita 12-15 ciclos = ~20 minutos. Aquece 3min antes.",
             videoKey: "cardio-esteira",
+            unilateral: false, startLeft: false
+          },
+          {
+            id: "f2-sab-1b",
+            name: "🔄 OU Escada Intervalada",
+            sets: 8, reps: "2-3 andares", rest: "descida elevador",
+            tip: "Alternativa ao HIIT — sobe rápido 2-3 andares, desce de elevador",
+            details: "ALTERNATIVA AO HIIT: Escada intervalada!\n\n🔑 TÉCNICA:\n• Incline o tronco levemente pra frente\n• Empurre pelo CALCANHAR\n• Aperte o glúteo no topo de cada degrau\n• Tente subir 2 degraus de uma vez (passada longa = mais glúteo)\n\n📋 EXECUÇÃO (Fase 2 — Intervalado):\n• Sobe RÁPIDO 2-3 andares (ritmo forte, 2 degraus de vez)\n• Desce de elevador (recuperação)\n• Repete 8-10 rounds\n• ~25 minutos total\n\n🍑 Mais intenso que Fase 1: ritmo forte na subida, foco em potência do glúteo.",
+            videoKey: null,
             unilateral: false, startLeft: false
           },
           {
@@ -1412,6 +1430,15 @@ const WORKOUTS = {
             unilateral: false, startLeft: false
           },
           {
+            id: "f3-sab-1b",
+            name: "🔄 OU Escada Intervalada+",
+            sets: 10, reps: "2-3 andares", rest: "descida elevador",
+            tip: "Alternativa ao HIIT — mais rounds e mais intenso que Fase 2",
+            details: "ALTERNATIVA AO HIIT: Escada intervalada intensificada!\n\n🔑 TÉCNICA:\n• Incline o tronco levemente pra frente\n• Empurre pelo CALCANHAR, aperte glúteo em cada degrau\n• 2 degraus de uma vez SEMPRE (passada longa)\n• Não se apoie no corrimão\n\n📋 EXECUÇÃO (Fase 3 — Intervalado Intenso):\n• Sobe RÁPIDO 2-3 andares (ritmo máximo, 2 degraus)\n• Desce de elevador (recuperação mais curta — desça logo)\n• Repete 10-12 rounds\n• ~25 minutos total\n\n🔥 Progressão: mais rounds que Fase 2 + recuperação mais curta. A subida deve ser explosiva.",
+            videoKey: null,
+            unilateral: false, startLeft: false
+          },
+          {
             id: "f3-sab-2",
             name: "Esteira inclinada",
             sets: 1, reps: "15min", rest: "-",
@@ -1832,6 +1859,15 @@ const WORKOUTS = {
             tip: "30seg sprint + 45seg caminhada (mais intenso)",
             details: "HIIT avançado: 30seg sprint (velocidade 11-13km/h) + 45seg caminhada (5km/h). Menos descanso = mais intenso. 15-18 ciclos.",
             videoKey: "cardio-esteira",
+            unilateral: false, startLeft: false
+          },
+          {
+            id: "f4-sab-1b",
+            name: "🔄 OU Escada Mix Avançado",
+            sets: 4, reps: "circuito completo", rest: "descida elevador",
+            tip: "Alternativa avançada — circuito com variações na escada",
+            details: "ALTERNATIVA AO HIIT: Circuito avançado na escada!\n\n🔑 TÉCNICA:\n• Tronco inclinado pra frente, calcanhar, glúteo apertado\n• Cada round tem 3 variações diferentes\n\n📋 CIRCUITO (repete 3-4x):\n\n1️⃣ SUBIDA NORMAL — 3 andares\n   • 1 degrau por vez, ritmo moderado constante\n\n2️⃣ SUBIDA PASSADA LONGA — 3 andares\n   • 2 degraus de vez, foco total no glúteo, ritmo forte\n\n3️⃣ SUBIDA LATERAL — 2 andares cada lado\n   • De lado na escada, perna de cima puxa o corpo\n   • Troca o lado na metade\n\n⬇️ DESCE de elevador (recuperação ~2min)\n\nRepete 3-4 rounds = ~25-30 min total\n\n🔥 Fase 4: as variações atacam o glúteo de ângulos diferentes (máximo, médio, lateral). Muito mais completo que sprint.",
+            videoKey: null,
             unilateral: false, startLeft: false
           },
           {
@@ -2978,29 +3014,56 @@ const HAIR_CARE = {
 
 // ─── 13. DEPILATION ──────────────────────────────────────────
 const DEPILATION = {
+  device: {
+    name: "Philips Epilator Series 8000 BRE700",
+    type: "Depilador elétrico (epilator)",
+    howItWorks: "32 pinças que giram e arrancam o pelo da raiz — resultado liso por 2-4 semanas",
+    features: [
+      "Wet & Dry — funciona no banho (menos dor)",
+      "2 velocidades (1: áreas sensíveis, 2: pernas/braços)",
+      "Luz embutida (Opti-light) pra enxergar pelos finos",
+      "Discos de cerâmica (mais suave na pele)",
+      "Sem fio — 40 min de bateria (corpo todo)",
+      "Cabeçote largo (pernas) + cabeçote área sensível (virilha/axilas)"
+    ]
+  },
   days: [2, 6],
   dayNames: ["Terça", "Sábado"],
   areas: [
-    { area: "Barriga/Peito", method: "Gilete com espuma", direction: "A favor do pelo (para baixo)", specialCare: "Esticar a pele com a outra mão", videoKey: null },
-    { area: "Pernas", method: "Gilete ou depilador", direction: "Contra o pelo (para cima) pra mais rente", specialCare: "Esfoliar 1 dia ANTES", videoKey: "depilar-pernas" },
-    { area: "Axilas", method: "SÓ gilete com espuma", direction: "A favor + contra (2 passadas)", specialCare: "Sem desodorante por 12h depois!", videoKey: "depilar-axilas" },
-    { area: "Virilha/íntima", method: "Gilete com MUITO cuidado", direction: "A favor do pelo SEMPRE", specialCare: "Calcinha algodão depois, sem roupa justa 24h", videoKey: "depilar-virilha" },
-    { area: "Braços", method: "Opcional", direction: "-", specialCare: "Pode só descolorir com água oxigenada", videoKey: null }
+    { area: "Pernas", method: "Epilator — cabeçote largo, velocidade 2", direction: "Contra o pelo (de baixo pra cima)", specialCare: "Esticar a pele com a outra mão. Área menos sensível — comece por aqui", videoKey: "depilar-pernas" },
+    { area: "Barriga/Peito", method: "Epilator — cabeçote largo, velocidade 1", direction: "Contra o pelo (de baixo pra cima)", specialCare: "Velocidade 1 (mais suave). Esticar bem a pele", videoKey: null },
+    { area: "Braços", method: "Epilator — cabeçote largo, velocidade 2", direction: "Contra o pelo", specialCare: "Fácil e rápido, pouca dor", videoKey: null },
+    { area: "Axilas", method: "Epilator — cabeçote área sensível, velocidade 1", direction: "Várias direções (pelo cresce em espiral)", specialCare: "Sem desodorante por 12h depois! Usar velocidade 1", videoKey: "depilar-axilas" },
+    { area: "Virilha/íntima", method: "Epilator — cabeçote área sensível, velocidade 1", direction: "A favor do pelo nas primeiras vezes, depois contra", specialCare: "Calcinha algodão depois, sem roupa justa 24h. Área mais sensível — faça por último", videoKey: "depilar-virilha" }
   ],
   steps: [
     "Dia anterior: Esfoliar a área no banho (bucha vegetal ou esfoliante)",
-    "No dia: Banho quente pra abrir poros",
-    "Aplicar: Espuma de barbear ou condicionador (NUNCA a seco!)",
-    "Depilar: Lâmina NOVA, passadas suaves sem pressionar",
-    "Enxaguar: Água fria pra fechar poros",
-    "Pós: Hidratar com Bepantol ou Aloe Vera",
-    "Noite: Niacinamida nas áreas escuras"
+    "Pelo ideal: 3-5mm — se estiver comprido, apare com tesoura antes",
+    "No banho: Água morna pra relaxar a pele e abrir poros (Wet & Dry!)",
+    "Esticar a pele com a outra mão — facilita a pinça pegar o pelo",
+    "Passar o epilator CONTRA o sentido do pelo, sem pressionar",
+    "Velocidade 1 pra áreas sensíveis (virilha, axilas), velocidade 2 pra pernas/braços",
+    "Começar pelas pernas (menos dor) e ir pras áreas sensíveis por último",
+    "Pós: Enxaguar com água fria e hidratar com Bepantol ou Aloe Vera",
+    "Noite: Niacinamida nas áreas escuras pra clarear"
+  ],
+  firstTimeGuide: [
+    "Semana 1: Só pernas — pra acostumar com a sensação",
+    "Semana 2: Pernas + braços + barriga/peito",
+    "Semana 3: Tudo + axilas",
+    "Semana 4+: Corpo todo incluindo virilha",
+    "A partir da 3ª vez: dor cai pela metade (pelo volta mais fino)",
+    "Depois de 2 meses: corpo todo em 30-40min, quase sem dor"
   ],
   alerts: [
-    "NUNCA depilar a seco = foliculite + manchas escuras",
+    "Primeiras vezes DÓI — é normal! A dor diminui muito a partir da 3ª sessão",
+    "SEMPRE esfoliar 1 dia antes pra evitar pelo encravado",
     "Não expor áreas depiladas ao sol por 24h",
     "Se aparecer bolinha vermelha (foliculite): Bepantol + não depilar até sarar",
-    "Não usar desodorante comum logo após depilar axilas (arde e mancha)"
+    "Não usar desodorante comum logo após depilar axilas (arde e mancha)",
+    "Pelo cresce mais FINO e RALO com o tempo — oposto da gilete",
+    "Use no banho (Wet & Dry) — dói MUITO menos que a seco",
+    "Carregar o epilator na noite anterior pra não ficar sem bateria"
   ]
 };
 
