@@ -2317,14 +2317,28 @@ const WorkoutManager = {
 // =============================================
 // NUTRITION MANAGER — Nutrição Tab (Task 8)
 // =============================================
-// Manages the Nutrition page with 3 sub-tabs:
-//   1. Plano do Dia (meal plan with logging)
-//   2. Receitas (recipe browser)
-//   3. Lista de Compras (shopping list with checkboxes)
+// Manages the Nutrition page with 4 sub-tabs:
+//   1. Plano do Dia (meal plan with 3 options per meal, from MEAL_OPTIONS)
+//   2. Suplementos (supplement cards from SUPPLEMENTS)
+//   3. Receitas (recipe browser)
+//   4. Lista de Compras (shopping list from SHOPPING_LIST_NEW with copy & reset)
 
 const NutritionManager = {
   currentSubTab: 'plano',
   currentRecipe: null,
+
+  // ── Meal IDs in display order ──
+  mealIds: ['cafe', 'lanche1', 'almoco', 'pretreino', 'jantar', 'noturno'],
+
+  // ── Emoji map for meal periods ──
+  mealEmojis: {
+    cafe: '\u2615',
+    lanche1: '\uD83C\uDF4E',
+    almoco: '\uD83C\uDF5B',
+    pretreino: '\u26A1',
+    jantar: '\uD83C\uDF19',
+    noturno: '\uD83C\uDF1F'
+  },
 
   init() {
     var self = this;
@@ -2351,33 +2365,13 @@ const NutritionManager = {
           self.toggleMeal(mealKey);
           return;
         }
-        // Meal option toggle buttons
-        var mealToggle = e.target.closest('.meal-toggle-btn');
-        if (mealToggle) {
-          var idx = mealToggle.dataset.mealIndex;
-          var current = mealToggle.dataset.current;
-          var next = current === 'A' ? 'B' : 'A';
-          self.setMealPref(idx, next);
-          // Get the new option data
-          var planType = self.getMealPlanType();
-          var meal = MEALS[planType].meals[parseInt(idx)];
-          var option = next === 'B' ? meal.optionB : meal.optionA;
-          if (option) {
-            // Update the card inline (no full re-render needed)
-            var card = mealToggle.closest('.meal-card');
-            if (card) {
-              var optEl = card.querySelector('.meal-option');
-              if (optEl) {
-                optEl.innerHTML = '<strong>Op\u00E7\u00E3o ' + next + ': ' + option.name + '</strong>'
-                  + '<div style="margin-top:4px; font-size:0.85rem; opacity:0.85;">' + option.description + '</div>'
-                  + '<span class="meal-macros">' + option.macros + '</span>';
-              }
-              // Update the button itself
-              mealToggle.dataset.current = next;
-              mealToggle.textContent = next === 'A' ? '\uD83D\uDD04 Op\u00E7\u00E3o B' : '\uD83D\uDD04 Op\u00E7\u00E3o A';
-            }
-            Toast.show('\uD83D\uDD04 Op\u00E7\u00E3o ' + next + ': ' + option.name, 'info', 1500);
-          }
+        // Meal option select buttons (3 options)
+        var mealOptBtn = e.target.closest('.meal-opt-btn');
+        if (mealOptBtn) {
+          var mealId = mealOptBtn.dataset.mealId;
+          var optIdx = parseInt(mealOptBtn.dataset.optIndex, 10);
+          self.setMealChoice(mealId, optIdx);
+          self.render();
           return;
         }
         // Recipe card clicks
@@ -2398,6 +2392,12 @@ const NutritionManager = {
         if (recipeVideo) {
           var videoKey = recipeVideo.getAttribute('data-video');
           VideoModal.open(videoKey, 'recipe');
+          return;
+        }
+        // Shopping copy button
+        var copyBtn = e.target.closest('.shopping-copy-btn');
+        if (copyBtn) {
+          self.copyShoppingList();
           return;
         }
         // Shopping reset button
@@ -2434,22 +2434,12 @@ const NutritionManager = {
 
     var html = this.renderSubTabs();
 
-    // Nutrition info card — daily macro/calorie goals
-    var infoHtml = '<div class="card glass nutrition-info-card">';
-    infoHtml += '<h3>\uD83D\uDD22 Suas Metas Nutricionais</h3>';
-    infoHtml += '<div class="nutrition-macros">';
-    infoHtml += '<div class="macro-item"><span class="macro-value">2.300-2.500</span><span class="macro-label">kcal treino</span></div>';
-    infoHtml += '<div class="macro-item"><span class="macro-value">2.000-2.200</span><span class="macro-label">kcal descanso</span></div>';
-    infoHtml += '<div class="macro-item"><span class="macro-value">160-170g</span><span class="macro-label">proteína</span></div>';
-    infoHtml += '<div class="macro-item"><span class="macro-value">2.5L</span><span class="macro-label">água</span></div>';
-    infoHtml += '</div>';
-    infoHtml += '<p style="font-size:0.8rem; opacity:0.7; margin-top:0.5rem;">TMB ~1.600kcal + atividade = superávit leve pra ganho muscular</p>';
-    infoHtml += '</div>';
-    html += infoHtml;
-
     switch (this.currentSubTab) {
       case 'plano':
         html += this.renderMealPlan();
+        break;
+      case 'suplementos':
+        html += this.renderSupplements();
         break;
       case 'receitas':
         html += this.currentRecipe ? this.renderRecipeDetail() : this.renderRecipeGrid();
@@ -2466,9 +2456,10 @@ const NutritionManager = {
 
   renderSubTabs() {
     var tabs = [
-      { id: 'plano', label: '\uD83C\uDF7D\uFE0F Plano do Dia' },
+      { id: 'plano', label: '\uD83C\uDF7D\uFE0F Plano' },
+      { id: 'suplementos', label: '\uD83D\uDC8A Suplem.' },
       { id: 'receitas', label: '\uD83D\uDCD6 Receitas' },
-      { id: 'compras', label: '\uD83D\uDED2 Lista de Compras' }
+      { id: 'compras', label: '\uD83D\uDED2 Compras' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
@@ -2480,11 +2471,14 @@ const NutritionManager = {
     return html;
   },
 
-  // ── Sub-tab 1: Plano do Dia ────────────────────────────────
+  // ── Sub-tab 1: Plano do Dia (MEAL_OPTIONS) ─────────────────
 
-  getMealPlanType() {
-    var day = new Date().getDay(); // 0=Sun, 6=Sat
-    return (day === 0 || day === 6) ? 'descanso' : 'treino';
+  getMealChoice(mealId) {
+    return StorageManager.getValue('mealChoice_' + mealId, 0);
+  },
+
+  setMealChoice(mealId, index) {
+    StorageManager.setValue('mealChoice_' + mealId, index);
   },
 
   getMealLogData() {
@@ -2495,47 +2489,44 @@ const NutritionManager = {
     StorageManager.setForDate('nutrition', data);
   },
 
-  getMealPrefs() {
-    var dateStr = new Date().toISOString().slice(0, 10);
-    return StorageManager.getValue('mealPrefs_' + dateStr, {});
-  },
-
-  setMealPref(mealIndex, option) {
-    var dateStr = new Date().toISOString().slice(0, 10);
-    var prefs = this.getMealPrefs();
-    prefs[mealIndex] = option;
-    StorageManager.setValue('mealPrefs_' + dateStr, prefs);
+  calculateDailyTotals() {
+    var totals = { kcal: 0, prot: 0, carb: 0, fat: 0 };
+    var self = this;
+    this.mealIds.forEach(function(mealId) {
+      var meal = MEAL_OPTIONS[mealId];
+      if (!meal) return;
+      var choiceIdx = self.getMealChoice(mealId);
+      var opt = meal.options[choiceIdx] || meal.options[0];
+      totals.kcal += opt.kcal;
+      totals.prot += opt.prot;
+      totals.carb += opt.carb;
+      totals.fat += opt.fat;
+    });
+    return totals;
   },
 
   calculateProtein(loggedMeals) {
-    var planType = this.getMealPlanType();
-    var meals = MEALS[planType].meals;
-    var prefs = this.getMealPrefs();
+    var self = this;
     var total = 0;
-    meals.forEach(function(meal, index) {
-      var mealKey = 'meal_' + index;
-      if (loggedMeals[mealKey]) {
-        var selected = prefs[index] || 'A';
-        var option = selected === 'B' ? meal.optionB : meal.optionA;
-        total += NutritionManager.extractProtein(option.macros);
+    this.mealIds.forEach(function(mealId) {
+      if (loggedMeals[mealId]) {
+        var meal = MEAL_OPTIONS[mealId];
+        if (!meal) return;
+        var choiceIdx = self.getMealChoice(mealId);
+        var opt = meal.options[choiceIdx] || meal.options[0];
+        total += opt.prot;
       }
     });
     return total;
   },
 
-  extractProtein(macroStr) {
-    var match = macroStr.match(/(\d+)g\s*prot/);
-    return match ? parseInt(match[1], 10) : 0;
-  },
-
   renderMealPlan() {
-    var planType = this.getMealPlanType();
-    var plan = MEALS[planType];
     var logData = this.getMealLogData();
     var loggedMeals = logData.meals || {};
     var proteinConsumed = this.calculateProtein(loggedMeals);
-    var proteinTarget = planType === 'treino' ? 170 : 160;
+    var proteinTarget = 170;
     var proteinPct = Math.min(100, Math.round((proteinConsumed / proteinTarget) * 100));
+    var totals = this.calculateDailyTotals();
 
     var html = '';
 
@@ -2547,14 +2538,25 @@ const NutritionManager = {
       html += '</div>';
     } else if (day === 0) {
       html += '<div class="card glass" style="text-align:center; margin-bottom: 12px;">';
-      html += '<span style="font-size:1.1rem;">\uD83D\uDE34 Dia de descanso \u2014 calorias um pouco menores (~2.100-2.200)</span>';
+      html += '<span style="font-size:1.1rem;">\uD83D\uDE34 Dia de descanso \u2014 calorias um pouco menores</span>';
       html += '</div>';
     }
+
+    // Daily totals card (sum of selected options)
+    html += '<div class="card glass" style="text-align:center; padding:12px; margin-bottom:8px;">';
+    html += '<h3 style="margin:0 0 8px;">\uD83D\uDCCA Totais do Dia (op\u00E7\u00F5es selecionadas)</h3>';
+    html += '<div class="nutrition-macros">';
+    html += '<div class="macro-item"><span class="macro-value">' + totals.kcal + '</span><span class="macro-label">kcal</span></div>';
+    html += '<div class="macro-item"><span class="macro-value">' + totals.prot + 'g</span><span class="macro-label">prot</span></div>';
+    html += '<div class="macro-item"><span class="macro-value">' + totals.carb + 'g</span><span class="macro-label">carb</span></div>';
+    html += '<div class="macro-item"><span class="macro-value">' + totals.fat + 'g</span><span class="macro-label">gord</span></div>';
+    html += '</div>';
+    html += '</div>';
 
     // Protein counter
     html += '<div class="card glass protein-counter">';
     html += '  <div class="progress-label" style="margin-bottom:6px;">';
-    html += '    <span>\uD83D\uDCAA Prote\u00EDna: ' + proteinConsumed + 'g / ' + proteinTarget + 'g</span>';
+    html += '    <span>\uD83D\uDCAA Prote\u00EDna consumida: ' + proteinConsumed + 'g / ' + proteinTarget + 'g</span>';
     html += '    <span>' + proteinPct + '%</span>';
     html += '  </div>';
     html += '  <div class="progress-bar-wrapper progress-bar-lg">';
@@ -2562,52 +2564,119 @@ const NutritionManager = {
     html += '  </div>';
     html += '</div>';
 
-    // Summary macros card
-    html += '<div class="card glass" style="text-align:center; padding:12px;">';
-    if (planType === 'treino') {
-      html += '<span style="font-size:0.85rem; opacity:0.85;">\uD83D\uDCCA Meta di\u00E1ria: ~2.400 kcal | 170g prot | 250g carb | 70g gord</span>';
-    } else {
-      html += '<span style="font-size:0.85rem; opacity:0.85;">\uD83D\uDCCA Meta di\u00E1ria: ~2.150 kcal | 160g prot | 220g carb | 65g gord</span>';
-    }
-    html += '</div>';
-
-    // Meal cards
-    var meals = plan.meals;
-    var mealPrefs = this.getMealPrefs();
-    for (var i = 0; i < meals.length; i++) {
-      var meal = meals[i];
-      var mealKey = 'meal_' + i;
-      var isLogged = !!loggedMeals[mealKey];
-      var selectedOpt = mealPrefs[i] || 'A';
-      var option = selectedOpt === 'B' ? meal.optionB : meal.optionA;
-      var toggleLabel = selectedOpt === 'A' ? '\uD83D\uDD04 Op\u00E7\u00E3o B' : '\uD83D\uDD04 Op\u00E7\u00E3o A';
+    // Meal cards from MEAL_OPTIONS
+    var self = this;
+    this.mealIds.forEach(function(mealId) {
+      var meal = MEAL_OPTIONS[mealId];
+      if (!meal) return;
+      var choiceIdx = self.getMealChoice(mealId);
+      var opt = meal.options[choiceIdx] || meal.options[0];
+      var isLogged = !!loggedMeals[mealId];
+      var emoji = self.mealEmojis[mealId] || '\uD83C\uDF7D';
 
       html += '<div class="card glass meal-card">';
-      html += '  <div class="meal-header">';
-      html += '    <span class="meal-emoji">' + meal.emoji + '</span>';
-      html += '    <div class="meal-header-info">';
-      html += '      <strong>' + meal.name + '</strong>';
-      html += '      <span class="meal-time">' + meal.time + '</span>';
-      html += '    </div>';
-      html += '    <button class="btn btn-sm ' + (isLogged ? 'btn-primary' : 'btn-outline') + ' meal-log-btn" data-meal="' + mealKey + '">';
+
+      // Header
+      html += '<div class="meal-header">';
+      html += '  <span class="meal-emoji">' + emoji + '</span>';
+      html += '  <div class="meal-header-info">';
+      html += '    <strong>' + meal.label + '</strong>';
+      html += '    <span class="meal-time">' + meal.time + '</span>';
+      html += '  </div>';
+      html += '  <button class="btn btn-sm ' + (isLogged ? 'btn-primary' : 'btn-outline') + ' meal-log-btn" data-meal="' + mealId + '">';
       html += isLogged ? '\u2705 Comi' : 'Comi \u2713';
-      html += '    </button>';
-      html += '  </div>';
-      html += '  <div class="meal-options">';
-      html += '    <div class="meal-option">';
-      html += '      <strong>Op\u00E7\u00E3o ' + selectedOpt + ': ' + option.name + '</strong>';
-      html += '      <div style="margin-top:4px; font-size:0.85rem; opacity:0.85;">' + option.description + '</div>';
-      html += '      <span class="meal-macros">' + option.macros + '</span>';
-      html += '    </div>';
-      html += '  </div>';
-      html += '  <button class="btn btn-sm btn-ghost meal-toggle-btn" data-meal-index="' + i + '" data-current="' + selectedOpt + '">' + toggleLabel + '</button>';
+      html += '  </button>';
+      html += '</div>';
+
+      // 3 option buttons
+      html += '<div style="display:flex; gap:6px; margin:8px 0;">';
+      for (var oi = 0; oi < meal.options.length; oi++) {
+        var o = meal.options[oi];
+        var isActive = oi === choiceIdx;
+        var femPrefix = o.fem ? '\uD83C\uDF3F ' : '';
+        html += '<button class="btn btn-sm ' + (isActive ? 'btn-primary' : 'btn-outline') + ' meal-opt-btn" ';
+        html += 'data-meal-id="' + mealId + '" data-opt-index="' + oi + '" style="flex:1; font-size:0.75rem; padding:6px 4px;">';
+        html += femPrefix + 'Op\u00E7\u00E3o ' + (oi + 1);
+        html += '</button>';
+      }
+      html += '</div>';
+
+      // Selected option details
+      html += '<div class="meal-option">';
+      var femTag = opt.fem ? ' <span style="background:rgba(76,175,80,0.2); color:#81C784; padding:2px 6px; border-radius:8px; font-size:0.7rem;">\uD83C\uDF3F fem</span>' : '';
+      html += '<strong>' + opt.name + femTag + '</strong>';
+      html += '<div class="meal-macros" style="margin:4px 0; font-size:0.8rem; opacity:0.85;">';
+      html += opt.kcal + ' kcal \u00B7 ' + opt.prot + 'g prot \u00B7 ' + opt.carb + 'g carb \u00B7 ' + opt.fat + 'g gord';
+      html += '</div>';
+
+      // Ingredients
+      html += '<div style="margin-top:8px; font-size:0.8rem;">';
+      html += '<strong>Ingredientes:</strong><ul style="margin:4px 0 0 16px; padding:0;">';
+      for (var ii = 0; ii < opt.ingredients.length; ii++) {
+        var ing = opt.ingredients[ii];
+        html += '<li>' + ing[0] + ' \u2014 ' + ing[1] + '</li>';
+      }
+      html += '</ul></div>';
+
+      // Prep steps
+      if (opt.prep && opt.prep.length > 0) {
+        html += '<div style="margin-top:8px; font-size:0.8rem;">';
+        html += '<strong>Preparo:</strong><ol style="margin:4px 0 0 16px; padding:0;">';
+        for (var pi = 0; pi < opt.prep.length; pi++) {
+          html += '<li style="margin-bottom:4px;">' + opt.prep[pi] + '</li>';
+        }
+        html += '</ol></div>';
+      }
+
+      html += '</div>'; // .meal-option
+
+      // Feminizacao note
+      if (meal.feminizacao) {
+        html += '<div style="margin-top:8px; padding:8px; background:rgba(76,175,80,0.1); border-radius:8px; font-size:0.78rem;">';
+        html += '\uD83C\uDF3F ' + meal.feminizacao;
+        html += '</div>';
+      }
+
+      html += '</div>'; // .meal-card
+    });
+
+    return html;
+  },
+
+  // ── Sub-tab 2: Suplementos ─────────────────────────────────
+
+  renderSupplements() {
+    var html = '';
+
+    // Header disclaimer
+    html += '<div class="card glass" style="padding:12px; margin-bottom:12px; font-size:0.82rem; border-left:3px solid #FFA726;">';
+    html += '<strong>\u26A0\uFE0F Aviso:</strong> Qualquer coisa hormonal real (progesterona, estradiol) precisa de m\u00E9dico. ';
+    html += 'O que est\u00E1 abaixo \u00E9 seguro, sem receita e sem impacto no desempenho \u00EDntimo.';
+    html += '</div>';
+
+    // Supplement cards
+    for (var i = 0; i < SUPPLEMENTS.length; i++) {
+      var s = SUPPLEMENTS[i];
+      html += '<div class="card glass" style="padding:14px; margin-bottom:10px;">';
+      html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">';
+      html += '<strong style="font-size:1rem;">\uD83D\uDC8A ' + s.name + '</strong>';
+      // Evidence badge
+      var evColor = s.evidence === 'Alta' ? '#4CAF50' : '#FFA726';
+      html += '<span style="background:' + evColor + '22; color:' + evColor + '; padding:2px 8px; border-radius:10px; font-size:0.7rem;">' + s.evidence + '</span>';
+      html += '</div>';
+
+      html += '<div style="font-size:0.85rem; margin-bottom:4px;"><strong>Dose:</strong> ' + s.dose + '</div>';
+      html += '<div style="font-size:0.85rem; margin-bottom:4px;"><strong>Quando:</strong> ' + s.when + '</div>';
+      html += '<div style="font-size:0.85rem; margin-bottom:4px; opacity:0.85;">' + s.note + '</div>';
+      html += '<div style="font-size:0.78rem; opacity:0.7;">\uD83D\uDD12 \u00CDntimo: ' + s.intimate + '</div>';
+
       html += '</div>';
     }
 
     return html;
   },
 
-  // ── Sub-tab 2: Receitas ────────────────────────────────────
+  // ── Sub-tab 3: Receitas ────────────────────────────────────
 
   renderRecipeGrid() {
     var html = '<div class="recipe-grid">';
@@ -2708,7 +2777,7 @@ const NutritionManager = {
     this.render();
   },
 
-  // ── Sub-tab 3: Lista de Compras ────────────────────────────
+  // ── Sub-tab 4: Lista de Compras (SHOPPING_LIST_NEW) ────────
 
   getShoppingData() {
     return StorageManager.getValue('shoppingList', {});
@@ -2720,37 +2789,54 @@ const NutritionManager = {
 
   renderShoppingList() {
     var checkedItems = this.getShoppingData();
-    var categories = Object.keys(SHOPPING_LIST);
+    var categories = Object.keys(SHOPPING_LIST_NEW);
     var html = '';
 
-    categories.forEach(function(catKey) {
-      var cat = SHOPPING_LIST[catKey];
-      html += '<h3 style="margin-top:16px; margin-bottom:8px;">' + cat.emoji + ' ' + cat.label + '</h3>';
+    // Action buttons
+    html += '<div style="display:flex; gap:8px; margin-bottom:12px;">';
+    html += '<button class="btn btn-sm btn-primary shopping-copy-btn" style="flex:1;">\uD83D\uDCCB Copiar lista</button>';
+    html += '<button class="btn btn-sm btn-outline shopping-reset-btn" style="flex:1;">Resetar \u21BA</button>';
+    html += '</div>';
 
-      cat.items.forEach(function(item) {
-        var itemKey = catKey + '_' + item.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    for (var c = 0; c < categories.length; c++) {
+      var catKey = categories[c];
+      var items = SHOPPING_LIST_NEW[catKey];
+      var catLabel = catKey.replace(/_/g, ' ');
+      catLabel = catLabel.charAt(0).toUpperCase() + catLabel.slice(1);
+
+      html += '<h3 style="margin-top:16px; margin-bottom:8px;">' + catLabel + '</h3>';
+
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var itemKey = catKey + '_' + i;
         var isChecked = !!checkedItems[itemKey];
 
         html += '<label class="checkbox-wrapper">';
         html += '  <input type="checkbox" class="shopping-checkbox" data-item="' + itemKey + '"' + (isChecked ? ' checked' : '') + '>';
         html += '  <span class="checkbox-custom"></span>';
-        html += '  <span class="checkbox-label">' + item.quantity + ' ' + item.name + ' \u2014 ' + item.price + '</span>';
+        html += '  <span class="checkbox-label' + (isChecked ? ' checked-label' : '') + '">' + item.item + ' \u2014 ' + item.qty + '</span>';
         html += '</label>';
-      });
-    });
-
-    // Total estimate
-    html += '<div class="card glass" style="text-align:center; margin-top:20px;">';
-    html += '  <strong>Custo semanal estimado: R$180-250</strong>';
-    html += '  <p style="opacity:0.6; font-size:0.8rem; margin-top:4px;">Sem contar whey e itens que duram mais de 1 semana</p>';
-    html += '</div>';
-
-    // Reset button
-    html += '<button class="btn btn-block btn-outline shopping-reset-btn" style="margin-top:12px;">';
-    html += '  Limpar lista \u21BA';
-    html += '</button>';
+      }
+    }
 
     return html;
+  },
+
+  copyShoppingList() {
+    var text = '\uD83D\uDED2 Lista de Compras Semanal\n\n';
+    var categories = Object.keys(SHOPPING_LIST_NEW);
+    for (var c = 0; c < categories.length; c++) {
+      var cat = categories[c];
+      text += cat.replace(/_/g, ' ').toUpperCase() + ':\n';
+      var items = SHOPPING_LIST_NEW[cat];
+      for (var i = 0; i < items.length; i++) {
+        text += '  \u25A1 ' + items[i].item + ' \u2014 ' + items[i].qty + '\n';
+      }
+      text += '\n';
+    }
+    navigator.clipboard.writeText(text).then(function() {
+      Toast.show('Lista copiada! Cola no WhatsApp \uD83D\uDCCB', 'success');
+    });
   },
 
   resetShoppingList() {
