@@ -3996,6 +3996,7 @@ const ProgressManager = {
   startingWeight: 96,
   goalWeight: 74,
   compareMode: false,
+  projectionData: null,
 
   // ── Lifecycle ──────────────────────────────────────────────
 
@@ -4033,6 +4034,11 @@ const ProgressManager = {
           if (confirm('Apagar todas as fotos de ' + Utils.formatDateBR(date) + '?')) {
             self.deletePhotosForDate(date);
           }
+          return;
+        }
+        // Projection button
+        if (e.target.closest('.proj-btn')) {
+          self.handleProjection();
           return;
         }
         // Delete measurement
@@ -4093,6 +4099,9 @@ const ProgressManager = {
       case 'conquistas':
         html += this.renderBadges();
         break;
+      case 'projecao':
+        html += this.renderProjection();
+        break;
     }
 
     container.innerHTML = html;
@@ -4112,7 +4121,8 @@ const ProgressManager = {
       { id: 'fotos', label: '\uD83D\uDCF8 Fotos' },
       { id: 'medidas', label: '\uD83D\uDCCF Medidas' },
       { id: 'graficos', label: '\uD83D\uDCC8 Gr\u00e1ficos' },
-      { id: 'conquistas', label: '\uD83C\uDFC6 Conquistas' }
+      { id: 'conquistas', label: '\uD83C\uDFC6 Conquistas' },
+      { id: 'projecao', label: '\u2728 Proje\u00e7\u00e3o' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
@@ -4713,6 +4723,249 @@ const ProgressManager = {
     } else {
       ratioDiv.innerHTML = '';
     }
+  },
+
+  // ── Sub-tab 5: Proje\u00e7\u00e3o Corporal ─────────────────────────
+
+  renderProjection: function() {
+    var html = '';
+
+    html += '<div class="card glass">';
+    html += '<h3>\u2728 Proje\u00e7\u00e3o Corporal</h3>';
+    html += '<p style="opacity:0.7;">Insira suas medidas atuais para projetar sua transforma\u00e7\u00e3o</p>';
+
+    var fields = [
+      { id: 'proj-peso', label: 'Peso', unit: 'kg', hint: 'Na balan\u00e7a, de manh\u00e3, em jejum', def: 96 },
+      { id: 'proj-altura', label: 'Altura', unit: 'cm', hint: 'Descal\u00e7a, encostada na parede', def: 173 },
+      { id: 'proj-cintura', label: 'Cintura', unit: 'cm', hint: 'No ponto mais fino do tronco', def: 90 },
+      { id: 'proj-quadril', label: 'Quadril', unit: 'cm', hint: 'No ponto mais largo dos gl\u00fateos', def: 105 },
+      { id: 'proj-coxa', label: 'Coxa', unit: 'cm', hint: 'No meio da coxa, perna relaxada', def: 62 },
+      { id: 'proj-busto', label: 'Busto', unit: 'cm', hint: 'Na linha do mamilo, sem apertar', def: 100 }
+    ];
+
+    html += '<div class="proj-form">';
+    fields.forEach(function(f) {
+      var val = f.def;
+      html += '<div class="proj-field">';
+      html += '<div class="proj-field-label">' + f.label + ' (' + f.unit + ')</div>';
+      html += '<div class="proj-field-hint">' + f.hint + '</div>';
+      html += '<input type="number" step="0.1" id="' + f.id + '" value="' + val + '">';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    html += '<div style="text-align:center; margin-top:10px;">';
+    html += '<button class="proj-btn">Projetar resultado</button>';
+    html += '</div>';
+    html += '</div>';
+
+    // Results area
+    html += '<div id="proj-results">';
+    if (this.projectionData) {
+      html += this.renderProjectionResults(this.projectionData);
+    }
+    html += '</div>';
+
+    return html;
+  },
+
+  handleProjection: function() {
+    var peso = parseFloat(document.getElementById('proj-peso').value) || 96;
+    var altura = parseFloat(document.getElementById('proj-altura').value) || 173;
+    var cintura = parseFloat(document.getElementById('proj-cintura').value) || 90;
+    var quadril = parseFloat(document.getElementById('proj-quadril').value) || 105;
+    var coxa = parseFloat(document.getElementById('proj-coxa').value) || 62;
+    var busto = parseFloat(document.getElementById('proj-busto').value) || 100;
+
+    var baseline = { peso: peso, altura: altura, cintura: cintura, quadril: quadril, coxa: coxa, busto: busto };
+    this.projectionData = baseline;
+
+    var resultsDiv = document.getElementById('proj-results');
+    if (resultsDiv) {
+      resultsDiv.innerHTML = this.renderProjectionResults(baseline);
+    }
+  },
+
+  projectMeasurements: function(baseline, months) {
+    return {
+      peso: Math.round((baseline.peso + PROJECTION_RATES.peso * months) * 10) / 10,
+      cintura: Math.round((baseline.cintura + PROJECTION_RATES.cintura * months) * 10) / 10,
+      quadril: Math.round((baseline.quadril + PROJECTION_RATES.quadril * months) * 10) / 10,
+      coxa: Math.round((baseline.coxa + PROJECTION_RATES.coxa * months) * 10) / 10,
+      busto: Math.round((baseline.busto + PROJECTION_RATES.busto * months) * 10) / 10,
+    };
+  },
+
+  calculateGoalMonths: function(baseline) {
+    var targetWHR = 0.75;
+    var curWHR = baseline.cintura / baseline.quadril;
+    var moWHR = curWHR <= targetWHR ? 0 : Math.ceil((baseline.cintura - targetWHR * baseline.quadril) / (Math.abs(PROJECTION_RATES.cintura) + targetWHR * PROJECTION_RATES.quadril));
+    var moHip = baseline.quadril >= 105 ? 0 : Math.ceil((105 - baseline.quadril) / PROJECTION_RATES.quadril);
+    return Math.max(moWHR, moHip, 6);
+  },
+
+  generateSilhouettePath: function(measurements, cx) {
+    var s = 0.62;
+    var hw = (measurements.quadril / 2) * s;
+    var ww = (measurements.cintura / 2) * s * 0.98;
+    var sw = hw * 0.84;
+    var tw = (measurements.coxa / 2) * s * 0.88;
+    var bw = (measurements.busto / 2) * s * 0.87;
+    var y0=22,y1=58,y2=98,y3=132,y4=172,y5=212,y6=278;
+    return 'M' + cx + ' ' + y0 +
+      'C' + (cx+sw*0.5) + ' ' + y0 + ' ' + (cx+sw) + ' ' + (y0+14) + ' ' + (cx+sw) + ' ' + (y0+20) +
+      'C' + (cx+sw+2) + ' ' + (y0+30) + ' ' + (cx+bw) + ' ' + (y1-4) + ' ' + (cx+bw) + ' ' + (y1+5) +
+      'C' + (cx+bw) + ' ' + (y1+22) + ' ' + (cx+ww+4) + ' ' + (y2-14) + ' ' + (cx+ww) + ' ' + y2 +
+      'C' + (cx+ww-2) + ' ' + (y2+22) + ' ' + (cx+hw) + ' ' + (y3-18) + ' ' + (cx+hw) + ' ' + y3 +
+      'C' + (cx+hw) + ' ' + (y3+26) + ' ' + (cx+tw+4) + ' ' + (y4-14) + ' ' + (cx+tw) + ' ' + y4 +
+      'C' + (cx+tw) + ' ' + (y4+20) + ' ' + (cx+tw*0.72) + ' ' + (y5-10) + ' ' + (cx+tw*0.68) + ' ' + y5 +
+      'C' + (cx+tw*0.62) + ' ' + (y5+22) + ' ' + (cx+tw*0.4) + ' ' + (y6-22) + ' ' + (cx+tw*0.38) + ' ' + y6 +
+      'L' + (cx-tw*0.38) + ' ' + y6 +
+      'C' + (cx-tw*0.4) + ' ' + (y6-22) + ' ' + (cx-tw*0.62) + ' ' + (y5+22) + ' ' + (cx-tw*0.68) + ' ' + y5 +
+      'C' + (cx-tw*0.72) + ' ' + (y5-10) + ' ' + (cx-tw) + ' ' + (y4+20) + ' ' + (cx-tw) + ' ' + y4 +
+      'C' + (cx-tw-4) + ' ' + (y4-14) + ' ' + (cx-hw) + ' ' + (y3+26) + ' ' + (cx-hw) + ' ' + y3 +
+      'C' + (cx-hw) + ' ' + (y3-18) + ' ' + (cx-ww+2) + ' ' + (y2+22) + ' ' + (cx-ww) + ' ' + y2 +
+      'C' + (cx-ww-4) + ' ' + (y2-14) + ' ' + (cx-bw) + ' ' + (y1+22) + ' ' + (cx-bw) + ' ' + (y1+5) +
+      'C' + (cx-bw) + ' ' + (y1-4) + ' ' + (cx-sw-2) + ' ' + (y0+30) + ' ' + (cx-sw) + ' ' + (y0+20) +
+      'C' + (cx-sw) + ' ' + (y0+14) + ' ' + (cx-sw*0.5) + ' ' + y0 + ' ' + cx + ' ' + y0 + 'Z';
+  },
+
+  renderProjectionResults: function(baseline) {
+    var self = this;
+    var projected12 = this.projectMeasurements(baseline, 12);
+    var goalMonths = this.calculateGoalMonths(baseline);
+    var curWHR = (baseline.cintura / baseline.quadril).toFixed(2);
+    var futWHR = (projected12.cintura / projected12.quadril).toFixed(2);
+
+    var html = '';
+
+    // ── Comparison grid ──
+    html += '<div class="card glass">';
+    html += '<h3>Hoje vs 12 meses</h3>';
+    html += '<div class="proj-comparison">';
+
+    var comparisons = [
+      { label: 'Peso', unit: 'kg', cur: baseline.peso, fut: projected12.peso },
+      { label: 'Cintura', unit: 'cm', cur: baseline.cintura, fut: projected12.cintura },
+      { label: 'Quadril', unit: 'cm', cur: baseline.quadril, fut: projected12.quadril },
+      { label: 'Coxa', unit: 'cm', cur: baseline.coxa, fut: projected12.coxa },
+      { label: 'Busto', unit: 'cm', cur: baseline.busto, fut: projected12.busto },
+      { label: 'C/Q Ratio', unit: '', cur: parseFloat(curWHR), fut: parseFloat(futWHR) }
+    ];
+
+    comparisons.forEach(function(c) {
+      var delta = c.fut - c.cur;
+      var deltaStr = (delta >= 0 ? '+' : '') + delta.toFixed(1);
+      var deltaColor;
+      // For waist/weight, decrease is good; for hip/thigh/bust, increase is good
+      if (c.label === 'Cintura' || c.label === 'Peso') {
+        deltaColor = delta < 0 ? 'var(--success)' : 'var(--danger)';
+      } else if (c.label === 'Quadril' || c.label === 'Coxa' || c.label === 'Busto') {
+        deltaColor = delta > 0 ? 'var(--success)' : 'var(--danger)';
+      } else if (c.label === 'C/Q Ratio') {
+        deltaColor = delta < 0 ? 'var(--success)' : 'var(--danger)';
+      } else {
+        deltaColor = 'var(--text-muted)';
+      }
+
+      html += '<div class="proj-comp-card">';
+      html += '<div class="proj-comp-label">' + c.label + '</div>';
+      html += '<div style="display:flex; justify-content:space-between; align-items:baseline;">';
+      html += '<span style="color:var(--accent); font-weight:600;">' + c.cur.toFixed(1) + (c.unit ? c.unit : '') + '</span>';
+      html += '<span style="opacity:0.5;">\u2192</span>';
+      html += '<span style="color:var(--primary); font-weight:600;">' + c.fut.toFixed(1) + (c.unit ? c.unit : '') + '</span>';
+      html += '</div>';
+      html += '<div style="text-align:right; font-size:0.78rem; color:' + deltaColor + '; font-weight:600;">' + deltaStr + (c.unit ? c.unit : '') + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div>';
+    html += '</div>';
+
+    // ── SVG Silhouettes ──
+    html += '<div class="card glass" style="text-align:center;">';
+    html += '<h3>Silhueta Projetada</h3>';
+    html += '<svg viewBox="0 0 280 310" style="max-width:100%; height:auto;">';
+
+    // Left silhouette — HOJE (gold)
+    var pathNow = this.generateSilhouettePath(baseline, 80);
+    html += '<path d="' + pathNow + '" fill="rgba(212,168,83,0.25)" stroke="var(--accent)" stroke-width="1.5"/>';
+    html += '<text x="80" y="14" text-anchor="middle" fill="var(--accent)" font-size="11" font-weight="600">HOJE</text>';
+    html += '<text x="80" y="296" text-anchor="middle" fill="var(--accent)" font-size="9">C/Q ' + curWHR + '</text>';
+
+    // Right silhouette — 12 MESES (rose)
+    var pathFut = this.generateSilhouettePath(projected12, 200);
+    html += '<path d="' + pathFut + '" fill="rgba(201,123,181,0.25)" stroke="var(--primary)" stroke-width="1.5"/>';
+    html += '<text x="200" y="14" text-anchor="middle" fill="var(--primary)" font-size="11" font-weight="600">12 MESES</text>';
+    html += '<text x="200" y="296" text-anchor="middle" fill="var(--primary)" font-size="9">C/Q ' + futWHR + '</text>';
+
+    html += '</svg>';
+    html += '</div>';
+
+    // ── Timeline milestones ──
+    html += '<div class="card glass">';
+    html += '<h3>Timeline de Transforma\u00e7\u00e3o</h3>';
+
+    var milestones = [3, 6, 12, 18];
+    var descriptions = {
+      3: 'Primeiros resultados vis\u00edveis. Postura melhorada, gl\u00fateo come\u00e7ando a ativar.',
+      6: 'Cintura mais definida, quadril ganhando volume. Roupas come\u00e7am a cair diferente.',
+      12: 'Transforma\u00e7\u00e3o completa de silhueta. Curvas marcadas, confian\u00e7a no auge.',
+      18: 'Corpo consolidado. Manuten\u00e7\u00e3o e refinamento. Amazona mode ativado.'
+    };
+
+    milestones.forEach(function(m) {
+      var proj = self.projectMeasurements(baseline, m);
+      var whr = (proj.cintura / proj.quadril).toFixed(2);
+      html += '<div class="proj-milestone">';
+      html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">';
+      html += '<span style="color:var(--primary); font-weight:700; font-size:1.1rem;">' + m + ' meses</span>';
+      html += '<span style="color:var(--text-muted); font-size:0.78rem;">C/Q ' + whr + '</span>';
+      html += '</div>';
+      html += '<div style="display:flex; gap:10px; flex-wrap:wrap; font-size:0.82rem; margin-bottom:6px;">';
+      html += '<span style="color:var(--accent);">' + proj.peso + 'kg</span>';
+      html += '<span>Cintura ' + proj.cintura + '</span>';
+      html += '<span>Quadril ' + proj.quadril + '</span>';
+      html += '<span>Coxa ' + proj.coxa + '</span>';
+      html += '</div>';
+      html += '<p style="opacity:0.7; font-size:0.8rem; margin:0;">' + descriptions[m] + '</p>';
+      html += '</div>';
+    });
+
+    html += '</div>';
+
+    // ── "Quando chego na amazona?" ──
+    html += '<div class="card glass" style="text-align:center;">';
+    html += '<h3>Quando chego na Amazona?</h3>';
+    html += '<div class="proj-goal-number">' + goalMonths + '</div>';
+    html += '<p style="color:var(--primary); font-weight:600; margin-top:0;">meses</p>';
+    html += '<div style="text-align:left; font-size:0.8rem; opacity:0.75; margin-top:10px;">';
+    html += '<p><strong>Crit\u00e9rios:</strong></p>';
+    html += '<p>\u2022 Raz\u00e3o cintura/quadril \u2264 0.75</p>';
+    html += '<p>\u2022 Quadril \u2265 105 cm</p>';
+    html += '<p>\u2022 M\u00ednimo 6 meses de consist\u00eancia</p>';
+    html += '</div>';
+    html += '</div>';
+
+    // ── Como acelerar ──
+    html += '<div class="card glass">';
+    html += '<h3>Como Acelerar</h3>';
+    var tips = [
+      'Treinar gl\u00fateos 3\u20134x/semana com sobrecarga progressiva',
+      'Priorizar prote\u00edna (1.6\u20132g/kg) em todas as refei\u00e7\u00f5es',
+      'Vacuum abdominal di\u00e1rio (3\u00d730s) para afinar cintura',
+      'Dormir 7\u20138h \u2014 m\u00fasculo cresce no descanso',
+      'Manter d\u00e9ficit cal\u00f3rico leve (\u2013300 a \u2013500 kcal) para perder gordura sem perder m\u00fasculo',
+      'Registrar medidas a cada 15 dias para ajustar o plano'
+    ];
+    html += '<ul style="margin:0; padding-left:18px;">';
+    tips.forEach(function(t) {
+      html += '<li style="margin-bottom:6px; font-size:0.84rem; line-height:1.5;">' + t + '</li>';
+    });
+    html += '</ul>';
+    html += '</div>';
+
+    return html;
   },
 
   // Event listeners are now handled via delegation in init()
