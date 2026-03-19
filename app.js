@@ -3127,6 +3127,7 @@ const NutritionManager = {
 
 const CareManager = {
   currentSubTab: 'skincare',
+  currentColorCat: 'cima',
   kegelTimerActive: false,
 
   // ── Lifecycle ──────────────────────────────────────────────
@@ -3151,6 +3152,16 @@ const CareManager = {
         // Kegel start button
         if (e.target.closest('#kegel-start-btn')) {
           self.startKegelTimer();
+          return;
+        }
+        // Color category buttons
+        var colorCatBtn = e.target.closest('.color-cat-btn');
+        if (colorCatBtn) {
+          var cat = colorCatBtn.dataset.cat;
+          if (cat && cat !== self.currentColorCat) {
+            self.currentColorCat = cat;
+            self.render();
+          }
           return;
         }
       });
@@ -3190,6 +3201,9 @@ const CareManager = {
       case 'kegel':
         html += this.renderKegel();
         break;
+      case 'cores':
+        html += this.renderCores();
+        break;
     }
 
     html += this.renderNightRoutine();
@@ -3204,7 +3218,8 @@ const CareManager = {
       { id: 'skincare', label: '\u2728 Skincare' },
       { id: 'cabelo', label: '\uD83D\uDC87 Cabelo' },
       { id: 'depilacao', label: '\uD83E\uDE92 Depila\u00E7\u00E3o' },
-      { id: 'kegel', label: '\uD83D\uDCAA Kegel' }
+      { id: 'kegel', label: '\uD83D\uDCAA Kegel' },
+      { id: 'cores', label: '\uD83D\uDC57 Cores' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
@@ -3221,18 +3236,54 @@ const CareManager = {
   renderSkincare() {
     var html = '';
 
+    // Pele parda note
+    html += '<div class="card glass">';
+    html += '<p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">';
+    html += '\u26A0\uFE0F <strong>Pele parda em Aracaju:</strong> hiperpigmenta\u00E7\u00E3o escurece f\u00E1cil. FPS todos os dias \u00E9 o passo mais importante.';
+    html += '</p>';
+    html += '</div>';
+
     // Morning routine
     html += this.renderSkincareRoutine(SKINCARE_ROUTINE.morning, false);
+
+    // Product recommendations for morning
+    html += this.renderSkincareProducts('Rosto Manh\u00E3', SKINCARE_PRODUCTS.rostoManha, '\uD83C\uDF24\uFE0F');
 
     // Night routine
     html += this.renderSkincareRoutine(SKINCARE_ROUTINE.night, true);
 
+    // Product recommendations for night
+    html += this.renderSkincareProducts('Rosto Noite', SKINCARE_PRODUCTS.rostoNoite, '\uD83C\uDF19');
+
     // Body care
     html += this.renderBodyCare();
+
+    // Product recommendations for body
+    html += this.renderSkincareProducts('Corpo', SKINCARE_PRODUCTS.corpo, '\uD83D\uDCAA');
 
     // Alerts
     html += this.renderSkincareAlerts();
 
+    return html;
+  },
+
+  renderSkincareProducts(title, products, emoji) {
+    var html = '<div class="card glass">';
+    html += '<h3>' + emoji + ' Produtos \u2014 ' + title + '</h3>';
+    html += '<div style="display:flex; flex-direction:column; gap:0.5rem;">';
+    products.forEach(function(p) {
+      html += '<div style="padding:0.5rem 0.6rem; background:rgba(255,255,255,0.04); border-radius:8px; border-left:3px solid var(--primary);">';
+      html += '<div style="font-size:0.88rem; font-weight:500; color:var(--text);">' + p.name + '</div>';
+      if (p.brand) {
+        html += '<div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">' + p.brand + '</div>';
+      }
+      if (p.price) {
+        html += '<div style="font-size:0.78rem; color:var(--primary-light); margin-top:2px; font-weight:500;">' + p.price + '</div>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
     return html;
   },
 
@@ -3336,7 +3387,13 @@ const CareManager = {
   renderHair() {
     var html = '';
 
-    // Hair care routine
+    // 7-step wash routine
+    html += this.renderHairWashRoutine();
+
+    // Product recommendations
+    html += this.renderHairProducts();
+
+    // Hair care routine (existing detailed routine)
     html += this.renderHairRoutine();
 
     // Hair growth timeline
@@ -3345,6 +3402,48 @@ const CareManager = {
     // Supplement card
     html += this.renderHairSupplement();
 
+    return html;
+  },
+
+  renderHairWashRoutine() {
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDEBF Rotina de Lavagem (7 Passos)</h3>';
+    html += '<div class="skincare-steps">';
+    HAIR_WASH_ROUTINE.forEach(function(step, index) {
+      html += '<div class="care-step">';
+      html += '<div class="step-number">' + (index + 1) + '</div>';
+      html += '<div class="step-content">';
+      html += '<p style="margin:0; font-size:0.9rem;">' + step + '</p>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<div class="care-alert" style="margin-top:0.75rem;">';
+    html += '<span>\uD83C\uDF19 Dormir com bonnet ou fronha de cetim protege os cachos e evita quebra.</span>';
+    html += '</div>';
+    html += '<div class="care-alert" style="margin-top:0.5rem;">';
+    html += '<span>\u2600\uFE0F Prote\u00E7\u00E3o solar capilar: use leave-in com filtro UV ou boné em dias de sol forte.</span>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+  },
+
+  renderHairProducts() {
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDECD\uFE0F Produtos Capilares</h3>';
+    html += '<div style="display:flex; flex-direction:column; gap:0.5rem;">';
+    HAIR_PRODUCTS.forEach(function(p, i) {
+      html += '<div style="padding:0.5rem 0.6rem; background:rgba(255,255,255,0.04); border-radius:8px; border-left:3px solid var(--primary); display:flex; align-items:center; gap:0.5rem;">';
+      html += '<div style="min-width:20px; font-size:0.8rem; color:var(--primary-light); font-weight:700;">' + (i + 1) + '</div>';
+      html += '<div style="flex:1;">';
+      html += '<div style="font-size:0.88rem; font-weight:500; color:var(--text);">' + p.name + '</div>';
+      html += '<div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">' + p.brand + '</div>';
+      html += '<div style="font-size:0.78rem; color:var(--primary-light); margin-top:2px; font-weight:500;">' + p.price + '</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
     return html;
   },
 
@@ -3597,6 +3696,9 @@ const CareManager = {
   renderKegel() {
     var html = '';
 
+    // Protocol types
+    html += this.renderKegelProtocolTypes();
+
     // Standard Kegel exercise
     html += this.renderKegelStandard();
 
@@ -3606,6 +3708,25 @@ const CareManager = {
     // Tips
     html += this.renderKegelTips();
 
+    return html;
+  },
+
+  renderKegelProtocolTypes() {
+    var html = '<div class="card glass">';
+    html += '<h3>\uD83D\uDCAA 3 Tipos de Kegel</h3>';
+    html += '<p style="font-size:0.8rem; color:var(--primary-light); margin-bottom:0.75rem;">\u23F1\uFE0F Resultado em 4\u20138 semanas consistentes: melhora de ere\u00E7\u00E3o, controle e intensidade.</p>';
+    html += '<div style="display:flex; flex-direction:column; gap:0.6rem;">';
+    KEGEL_PROTOCOL_TYPES.forEach(function(p) {
+      html += '<div style="padding:0.65rem 0.8rem; background:rgba(255,255,255,0.05); border-radius:10px; border-left:3px solid var(--primary);">';
+      html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">';
+      html += '<strong style="font-size:0.95rem; color:var(--text);">' + p.tipo + '</strong>';
+      html += '<span style="font-size:0.75rem; color:var(--primary-light); background:rgba(var(--primary-rgb,110,203,139),0.15); padding:2px 8px; border-radius:10px;">' + p.quando + '</span>';
+      html += '</div>';
+      html += '<p style="margin:0; font-size:0.85rem; color:var(--text-muted);">' + p.desc + '</p>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
     return html;
   },
 
@@ -3669,6 +3790,95 @@ const CareManager = {
     });
 
     html += '</div>'; // .kegel-tips-list
+    html += '</div>'; // .card
+    return html;
+  },
+
+  // ── Sub-tab 5: Cores ───────────────────────────────────────
+
+  renderCores() {
+    var self = this;
+    var cats = [
+      { id: 'cima', label: '\uD83D\uDC5A Parte de cima' },
+      { id: 'baixo', label: '\uD83D\uDC56 Parte de baixo' },
+      { id: 'intima', label: '\uD83D\uDEB1 \u00CDntima & Lingerie' }
+    ];
+
+    var html = '<div class="card glass">';
+
+    // Category buttons
+    html += '<div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">';
+    cats.forEach(function(cat) {
+      var activeClass = cat.id === self.currentColorCat ? ' active' : '';
+      html += '<button class="color-cat-btn' + activeClass + '" data-cat="' + cat.id + '">' + cat.label + '</button>';
+    });
+    html += '</div>';
+
+    var guide = COLOR_GUIDE[this.currentColorCat];
+    if (!guide) {
+      html += '</div>';
+      return html;
+    }
+
+    // Subtitle and tip
+    html += '<p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.4rem;">' + guide.subtitle + '</p>';
+    html += '<div class="care-alert" style="margin-bottom:1rem;">';
+    html += '<span>\uD83D\uDCA1 ' + guide.tip + '</span>';
+    html += '</div>';
+
+    // Best colors
+    html += '<h4 style="margin:0 0 0.5rem; font-size:0.9rem; color:var(--success);">\u2705 Melhores cores</h4>';
+    html += '<div class="color-grid">';
+    guide.best.forEach(function(c) {
+      html += '<div class="color-card">';
+      html += '<div class="color-swatch" style="background:' + c.hex + ';"></div>';
+      html += '<div class="color-card-info">';
+      html += '<div class="color-card-name">' + c.name + '</div>';
+      html += '<div class="color-card-why">' + c.why + '</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Combos
+    html += '<h4 style="margin:0 0 0.5rem; font-size:0.9rem; color:var(--primary-light);">\uD83C\uDFB6 Combina\u00E7\u00F5es prontas</h4>';
+    html += '<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">';
+    guide.combos.forEach(function(combo) {
+      html += '<div class="color-card">';
+      html += '<div class="color-combo">';
+      combo.swatches.forEach(function(hex) {
+        html += '<div style="background:' + hex + ';"></div>';
+      });
+      html += '</div>';
+      html += '<div class="color-card-info">';
+      html += '<div class="color-card-name">' + combo.name + '</div>';
+      html += '<div class="color-card-why">' + combo.desc + '</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Avoid colors
+    html += '<h4 style="margin:0 0 0.5rem; font-size:0.9rem; color:var(--danger, #ff6b6b);">\u26A0\uFE0F Usar com cuidado</h4>';
+    html += '<div class="color-grid color-avoid">';
+    guide.avoid.forEach(function(c) {
+      html += '<div class="color-card">';
+      html += '<div class="color-swatch" style="background:' + c.hex + ';"></div>';
+      html += '<div class="color-card-info">';
+      html += '<div class="color-card-name">' + c.name + '</div>';
+      html += '<div class="color-card-why">' + c.why + '</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Special note for lingerie
+    if (this.currentColorCat === 'intima') {
+      html += '<div class="care-alert" style="margin-top:0.5rem;">';
+      html += '<span>\uD83D\uDCA1 Nude caramelo \u00E9 o nude certo pra pele parda, n\u00E3o o rosado europeu.</span>';
+      html += '</div>';
+    }
+
     html += '</div>'; // .card
     return html;
   },
