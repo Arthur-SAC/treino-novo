@@ -3914,3 +3914,44 @@ const NIGHT_ROUTINE = {
     }
   ]
 };
+
+const DAILY_TIMELINE = {
+  treino: [
+    { id: "acordar", time: "6:00", label: "☀️ Acordar", icon: "☀️", items: ["Kegel matinal (3 tipos)", "1ª garrafinha de água (700ml)"] },
+    { id: "cafe", time: "7:00", label: "☕ Café da manhã", icon: "☕", type: "meal", mealId: "cafe", items: ["Suplementos: multivitamínico + (creatina e whey no shake)"] },
+    { id: "lanche1", time: "10:00", label: "🍎 Lanche manhã", icon: "🍎", type: "meal", mealId: "lanche1", items: ["Chá de spearmint — 1ª xícara 🌿"] },
+    { id: "almoco", time: "12:00", label: "🍽️ Almoço", icon: "🍽️", type: "meal", mealId: "almoco", items: ["Ômega-3 com a refeição (absorção melhor com gordura)"] },
+    { id: "pretreino", time: "16:00", label: "⚡ Pré-treino", icon: "⚡", type: "meal", mealId: "pretreino", items: ["Chá de spearmint — 2ª xícara 🌿", "Comer 45-60min antes do treino"] },
+    { id: "treino", time: "17:40", label: "💪 Treino", icon: "💪", type: "workout", items: ["Ativação glúteo esq (10min)", "Aquecimento", "Treino do dia", "Alongamento"] },
+    { id: "postreino", time: "19:00", label: "🐕 Pós-treino", icon: "🐕", items: ["Passeio com os cães (~25min — cardio leve)"] },
+    { id: "jantar", time: "20:00", label: "🌙 Jantar", icon: "🌙", type: "meal", mealId: "jantar", items: ["Vitamina D3+K2 com a refeição"] },
+    { id: "noturno", time: "22:00", label: "🌛 Noturno", icon: "🌛", type: "meal", mealId: "noturno", items: ["Skincare noite (passo a passo)", "Kegel noturno", "Meta: largar celular 22h, dormir 22:30", "Lembrete: luz azul + estímulo = sono ruim = cortisol alto"] },
+  ],
+  descanso: [
+    { id: "acordar", time: "6:00", label: "☀️ Acordar", icon: "☀️", items: ["Kegel matinal (3 tipos)", "1ª garrafinha de água (700ml)"] },
+    { id: "cafe", time: "7:00", label: "☕ Café da manhã", icon: "☕", type: "meal", mealId: "cafe", items: ["Suplementos: multivitamínico"] },
+    { id: "lanche1", time: "10:00", label: "🍎 Lanche manhã", icon: "🍎", type: "meal", mealId: "lanche1", items: ["Chá de spearmint — 1ª xícara 🌿"] },
+    { id: "almoco", time: "12:00", label: "🍽️ Almoço", icon: "🍽️", type: "meal", mealId: "almoco", items: ["Ômega-3 com a refeição"] },
+    { id: "lanche2", time: "16:00", label: "🍎 Lanche tarde", icon: "🍎", type: "meal", mealId: "pretreino", items: ["Chá de spearmint — 2ª xícara 🌿"] },
+    { id: "atividade", time: "17:40", label: "🚶 Atividade leve", icon: "🚶", items: ["Caminhada 25-30min ou protocolo ativação glúteo esq (10min)", "Yoga de quadril (20min)"] },
+    { id: "postreino", time: "19:00", label: "🐕 Passeio cães", icon: "🐕", items: ["Passeio com os cães (~25min)"] },
+    { id: "jantar", time: "20:00", label: "🌙 Jantar", icon: "🌙", type: "meal", mealId: "jantar", items: ["Vitamina D3+K2 com a refeição"] },
+    { id: "noturno", time: "22:00", label: "🌛 Noturno", icon: "🌛", type: "meal", mealId: "noturno", items: ["Skincare caprichado (rosto + corpo)", "Kegel noturno", "Ritual de corpo", "Meta: largar celular 22h, dormir 22:30"] },
+  ]
+};
+
+const WEEK_SCHEDULE = {
+  1: { type: "treino", workout: "Lower A", label: "💪 Lower A (Glúteo heavy)", warmup: "lower", cooldown: "lower" },
+  2: { type: "descanso", workout: null, label: "🧘 Yoga + Rebolar", warmup: null, cooldown: null },
+  3: { type: "treino", workout: "Upper", label: "💪 Upper Body", warmup: "upper", cooldown: "upper" },
+  4: { type: "descanso", workout: null, label: "🟡 Ativação + Caminhada", warmup: null, cooldown: null },
+  5: { type: "treino", workout: "Lower B", label: "💪 Lower B (Coxas + Quadril)", warmup: "lower", cooldown: "lower" },
+  6: { type: "treino", workout: "Gluteo Isolado", label: "💪 Glúteo Isolado + Core", warmup: "lower", cooldown: "lower" },
+  0: { type: "descanso", workout: null, label: "😴 Descanso total", warmup: null, cooldown: null },
+};
+
+const KEGEL_PROTOCOL_TYPES = [
+  { tipo: "Rápida", desc: "Contrair e soltar rápido x10. Descansar 10s. Repetir 3x.", quando: "3x ao dia" },
+  { tipo: "Longa", desc: "Contrair 10s, soltar 10s. Repetir 5x.", quando: "3x ao dia" },
+  { tipo: "Elevador", desc: "Contrair progressivamente 'andares', relaxar andares. Repetir 3x.", quando: "1x ao dia" },
+];
