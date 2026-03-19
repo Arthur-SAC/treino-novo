@@ -105,7 +105,20 @@ const EXERCISE_VIDEOS = {
   "cat-cow": { youtubeId: "40Y1rukJs4E", gifUrl: null, title: "Gato e Vaca — Mobilidade Coluna", tips: "Arredonda e arqueia as costas alternando", commonMistakes: "" },
   "pombo-alongamento": { youtubeId: "fASdWDluHrc", gifUrl: null, title: "Pombo — Alongamento Quadril", tips: "Perna cruzada na frente, desça o tronco devagar", commonMistakes: "" },
   "borboleta-alongamento": { youtubeId: "6XT60SbKR3s", gifUrl: "https://static.exercisedb.dev/media/bWlZvXh.gif", title: "Borboleta — Alongamento", tips: "Solas dos pés juntas, pressione joelhos pra baixo", commonMistakes: "" },
-  "glute-bridge-ativacao": { youtubeId: "eu5oejYxPBQ", gifUrl: "https://static.exercisedb.dev/media/u0cNiij.gif", title: "Glute Bridge — Ativação", tips: "Sem peso, foque em sentir o glúteo", commonMistakes: "" }
+  "glute-bridge-ativacao": { youtubeId: "eu5oejYxPBQ", gifUrl: "https://static.exercisedb.dev/media/u0cNiij.gif", title: "Glute Bridge — Ativação", tips: "Sem peso, foque em sentir o glúteo", commonMistakes: "" },
+  "deadlift": { youtubeId: "ytGaGIn3SjE", gifUrl: null, title: "Levantamento Terra (Deadlift)", tips: "Quadril pra trás, barra rente ao corpo", commonMistakes: "Arredondar as costas. Subir com a lombar. Barra longe do corpo." },
+  "remada-curvada": { youtubeId: "kBraFNjSJWQ", gifUrl: null, title: "Remada Curvada com Halteres", tips: "Retração escapular completa", commonMistakes: "Usar impulso. Costas arredondadas. Cotovelos muito abertos." },
+  "supino-inclinado": { youtubeId: "8iPEnn-ltC8", gifUrl: null, title: "Supino Inclinado com Halteres", tips: "Peito alto, cotovelos 45 graus", commonMistakes: "Banco muito inclinado. Peso caindo rápido. Ombros subindo." },
+  "elevacao-lateral": { youtubeId: "3VcKaXpzqRo", gifUrl: null, title: "Elevação Lateral", tips: "Peso leve, cotovelo levemente dobrado, até altura do ombro", commonMistakes: "Peso pesado demais. Usar trapézio. Elevar acima do ombro." },
+  "crucifixo": { youtubeId: "eozdVDA78K0", gifUrl: null, title: "Crucifixo com Halteres", tips: "Braços levemente dobrados, abrir lento", commonMistakes: "Braços retos. Peso pesado demais. Perder controle na descida." },
+  "rosca-direta": { youtubeId: "ykJmrZ5v0Oo", gifUrl: null, title: "Rosca Direta", tips: "Cotovelos fixos, sem balanço", commonMistakes: "Usar impulso. Cotovelos subindo. Não controlar a descida." },
+  "triceps-testa": { youtubeId: "d_KZxkY_0cM", gifUrl: null, title: "Tríceps Testa", tips: "Cotovelos apontando pro teto, fixos", commonMistakes: "Cotovelos abrindo. Descer rápido demais. Lombar arqueando." },
+  "panturrilha": { youtubeId: "gwLzBJYoWlI", gifUrl: null, title: "Panturrilha em Pé", tips: "Extensão máxima, pausa 1s no topo", commonMistakes: "Amplitude curta. Velocidade rápida. Não pausar no topo." },
+  "crunch-bicicleta": { youtubeId: "9FGilxCbdz8", gifUrl: null, title: "Crunch Bicicleta", tips: "Cotovelo toca joelho oposto, devagar", commonMistakes: "Puxar o pescoço. Fazer rápido demais." },
+  "band-pull-apart": { youtubeId: "JObYtU7Y7ag", gifUrl: null, title: "Band Pull-Apart (Elástico)", tips: "Escápulas juntas, braços estendidos", commonMistakes: "Braços dobrados. Usar impulso." },
+  "agachamento": { youtubeId: "aclHkVaku9U", gifUrl: null, title: "Agachamento com Barra", tips: "Pés largura dos ombros, descer até coxa paralela", commonMistakes: "Joelhos caindo pra dentro. Lombar arredondando. Calcanhar subindo." },
+  "clamshell": { youtubeId: "cC7RUFwh2Ew", gifUrl: null, title: "Clamshell com Elástico", tips: "Deitado de lado, abrir joelhos mantendo pés juntos", commonMistakes: "Girar o tronco. Separar os pés. Fazer rápido demais." },
+  "donkey-kick-caneleira": { youtubeId: "VKGClPYoJCE", gifUrl: null, title: "Donkey Kick com Caneleira", tips: "Quadrupede, chutar pé pra cima mantendo joelho 90°", commonMistakes: "Arquear a lombar. Girar o quadril. Não controlar." }
 };
 
 // ─── 3b. WEIGHT_GUIDE — Pesos sugeridos por fase ────────────
@@ -3955,3 +3968,937 @@ const KEGEL_PROTOCOL_TYPES = [
   { tipo: "Longa", desc: "Contrair 10s, soltar 10s. Repetir 5x.", quando: "3x ao dia" },
   { tipo: "Elevador", desc: "Contrair progressivamente 'andares', relaxar andares. Repetir 3x.", quando: "1x ao dia" },
 ];
+
+// ─── WORKOUTS_NEW — Rotina Amazona (4 Fases) ─────────────────
+const WORKOUTS_NEW = {
+  fase1: {
+    name: "Fase 1 — Fundação",
+    period: "Meses 1-2",
+    frequency: "3x/semana",
+    objective: "Ativar glúteos dormentes, aprender os movimentos, criar o hábito",
+    note: "Pode fazer no prédio: elástico + halteres. Glúteo esq mais dormido: 5 reps extras de ativação unilateral esquerda ANTES de cada exercício bilateral.",
+    days: {
+      "Lower A": {
+        name: "Treino A · Full Body (Seg/Qua/Sex)",
+        exercises: [
+          {
+            id: "f1-hip-thrust",
+            name: "Hip Thrust (peso corporal ou haltere)",
+            sets: 3,
+            reps: "20",
+            rest: "60seg",
+            weight: "0-15 kg",
+            tip: "Squeeze consciente dos dois lados. Sentir os dois trabalhando.",
+            videoKey: "hip-thrust",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f1-agachamento",
+            name: "Agachamento (peso corporal)",
+            sets: 3,
+            reps: "15",
+            rest: "60seg",
+            weight: "0 kg",
+            tip: "Descer devagar em 3s, subir normal.",
+            videoKey: "sumo-squat",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f1-elevacao-pelvica-esq",
+            name: "Elevação Pélvica Unilateral ESQUERDA",
+            sets: 3,
+            reps: "15",
+            rest: "45seg",
+            weight: "0 kg",
+            tip: "Esquerdo primeiro, sempre.",
+            videoKey: "elevacao-pelvica",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f1-elevacao-pelvica-dir",
+            name: "Elevação Pélvica Unilateral DIREITA",
+            sets: 3,
+            reps: "15",
+            rest: "45seg",
+            weight: "0 kg",
+            tip: "Só depois do esquerdo.",
+            videoKey: "elevacao-pelvica",
+            unilateral: true,
+            startLeft: false
+          },
+          {
+            id: "f1-abducao-elastico",
+            name: "Abdução Lateral com Elástico",
+            sets: 3,
+            reps: "20",
+            rest: "45seg",
+            weight: "elástico leve/médio",
+            tip: "Apertar o elástico para fora consciente.",
+            videoKey: "abdutora",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f1-rdl",
+            name: "RDL com Halteres (leves)",
+            sets: 3,
+            reps: "12",
+            rest: "60seg",
+            weight: "5-10 kg cada",
+            tip: "Sentir o posterior da coxa.",
+            videoKey: "stiff",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f1-prancha",
+            name: "Prancha",
+            sets: 3,
+            reps: "30seg",
+            rest: "30seg",
+            weight: "0 kg",
+            tip: "Core estabilizado.",
+            videoKey: "prancha",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f1-caminhada",
+            name: "Caminhada Leve",
+            sets: 1,
+            reps: "20-30min",
+            rest: "0seg",
+            weight: "0 kg",
+            tip: "Finalizar, não substituir o treino.",
+            videoKey: "cardio-esteira",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      }
+    }
+  },
+
+  fase2: {
+    name: "Fase 2 — Construção",
+    period: "Meses 3-5",
+    frequency: "4x/semana",
+    objective: "Construir volume em glúteos e coxas, iniciar a silhueta amazona",
+    days: {
+      "Lower A": {
+        name: "Lower A · Glúteo + Posterior",
+        exercises: [
+          {
+            id: "f2-hip-thrust-pesado",
+            name: "Hip Thrust Barra/Halteres (pesado)",
+            sets: 4,
+            reps: "10-12",
+            rest: "90seg",
+            weight: "20-50 kg",
+            tip: "Principal do dia. Progressão de carga toda semana.",
+            videoKey: "hip-thrust",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-hip-thrust-uni-esq",
+            name: "Hip Thrust Unilateral ESQUERDO",
+            sets: 3,
+            reps: "12",
+            rest: "60seg",
+            weight: "10-20 kg",
+            tip: "Extra pro lado fraco — começa pelo esquerdo.",
+            videoKey: "hip-thrust",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f2-hip-thrust-uni-dir",
+            name: "Hip Thrust Unilateral DIREITO",
+            sets: 3,
+            reps: "12",
+            rest: "60seg",
+            weight: "10-20 kg",
+            tip: "Igual ao esquerdo, nem uma a mais.",
+            videoKey: "hip-thrust",
+            unilateral: true,
+            startLeft: false
+          },
+          {
+            id: "f2-rdl",
+            name: "RDL com Halteres",
+            sets: 3,
+            reps: "12",
+            rest: "60seg",
+            weight: "10-18 kg cada",
+            tip: "Dobrar quadril, não a coluna.",
+            videoKey: "stiff",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-stiff",
+            name: "Stiff com Halteres",
+            sets: 3,
+            reps: "12",
+            rest: "60seg",
+            weight: "10-18 kg cada",
+            tip: "Volume na parte de baixo da bunda.",
+            videoKey: "stiff",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-abducao-maquina",
+            name: "Abdução Máquina ou Elástico",
+            sets: 4,
+            reps: "20",
+            rest: "45seg",
+            weight: "10-30 kg / elástico médio",
+            tip: "Lento, sentir queimar.",
+            videoKey: "abdutora",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Upper": {
+        name: "Upper · Peito + Costas + Ombros",
+        exercises: [
+          {
+            id: "f2-supino-inclinado",
+            name: "Supino Inclinado com Halteres",
+            sets: 3,
+            reps: "12",
+            rest: "60seg",
+            weight: "8-14 kg cada",
+            tip: "Peito alto e ombros arredondados.",
+            videoKey: "supino-inclinado",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-remada-curvada",
+            name: "Remada Curvada com Halteres",
+            sets: 3,
+            reps: "12",
+            rest: "60seg",
+            weight: "10-16 kg cada",
+            tip: "Retração escapular completa.",
+            videoKey: "remada-curvada",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-elevacao-lateral",
+            name: "Elevação Lateral",
+            sets: 4,
+            reps: "15",
+            rest: "45seg",
+            weight: "4-8 kg cada",
+            tip: "Ombros redondos = silhueta mais feminina.",
+            videoKey: "elevacao-lateral",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-band-pull-apart",
+            name: "Band Pull-Apart com Elástico",
+            sets: 3,
+            reps: "20",
+            rest: "45seg",
+            weight: "elástico leve/médio",
+            tip: "Postura e ombros saudáveis.",
+            videoKey: "band-pull-apart",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-rosca-triceps",
+            name: "Rosca Direta + Tríceps Testa",
+            sets: 3,
+            reps: "15 cada",
+            rest: "45seg",
+            weight: "8-12 kg cada",
+            tip: "Bônus de braços.",
+            videoKey: "rosca-direta",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Lower B": {
+        name: "Lower B · Coxa + Quadril",
+        exercises: [
+          {
+            id: "f2-bulgaro-esq",
+            name: "Agachamento Búlgaro (esquerdo primeiro)",
+            sets: 3,
+            reps: "10 cada",
+            rest: "60seg",
+            weight: "8-16 kg cada",
+            tip: "Começar pelo lado esquerdo sempre.",
+            videoKey: "bulgarian-split-squat",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f2-agachamento-barra",
+            name: "Agachamento com Barra ou Halteres",
+            sets: 4,
+            reps: "10",
+            rest: "90seg",
+            weight: "30-50 kg barra / 14-20 kg cada",
+            tip: "Pés abertos, joelhos seguindo o pé.",
+            videoKey: "agachamento",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-sumo",
+            name: "Sumo Agachamento",
+            sets: 3,
+            reps: "15",
+            rest: "60seg",
+            weight: "20-40 kg (haltere ou barra)",
+            tip: "Interno de coxa — coxas grossas.",
+            videoKey: "sumo-squat",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-leg-press",
+            name: "Leg Press (pés altos e abertos)",
+            sets: 4,
+            reps: "12",
+            rest: "90seg",
+            weight: "40-80 kg",
+            tip: "Ativa glúteo mais que quadríceps.",
+            videoKey: "leg-press",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-aducao",
+            name: "Adução Interna Máquina",
+            sets: 4,
+            reps: "15",
+            rest: "45seg",
+            weight: "15-35 kg",
+            tip: "Preenche a coxa internamente.",
+            videoKey: "adutora",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-panturrilha",
+            name: "Panturrilha em Pé",
+            sets: 4,
+            reps: "20",
+            rest: "45seg",
+            weight: "20-40 kg (barra ou máquina)",
+            tip: "Pernas completas.",
+            videoKey: "panturrilha",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Gluteo Isolado": {
+        name: "Glúteo Isolado + Core",
+        exercises: [
+          {
+            id: "f2-kickback-esq",
+            name: "Kickback com Caneleira — 4 apoios (esquerdo primeiro)",
+            sets: 4,
+            reps: "15 cada",
+            rest: "45seg",
+            weight: "3-8 kg caneleira",
+            tip: "Extensão completa de quadril.",
+            videoKey: "kickback-polia",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f2-hip-thrust-uni-core",
+            name: "Hip Thrust Unilateral",
+            sets: 3,
+            reps: "12 cada",
+            rest: "60seg",
+            weight: "10-20 kg",
+            tip: "Esquerdo começa.",
+            videoKey: "hip-thrust",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f2-abducao-deitada",
+            name: "Abdução Deitada Lateral",
+            sets: 4,
+            reps: "20",
+            rest: "45seg",
+            weight: "elástico / 3-8 kg caneleira",
+            tip: "Sempre comece pelo lado esquerdo.",
+            videoKey: "abducao-deitada",
+            unilateral: false,
+            startLeft: true
+          },
+          {
+            id: "f2-prancha-variacoes",
+            name: "Prancha Variações",
+            sets: 3,
+            reps: "45seg",
+            rest: "30seg",
+            weight: "0 kg",
+            tip: "Alternar prancha frontal e lateral.",
+            videoKey: "prancha",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f2-crunch-bicicleta",
+            name: "Crunch Bicicleta",
+            sets: 3,
+            reps: "20",
+            rest: "30seg",
+            weight: "0 kg",
+            tip: "Cotovelo toca joelho oposto, devagar.",
+            videoKey: "crunch-bicicleta",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      }
+    }
+  },
+
+  fase3: {
+    name: "Fase 3 — Amazona 🔥",
+    period: "Meses 6-10",
+    frequency: "4-5x/semana",
+    objective: "Maximizar volume nos lugares certos — a forma amazona acontece aqui",
+    days: {
+      "Lower A": {
+        name: "Lower A · Glúteo Heavy",
+        exercises: [
+          {
+            id: "f3-hip-thrust-heavy",
+            name: "Hip Thrust Barra (carga máxima progressiva)",
+            sets: 5,
+            reps: "8-10",
+            rest: "90seg",
+            weight: "50-90 kg",
+            tip: "Aqui é onde a bunda cresce de verdade.",
+            videoKey: "hip-thrust",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-hip-thrust-uni-esq",
+            name: "Hip Thrust Unilateral ESQUERDO",
+            sets: 3,
+            reps: "10",
+            rest: "60seg",
+            weight: "15-30 kg",
+            tip: "Continua o extra do lado fraco.",
+            videoKey: "hip-thrust",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f3-rdl-barra",
+            name: "RDL com Barra",
+            sets: 4,
+            reps: "10",
+            rest: "90seg",
+            weight: "40-60 kg",
+            tip: "Empurre o quadril pra trás, sinta atrás da coxa.",
+            videoKey: "stiff",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-stiff-pesado",
+            name: "Stiff com Halteres (pesado)",
+            sets: 4,
+            reps: "10",
+            rest: "90seg",
+            weight: "30-50 kg",
+            tip: "Volume na parte de baixo da bunda.",
+            videoKey: "stiff",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-abducao-dropset",
+            name: "Abdução Máquina (drop set no final)",
+            sets: 4,
+            reps: "12 + drop",
+            rest: "60seg",
+            weight: "25-45 kg",
+            tip: "Drop set: terminar o último sem descanso, peso menor.",
+            videoKey: "abdutora",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Upper": {
+        name: "Upper · Curvilíneo",
+        exercises: [
+          {
+            id: "f3-supino-inclinado",
+            name: "Supino Inclinado com Halteres",
+            sets: 4,
+            reps: "10",
+            rest: "60seg",
+            weight: "14-22 kg cada",
+            tip: "Peito alto, cotovelos 45 graus.",
+            videoKey: "supino-inclinado",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-remada-curvada",
+            name: "Remada Curvada com Halteres",
+            sets: 4,
+            reps: "10",
+            rest: "60seg",
+            weight: "14-22 kg cada",
+            tip: "Abre as costas, cria a forma ampulheta.",
+            videoKey: "remada-curvada",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-elevacao-lateral",
+            name: "Elevação Lateral",
+            sets: 4,
+            reps: "15",
+            rest: "45seg",
+            weight: "7-12 kg cada",
+            tip: "Ombros arredondados = cintura parece mais fina.",
+            videoKey: "elevacao-lateral",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-band-pull-apart",
+            name: "Band Pull-Apart com Elástico",
+            sets: 3,
+            reps: "20",
+            rest: "45seg",
+            weight: "elástico médio/forte",
+            tip: "Postura e ombros saudáveis.",
+            videoKey: "band-pull-apart",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-crucifixo",
+            name: "Crucifixo com Halteres",
+            sets: 3,
+            reps: "12",
+            rest: "45seg",
+            weight: "10-16 kg cada",
+            tip: "Braços levemente dobrados, abrir lento.",
+            videoKey: "crucifixo",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Lower B": {
+        name: "Lower B · Coxa + Quadril",
+        exercises: [
+          {
+            id: "f3-agachamento-barra",
+            name: "Agachamento Barra Traseira",
+            sets: 4,
+            reps: "8-10",
+            rest: "90seg",
+            weight: "50-80 kg",
+            tip: "Pés largura dos ombros, descer até coxa paralela.",
+            videoKey: "agachamento",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-bulgaro-esq",
+            name: "Agachamento Búlgaro com Halteres (esquerdo primeiro)",
+            sets: 3,
+            reps: "10 cada",
+            rest: "60seg",
+            weight: "14-22 kg cada",
+            tip: "Pé traseiro no banco, foque no glúteo ao subir.",
+            videoKey: "bulgarian-split-squat",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f3-aducao",
+            name: "Adução Interna Máquina",
+            sets: 4,
+            reps: "15",
+            rest: "45seg",
+            weight: "25-50 kg",
+            tip: "Preenche a coxa internamente.",
+            videoKey: "adutora",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-sumo-pesado",
+            name: "Sumo Pesado com Barra",
+            sets: 4,
+            reps: "10",
+            rest: "90seg",
+            weight: "50-80 kg barra",
+            tip: "Interno de coxa — coxas grossas.",
+            videoKey: "sumo-squat",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-bulgaro-dir",
+            name: "Agachamento Búlgaro com Halteres — substituição cadeira extensora",
+            sets: 3,
+            reps: "15",
+            rest: "60seg",
+            weight: "10-18 kg cada",
+            tip: "Substitui cadeira extensora. Quadríceps em foco.",
+            videoKey: "bulgarian-split-squat",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Gluteo Isolado": {
+        name: "Full Glúteo + Posterior",
+        exercises: [
+          {
+            id: "f3-deadlift",
+            name: "Deadlift (Levantamento Terra)",
+            sets: 4,
+            reps: "8",
+            rest: "90seg",
+            weight: "50-80 kg",
+            tip: "O exercício que mais recruta glúteo e posterior junto.",
+            videoKey: "deadlift",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-hip-thrust-pausa",
+            name: "Hip Thrust com Pausa 2s em Cima",
+            sets: 4,
+            reps: "10",
+            rest: "90seg",
+            weight: "50-80 kg",
+            tip: "A pausa isométrica constrói mente-músculo.",
+            videoKey: "hip-thrust",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-stiff-leg-curl",
+            name: "Stiff com Halteres — substituição leg curl",
+            sets: 4,
+            reps: "12",
+            rest: "60seg",
+            weight: "20-40 kg",
+            tip: "Substitui leg curl. Posterior da coxa em foco.",
+            videoKey: "stiff",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f3-abducao-pe-band",
+            name: "Abdução com Elástico em Pé",
+            sets: 3,
+            reps: "20",
+            rest: "45seg",
+            weight: "elástico médio/forte",
+            tip: "Sempre comece pelo lado esquerdo.",
+            videoKey: "abducao-pe",
+            unilateral: false,
+            startLeft: true
+          }
+        ]
+      }
+    }
+  },
+
+  fase4: {
+    name: "Fase 4 — Manutenção",
+    period: "Mês 11+",
+    frequency: "3-4x/semana",
+    objective: "Manter, refinar, continuar crescendo devagar",
+    note: "Mantenha intensidade mas pode reduzir volume.",
+    days: {
+      "Lower A": {
+        name: "Lower Body Foco Glúteo",
+        exercises: [
+          {
+            id: "f4-hip-thrust",
+            name: "Hip Thrust Barra",
+            sets: 3,
+            reps: "10",
+            rest: "90seg",
+            weight: "50-90 kg",
+            tip: "Manter carga da fase 3. Unilateral esquerdo continua pra sempre.",
+            videoKey: "hip-thrust",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-hip-thrust-uni-esq",
+            name: "Hip Thrust Unilateral ESQUERDO",
+            sets: 3,
+            reps: "10",
+            rest: "60seg",
+            weight: "15-30 kg",
+            tip: "Continua o extra do lado fraco.",
+            videoKey: "hip-thrust",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f4-rdl",
+            name: "RDL com Barra",
+            sets: 3,
+            reps: "10",
+            rest: "90seg",
+            weight: "40-60 kg",
+            tip: "Empurre o quadril pra trás, sinta atrás da coxa.",
+            videoKey: "stiff",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-abducao",
+            name: "Abdução Máquina",
+            sets: 3,
+            reps: "12",
+            rest: "60seg",
+            weight: "25-45 kg",
+            tip: "Lento, sentir queimar.",
+            videoKey: "abdutora",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-deadlift",
+            name: "Deadlift (Levantamento Terra)",
+            sets: 3,
+            reps: "8",
+            rest: "90seg",
+            weight: "50-80 kg",
+            tip: "Quadril pra trás, barra rente ao corpo.",
+            videoKey: "deadlift",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Upper": {
+        name: "Upper Body",
+        exercises: [
+          {
+            id: "f4-supino-inclinado",
+            name: "Supino Inclinado com Halteres",
+            sets: 3,
+            reps: "10",
+            rest: "60seg",
+            weight: "14-22 kg cada",
+            tip: "Peito alto, cotovelos 45 graus.",
+            videoKey: "supino-inclinado",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-remada-curvada",
+            name: "Remada Curvada com Halteres",
+            sets: 3,
+            reps: "10",
+            rest: "60seg",
+            weight: "14-22 kg cada",
+            tip: "Retração escapular completa.",
+            videoKey: "remada-curvada",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-elevacao-lateral",
+            name: "Elevação Lateral",
+            sets: 3,
+            reps: "15",
+            rest: "45seg",
+            weight: "7-12 kg cada",
+            tip: "Ombros arredondados = cintura parece mais fina.",
+            videoKey: "elevacao-lateral",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-band-pull-apart",
+            name: "Band Pull-Apart com Elástico",
+            sets: 3,
+            reps: "20",
+            rest: "45seg",
+            weight: "elástico médio/forte",
+            tip: "Postura e ombros saudáveis.",
+            videoKey: "band-pull-apart",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-crucifixo",
+            name: "Crucifixo com Halteres",
+            sets: 3,
+            reps: "12",
+            rest: "45seg",
+            weight: "10-16 kg cada",
+            tip: "Braços levemente dobrados, abrir lento.",
+            videoKey: "crucifixo",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Lower B": {
+        name: "Lower Body Foco Glúteo 2",
+        exercises: [
+          {
+            id: "f4-agachamento-barra",
+            name: "Agachamento Barra Traseira",
+            sets: 3,
+            reps: "10",
+            rest: "90seg",
+            weight: "50-80 kg",
+            tip: "Pés largura dos ombros, descer até coxa paralela.",
+            videoKey: "agachamento",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-bulgaro-esq",
+            name: "Agachamento Búlgaro com Halteres (esquerdo primeiro)",
+            sets: 3,
+            reps: "10 cada",
+            rest: "60seg",
+            weight: "14-22 kg cada",
+            tip: "Pé traseiro no banco, foque no glúteo ao subir.",
+            videoKey: "bulgarian-split-squat",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f4-aducao",
+            name: "Adução Interna Máquina",
+            sets: 3,
+            reps: "15",
+            rest: "45seg",
+            weight: "25-50 kg",
+            tip: "Preenche a coxa internamente.",
+            videoKey: "adutora",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-sumo",
+            name: "Sumo com Barra",
+            sets: 3,
+            reps: "10",
+            rest: "90seg",
+            weight: "50-80 kg barra",
+            tip: "Interno de coxa — coxas grossas.",
+            videoKey: "sumo-squat",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-leg-press",
+            name: "Leg Press (pés altos e abertos)",
+            sets: 3,
+            reps: "12",
+            rest: "90seg",
+            weight: "60-100 kg",
+            tip: "Ativa glúteo mais que quadríceps.",
+            videoKey: "leg-press",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      },
+      "Gluteo Isolado": {
+        name: "Misto ou Cardio + Core",
+        exercises: [
+          {
+            id: "f4-stiff",
+            name: "Stiff com Halteres",
+            sets: 3,
+            reps: "10",
+            rest: "90seg",
+            weight: "30-50 kg",
+            tip: "Volume na parte de baixo da bunda.",
+            videoKey: "stiff",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-kickback",
+            name: "Kickback com Caneleira — 4 apoios (esquerdo primeiro)",
+            sets: 3,
+            reps: "15 cada",
+            rest: "45seg",
+            weight: "3-8 kg caneleira",
+            tip: "Extensão completa de quadril.",
+            videoKey: "kickback-polia",
+            unilateral: true,
+            startLeft: true
+          },
+          {
+            id: "f4-abducao-deitada",
+            name: "Abdução Deitada Lateral",
+            sets: 3,
+            reps: "20",
+            rest: "45seg",
+            weight: "elástico / 3-8 kg caneleira",
+            tip: "Sempre comece pelo lado esquerdo.",
+            videoKey: "abducao-deitada",
+            unilateral: false,
+            startLeft: true
+          },
+          {
+            id: "f4-prancha-variacoes",
+            name: "Prancha Variações",
+            sets: 3,
+            reps: "45seg",
+            rest: "30seg",
+            weight: "0 kg",
+            tip: "Alternar prancha frontal e lateral.",
+            videoKey: "prancha",
+            unilateral: false,
+            startLeft: false
+          },
+          {
+            id: "f4-cardio",
+            name: "Cardio Esteira Inclinada",
+            sets: 1,
+            reps: "20-30min",
+            rest: "0seg",
+            weight: "0 kg",
+            tip: "Inclinação 8-12%, velocidade 5-6km/h.",
+            videoKey: "cardio-esteira",
+            unilateral: false,
+            startLeft: false
+          }
+        ]
+      }
+    }
+  }
+};
