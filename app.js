@@ -1448,7 +1448,7 @@ const WorkoutManager = {
     { key: 'treino', label: 'Treino' },
     { key: 'gluteo', label: 'Gluteo Fix' },
     { key: 'yoga', label: 'Yoga' },
-    { key: 'rebolar', label: 'Rebolar' },
+    { key: 'rebolar', label: 'Movimento' },
     { key: 'tecnica', label: 'Tecnica' },
     { key: 'cardio', label: 'Cardio' }
   ],
@@ -2391,6 +2391,31 @@ const WorkoutManager = {
       html += '</div>';
     });
 
+    if (typeof POWER_MOVES !== 'undefined') {
+      html += '<h3 style="font-family:var(--font-title);margin:20px 0 10px;">Power Moves \u2014 Micro-Momentos</h3>';
+      html += '<div style="color:var(--text-muted);font-size:0.82rem;margin-bottom:12px;line-height:1.5;">Movimentos r\u00e1pidos pra fazer em momentos mortos do dia. N\u00e3o \u00e9 treino formal \u2014 \u00e9 construir o gingado natural.</div>';
+      var pmCats = Object.keys(POWER_MOVES);
+      for (var pc = 0; pc < pmCats.length; pc++) {
+        var pmCat = POWER_MOVES[pmCats[pc]];
+        html += '<div class="card glass" style="margin-bottom:10px;">';
+        html += '<div style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">' + pmCat.icon + ' ' + pmCat.label + '</div>';
+        for (var pm = 0; pm < pmCat.moves.length; pm++) {
+          var move = pmCat.moves[pm];
+          html += '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);">';
+          html += '<div style="color:var(--text);font-weight:600;font-size:0.86rem;">' + move.name + '</div>';
+          html += '<div style="color:var(--text-muted);font-size:0.8rem;margin-top:2px;">' + move.how + '</div>';
+          if (move.result) {
+            html += '<div style="color:var(--success);font-size:0.75rem;margin-top:2px;">' + move.result + '</div>';
+          }
+          if (move.alert) {
+            html += '<div style="color:var(--danger);font-size:0.75rem;margin-top:2px;">\u26a0 ' + move.alert + '</div>';
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+    }
+
     return html;
   },
 
@@ -2668,15 +2693,19 @@ const NutritionManager = {
           return;
         }
         // Shopping copy button
-        var copyBtn = e.target.closest('.shopping-copy-btn');
+        var copyBtn = e.target.closest('.copy-shopping-btn');
         if (copyBtn) {
-          self.copyShoppingList();
-          return;
-        }
-        // Shopping reset button
-        var resetBtn = e.target.closest('.shopping-reset-btn');
-        if (resetBtn) {
-          self.resetShoppingList();
+          var type = copyBtn.dataset.type || 'semanal';
+          if (typeof SHOPPING_SYSTEM !== 'undefined' && SHOPPING_SYSTEM[type]) {
+            var data = SHOPPING_SYSTEM[type];
+            var text = '\uD83D\uDED2 ' + data.label + '\n\n';
+            for (var i = 0; i < data.items.length; i++) {
+              text += '\u25a1 ' + data.items[i].item + ' \u2014 ' + data.items[i].qty + '\n';
+            }
+            navigator.clipboard.writeText(text).then(function() {
+              Toast.show('Lista copiada! Cola no WhatsApp \uD83D\uDCCB', 'success');
+            });
+          }
           return;
         }
       });
@@ -3061,37 +3090,37 @@ const NutritionManager = {
   },
 
   renderShoppingList() {
-    var checkedItems = this.getShoppingData();
-    var categories = Object.keys(SHOPPING_LIST);
+    if (typeof SHOPPING_SYSTEM === 'undefined') return '<div class="card glass"><p>Dados de compras n\u00e3o encontrados.</p></div>';
     var html = '';
-
-    // Action buttons
-    html += '<div style="display:flex; gap:8px; margin-bottom:12px;">';
-    html += '<button class="btn btn-sm btn-primary shopping-copy-btn" style="flex:1;">\uD83D\uDCCB Copiar lista</button>';
-    html += '<button class="btn btn-sm btn-outline shopping-reset-btn" style="flex:1;">Resetar \u21BA</button>';
-    html += '</div>';
-
-    for (var c = 0; c < categories.length; c++) {
-      var catKey = categories[c];
-      var items = SHOPPING_LIST[catKey];
-      var catLabel = catKey.replace(/_/g, ' ');
-      catLabel = catLabel.charAt(0).toUpperCase() + catLabel.slice(1);
-
-      html += '<h3 style="margin-top:16px; margin-bottom:8px;">' + catLabel + '</h3>';
-
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        var itemKey = catKey + '_' + i;
-        var isChecked = !!checkedItems[itemKey];
-
-        html += '<label class="checkbox-wrapper">';
-        html += '  <input type="checkbox" class="shopping-checkbox" data-item="' + itemKey + '"' + (isChecked ? ' checked' : '') + '>';
-        html += '  <span class="checkbox-custom"></span>';
-        html += '  <span class="checkbox-label' + (isChecked ? ' checked-label' : '') + '">' + item.item + ' \u2014 ' + item.qty + '</span>';
-        html += '</label>';
+    var types = ['mensal', 'semanal'];
+    for (var t = 0; t < types.length; t++) {
+      var key = types[t];
+      var data = SHOPPING_SYSTEM[key];
+      html += '<div class="card glass" style="margin-bottom:12px;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+      html += '<h3 style="margin:0;font-family:var(--font-title);font-size:1rem;">' + data.label + '</h3>';
+      html += '<button class="copy-shopping-btn" data-type="' + key + '" style="background:var(--primary);border:none;color:white;padding:6px 12px;border-radius:12px;font-size:0.75rem;cursor:pointer;font-family:inherit;">Copiar</button>';
+      html += '</div>';
+      var categories = {};
+      for (var i = 0; i < data.items.length; i++) {
+        var item = data.items[i];
+        if (!categories[item.category]) categories[item.category] = [];
+        categories[item.category].push(item);
       }
+      var catKeys = Object.keys(categories);
+      for (var c = 0; c < catKeys.length; c++) {
+        var catName = catKeys[c];
+        html += '<div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:8px 0 4px;">' + catName + '</div>';
+        var items = categories[catName];
+        for (var j = 0; j < items.length; j++) {
+          html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.84rem;">';
+          html += '<span style="color:var(--text);">' + items[j].item + '</span>';
+          html += '<span style="color:var(--gold);font-weight:600;font-size:0.8rem;white-space:nowrap;">' + items[j].qty + '</span>';
+          html += '</div>';
+        }
+      }
+      html += '</div>';
     }
-
     return html;
   },
 
@@ -3213,6 +3242,9 @@ const CareManager = {
       case 'kegel':
         html += this.renderKegel();
         break;
+      case 'intimidade':
+        html += this.renderIntimidade();
+        break;
       case 'cores':
         html += this.renderCores();
         break;
@@ -3229,6 +3261,7 @@ const CareManager = {
       { id: 'cabelo', label: 'Cabelo' },
       { id: 'depilacao', label: 'Depila\u00E7\u00E3o' },
       { id: 'kegel', label: 'Kegel' },
+      { id: 'intimidade', label: 'Intimidade' },
       { id: 'cores', label: 'Cores' }
     ];
     var self = this;
@@ -3804,7 +3837,32 @@ const CareManager = {
     return html;
   },
 
-  // ── Sub-tab 5: Cores ───────────────────────────────────────
+  // ── Sub-tab 5: Intimidade ──────────────────────────────────
+
+  renderIntimidade: function() {
+    if (typeof INTIMACY_GUIDE === 'undefined') return '';
+    var html = '';
+    var sections = ['feminina', 'confianca', 'evolucao'];
+    for (var s = 0; s < sections.length; s++) {
+      var section = INTIMACY_GUIDE[sections[s]];
+      html += '<div class="card glass" style="margin-bottom:12px;">';
+      html += '<h3 style="font-family:var(--font-title);margin:0 0 10px;">' + section.title + '</h3>';
+      for (var i = 0; i < section.items.length; i++) {
+        var item = section.items[i];
+        html += '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">';
+        html += '<div style="color:var(--primary);font-weight:600;font-size:0.86rem;margin-bottom:3px;">' + item.topic + '</div>';
+        html += '<div style="color:var(--text-muted);font-size:0.82rem;line-height:1.55;">' + item.desc + '</div>';
+        if (item.how) {
+          html += '<div style="color:var(--gold);font-size:0.78rem;margin-top:4px;">Como: ' + item.how + '</div>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    return html;
+  },
+
+  // ── Sub-tab 6: Cores ───────────────────────────────────────
 
   renderCores() {
     var self = this;
