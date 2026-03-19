@@ -1756,7 +1756,7 @@ const DAILY_TIMELINE = {
     { id: "lanche1", time: "10:00", label: "🍎 Lanche manhã", icon: "🍎", type: "meal", mealId: "lanche1", items: ["Chá de spearmint — 1ª xícara 🌿"] },
     { id: "almoco", time: "12:00", label: "🍽️ Almoço", icon: "🍽️", type: "meal", mealId: "almoco", items: ["Ômega-3 com a refeição"] },
     { id: "lanche2", time: "16:00", label: "🍎 Lanche tarde", icon: "🍎", type: "meal", mealId: "pretreino", items: ["Chá de spearmint — 2ª xícara 🌿"] },
-    { id: "atividade", time: "17:40", label: "🚶 Atividade leve", icon: "🚶", items: ["Caminhada 25-30min ou escada do prédio (progressivo)", "Protocolo ativação glúteo esq (10min)", "Yoga de quadril (20min)"] },
+    { id: "atividade", time: "17:40", label: "🚶 Atividade leve", icon: "🚶", items: ["✅ Ativação glúteo esq (10min) — fazer sempre, todo dia", "Escolha 1 ou 2 (ou ambas se tiver tempo):", "→ Caminhada 25-30min ou escada do prédio", "→ Yoga de quadril (20min)"] },
     { id: "postreino", time: "19:00", label: "🐕 Passeio cães", icon: "🐕", items: ["Passeio com os cães (~25min)"] },
     { id: "jantar", time: "20:00", label: "🌙 Jantar", icon: "🌙", type: "meal", mealId: "jantar", items: ["Vitamina D3+K2 com a refeição"] },
     { id: "noturno", time: "22:00", label: "🌛 Noturno", icon: "🌛", type: "meal", mealId: "noturno", items: ["Skincare caprichado (rosto + corpo)", "Kegel noturno", "Ritual de corpo", "Meta: largar celular 22h, dormir 22:30"] },
