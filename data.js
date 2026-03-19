@@ -1791,102 +1791,14 @@ const WORKOUTS = {
       "Lower A": {
         name: "Treino A · Full Body (Seg/Qua/Sex)",
         exercises: [
-          {
-            id: "f1-hip-thrust",
-            name: "Hip Thrust (peso corporal ou haltere)",
-            sets: 3,
-            reps: "20",
-            rest: "60seg",
-            weight: "0-15 kg",
-            tip: "Squeeze consciente dos dois lados. Sentir os dois trabalhando.",
-            videoKey: "hip-thrust",
-            unilateral: false,
-            startLeft: false
-          },
-          {
-            id: "f1-agachamento",
-            name: "Agachamento (peso corporal)",
-            sets: 3,
-            reps: "15",
-            rest: "60seg",
-            weight: "0 kg",
-            tip: "Descer devagar em 3s, subir normal.",
-            videoKey: "sumo-squat",
-            unilateral: false,
-            startLeft: false
-          },
-          {
-            id: "f1-elevacao-pelvica-esq",
-            name: "Elevação Pélvica Unilateral ESQUERDA",
-            sets: 3,
-            reps: "15",
-            rest: "45seg",
-            weight: "0 kg",
-            tip: "Esquerdo primeiro, sempre.",
-            videoKey: "elevacao-pelvica",
-            unilateral: true,
-            startLeft: true
-          },
-          {
-            id: "f1-elevacao-pelvica-dir",
-            name: "Elevação Pélvica Unilateral DIREITA",
-            sets: 3,
-            reps: "15",
-            rest: "45seg",
-            weight: "0 kg",
-            tip: "Só depois do esquerdo.",
-            videoKey: "elevacao-pelvica",
-            unilateral: true,
-            startLeft: false
-          },
-          {
-            id: "f1-abducao-elastico",
-            name: "Abdução Lateral com Elástico",
-            sets: 3,
-            reps: "20",
-            rest: "45seg",
-            weight: "elástico leve/médio",
-            tip: "Apertar o elástico para fora consciente.",
-            videoKey: "abdutora",
-            unilateral: false,
-            startLeft: false
-          },
-          {
-            id: "f1-rdl",
-            name: "RDL com Halteres (leves)",
-            sets: 3,
-            reps: "12",
-            rest: "60seg",
-            weight: "5-10 kg cada",
-            tip: "Sentir o posterior da coxa.",
-            videoKey: "stiff",
-            unilateral: false,
-            startLeft: false
-          },
-          {
-            id: "f1-prancha",
-            name: "Prancha",
-            sets: 3,
-            reps: "30seg",
-            rest: "30seg",
-            weight: "0 kg",
-            tip: "Core estabilizado.",
-            videoKey: "prancha",
-            unilateral: false,
-            startLeft: false
-          },
-          {
-            id: "f1-caminhada",
-            name: "Caminhada Leve",
-            sets: 1,
-            reps: "20-30min",
-            rest: "0seg",
-            weight: "0 kg",
-            tip: "Finalizar, não substituir o treino.",
-            videoKey: "cardio-esteira",
-            unilateral: false,
-            startLeft: false
-          }
+          { id: "f1-glute-bridge", name: "Glute Bridge no chão", sets: 3, reps: "15", rest: "90seg", weight: "0 kg → haltere leve no quadril", tip: "Empurre o quadril pro teto, squeeze 2-3seg no topo. Começar sem peso.", videoKey: "glute-bridge", unilateral: false, startLeft: false },
+          { id: "f1-bridge-uni-esq", name: "Glute Bridge Unilateral ESQUERDO", sets: 3, reps: "12", rest: "60seg", weight: "0 kg", tip: "Pé esquerdo no chão, direito suspenso. Segurar 3seg no topo.", videoKey: "glute-bridge", unilateral: true, startLeft: true },
+          { id: "f1-bridge-uni-dir", name: "Glute Bridge Unilateral DIREITO", sets: 3, reps: "12", rest: "60seg", weight: "0 kg", tip: "Mesmo número de reps que o esquerdo. Nunca mais.", videoKey: "glute-bridge", unilateral: true, startLeft: false },
+          { id: "f1-abducao-elastico", name: "Abdução deitada com elástico", sets: 3, reps: "20", rest: "60seg", weight: "elástico leve/médio", tip: "Deitada de lado, elevar perna. Sentir queimar no glúteo.", videoKey: "abducao-deitada", unilateral: false, startLeft: false },
+          { id: "f1-wall-sit", name: "Wall Sit (agachamento na parede)", sets: 3, reps: "20-30seg", rest: "60seg", weight: "0 kg", tip: "Costas na parede, coxas paralelas ao chão. Protege joelhos.", videoKey: "agachamento", unilateral: false, startLeft: false, type: "plank" },
+          { id: "f1-rdl", name: "RDL com halteres leves", sets: 3, reps: "12", rest: "90seg", weight: "5-8 kg cada", tip: "Dobrar no quadril, NÃO na coluna. Sentir posterior da coxa.", videoKey: "stiff", unilateral: false, startLeft: false },
+          { id: "f1-prancha", name: "Prancha", sets: 3, reps: "20-30seg", rest: "45seg", weight: "0 kg", tip: "Corpo reto. Apertar glúteo e abdômen.", videoKey: "prancha", unilateral: false, startLeft: false, type: "plank" },
+          { id: "f1-vacuum", name: "Vacuum Abdominal", sets: 3, reps: "20seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e pra cima, segurar. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" },
         ]
       }
     }
@@ -1972,7 +1884,8 @@ const WORKOUTS = {
             videoKey: "abdutora",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f2-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Upper": {
@@ -2037,7 +1950,8 @@ const WORKOUTS = {
             videoKey: "rosca-direta",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f2-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Lower B": {
@@ -2114,7 +2028,8 @@ const WORKOUTS = {
             videoKey: "panturrilha",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f2-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Gluteo Isolado": {
@@ -2179,7 +2094,8 @@ const WORKOUTS = {
             videoKey: "crunch-bicicleta",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f2-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       }
     }
@@ -2253,7 +2169,8 @@ const WORKOUTS = {
             videoKey: "abdutora",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f3-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Upper": {
@@ -2318,7 +2235,8 @@ const WORKOUTS = {
             videoKey: "crucifixo",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f3-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Lower B": {
@@ -2383,7 +2301,8 @@ const WORKOUTS = {
             videoKey: "bulgarian-split-squat",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f3-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Gluteo Isolado": {
@@ -2436,7 +2355,8 @@ const WORKOUTS = {
             videoKey: "abducao-pe",
             unilateral: false,
             startLeft: true
-          }
+          },
+          { id: "f3-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       }
     }
@@ -2511,7 +2431,8 @@ const WORKOUTS = {
             videoKey: "deadlift",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f4-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Upper": {
@@ -2576,7 +2497,8 @@ const WORKOUTS = {
             videoKey: "crucifixo",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f4-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Lower B": {
@@ -2641,7 +2563,8 @@ const WORKOUTS = {
             videoKey: "leg-press",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f4-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Gluteo Isolado": {
@@ -2706,7 +2629,8 @@ const WORKOUTS = {
             videoKey: "cardio-esteira",
             unilateral: false,
             startLeft: false
-          }
+          },
+          { id: "f4-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       }
     }
