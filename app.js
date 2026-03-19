@@ -1126,39 +1126,44 @@ const Dashboard = {
     // Event delegation — set up ONCE, works for all future renders
     var dashContainer = document.getElementById('dashboard-content');
     if (dashContainer) {
-      dashContainer.addEventListener('change', function(e) {
-        var cb = e.target.closest('.checklist-checkbox');
-        if (cb) {
-          if (cb.checked && navigator.vibrate) navigator.vibrate(10);
-          var id = cb.dataset.id;
-          var checklistData = StorageManager.getForDate('checklist') || {};
-          checklistData[id] = cb.checked;
-          StorageManager.setForDate('checklist', checklistData);
-          self.updateStreak();
-        }
-      });
       dashContainer.addEventListener('click', function(e) {
-        var cup = e.target.closest('.water-cup');
-        if (cup) {
-          var cupNum = parseInt(cup.dataset.cup);
-          StorageManager.setForDate('water', cupNum);
+        // Water bottle click
+        var bottle = e.target.closest('.timeline-bottle');
+        if (bottle) {
+          var bottleNum = parseInt(bottle.dataset.bottle);
+          var currentWater = StorageManager.getForDate('water') || 0;
+          // If clicking the currently filled bottle, unfill it; otherwise fill up to that bottle
+          if (bottleNum === currentWater) {
+            StorageManager.setForDate('water', bottleNum - 1);
+          } else {
+            StorageManager.setForDate('water', bottleNum);
+          }
           self.render();
           return;
         }
-        if (e.target.closest('#water-add')) {
-          var current = StorageManager.getForDate('water') || 0;
-          if (current < 15) {
-            StorageManager.setForDate('water', current + 1);
-            self.render();
-          }
+
+        // Meal option click
+        var mealOpt = e.target.closest('.timeline-meal-opt');
+        if (mealOpt) {
+          e.stopPropagation();
+          var mealId = mealOpt.dataset.mealId;
+          var optIdx = parseInt(mealOpt.dataset.optIdx);
+          StorageManager.setValue('mealChoice_' + mealId, optIdx);
+          self.render();
           return;
         }
-        if (e.target.closest('#water-remove')) {
-          var current = StorageManager.getForDate('water') || 0;
-          if (current > 0) {
-            StorageManager.setForDate('water', current - 1);
-            self.render();
+
+        // Timeline block click
+        var block = e.target.closest('.timeline-block');
+        if (block) {
+          var blockId = block.dataset.blockId;
+          var blockType = block.dataset.blockType;
+          // Workout block navigates to treino tab
+          if (blockType === 'workout') {
+            Router.navigate('treino');
+            return;
           }
+          self.toggleBlock(blockId);
           return;
         }
       });
@@ -1172,193 +1177,219 @@ const Dashboard = {
     });
   },
 
+  getTimelineType() {
+    var dayOfWeek = new Date().getDay();
+    var schedule = WEEK_SCHEDULE[dayOfWeek];
+    return schedule ? schedule.type : 'descanso';
+  },
+
+  getTodayWorkoutLabel() {
+    var dayOfWeek = new Date().getDay();
+    var schedule = WEEK_SCHEDULE[dayOfWeek];
+    return schedule ? schedule.label : '';
+  },
+
+  getCompletedBlocks() {
+    return StorageManager.getForDate('timeline') || {};
+  },
+
+  toggleBlock(blockId) {
+    var completed = this.getCompletedBlocks();
+    completed[blockId] = !completed[blockId];
+    StorageManager.setForDate('timeline', completed);
+    this.updateStreak();
+    this.render();
+  },
+
+  getMealChoice(mealId) {
+    return StorageManager.getValue('mealChoice_' + mealId, 0);
+  },
+
+  calculateDayMacros(timeline) {
+    var totals = { kcal: 0, prot: 0, carb: 0, fat: 0 };
+    for (var i = 0; i < timeline.length; i++) {
+      var block = timeline[i];
+      if (block.type === 'meal' && block.mealId && MEAL_OPTIONS[block.mealId]) {
+        var mealData = MEAL_OPTIONS[block.mealId];
+        var choiceIdx = this.getMealChoice(block.mealId);
+        if (mealData.options && mealData.options[choiceIdx]) {
+          var opt = mealData.options[choiceIdx];
+          totals.kcal += opt.kcal || 0;
+          totals.prot += opt.prot || 0;
+          totals.carb += opt.carb || 0;
+          totals.fat += opt.fat || 0;
+        }
+      }
+    }
+    return totals;
+  },
+
   render() {
-    const container = document.getElementById('dashboard-content');
+    var container = document.getElementById('dashboard-content');
     if (!container) return;
 
-    const dayOfWeek = Utils.getDayOfWeek();
-    const dayName = Utils.getDayName();
-    const dayDisplay = Utils.getDayDisplayName();
-    const today = StorageManager.today();
+    var type = this.getTimelineType();
+    var timeline = DAILY_TIMELINE[type] || [];
+    var completed = this.getCompletedBlocks();
+    var streak = this.calculateStreak();
+    var waterCount = StorageManager.getForDate('water') || 0;
+    var macros = this.calculateDayMacros(timeline);
+    var workoutLabel = this.getTodayWorkoutLabel();
 
-    // Get stored data for today
-    const checklistData = StorageManager.getForDate('checklist') || {};
-    const waterCount = StorageManager.getForDate('water') || 0;
-    const streak = this.calculateStreak();
+    var html = '';
 
-    // Get today's workout
-    const currentPhase = StorageManager.getValue('currentPhase', 1);
-    const phaseKey = 'fase' + currentPhase;
-    const todayWorkout = WORKOUTS[phaseKey] ? WORKOUTS[phaseKey].days[dayName] : null;
+    // Greeting card
+    html += '<div class="card glass dashboard-hero" style="text-align:center; padding: 1.5rem;">';
+    html += '<h2 style="font-family: \'Playfair Display\', serif; margin-bottom: 0.5rem;">';
+    html += Utils.getContextGreeting();
+    html += '</h2>';
+    html += '<p style="opacity: 0.8; font-style: italic;">';
+    html += '"' + Utils.randomFrom(MOTIVATIONAL_QUOTES) + '"';
+    html += '</p>';
+    html += '</div>';
 
-    // Get today's meals
-    const mealType = (dayOfWeek >= 1 && dayOfWeek <= 5) ? 'treino' : 'descanso';
-    const todayMeals = MEALS[mealType];
-
-    // Build HTML
-    let html = '';
-
-    // Greeting + motivational quote
-    html += `
-      <div class="card glass dashboard-hero" style="text-align:center; padding: 1.5rem;">
-        <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">
-          ${Utils.getContextGreeting()}
-        </h2>
-        <p style="opacity: 0.8; font-style: italic;">
-          "${Utils.randomFrom(MOTIVATIONAL_QUOTES)}"
-        </p>
-      </div>`;
-
-    // Photo reminder — check if > 14 days since last photo
-    var lastPhotoDate = StorageManager.getValue('lastPhotoDate', null);
-    var photoReminder = '';
-    if (lastPhotoDate) {
-      var daysSince = Math.floor((Date.now() - new Date(lastPhotoDate).getTime()) / 86400000);
-      if (daysSince >= 14) {
-        photoReminder = '<div class="card glass photo-reminder" style="border-left:3px solid var(--accent); cursor:pointer;" onclick="Router.navigate(\'progresso\')">';
-        photoReminder += '<p style="margin:0;">\uD83D\uDCF8 <strong>Hora de tirar fotos de progresso!</strong></p>';
-        photoReminder += '<p style="margin:0.25rem 0 0; font-size:0.85rem; opacity:0.7;">\u00DAltima foto: ' + Utils.formatDateBR(lastPhotoDate) + ' (' + daysSince + ' dias atr\u00E1s)</p>';
-        photoReminder += '</div>';
-      }
-    } else {
-      photoReminder = '<div class="card glass photo-reminder" style="border-left:3px solid var(--accent); cursor:pointer;" onclick="Router.navigate(\'progresso\')">';
-      photoReminder += '<p style="margin:0;">\uD83D\uDCF8 <strong>Tire sua primeira foto de progresso!</strong></p>';
-      photoReminder += '<p style="margin:0.25rem 0 0; font-size:0.85rem; opacity:0.7;">Fotos a cada 15 dias mostram a transforma\u00E7\u00E3o</p>';
-      photoReminder += '</div>';
-    }
-    html += photoReminder;
-
-    // Streak
+    // Streak + today's workout label
+    html += '<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">';
     if (streak > 0) {
-      html += `
-        <div class="streak">
-          <span class="streak-fire">&#128293;</span>
-          <span class="streak-count">${streak}</span>
-          <span class="streak-label">dias seguidos</span>
-        </div>`;
-    }
-
-    // Daily checklist
-    html += `<div class="card glass">
-      <h3>Checklist do Dia — ${dayDisplay}</h3>
-      <div class="checklist-items">`;
-
-    const todayItems = CHECKLIST_ITEMS.filter(item => {
-      if (!item.days) return true; // Every day
-      return item.days.includes(dayOfWeek);
-    });
-
-    todayItems.forEach(item => {
-      // Special handling for water (separate tracker)
-      if (item.id === 'agua') return;
-
-      const checked = checklistData[item.id] || false;
-      html += `
-        <label class="checkbox-wrapper">
-          <input type="checkbox" class="checklist-checkbox" data-id="${item.id}"
-            ${checked ? 'checked' : ''}>
-          <span class="checkbox-custom"></span>
-          <span class="checkbox-label">
-            ${item.emoji} ${item.label}
-            ${item.time ? '<small style="opacity:0.6"> — ' + item.time + '</small>' : ''}
-          </span>
-        </label>`;
-    });
-
-    html += `</div></div>`;
-
-    // Water tracker
-    const waterGoal = 10; // 10 copos de 250ml = 2.5L
-    html += `
-      <div class="card glass">
-        <h3>Agua — ${waterCount}/${waterGoal} copos (${(waterCount * 250 / 1000).toFixed(1)}L / 2.5L)</h3>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: ${Math.min(100, (waterCount / waterGoal) * 100)}%"></div>
-        </div>
-        <div class="water-tracker" style="margin-top: 0.75rem;">`;
-
-    for (let i = 1; i <= waterGoal; i++) {
-      html += `<button class="water-cup ${i <= waterCount ? 'filled' : ''}" data-cup="${i}">&#128167;</button>`;
-    }
-
-    html += `
-        </div>
-        <div style="display:flex; gap:0.5rem; margin-top:0.75rem;">
-          <button class="btn btn-sm btn-primary" id="water-add">+ Copo</button>
-          <button class="btn btn-sm btn-outline" id="water-remove">- Copo</button>
-        </div>
-      </div>`;
-
-    // Today's workout card
-    if (todayWorkout && todayWorkout.name !== 'Descanso total') {
-      html += `
-        <div class="card glass" onclick="Router.navigate('treino')" style="cursor:pointer;">
-          <h3>Treino de Hoje</h3>
-          <p style="font-weight:600; color: var(--primary);">${todayWorkout.name}</p>
-          <p style="opacity:0.7; font-size:0.9rem;">
-            ${todayWorkout.exercises ? todayWorkout.exercises.length + ' exercícios' : 'Dia de descanso ativo'}
-          </p>
-          <span class="btn btn-sm btn-outline" style="margin-top:0.5rem;">Ver treino &#8594;</span>
-        </div>`;
+      html += '<div class="streak" style="margin:0;">';
+      html += '<span class="streak-fire">&#128293;</span>';
+      html += '<span class="streak-count">' + streak + '</span>';
+      html += '<span class="streak-label">dias seguidos</span>';
+      html += '</div>';
     } else {
-      html += `
-        <div class="card glass">
-          <h3>Dia de Descanso</h3>
-          <p style="opacity:0.7;">Apenas alongamento leve, skincare, hidratação e autocuidado!</p>
-        </div>`;
+      html += '<div></div>';
     }
+    html += '<div style="font-size:0.82rem; color:var(--text-muted); text-align:right;">' + workoutLabel + '</div>';
+    html += '</div>';
 
-    // Today's meals card
-    if (todayMeals) {
-      html += `
-        <div class="card glass" onclick="Router.navigate('nutricao')" style="cursor:pointer;">
-          <h3>Refeições de Hoje</h3>
-          <div style="display:flex; flex-direction:column; gap:0.3rem;">`;
+    // Macros summary bar
+    html += '<div class="timeline-macros">';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.kcal + '</span><span class="timeline-macro-label">kcal</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.prot + 'g</span><span class="timeline-macro-label">prote\u00edna</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.carb + 'g</span><span class="timeline-macro-label">carb</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.fat + 'g</span><span class="timeline-macro-label">gordura</span></div>';
+    html += '</div>';
 
-      todayMeals.meals.forEach(meal => {
-        html += `<span style="font-size:0.9rem;">${meal.emoji} <strong>${meal.name}</strong> — ${meal.time}</span>`;
-      });
+    // Water tracker — 5 garrafinhas de 700ml = 3.5L
+    var waterGoal = 5;
+    var waterMl = waterCount * 700;
+    html += '<div class="timeline-water">';
+    for (var w = 1; w <= waterGoal; w++) {
+      html += '<div class="timeline-bottle' + (w <= waterCount ? ' filled' : '') + '" data-bottle="' + w + '"></div>';
+    }
+    html += '<span class="timeline-water-label">' + (waterMl / 1000).toFixed(1) + 'L / 3.5L</span>';
+    html += '</div>';
 
-      html += `
-          </div>
-          <p style="opacity:0.6; font-size:0.85rem; margin-top:0.5rem;">Meta: ~2.400 kcal | 170g proteína</p>
-          <span class="btn btn-sm btn-outline" style="margin-top:0.5rem;">Ver nutrição &#8594;</span>
-        </div>`;
+    // Timeline blocks
+    for (var t = 0; t < timeline.length; t++) {
+      var block = timeline[t];
+      var isCompleted = !!completed[block.id];
+      var isMeal = block.type === 'meal' && block.mealId && MEAL_OPTIONS[block.mealId];
+      var isWorkout = block.type === 'workout';
+
+      html += '<div class="timeline-block' + (isCompleted ? ' completed' : '') + '" data-block-id="' + block.id + '" data-block-type="' + (block.type || '') + '">';
+
+      // Time
+      html += '<div class="timeline-block-time">' + block.time + '</div>';
+
+      // Content
+      html += '<div class="timeline-block-content">';
+      html += '<div class="timeline-block-title">' + block.label + '</div>';
+
+      // Items
+      if (block.items && block.items.length > 0) {
+        html += '<div class="timeline-block-items">';
+        for (var it = 0; it < block.items.length; it++) {
+          var item = block.items[it];
+          // Check for fem tags (items containing specific emoji)
+          if (item.indexOf('\uD83C\uDF3F') !== -1) {
+            var parts = item.split('\uD83C\uDF3F');
+            html += parts[0] + '<span class="fem-tag">\uD83C\uDF3F fem</span>';
+            if (parts[1]) html += parts[1];
+            html += '<br>';
+          } else {
+            html += item + '<br>';
+          }
+        }
+        html += '</div>';
+      }
+
+      // Meal options
+      if (isMeal) {
+        var mealData = MEAL_OPTIONS[block.mealId];
+        var choiceIdx = this.getMealChoice(block.mealId);
+
+        html += '<div class="timeline-meal-options">';
+        for (var mo = 0; mo < mealData.options.length; mo++) {
+          var opt = mealData.options[mo];
+          html += '<button class="timeline-meal-opt' + (mo === choiceIdx ? ' active' : '') + '" ';
+          html += 'data-meal-id="' + block.mealId + '" data-opt-idx="' + mo + '">';
+          html += 'Op\u00e7\u00e3o ' + (mo + 1);
+          html += '</button>';
+        }
+        html += '</div>';
+
+        // Show selected meal info
+        if (mealData.options[choiceIdx]) {
+          var selected = mealData.options[choiceIdx];
+          html += '<div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">';
+          html += selected.name;
+          if (selected.fem) html += ' <span class="fem-tag">fem</span>';
+          html += ' &mdash; ' + selected.kcal + ' kcal, ' + selected.prot + 'g prot';
+          html += '</div>';
+        }
+      }
+
+      // Workout block extra info
+      if (isWorkout) {
+        html += '<div style="font-size:0.75rem; color:var(--accent); margin-top:4px;">Toque para ir ao treino &rarr;</div>';
+      }
+
+      html += '</div>'; // end content
+
+      // Check circle
+      html += '<div class="timeline-block-check">';
+      if (isCompleted) {
+        html += '&#10003;';
+      }
+      html += '</div>';
+
+      html += '</div>'; // end timeline-block
     }
 
     // Daily tip
-    html += `
-      <div class="card glass">
-        <h3>Dica do Dia</h3>
-        <p style="opacity:0.9;">${Utils.randomFrom(DAILY_TIPS)}</p>
-      </div>`;
+    html += '<div class="card glass" style="margin-top:8px;">';
+    html += '<h3>Dica do Dia</h3>';
+    html += '<p style="opacity:0.9;">' + Utils.randomFrom(DAILY_TIPS) + '</p>';
+    html += '</div>';
 
-    // Set innerHTML
     container.innerHTML = html;
   },
 
-  // Event listeners are now handled via delegation in init()
-
   calculateStreak() {
-    let streak = 0;
-    const today = new Date();
+    var streak = 0;
+    var today = new Date();
 
-    for (let i = 0; i < 365; i++) {
-      const date = new Date(today);
+    for (var i = 0; i < 365; i++) {
+      var date = new Date(today);
       date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
+      var dateStr = date.toISOString().split('T')[0];
 
-      const checklist = StorageManager.getForDate('checklist', dateStr);
-      if (!checklist) {
+      // Check timeline data first, fall back to old checklist data
+      var data = StorageManager.getForDate('timeline', dateStr);
+      if (!data) {
+        data = StorageManager.getForDate('checklist', dateStr);
+      }
+      if (!data) {
         if (i === 0) continue; // Today might not have data yet
         break;
       }
 
       // Count checked items
-      const total = Object.keys(checklist).length;
-      const checked = Object.values(checklist).filter(v => v).length;
+      var total = Object.keys(data).length;
+      var checked = Object.values(data).filter(function(v) { return v; }).length;
 
-      if (total > 0 && (checked / total) >= 0.8) {
+      if (total > 0 && (checked / total) >= 0.5) {
         streak++;
       } else {
         if (i === 0) continue; // Today in progress
