@@ -2705,10 +2705,10 @@ const NutritionManager = {
 
   renderSubTabs() {
     var tabs = [
-      { id: 'plano', label: '\uD83C\uDF7D\uFE0F Plano' },
-      { id: 'suplementos', label: '\uD83D\uDC8A Suplem.' },
-      { id: 'receitas', label: '\uD83D\uDCD6 Receitas' },
-      { id: 'compras', label: '\uD83D\uDED2 Compras' }
+      { id: 'plano', label: 'Plano' },
+      { id: 'suplementos', label: 'Suplem.' },
+      { id: 'receitas', label: 'Receitas' },
+      { id: 'compras', label: 'Compras' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
@@ -3201,11 +3201,11 @@ const CareManager = {
 
   renderSubTabs() {
     var tabs = [
-      { id: 'skincare', label: '\u2728 Skincare' },
-      { id: 'cabelo', label: '\uD83D\uDC87 Cabelo' },
-      { id: 'depilacao', label: '\uD83E\uDE92 Depila\u00E7\u00E3o' },
-      { id: 'kegel', label: '\uD83D\uDCAA Kegel' },
-      { id: 'cores', label: '\uD83D\uDC57 Cores' }
+      { id: 'skincare', label: 'Skincare' },
+      { id: 'cabelo', label: 'Cabelo' },
+      { id: 'depilacao', label: 'Depila\u00E7\u00E3o' },
+      { id: 'kegel', label: 'Kegel' },
+      { id: 'cores', label: 'Cores' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
