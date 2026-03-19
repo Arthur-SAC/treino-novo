@@ -2391,6 +2391,33 @@ const WorkoutManager = {
       html += '</div>';
     });
 
+    // Dança Sensual
+    if (typeof DANCA_SENSUAL !== 'undefined') {
+      html += '<h3 style="font-family:var(--font-title);margin:20px 0 10px;">Dan\u00e7a Sensual</h3>';
+      html += '<div style="color:var(--text-muted);font-size:0.82rem;margin-bottom:12px;line-height:1.55;">' + DANCA_SENSUAL.intro + '</div>';
+      for (var ds = 0; ds < DANCA_SENSUAL.estilos.length; ds++) {
+        var estilo = DANCA_SENSUAL.estilos[ds];
+        html += '<div class="card glass" style="margin-bottom:10px;">';
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
+        html += '<span style="font-size:1.2rem;">' + estilo.icon + '</span>';
+        html += '<div>';
+        html += '<div style="color:var(--text);font-weight:600;font-size:0.92rem;">' + estilo.name + '</div>';
+        html += '<div style="color:var(--text-muted);font-size:0.78rem;">' + estilo.what + '</div>';
+        html += '</div></div>';
+        html += '<div style="color:var(--primary);font-size:0.8rem;margin-bottom:8px;line-height:1.5;">' + estilo.forYou + '</div>';
+        for (var lv = 0; lv < estilo.progression.length; lv++) {
+          var level = estilo.progression[lv];
+          html += '<div style="margin-bottom:8px;">';
+          html += '<div style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">' + level.level + '</div>';
+          for (var mv = 0; mv < level.moves.length; mv++) {
+            html += '<div style="padding:3px 0;font-size:0.82rem;color:var(--text-muted);line-height:1.5;">\u203A ' + level.moves[mv] + '</div>';
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+    }
+
     if (typeof POWER_MOVES !== 'undefined') {
       html += '<h3 style="font-family:var(--font-title);margin:20px 0 10px;">Power Moves \u2014 Micro-Momentos</h3>';
       html += '<div style="color:var(--text-muted);font-size:0.82rem;margin-bottom:12px;line-height:1.5;">Movimentos r\u00e1pidos pra fazer em momentos mortos do dia. N\u00e3o \u00e9 treino formal \u2014 \u00e9 construir o gingado natural.</div>';

@@ -2721,6 +2721,57 @@ const REBOLAR_STEPS = [
   { fase: "Mês 2+ · Expressão", steps: ["Adicionar movimento dos braços e expressão corporal.","YouTube: 'aprenda a rebolar do zero' — boas aulas gratuitas.","Bachata para iniciantes no YouTube — ensina isolamento naturalmente.","Gravar e comparar com semanas anteriores."] },
 ];
 
+// ─── DANCA_SENSUAL ──────────────────────────────────────────
+const DANCA_SENSUAL = {
+  intro: "Dança sensual é treino de expressão corporal + quadril + confiança. Cada estilo desenvolve um aspecto diferente. Comece pelo que te atrair mais — todos se complementam.",
+  estilos: [
+    {
+      name: "Twerk",
+      icon: "🍑",
+      what: "Isolamento de glúteo puro — contrai e solta rápido. O mais direto pra ativar e crescer a bunda.",
+      forYou: "Ativa glúteo de um jeito que nenhum exercício faz. Complementa o treino de hipertrofia e constrói conexão mente-músculo.",
+      progression: [
+        { level: "Nível 1 · Base", moves: ["Wall twerk: mãos na parede, pés afastados, arch (empinar) e tuck (recolher) o quadril. 3x20 devagar.", "Sumo twerk: posição de sumo squat, mesma coisa — arch e tuck. O peso nas pernas ajuda a sentir.", "Squeeze isolado: em pé, contrair só o glúteo ritmicamente sem mexer lombar. 3x30."] },
+        { level: "Nível 2 · Velocidade", moves: ["Wall twerk mais rápido — buscar a vibração.", "Adicionar bounce (joelhos dobram e estendem rápido enquanto o glúteo twerka).", "YouTube: buscar 'beginner twerk tutorial' — Lexy Panterra e Nicole Steen têm boas aulas."] },
+        { level: "Nível 3 · Flow", moves: ["Twerk em diferentes posições: de pé, agachada, no chão.", "Combinar com ondulação de coluna — twerk + wave.", "Freestyle com música — funk brasileiro, reggaeton, dancehall."] }
+      ]
+    },
+    {
+      name: "Bachata Sensual",
+      icon: "💃",
+      what: "Dança de casal com ondulações de corpo e isolamentos de quadril. O mais completo pra aprender fluidez feminina.",
+      forYou: "Ensina ondulação de corpo inteiro, conexão com outra pessoa, e expressão sensual. Pode dançar com a namorada.",
+      progression: [
+        { level: "Nível 1 · Passos básicos", moves: ["Passo lateral básico: 3 passos pro lado + tap. YouTube: 'bachata basic step'.", "Adicionar quadril: no tap, empurrar quadril pro lado.", "Praticar sozinha com música — Prince Royce, Romeo Santos."] },
+        { level: "Nível 2 · Ondulações", moves: ["Body wave frontal: onda do peito até o quadril.", "Body wave lateral: onda lateral passando pelo quadril.", "YouTube: buscar 'bachata sensual lady style' — muitas aulas gratuitas."] },
+        { level: "Nível 3 · Com a parceira", moves: ["Dançar junto com a namorada — ela conduz ou você conduz.", "Combinar body waves com os passos.", "Aulas presenciais de bachata em Aracaju se tiver — acelera muito."] }
+      ]
+    },
+    {
+      name: "Lady Style / Feminine Movement",
+      icon: "👠",
+      what: "Expressão corporal feminina — como andar, como se mover, como usar braços e mãos. É o mais 'do dia a dia'.",
+      forYou: "Constrói o gingado feminino natural que vai aparecer em tudo: andando, sentando, se movendo. A Luiza Sonza é referência direta.",
+      progression: [
+        { level: "Nível 1 · Braços e mãos", moves: ["Braços fluidos: estender um braço devagar como se tocasse água. Alternar. 10x cada.", "Mão no cabelo: passar a mão no cabelo/nuca com fluidez (gesto feminino clássico). Praticar até ficar natural.", "Toque no corpo: deslizar a mão da cintura até a coxa. Devagar, com intenção."] },
+        { level: "Nível 2 · Caminhar", moves: ["Caminhar cruzando levemente os pés (passarela) — quadril balança naturalmente.", "Peso no quadril ao parar: ficar em pé com peso num lado, quadril empurrado.", "YouTube: buscar 'feminine walk tutorial' ou 'model walk'."] },
+        { level: "Nível 3 · Expressão completa", moves: ["Combinar braços + quadril + caminhar numa música.", "YouTube: buscar 'lady style dance tutorial' ou 'Luiza Sonza dança'.", "Gravar a si mesma e comparar mês a mês — a evolução motiva."] }
+      ]
+    },
+    {
+      name: "Dancehall / Reggaeton",
+      icon: "🔥",
+      what: "Energia alta, muita movimentação de quadril e glúteo. O mais 'fitness' das danças sensuais — cansa e treina ao mesmo tempo.",
+      forYou: "Cardio que não parece cardio. Trabalha quadril, glúteo e abdômen enquanto se diverte. Queima muita caloria.",
+      progression: [
+        { level: "Nível 1 · Grooves básicos", moves: ["Wine: círculos de quadril contínuos no ritmo da música. 2min sem parar.", "Tick: quadril batendo no tempo — esquerda, direita, esquerda, direita. Com joelhos.", "YouTube: buscar 'beginner dancehall tutorial' ou 'reggaeton dance basic'."] },
+        { level: "Nível 2 · Combos", moves: ["Combinar wine + tick em sequência.", "Adicionar braços e expressão — energia alta.", "Praticar com reggaeton: Daddy Yankee, Bad Bunny, J Balvin."] },
+        { level: "Nível 3 · Freestyle", moves: ["Dançar livre numa música inteira sem parar (3-4min).", "Misturar estilos: um pouco de twerk, wine, ondulação.", "Filmar e comparar — dançar pra se divertir, não pra ser perfeita."] }
+      ]
+    }
+  ]
+};
+
 // ─── EXERCISE_TECHNIQUE ──────────────────────────────────────
 const EXERCISE_TECHNIQUE = [
   {
@@ -3067,6 +3118,18 @@ const POWER_MOVES = {
       { name: "Postura check", how: "Ombros baixos, coluna longa, pés no chão.", result: "Reduz tensão no pescoço/ombros. Cintura parece mais fina com postura boa.", alert: null },
       { name: "Rotação de tornozelo", how: "10 círculos cada pé, sob a mesa.", result: "Circulação pras pernas — 8h sentada trava tudo.", alert: null },
       { name: "Vacuum discreto", how: "Puxar umbigo pra dentro, segurar 10seg. Ninguém percebe.", result: "Marca cintura ao longo do tempo.", alert: null },
+    ]
+  },
+  danca: {
+    label: "Mini-treino de dança (2-3min)",
+    icon: "💃",
+    moves: [
+      { name: "Arch & Tuck (base do twerk)", how: "Em pé, mãos na cintura ou na parede. Empinar o quadril (arch) e recolher (tuck). 20x devagar, sentir o glúteo contrair no arch.", result: "Ativação de glúteo + aprende o movimento base do twerk.", alert: "Se a lombar doer, diminuir a amplitude. O movimento é no quadril, não na lombar." },
+      { name: "Wine de quadril (dancehall)", how: "Pés afastados, joelhos levemente dobrados. Fazer círculos contínuos com o quadril no ritmo de uma música. 1min sem parar.", result: "Fluidez de quadril. Depois de 2 semanas fazendo todo dia, o movimento fica automático.", alert: "Tronco fica parado. Se tiver mexendo os ombros junto, o círculo tá grande demais." },
+      { name: "Body wave (bachata sensual)", how: "Em pé, iniciar a onda no peito (empurrar pra frente), passar pela barriga, quadril, e voltar. Como uma onda passando pelo corpo. 10x devagar.", result: "Flexibilidade de coluna + movimento mais sensual que existe. Se aplica na cama também.", alert: "Se travar no meio, dividir: fazer só peito→barriga, depois só barriga→quadril. Juntar depois." },
+      { name: "Passada cruzada (lady style)", how: "Andar cruzando levemente um pé na frente do outro, como passarela. Quadril balança naturalmente. 10 passos ida, 10 volta.", result: "Gingado feminino ao andar. Depois de praticar, aparece sem pensar.", alert: null },
+      { name: "Tick de quadril (reggaeton)", how: "Em pé, bater o quadril pro lado no ritmo — esquerda, direita, esquerda, direita. Seco e rápido. 30 ticks.", result: "Coordenação de quadril no ritmo. Base de reggaeton e funk.", alert: "Se os joelhos reclamarem, diminuir a velocidade. O movimento vem do quadril, joelhos só acompanham." },
+      { name: "Mãos e cabelo (expressão)", how: "Passar a mão no cabelo/nuca com fluidez. Deslizar a mão da cintura até a coxa. Praticar na frente do espelho até parecer natural.", result: "Expressão corporal feminina. O tipo de gesto que vira natural e aparece em tudo.", alert: null },
     ]
   },
   cama: {
