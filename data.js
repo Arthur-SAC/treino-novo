@@ -5039,3 +5039,203 @@ const CARDIO_GUIDE = [
   { title: "Bike de baixa intensidade", ideal: "Cardio leve sem impacto articular", kcal: "~250-350 kcal/h", impact: "Muito baixo", when: "Opcional em qualquer dia" },
   { title: "Corrida (EVITAR primeiros 6 meses)", ideal: "Não recomendado no início", kcal: "—", impact: "Consome músculo junto com gordura", when: "Só após base muscular estabelecida" },
 ];
+
+// ─── COLOR_GUIDE ──────────────────────────────────────────────
+const COLOR_GUIDE = {
+  cima: {
+    label: "Parte de cima",
+    subtitle: "Blusinhas, croppeds, tops, camisas, bodysuit",
+    tip: "A parte de cima fica perto do rosto — cores aqui afetam direto como a pele aparece. Tons quentes fazem a pele brilhar; tons frios apagam.",
+    best: [
+      { hex: "#8B3A2A", name: "Terracota", why: "Harmonia total com a pele, faz o rosto iluminar" },
+      { hex: "#C6882A", name: "Mostarda / Âmbar", why: "O tom dourado faz a pele parecer mais luminosa" },
+      { hex: "#7D2B4E", name: "Vinho / Borgonha", why: "Contraste elegante que valoriza pele morena" },
+      { hex: "#1B5E3C", name: "Verde floresta", why: "Contraste profundo — muito flattering em tons pardos" },
+      { hex: "#3D1A5A", name: "Roxo ameixa", why: "Intenso e feminino, cria profundidade no look" },
+      { hex: "#1C2C5B", name: "Azul marinho", why: "Versátil, contraste marcante sem agredir" },
+      { hex: "#5A3E28", name: "Chocolate", why: "Monocromático com a pele — efeito luxuoso" },
+      { hex: "#C4956A", name: "Caramelo", why: "Tom próximo da pele — efeito monochromático sensual" },
+    ],
+    avoid: [
+      { hex: "#E8F4F8", name: "Azul bebê", why: "Lava o rosto" },
+      { hex: "#FFE4E1", name: "Rosa bebê", why: "Desbota o tom da pele" },
+      { hex: "#FFFFFF", name: "Branco puro", why: "Use creme/off-white no lugar" },
+      { hex: "#E8E0F0", name: "Lavanda pálida", why: "Apaga o brilho" },
+    ],
+    combos: [
+      { swatches: ["#8B3A2A", "#C6882A", "#F5E6C8"], name: "Terra quente", desc: "Terracota + mostarda + creme" },
+      { swatches: ["#7D2B4E", "#1A1A1A", "#B8860B"], name: "Noite e dourado", desc: "Vinho + preto + detalhe dourado" },
+      { swatches: ["#1B5E3C", "#C4956A", "#F5E6C8"], name: "Floresta e mel", desc: "Verde escuro + caramelo" },
+    ]
+  },
+  baixo: {
+    label: "Parte de baixo",
+    subtitle: "Calças, saias, shorts, leggings",
+    tip: "A parte de baixo emoldura o glúteo e as coxas — o foco do seu treino. Cores escuras e monocromáticas criam volume visual, estampas e tons vibrantes celebram as curvas quando elas já estiverem construídas.",
+    best: [
+      { hex: "#1A1A1A", name: "Preto", why: "Infalível. Define contorno e alonga. Melhor amigo da silhueta." },
+      { hex: "#1C2C5B", name: "Azul marinho", why: "Substituto do preto com mais personalidade" },
+      { hex: "#1B5E3C", name: "Verde floresta", why: "Tendência atual, muito flattering em pele morena" },
+      { hex: "#5A3E28", name: "Chocolate escuro", why: "Monocromático, sofisticado, valoriza as curvas" },
+      { hex: "#3D1A5A", name: "Roxo ameixa", why: "Profundo e sensual em calça jeans ou legging" },
+      { hex: "#7D2B4E", name: "Vinho", why: "Excelente em saia lápis ou calça reta" },
+      { hex: "#8B3A2A", name: "Terracota", why: "Belíssimo em saia midi ou calça pantalona" },
+      { hex: "#2C4A3E", name: "Verde militar / Oliva", why: "Neutro quente que combina com quase tudo" },
+    ],
+    avoid: [
+      { hex: "#B8B8B8", name: "Cinza claro", why: "Não favorece nem contrasta" },
+      { hex: "#E8F4F8", name: "Azul bebê", why: "Faz as pernas parecerem mais largas" },
+      { hex: "#E8F8E8", name: "Verde menta", why: "Tom frio conflita com subtom da pele" },
+      { hex: "#FFE4E1", name: "Rosa bebê", why: "Desbota próximo da pele" },
+    ],
+    combos: [
+      { swatches: ["#1A1A1A", "#C6882A", "#B8860B"], name: "Preto e ouro", desc: "Calça preta + top mostarda + acessório dourado" },
+      { swatches: ["#1C2C5B", "#F5E6C8", "#8B3A2A"], name: "Marinho e terra", desc: "Calça marinha + blusa creme + detalhe terracota" },
+      { swatches: ["#2C4A3E", "#C4956A", "#5A3E28"], name: "Tons naturais", desc: "Oliva + caramelo + chocolate" },
+    ]
+  },
+  intima: {
+    label: "Roupa íntima & lingerie",
+    subtitle: "Calcinha, sutiã, bralette, bodysuit, camisola",
+    tip: "Em lingerie a regra muda: você quer ou criar contraste dramático com a pele (escuros intensos) ou criar o efeito 'segunda pele' (nude certo para pele parda — não o nude rosado europeu). Ambos funcionam por razões diferentes.",
+    best: [
+      { hex: "#1A1A1A", name: "Preto", why: "Clássico absoluto. Pele parda + lingerie preta = combinação perfeita. Sempre." },
+      { hex: "#C4956A", name: "Nude caramelo", why: "O nude CERTO para pele parda. Efeito segunda pele real — não o rosado europeu." },
+      { hex: "#8B0000", name: "Vermelho cereja escuro", why: "Contraste dramático e sensual. Clássico que nunca erra." },
+      { hex: "#6B2D5E", name: "Roxo profundo", why: "Excelente em renda. Contraste luxuoso com a pele morena." },
+      { hex: "#7D2B4E", name: "Vinho", why: "Sofisticado e sensual. Ótimo em cetim ou renda." },
+      { hex: "#B8860B", name: "Dourado / Bronze", why: "Em acetinado ou renda faz a pele parecer bronzeada e luminosa." },
+      { hex: "#2C4A3E", name: "Verde militar / Oliva", why: "Tendência atual — inesperado e muito lindo em pele morena." },
+      { hex: "#3D1A5A", name: "Roxo ameixa", why: "Profundo e misterioso. Poderoso em qualquer peça de lingerie." },
+    ],
+    avoid: [
+      { hex: "#F5D5C8", name: "Nude rosado", why: "O 'nude' europeu — some na pele, não cria segunda pele real" },
+      { hex: "#E8E0F0", name: "Lavanda pálida", why: "Pastel frio sem contraste ou harmonia" },
+      { hex: "#E8F4F8", name: "Azul bebê", why: "Lavado, perde todo o impacto" },
+      { hex: "#FFFFFF", name: "Branco puro", why: "Difícil de manter e sem sinergia — use off-white/creme" },
+    ],
+    combos: [
+      { swatches: ["#1A1A1A", "#B8860B"], name: "Clássico dourado", desc: "Preto + detalhe dourado — infalível" },
+      { swatches: ["#7D2B4E", "#3D1A5A", "#1A1A1A"], name: "Noite escura", desc: "Vinho + roxo + preto — intenso e sensual" },
+      { swatches: ["#C4956A", "#B8860B", "#5A3E28"], name: "Segunda pele", desc: "Nude caramelo + bronze + chocolate — monochromático" },
+    ]
+  }
+};
+
+// ─── PROJECTION_RATES ─────────────────────────────────────────
+const PROJECTION_RATES = {
+  quadril: 0.7,
+  cintura: -0.35,
+  coxa: 0.5,
+  peso: -0.38,
+  busto: 0.25
+};
+
+// ─── SHOPPING_LIST_NEW ────────────────────────────────────────
+const SHOPPING_LIST_NEW = {
+  proteinas: [
+    { item: "Peito de frango ou sobrecoxa s/ pele", qty: "1.2 kg", checked: false },
+    { item: "Carne moída patinho", qty: "600g", checked: false },
+    { item: "Ovos", qty: "2 dúzias", checked: false },
+    { item: "Whey Protein", qty: "1 pote (mensal)", checked: false },
+    { item: "Tofu firme 🌿", qty: "2 blocos (600g)", checked: false },
+    { item: "Filé de peixe", qty: "400g", checked: false },
+    { item: "Queijo cottage", qty: "300g", checked: false },
+    { item: "Iogurte grego natural integral", qty: "6 potes (170g)", checked: false },
+  ],
+  carboidratos: [
+    { item: "Arroz branco ou integral", qty: "1 kg", checked: false },
+    { item: "Feijão (carioca ou preto)", qty: "500g", checked: false },
+    { item: "Batata-doce", qty: "1.5 kg", checked: false },
+    { item: "Aveia em flocos finos", qty: "500g", checked: false },
+    { item: "Pão integral", qty: "1 pacote", checked: false },
+    { item: "Goma de tapioca", qty: "500g", checked: false },
+    { item: "Granola sem açúcar", qty: "300g", checked: false },
+  ],
+  verduras_legumes: [
+    { item: "Brócolis ou couve-flor 🌿", qty: "1 kg", checked: false },
+    { item: "Abobrinha", qty: "800g", checked: false },
+    { item: "Cenoura", qty: "500g", checked: false },
+    { item: "Alface, tomate, pepino", qty: "livre", checked: false },
+    { item: "Couve ou espinafre 🌿", qty: "2 maços", checked: false },
+    { item: "Pimentão", qty: "3 un.", checked: false },
+    { item: "Cebola e alho", qty: "500g + 1 cabeça", checked: false },
+  ],
+  frutas: [
+    { item: "Banana", qty: "1 cacho (~12)", checked: false },
+    { item: "Fruta da época", qty: "7 un.", checked: false },
+    { item: "Abacate", qty: "2 un.", checked: false },
+    { item: "Limão", qty: "6 un.", checked: false },
+    { item: "Morangos ou kiwi", qty: "300g", checked: false },
+  ],
+  gorduras: [
+    { item: "Pasta de amendoim", qty: "1 pote (500g)", checked: false },
+    { item: "Azeite extra virgem", qty: "500ml", checked: false },
+    { item: "Linhaça dourada moída 🌿", qty: "300g", checked: false },
+  ],
+  laticinios: [
+    { item: "Leite de soja 🌿 ou leite semidesnatado", qty: "2L", checked: false },
+    { item: "Requeijão light ou cottage", qty: "1 pote", checked: false },
+  ],
+  temperos_outros: [
+    { item: "Shoyu / molho de soja", qty: "200ml", checked: false },
+    { item: "Sal, pimenta, cominho, ervas", qty: "conforme falta", checked: false },
+    { item: "Gergelim", qty: "100g", checked: false },
+    { item: "Canela em pó", qty: "1 pote", checked: false },
+    { item: "Extrato de tomate", qty: "2 latas", checked: false },
+  ],
+  suplementos_chas: [
+    { item: "Creatina", qty: "1 pote (mensal)", checked: false },
+    { item: "Ômega-3 cápsulas", qty: "1 pote (mensal)", checked: false },
+    { item: "Multivitamínico", qty: "1 pote (mensal)", checked: false },
+    { item: "Chá de spearmint (hortelã) 🌿", qty: "2 caixas", checked: false },
+    { item: "Edamame congelado 🌿", qty: "2 pacotes", checked: false },
+    { item: "Vitamina D3 + K2", qty: "1 pote (mensal)", checked: false },
+  ],
+};
+
+// ─── SKINCARE_PRODUCTS ────────────────────────────────────────
+const SKINCARE_PRODUCTS = {
+  rostoManha: [
+    { name: "Gel de Limpeza Facial suave", brand: "Neutrogena ou CeraVe", price: "~R$25–40" },
+    { name: "Sérum Vitamina C 10%", brand: "Yes! Vitamins ou Simple Organic", price: "~R$40–80" },
+    { name: "Hidratante Gel-Creme leve", brand: "Neutrogena Hydro Boost", price: "~R$45–60" },
+    { name: "Protetor Solar FPS 60 ★ ESSENCIAL", brand: "Episol Sec ou Anthelios Airlicium", price: "~R$35–85" },
+  ],
+  rostoNoite: [
+    { name: "Gel de Limpeza (mesmo da manhã)", brand: "", price: "" },
+    { name: "Sérum Niacinamida 10%", brand: "Skala (~R$20), Yes! Vitamins ou Dermage", price: "~R$20–50" },
+    { name: "Retinol 0.3% (2–3×/sem inicialmente)", brand: "Episkin ou La Roche-Posay Redermic", price: "~R$50–120" },
+    { name: "Hidratante Noturno mais rico", brand: "CeraVe Loção ou Aquaphor", price: "~R$40–80" },
+  ],
+  corpo: [
+    { name: "Hidratante Corporal rico", brand: "Muriel Karité ou Nívea Luminous 630", price: "~R$20–55" },
+    { name: "Protetor Solar Corporal FPS 50+", brand: "Episol corpo ou Nívea Sun", price: "~R$30–45" },
+    { name: "Esfoliante corporal (1–2×/semana)", brand: "Océane Body Scrub ou sal grosso + azeite (caseiro)", price: "~R$0–25" },
+    { name: "Nívea Luminous 630 (axilas + virilha)", brand: "Niacinamida + hexyl resorcinol — específico pra isso", price: "~R$50–60" },
+    { name: "Desodorante sem álcool e perfume", brand: "Nívea Sensitive ou Dove Sensitive", price: "~R$12–20" },
+    { name: "Loção pós-depilação (anti-foliculite)", brand: "Com ác. salicílico — Nívea ou Avon Naturals", price: "~R$20–30" },
+  ]
+};
+
+// ─── HAIR_WASH_ROUTINE ────────────────────────────────────────
+const HAIR_WASH_ROUTINE = [
+  "Shampoo sem sulfato só no couro cabeludo — não esfregar as pontas",
+  "Condicionador do meio pra baixo, 3–5 min. Enxaguar deixando um pouquinho",
+  "Leave-in no fio ainda molhado espalhando bem",
+  "Creme de pentear com squish (apertar cachos de baixo pra cima)",
+  "Gel por cima — não tocar até secar completamente",
+  "Secar com difusor (melhor que ar natural em clima úmido como Aracaju)",
+  "Seco: quebrar o cast do gel batendo com as palmas levemente"
+];
+
+// ─── HAIR_PRODUCTS ────────────────────────────────────────────
+const HAIR_PRODUCTS = [
+  { name: "Shampoo sem sulfato", brand: "Salon Line S.O.S Cachos ou Skala Expert", price: "~R$15–22" },
+  { name: "Condicionador hidratante", brand: "Salon Line S.O.S ou Novex Embelleze", price: "~R$15–22" },
+  { name: "Leave-in para cachos", brand: "Salon Line S.O.S ou Lola Minha Vida", price: "~R$20–35" },
+  { name: "Creme de pentear", brand: "Lola Dream Cream ou Salon Line", price: "~R$22–38" },
+  { name: "Gel fixador anti-frizz", brand: "Salon Line (buscar versão pra cachos)", price: "~R$12–18" },
+  { name: "Touca/Bonnet de cetim", brand: "Shopee — 'touca cetim cachos'", price: "~R$15–25" },
+  { name: "Fronha de cetim", brand: "Shopee", price: "~R$20–40" },
+];
