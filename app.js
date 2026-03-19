@@ -4079,11 +4079,11 @@ const ProgressManager = {
 
   renderSubTabs() {
     var tabs = [
-      { id: 'fotos', label: '\uD83D\uDCF8 Fotos' },
-      { id: 'medidas', label: '\uD83D\uDCCF Medidas' },
-      { id: 'graficos', label: '\uD83D\uDCC8 Gr\u00e1ficos' },
-      { id: 'conquistas', label: '\uD83C\uDFC6 Conquistas' },
-      { id: 'projecao', label: '\u2728 Proje\u00e7\u00e3o' }
+      { id: 'fotos', label: 'Fotos' },
+      { id: 'medidas', label: 'Medidas' },
+      { id: 'graficos', label: 'Gr\u00e1ficos' },
+      { id: 'conquistas', label: 'Conquistas' },
+      { id: 'projecao', label: 'Proje\u00e7\u00e3o' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
