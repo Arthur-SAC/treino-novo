@@ -4902,3 +4902,140 @@ const WORKOUTS_NEW = {
     }
   }
 };
+
+// ─── WARMUP_LOWER ────────────────────────────────────────────
+const WARMUP_LOWER = [
+  { name: "Marcha elevando joelho", desc: "Ativa circulação e aquece quadril", time: "2 min" },
+  { name: "Círculos de quadril", desc: "Mãos na cintura, círculos amplos", time: "1 min cada sentido" },
+  { name: "Leg swing frente/trás", desc: "Pêndulo solto — não forçar", time: "15x cada perna" },
+  { name: "Leg swing lateral", desc: "Plano lateral — abre o quadril", time: "15x cada perna" },
+  { name: "Agachamento com pausa no fundo", desc: "3s no fundo, mobilidade de tornozelo e quadril", time: "10 reps" },
+  { name: "Clamshell esquerdo com elástico ⭐", desc: "Ativa o glúteo esq antes do treino — crítico", time: "2x15" },
+  { name: "Clamshell bilateral com elástico", desc: "Dois lados, ativa glúteo médio", time: "2x20" },
+  { name: "Cat-cow no quadrupede", desc: "Mobilidade lombar — arquear e curvar devagar", time: "10 lentos" },
+];
+
+// ─── WARMUP_UPPER ────────────────────────────────────────────
+const WARMUP_UPPER = [
+  { name: "Jumping jack ou pular corda", desc: "Elevar frequência cardíaca base", time: "2 min" },
+  { name: "Círculos de ombro", desc: "Braços estendidos, amplos — frente e trás", time: "15x cada direção" },
+  { name: "T-spine rotation", desc: "Deitado de lado, joelhos dobrados: abrir o braço pra trás", time: "10x cada lado" },
+  { name: "Band pull-apart (ou toalha)", desc: "Elástico na frente, abrir até tocar o peito por trás", time: "2x15" },
+  { name: "Supino com peso leve (50%)", desc: "Aquecimento específico do padrão de empurrar", time: "2x15" },
+];
+
+// ─── COOLDOWN_LOWER ──────────────────────────────────────────
+const COOLDOWN_LOWER = [
+  { name: "Pigeon Pose", desc: "Joelho dobrado na frente, perna de trás estendida", time: "2 min cada lado" },
+  { name: "Lizard Pose (Lagarto)", desc: "Avanço fundo com antebraço no chão", time: "90s cada lado" },
+  { name: "Figura 4 (piriformes)", desc: "Deitado, cruzar tornozelo sobre joelho e puxar", time: "1 min cada lado" },
+  { name: "Isquiotibial deitado", desc: "Perna esticada puxada com as mãos ou toalha", time: "1 min cada perna" },
+  { name: "Borboleta sentada", desc: "Pés juntos, joelhos pra fora, inclinar devagar", time: "2 min" },
+  { name: "Happy Baby", desc: "Deitado, segurar plantas dos pés, joelhos abertos", time: "2 min" },
+];
+
+// ─── COOLDOWN_UPPER ──────────────────────────────────────────
+const COOLDOWN_UPPER = [
+  { name: "Peitoral na porta", desc: "Braço dobrado 90° na porta, girar suavemente", time: "1 min cada lado" },
+  { name: "Ombro cruzado", desc: "Puxar o braço estendido pro outro lado", time: "45s cada lado" },
+  { name: "Torção espinhal sentada", desc: "Perna cruzada, torcer o tronco devagar", time: "1 min cada lado" },
+  { name: "Tríceps acima da cabeça", desc: "Braço dobrado, puxar o cotovelo", time: "45s cada lado" },
+  { name: "Child's Pose", desc: "Joelhos, braços à frente, testa no chão", time: "2 min" },
+];
+
+// ─── GLUTE_FIX_PROTOCOL ──────────────────────────────────────
+const GLUTE_FIX_PROTOCOL = {
+  explanation: "Desequilíbrio de glúteo é quase universal em sedentários. O lado dominante assume o trabalho. O esquerdo vai ficando dormido. É um problema de conexão nervo-músculo, não de tamanho.",
+  daily_exercises: [
+    { name: "Clamshell com elástico — ESQUERDO", sets: "3x20 lentos", desc: "Deitado de lado, elástico nos joelhos. Abrir e fechar como concha. Só o esquerdo neste bloco." },
+    { name: "Glute bridge unilateral — ESQUERDO", sets: "3x15 com pausa 3s", desc: "Pé esquerdo no chão, direito suspenso. Elevar quadril, SEGURAR 3s no topo." },
+    { name: "Donkey kick — ESQUERDO", sets: "3x20", desc: "Quadrupede, chutar o pé esquerdo para cima e trás. Joelho dobrado 90°." },
+    { name: "Side-lying abduction — ESQUERDO", sets: "3x20 lentos", desc: "Deitado de lado, elevar a perna esquerda estendida. Segurar 1s no topo." },
+    { name: "Isométrico de parede — ESQUERDO", sets: "3x30s", desc: "De pé, pressionar pé esquerdo contra parede. Sentir glúteo esq contrair. Zero movimento." },
+  ],
+  rules: [
+    { name: "Regra do líder", rule: "SEMPRE", desc: "Unilaterais: começa pelo ESQUERDO. Reps do esquerdo definem o máximo do direito." },
+    { name: "Pausa isométrica nos bilaterais", rule: "Cada rep", desc: "Hip thrust e agachamento: squeeze consciente no topo, imaginar apertar moeda com glúteo esquerdo. 1-2s de pausa." },
+    { name: "Mão de feedback", rule: "Opcional", desc: "Nos primeiros meses: colocar a mão no glúteo esquerdo durante exercícios pra sentir se está contraindo." },
+    { name: "Não compensar na lombar", rule: "Crítico", desc: "Glúteo dormido = lombar faz o trabalho → lesão. Se sentir tensão na lombar, parar e fazer 10 glute bridges unilaterais esq." },
+  ],
+  timeline: [
+    ["Semanas 1-4", "Melhora de ativação — vai começar a SENTIR o esquerdo queimar"],
+    ["Meses 2-3", "Simetria de força — os dois lados produzem força similar"],
+    ["Meses 4-8", "Resultado visual — esquerdo começa a acompanhar o direito"],
+    ["Mês 8+", "Com consistência, diferença mínima ou imperceptível"],
+  ]
+};
+
+// ─── YOGA_LEVELS ─────────────────────────────────────────────
+const YOGA_LEVELS = {
+  iniciante: [["Pigeon Pose","2 min cada lado"],["Happy Baby","2 min"],["Borboleta","2 min"],["Cat-Cow","2 min"],["Torção sentada","1 min cada lado"]],
+  intermediario: [["Lizard Pose","2 min cada lado"],["Malasana (agachamento profundo)","2 min"],["Frog Pose","2 min"],["Forward Fold sentado","2 min"],["Low Lunge com abertura","2 min cada lado"]],
+  avancado: [["Dragon Pose","3 min cada lado"],["Splits progressivos","trabalhar devagar"],["Standing Split","1 min cada lado"],["Pancake Stretch","3 min"]],
+};
+
+// ─── REBOLAR_STEPS ───────────────────────────────────────────
+const REBOLAR_STEPS = [
+  { fase: "Semanas 1-2 · Isolamento Base", steps: ["Pé paralelo, mãos na cintura — mover SÓ o quadril frente/trás sem mover o tronco. 3x30 reps.","Quadril esquerda/direita isolado: 3x30 reps.","Círculos lentos: 3x20 em cada sentido.","Objetivo real: o tronco não mexe. Só o quadril."] },
+  { fase: "Semanas 3-4 · Ritmo", steps: ["Mesmos movimentos com música — funk, pagode, baile funk.","Adicionar leve balanço nos joelhos enquanto move o quadril.","Figura de 8 / infinito com o quadril: 3x20.","Praticar frente ao espelho — feedback visual acelera muito."] },
+  { fase: "Mês 2+ · Expressão", steps: ["Adicionar movimento dos braços e expressão corporal.","YouTube: 'aprenda a rebolar do zero' — boas aulas gratuitas.","Bachata para iniciantes no YouTube — ensina isolamento naturalmente.","Gravar e comparar com semanas anteriores."] },
+];
+
+// ─── EXERCISE_TECHNIQUE ──────────────────────────────────────
+const EXERCISE_TECHNIQUE = [
+  {
+    exercise: "Hip Thrust", subtitle: "Glúteo — base de tudo",
+    tips: ["Banco atrás das escápulas, não da nuca","Pés paralelos ou levemente abertos, largura de quadril","No topo: quadril paralelo ao chão — não hiperextender a lombar","Pausa de 1-2s no topo com squeeze consciente","Descer controlado em 2s","Joelhos seguindo a linha dos pés"],
+    alerts: [
+      { signal: "Dor ou tensão na lombar baixa", fix: "Glúteo não ativou. Parar, fazer 10 glute bridges unilaterais esq, recomeçar." },
+      { signal: "Tensão no quadríceps", fix: "Pés muito à frente ou banco muito baixo." },
+      { signal: "Pontada no joelho", fix: "Joelho caindo pra dentro. Usar elástico." },
+      { signal: "Pescoço tenso", fix: "Banco na posição errada — deve estar nas escápulas." }
+    ]
+  },
+  {
+    exercise: "Agachamento", subtitle: "Coxa + Glúteo",
+    tips: ["Pés na largura dos ombros ou um pouco mais, levemente abertos (15-30°)","Descer como se fosse sentar numa cadeira atrás — não deixar os joelhos passarem muito à frente dos pés","Lombar neutra durante todo o movimento — nem arqueada demais, nem curvada","Olhar levemente pra frente e pra cima, não direto para baixo","Descer até coxa paralela ao chão no mínimo — agachamento raso não ativa o glúteo","Subir empurrando o chão, não pensando em joelhos — muda o recrutamento muscular"],
+    alerts: [
+      { signal: "Joelhos indo pra dentro na subida (valgismo)", fix: "Glúteo fraco ou mobilidade de tornozelo ruim. Reduzir carga, usar elástico nos joelhos para treinar o padrão." },
+      { signal: "Lombar 'arredondando' no fundo", fix: "Falta de mobilidade de quadril ou carga alta demais. Reduzir peso, trabalhar mobilidade antes." },
+      { signal: "Elevação de calcanhar", fix: "Mobilidade de tornozelo insuficiente. Agachar com calcanhar em pequena elevação temporariamente." },
+      { signal: "Dor anterior no joelho", fix: "Carga alta demais ou movimento muito à frente. Recuar o padrão." }
+    ]
+  },
+  {
+    exercise: "RDL / Stiff", subtitle: "Posterior de coxa e glúteo",
+    tips: ["Movimento começa no quadril — dobrar o quadril pra trás, não curvar a coluna","Barra ou halteres deslizam rente ao corpo durante todo o movimento","Joelhos levemente dobrados e fixos — não é agachamento, não muda o ângulo do joelho","Descer até sentir o alongamento no posterior da coxa — cada pessoa tem um range diferente","Subir contraindo glúteo e posterior juntos, não usando a lombar para puxar","Escápulas juntas e lombar neutra durante todo o movimento"],
+    alerts: [
+      { signal: "Dor aguda na lombar", fix: "Coluna arredondando. Reduzir a amplitude e focar na neutralidade antes de aumentar range." },
+      { signal: "Não sentir o posterior da coxa", fix: "Joelhos dobrados demais — virou agachamento. Fixar os joelhos." },
+      { signal: "Barra ou halteres longe do corpo", fix: "Sobrecarrega a lombar. Deslizar rente às pernas." }
+    ]
+  },
+  {
+    exercise: "Elevação Lateral", subtitle: "Ombros arredondados",
+    tips: ["Peso MUITO mais leve do que parece necessário — é um músculo pequeno","Cotovelo levemente dobrado, não completamente estendido","Elevar até a altura do ombro — não acima, não recruta mais e lesiona","Imaginar que está despejando água de uma jarra — rotação interna leve no topo","Subida em 2s, descida em 3s controlada — a descida constrói tanto quanto a subida","Não usar o trapézio para 'ajudar' — se os ombros subirem junto, o peso está pesado demais"],
+    alerts: [
+      { signal: "Dor no topo do ombro (pinçamento)", fix: "Peso alto demais ou elevando acima da altura do ombro." },
+      { signal: "Trapézio (pescoço/ombro) ficando tenso", fix: "Compensação. Reduzir peso, focar em manter ombros abaixados." },
+      { signal: "Não sentir o deltóide lateral", fix: "Movimento errado — cotovelo liderando em vez do pulso." }
+    ]
+  },
+  {
+    exercise: "Búlgaro", subtitle: "Glúteo + coxa unilateral",
+    tips: ["Pé da frente longe o suficiente — se o joelho passar muito à frente dos dedos, o pé está próximo demais","Tronco levemente inclinado à frente (não reto) — ativa mais o glúteo","Descer controlado, joelho de trás quase tocando o chão","SEMPRE começa pelo lado esquerdo — o número do esquerdo define o máximo do direito","Segurar apoio nas primeiras semanas é ok — melhor fazer certo com apoio do que errado livre"],
+    alerts: [
+      { signal: "Joelho anterior batendo no chão com força", fix: "Descida sem controle — desacelerar a fase excêntrica." },
+      { signal: "Dor no joelho posterior (de trás)", fix: "Posição do banco muito alta. Baixar o apoio." },
+      { signal: "Instabilidade e queda lateral", fix: "Normal nas primeiras semanas. Usar apoio até o equilíbrio estabilizar." }
+    ]
+  },
+];
+
+// ─── CARDIO_GUIDE ────────────────────────────────────────────
+const CARDIO_GUIDE = [
+  { title: "Caminhada plana", ideal: "Recuperação ativa, dias de descanso", kcal: "~200-280 kcal/h", impact: "Zero impacto no músculo", when: "Terça e Quinta" },
+  { title: "Caminhada inclinada (10-15%)", ideal: "Máximo resultado com mínimo desgaste", kcal: "~350-450 kcal/h", impact: "Ativa glúteo durante o cardio", when: "Substituir caminhada plana após mês 2" },
+  { title: "Bike de baixa intensidade", ideal: "Cardio leve sem impacto articular", kcal: "~250-350 kcal/h", impact: "Muito baixo", when: "Opcional em qualquer dia" },
+  { title: "Corrida (EVITAR primeiros 6 meses)", ideal: "Não recomendado no início", kcal: "—", impact: "Consome músculo junto com gordura", when: "Só após base muscular estabelecida" },
+];
