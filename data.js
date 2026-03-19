@@ -1756,7 +1756,7 @@ const DAILY_TIMELINE = {
     { id: "lanche1", time: "10:00", label: "🍎 Lanche manhã", icon: "🍎", type: "meal", mealId: "lanche1", items: ["Chá de spearmint — 1ª xícara 🌿"] },
     { id: "almoco", time: "12:00", label: "🍽️ Almoço", icon: "🍽️", type: "meal", mealId: "almoco", items: ["Ômega-3 com a refeição"] },
     { id: "lanche2", time: "16:00", label: "🍎 Lanche tarde", icon: "🍎", type: "meal", mealId: "pretreino", items: ["Chá de spearmint — 2ª xícara 🌿"] },
-    { id: "atividade", time: "17:40", label: "🚶 Atividade leve", icon: "🚶", items: ["Caminhada 25-30min ou protocolo ativação glúteo esq (10min)", "Yoga de quadril (20min)"] },
+    { id: "atividade", time: "17:40", label: "🚶 Atividade leve", icon: "🚶", items: ["Caminhada 25-30min ou escada do prédio (progressivo)", "Protocolo ativação glúteo esq (10min)", "Yoga de quadril (20min)"] },
     { id: "postreino", time: "19:00", label: "🐕 Passeio cães", icon: "🐕", items: ["Passeio com os cães (~25min)"] },
     { id: "jantar", time: "20:00", label: "🌙 Jantar", icon: "🌙", type: "meal", mealId: "jantar", items: ["Vitamina D3+K2 com a refeição"] },
     { id: "noturno", time: "22:00", label: "🌛 Noturno", icon: "🌛", type: "meal", mealId: "noturno", items: ["Skincare caprichado (rosto + corpo)", "Kegel noturno", "Ritual de corpo", "Meta: largar celular 22h, dormir 22:30"] },
@@ -2847,6 +2847,7 @@ const CARDIO_GUIDE = [
   { title: "Caminhada plana", ideal: "Recuperação ativa, dias de descanso", kcal: "~200-280 kcal/h", impact: "Zero impacto no músculo", when: "Terça e Quinta" },
   { title: "Caminhada inclinada (10-15%)", ideal: "Máximo resultado com mínimo desgaste", kcal: "~350-450 kcal/h", impact: "Ativa glúteo durante o cardio", when: "Substituir caminhada plana após mês 2" },
   { title: "Bike de baixa intensidade", ideal: "Cardio leve sem impacto articular", kcal: "~250-350 kcal/h", impact: "Muito baixo", when: "Opcional em qualquer dia" },
+  { title: "Escada do prédio (8 andares)", ideal: "Cardio + ativação de glúteo no dia a dia", kcal: "~400-500 kcal/h", impact: "Ativa glúteo e posterior a cada degrau — excelente", when: "Todo dia, progressivo: mês 1 sobe 2-3 andares (elevador o resto), mês 2 sobe 4-5, mês 3+ tenta os 8. Descer os 8 desde o dia 1." },
   { title: "Corrida (EVITAR primeiros 6 meses)", ideal: "Não recomendado no início", kcal: "—", impact: "Consome músculo junto com gordura", when: "Só após base muscular estabelecida" },
 ];
 
