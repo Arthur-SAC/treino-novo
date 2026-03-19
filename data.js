@@ -1740,7 +1740,7 @@ const EDUCATIONAL_CONTENT = {
 
 const DAILY_TIMELINE = {
   treino: [
-    { id: "acordar", time: "6:00", label: "☀️ Acordar", icon: "☀️", items: ["Kegel matinal (3 tipos)", "1ª garrafinha de água (700ml)"] },
+    { id: "acordar", time: "6:00", label: "☀️ Acordar", icon: "☀️", items: ["Kegel matinal (3 tipos)", "1ª garrafinha de água (700ml)", "Mobilidade desk-worker (5min): hip flexor + torção torácica + pescoço", "Vacuum matinal (3x20seg)"] },
     { id: "cafe", time: "7:00", label: "☕ Café da manhã", icon: "☕", type: "meal", mealId: "cafe", items: ["Suplementos: multivitamínico + (creatina e whey no shake)"] },
     { id: "lanche1", time: "10:00", label: "🍎 Lanche manhã", icon: "🍎", type: "meal", mealId: "lanche1", items: ["Chá de spearmint — 1ª xícara 🌿"] },
     { id: "almoco", time: "12:00", label: "🍽️ Almoço", icon: "🍽️", type: "meal", mealId: "almoco", items: ["Ômega-3 com a refeição (absorção melhor com gordura)"] },
@@ -1751,7 +1751,7 @@ const DAILY_TIMELINE = {
     { id: "noturno", time: "22:00", label: "🌛 Noturno", icon: "🌛", type: "meal", mealId: "noturno", items: ["Skincare noite (passo a passo)", "Kegel noturno", "Meta: largar celular 22h, dormir 22:30", "Lembrete: luz azul + estímulo = sono ruim = cortisol alto"] },
   ],
   descanso: [
-    { id: "acordar", time: "6:00", label: "☀️ Acordar", icon: "☀️", items: ["Kegel matinal (3 tipos)", "1ª garrafinha de água (700ml)"] },
+    { id: "acordar", time: "6:00", label: "☀️ Acordar", icon: "☀️", items: ["Kegel matinal (3 tipos)", "1ª garrafinha de água (700ml)", "Mobilidade desk-worker (5min): hip flexor + torção torácica + pescoço", "Vacuum matinal (3x20seg)"] },
     { id: "cafe", time: "7:00", label: "☕ Café da manhã", icon: "☕", type: "meal", mealId: "cafe", items: ["Suplementos: multivitamínico"] },
     { id: "lanche1", time: "10:00", label: "🍎 Lanche manhã", icon: "🍎", type: "meal", mealId: "lanche1", items: ["Chá de spearmint — 1ª xícara 🌿"] },
     { id: "almoco", time: "12:00", label: "🍽️ Almoço", icon: "🍽️", type: "meal", mealId: "almoco", items: ["Ômega-3 com a refeição"] },
@@ -2639,6 +2639,9 @@ const WORKOUTS = {
 
 // ─── WARMUP_LOWER ────────────────────────────────────────────
 const WARMUP_LOWER = [
+  { name: "Alongamento hip flexor ajoelhado", desc: "Ajoelhar, uma perna à frente 90°. Empurrar quadril pra frente suavemente. Destravar 8h sentada.", time: "30seg cada lado" },
+  { name: "Torção torácica deitada", desc: "Deitada de lado, joelhos dobrados. Abrir braço de cima pra trás, olhar seguir a mão. Soltar ombros e costas.", time: "5x cada lado" },
+  { name: "Rotação pescoço + ombros", desc: "Girar pescoço devagar 5x cada lado. Depois subir ombros até orelhas e soltar com força 10x. Soltar tensão.", time: "1 min" },
   { name: "Marcha elevando joelho", desc: "Ativa circulação e aquece quadril", time: "2 min" },
   { name: "Círculos de quadril", desc: "Mãos na cintura, círculos amplos", time: "1 min cada sentido" },
   { name: "Leg swing frente/trás", desc: "Pêndulo solto — não forçar", time: "15x cada perna" },
@@ -2651,6 +2654,9 @@ const WARMUP_LOWER = [
 
 // ─── WARMUP_UPPER ────────────────────────────────────────────
 const WARMUP_UPPER = [
+  { name: "Alongamento hip flexor ajoelhado", desc: "Ajoelhar, uma perna à frente 90°. Empurrar quadril pra frente suavemente. Destravar 8h sentada.", time: "30seg cada lado" },
+  { name: "Torção torácica deitada", desc: "Deitada de lado, joelhos dobrados. Abrir braço de cima pra trás, olhar seguir a mão. Soltar ombros e costas.", time: "5x cada lado" },
+  { name: "Rotação pescoço + ombros", desc: "Girar pescoço devagar 5x cada lado. Depois subir ombros até orelhas e soltar com força 10x. Soltar tensão.", time: "1 min" },
   { name: "Jumping jack ou pular corda", desc: "Elevar frequência cardíaca base", time: "2 min" },
   { name: "Círculos de ombro", desc: "Braços estendidos, amplos — frente e trás", time: "15x cada direção" },
   { name: "T-spine rotation", desc: "Deitado de lado, joelhos dobrados: abrir o braço pra trás", time: "10x cada lado" },
@@ -2660,21 +2666,21 @@ const WARMUP_UPPER = [
 
 // ─── COOLDOWN_LOWER ──────────────────────────────────────────
 const COOLDOWN_LOWER = [
-  { name: "Pigeon Pose", desc: "Joelho dobrado na frente, perna de trás estendida", time: "2 min cada lado" },
-  { name: "Lizard Pose (Lagarto)", desc: "Avanço fundo com antebraço no chão", time: "90s cada lado" },
-  { name: "Figura 4 (piriformes)", desc: "Deitado, cruzar tornozelo sobre joelho e puxar", time: "1 min cada lado" },
-  { name: "Isquiotibial deitado", desc: "Perna esticada puxada com as mãos ou toalha", time: "1 min cada perna" },
-  { name: "Borboleta sentada", desc: "Pés juntos, joelhos pra fora, inclinar devagar", time: "2 min" },
-  { name: "Happy Baby", desc: "Deitado, segurar plantas dos pés, joelhos abertos", time: "2 min" },
+  { name: "Pigeon Pose", desc: "Joelho dobrado na frente, perna trás estendida. Relaxar quadril pro chão. Se doer no joelho da frente: afastar mais o pé.", time: "2 min cada lado" },
+  { name: "Lizard Pose", desc: "Avanço fundo, antebraço no chão. Respirar fundo, afundar mais a cada expiração. Não forçar se lombar reclamar.", time: "90seg cada lado" },
+  { name: "Borboleta sentada", desc: "Pés juntos, joelhos abertos, inclinar devagar. Puxar pés mais perto = mais intenso. Dor no joelho = soltar.", time: "2 min" },
+  { name: "Happy Baby", desc: "Deitada, segurar plantas dos pés, joelhos abertos. Balançar suave lado a lado. Pescoço no chão.", time: "2 min" },
+  { name: "Círculos de quadril em pé", desc: "Mãos na cintura, círculos amplos e lentos. Tronco PARADO, só quadril move. Se tronco mexer, círculo menor.", time: "1 min (30seg cada sentido)" },
+  { name: "Isolamento quadril frente/trás", desc: "Pés paralelos, empurrar quadril frente e trás sem mover tronco. Imaginar parede na frente e atrás. Joelhos levemente flexionados.", time: "1 min" },
 ];
 
 // ─── COOLDOWN_UPPER ──────────────────────────────────────────
 const COOLDOWN_UPPER = [
-  { name: "Peitoral na porta", desc: "Braço dobrado 90° na porta, girar suavemente", time: "1 min cada lado" },
-  { name: "Ombro cruzado", desc: "Puxar o braço estendido pro outro lado", time: "45s cada lado" },
-  { name: "Torção espinhal sentada", desc: "Perna cruzada, torcer o tronco devagar", time: "1 min cada lado" },
-  { name: "Tríceps acima da cabeça", desc: "Braço dobrado, puxar o cotovelo", time: "45s cada lado" },
-  { name: "Child's Pose", desc: "Joelhos, braços à frente, testa no chão", time: "2 min" },
+  { name: "Peitoral na porta", desc: "Braço dobrado 90° na porta, girar suavemente. Sentir abertura no peito.", time: "1 min cada lado" },
+  { name: "Torção espinhal sentada", desc: "Perna cruzada, torcer o tronco devagar. Olhar por cima do ombro.", time: "1 min cada lado" },
+  { name: "Child's Pose", desc: "Joelhos abertos, braços à frente, testa no chão. Respirar profundo.", time: "2 min" },
+  { name: "Ondulação de coluna em pé", desc: "Da cintura pra cima, ondular como cobra. Começar pela pélvis, passar por lombar, torácica, pescoço. Tensão no pescoço = parar antes.", time: "1 min" },
+  { name: "Rotação de ombros fluida", desc: "Círculos amplos com os ombros, devagar, sentir soltar.", time: "1 min" },
 ];
 
 // ─── GLUTE_FIX_PROTOCOL ──────────────────────────────────────
