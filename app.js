@@ -1624,7 +1624,7 @@ const WorkoutManager = {
   },
 
   getPhaseData() {
-    return WORKOUTS_NEW[this.getPhaseKey()] || WORKOUTS_NEW.fase1;
+    return WORKOUTS[this.getPhaseKey()] || WORKOUTS.fase1;
   },
 
   getScheduleForDay(dayNum) {
@@ -2016,18 +2016,6 @@ const WorkoutManager = {
     html += '<div class="exercise-details hidden" id="details-' + exercise.id + '">';
     if (exercise.details) {
       html += '<p style="font-size:0.85rem; opacity:0.85; line-height:1.5;">' + this.escapeHtml(exercise.details) + '</p>';
-    }
-    if (exercise.videoKey && typeof WEIGHT_GUIDE !== 'undefined') {
-      var wGuide = WEIGHT_GUIDE[exercise.videoKey];
-      var wPhaseKey = this.getPhaseKey();
-      if (wGuide && wGuide[wPhaseKey]) {
-        html += '<div class="weight-progression-info">';
-        html += '<span class="weight-progression-label">Peso sugerido:</span> <strong>' + this.escapeHtml(wGuide[wPhaseKey].suggestedKg) + '</strong>';
-        if (wGuide[wPhaseKey].progression) {
-          html += '<br><span class="weight-progression-label">Quando progredir:</span> ' + this.escapeHtml(wGuide[wPhaseKey].progression);
-        }
-        html += '</div>';
-      }
     }
     html += '</div>';
 
@@ -2582,7 +2570,7 @@ const WorkoutManager = {
 //   1. Plano do Dia (meal plan with 3 options per meal, from MEAL_OPTIONS)
 //   2. Suplementos (supplement cards from SUPPLEMENTS)
 //   3. Receitas (recipe browser)
-//   4. Lista de Compras (shopping list from SHOPPING_LIST_NEW with copy & reset)
+//   4. Lista de Compras (shopping list from SHOPPING_LIST with copy & reset)
 
 const NutritionManager = {
   currentSubTab: 'plano',
@@ -3038,7 +3026,7 @@ const NutritionManager = {
     this.render();
   },
 
-  // ── Sub-tab 4: Lista de Compras (SHOPPING_LIST_NEW) ────────
+  // ── Sub-tab 4: Lista de Compras (SHOPPING_LIST) ────────
 
   getShoppingData() {
     return StorageManager.getValue('shoppingList', {});
@@ -3050,7 +3038,7 @@ const NutritionManager = {
 
   renderShoppingList() {
     var checkedItems = this.getShoppingData();
-    var categories = Object.keys(SHOPPING_LIST_NEW);
+    var categories = Object.keys(SHOPPING_LIST);
     var html = '';
 
     // Action buttons
@@ -3061,7 +3049,7 @@ const NutritionManager = {
 
     for (var c = 0; c < categories.length; c++) {
       var catKey = categories[c];
-      var items = SHOPPING_LIST_NEW[catKey];
+      var items = SHOPPING_LIST[catKey];
       var catLabel = catKey.replace(/_/g, ' ');
       catLabel = catLabel.charAt(0).toUpperCase() + catLabel.slice(1);
 
@@ -3085,11 +3073,11 @@ const NutritionManager = {
 
   copyShoppingList() {
     var text = '\uD83D\uDED2 Lista de Compras Semanal\n\n';
-    var categories = Object.keys(SHOPPING_LIST_NEW);
+    var categories = Object.keys(SHOPPING_LIST);
     for (var c = 0; c < categories.length; c++) {
       var cat = categories[c];
       text += cat.replace(/_/g, ' ').toUpperCase() + ':\n';
-      var items = SHOPPING_LIST_NEW[cat];
+      var items = SHOPPING_LIST[cat];
       for (var i = 0; i < items.length; i++) {
         text += '  \u25A1 ' + items[i].item + ' \u2014 ' + items[i].qty + '\n';
       }
@@ -3205,8 +3193,6 @@ const CareManager = {
         html += this.renderCores();
         break;
     }
-
-    html += this.renderNightRoutine();
 
     container.innerHTML = html;
   },
@@ -3951,31 +3937,6 @@ const CareManager = {
     if (phaseEl) phaseEl.textContent = phase;
     if (countEl) countEl.textContent = count;
     if (repEl) repEl.textContent = repText;
-  },
-
-  // ── Night Routine ─────────────────────────────────────────
-
-  renderNightRoutine() {
-    if (typeof NIGHT_ROUTINE === 'undefined') return '';
-    var html = '<div class="card glass night-routine-card">';
-    html += '<h3>' + NIGHT_ROUTINE.emoji + ' ' + NIGHT_ROUTINE.name + '</h3>';
-
-    NIGHT_ROUTINE.steps.forEach(function(step) {
-      html += '<div class="night-routine-step">';
-      html += '<h4 style="color: var(--primary); margin:0.5rem 0 0.25rem;">' + step.emoji + ' ' + step.name + '</h4>';
-      html += '<ul style="margin:0; padding-left:1.2rem;">';
-      step.items.forEach(function(item) {
-        html += '<li style="font-size:0.85rem; margin:0.2rem 0; opacity:0.9;">' + item + '</li>';
-      });
-      html += '</ul>';
-      if (step.videoKey) {
-        html += '<button class="btn btn-sm btn-ghost" onclick="VideoModal.open(\'' + step.videoKey + '\', \'' + (step.videoSource || 'exercise') + '\')">\uD83C\uDFAC Ver como fazer</button>';
-      }
-      html += '</div>';
-    });
-
-    html += '</div>';
-    return html;
   },
 
   // Event listeners are now handled via delegation in init()
