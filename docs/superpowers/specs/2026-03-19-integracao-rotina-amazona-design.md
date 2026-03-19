@@ -200,6 +200,127 @@
 
 ---
 
+## Adaptação Tecnológica
+
+O `rotina_amazona.html` é um app React (JSX + useState + ReactDOM). O app `treino-novo` é vanilla JS puro. Toda a integração exige tradução:
+
+- **Componentes React** (Phase, MealBlock, CorTAB, ProjecaoTAB, etc.) → métodos `render()` nos managers existentes, retornando strings HTML via template literals
+- **React useState** → estado local no manager (propriedades do objeto) + StorageManager pra persistência
+- **JSX event handlers** (onClick) → event delegation no `container.addEventListener('click', ...)` do manager
+- **Silhueta SVG** (`silPath` function) → porta direto, é matemática pura (bezier curves), sem dependência de React
+- **Projeção** (cálculos de RATES, moGoal, milestones) → portar como funções utilitárias dentro do ProgressManager
+
+---
+
+## Schema de Dados Novos
+
+### MEAL_OPTIONS (substitui MEALS)
+```javascript
+const MEAL_OPTIONS = {
+  cafe: {
+    label: "Café da manhã",
+    time: "7h-8h",
+    options: [
+      {
+        name: "Shake de Whey + Linhaça",
+        kcal: 565, prot: 39, carb: 58, fat: 16,
+        fem: true,  // flag feminização
+        ingredients: [["Whey Protein", "1 dose (30g)"], ...],
+        prep: ["Passo 1...", "Passo 2..."]
+      },
+      // ... 2 mais opções
+    ]
+  },
+  // lanche1, almoco, pretreino, jantar, noturno
+};
+```
+- **Sem split treino/descanso** — rotina unificada (dias de descanso ajustam apenas o bloco de treino na timeline)
+- Macros são campos numéricos separados (kcal, prot, carb, fat) em vez de string parseada
+- NutritionManager.extractProtein() simplifica pra `option.prot` direto
+- Opções selecionadas por índice (0, 1, 2) em vez de A/B
+- Storage: `mealChoice_{refeicaoId}` salva o índice preferido (padrão 0)
+
+### DAILY_TIMELINE (substitui CHECKLIST_ITEMS e DAILY_ROUTINE)
+```javascript
+const DAILY_TIMELINE = {
+  treino: [
+    { id: "acordar", time: "6:00", label: "Acordar", items: ["Kegel matinal", "1a garrafinha"] },
+    { id: "cafe", time: "7:00", label: "Café da manhã", type: "meal", mealId: "cafe" },
+    // ... todos os blocos
+  ],
+  descanso: [
+    // ... versão com blocos mais leves (sem treino, skincare caprichado)
+  ]
+};
+```
+
+### PROJECTION_RATES
+```javascript
+const PROJECTION_RATES = {
+  quadril: 0.7,    // cm/mês de ganho
+  cintura: -0.35,  // cm/mês de redução
+  coxa: 0.5,       // cm/mês de ganho
+  peso: -0.38,     // kg/mês de perda
+  busto: 0.25      // cm/mês de ganho
+};
+```
+
+---
+
+## Objetos de Dados: Substituições e Novos
+
+| Existente | Ação | Substituído por |
+|-----------|------|-----------------|
+| `MEALS` | Substituir | `MEAL_OPTIONS` (3 opções, macros numéricos, sem split treino/descanso) |
+| `CHECKLIST_ITEMS` | Substituir | `DAILY_TIMELINE` (blocos cronológicos) |
+| `DAILY_ROUTINE` | Remover | Coberto por `DAILY_TIMELINE` |
+| `NIGHT_ROUTINE` | Remover | Coberto pelo bloco "Noturno" em `DAILY_TIMELINE` |
+| `WORKOUTS` | Reescrever | Mesma key, novo conteúdo com 4 fases do Rotina Amazona |
+| `WEIGHT_GUIDE` | Remover | Pesos sugeridos inline em cada exercício do `WORKOUTS` |
+| `WARMUP` | Substituir | `WARMUP_LOWER` + `WARMUP_UPPER` |
+| `COOLDOWN` | Substituir | `COOLDOWN_LOWER` + `COOLDOWN_UPPER` |
+| `EDUCATIONAL_CONTENT` | Manter parcialmente | `EXERCISE_TECHNIQUE` cobre a parte de exercícios |
+| `EXERCISE_VIDEOS` | Manter + expandir | Adicionar entries pra exercícios novos (deadlift, remada curvada, supino inclinado, etc.) |
+| `SKINCARE_ROUTINE` | Manter + aprimorar | Adicionar produtos com preço |
+| `HAIR_CARE` | Manter + aprimorar | Adicionar rotina de lavagem 7 passos |
+| `SHOPPING_LIST` | Reescrever | Quantidades pra 7 dias, categorizada |
+
+**Novos objetos:**
+- `MEAL_OPTIONS`, `DAILY_TIMELINE`, `WEEK_SCHEDULE`
+- `GLUTE_FIX_PROTOCOL`, `WARMUP_LOWER`, `WARMUP_UPPER`, `COOLDOWN_LOWER`, `COOLDOWN_UPPER`
+- `YOGA_LEVELS`, `REBOLAR_STEPS`, `EXERCISE_TECHNIQUE`, `CARDIO_GUIDE`
+- `SUPPLEMENTS`, `COLOR_GUIDE`, `PROJECTION_RATES`
+
+---
+
+## Migração de Dados do Usuário
+
+| Dado existente | O que acontece |
+|----------------|----------------|
+| `currentPhase` (1-4) | Preservado. Range 1-4 mantido. Semântica muda (Fase 1 = "Meses 1-2" em vez de "Semanas 1-6") |
+| `checklist_{date}` | Orfanado — substituído por `timeline_{date}`. Dados antigos não são apagados mas não são mais lidos |
+| `water_{date}` | Usar nova key `garrafas_{date}` (700ml). Key antiga `water_{date}` ignorada, não apagada |
+| `workout_{date}` (séries/pesos) | IDs de exercício mudam. Dados antigos orfanados. Sem impacto funcional |
+| `mealPrefs_{date}` | Formato muda de A/B pra índice 0/1/2. Dados antigos ignorados |
+| Fotos, medidas, badges, settings | 100% preservados, sem mudança |
+| Streak | Recalculado com nova lógica (>70% blocos timeline). Streak anterior pode resetar |
+
+Nenhuma migração destrutiva. Dados antigos ficam no localStorage sem uso, não causam erro.
+
+---
+
+## Adaptações pro Equipamento do Prédio
+
+Substituições são **baked direto** no objeto WORKOUTS — não há toggle dinâmico. Os exercícios já vêm com as versões que funcionam no equipamento disponível:
+- Kickback polia → Kickback caneleira (4 apoios)
+- Face pull cabo → Band pull-apart elástico
+- Cable pull-through → RDL halteres
+- Puxada frontal → Remada curvada halteres
+- Leg curl → Stiff halteres
+- Cadeira extensora → Búlgaro halteres
+
+---
+
 ## Decisões Técnicas
 
 ### Estrutura de arquivos (mantém a mesma)
@@ -217,15 +338,16 @@
 - Commits em português com prefixo feat:/fix:/refactor:
 - Sem acentos em IDs, kebab-case
 
-### Tamanho dos arquivos
-- data.js vai crescer significativamente (~250-300KB estimado) com todos os novos objetos
-- app.js vai crescer (~180-200KB estimado) com novas funcionalidades nos managers
-- index.html vai crescer (~80-90KB estimado) com novos estilos
+### Tamanho dos arquivos (estimativas)
+- data.js: 172KB → ~280-320KB (+108-148KB de novos objetos de dados)
+- app.js: 161KB → ~230-250KB (+69-89KB de lógica nos managers — Dashboard rewrite, Projeção SVG, Cores, Suplementos)
+- index.html: 76KB → ~85-95KB (+9-19KB de novos estilos CSS)
 
 ### Migração
-- StorageManager mantém compatibilidade (mesmos métodos, mesmas keys existentes)
-- Novos dados são aditivos (não quebram dados existentes)
-- `currentPhase` continua funcionando (1-4)
+- Ver seção "Migração de Dados do Usuário" acima para detalhes completos
+- StorageManager mantém API compatível (mesmos métodos)
+- Algumas keys mudam (water → garrafas, checklist → timeline)
+- Dados antigos orfanados, não apagados, não causam erro
 
 ---
 
