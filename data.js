@@ -2173,7 +2173,419 @@ const MEALS = {
   }
 };
 
-// ─── 9. RECIPES ──────────────────────────────────────────────
+// ─── 9. MEAL_OPTIONS ─────────────────────────────────────────
+const MEAL_OPTIONS = {
+  cafe: {
+    id: "cafe",
+    label: "Café da manhã",
+    time: "7h-8h",
+    feminizacao: "Chá de spearmint (hortelã-peppermint): tomar junto com o café da manhã. 1 xícara aqui + 1 à tarde = dose diária completa.",
+    options: [
+      {
+        name: "Shake de Whey + Linhaça",
+        kcal: 565, prot: 39, carb: 58, fat: 16,
+        fem: true,
+        ingredients: [
+          ["Whey Protein", "1 dose (30g)"],
+          ["Aveia em flocos finos", "50g"],
+          ["Banana média", "1 un."],
+          ["Pasta de amendoim", "1 col. sopa"],
+          ["Linhaça dourada moída", "2 col. sopa — fitoestrógenos"],
+          ["Água ou leite de soja", "200ml — isoflavonas"],
+          ["Creatina", "5g — misturar aqui"]
+        ],
+        prep: [
+          "Coloque a aveia e a linhaça moída primeiro no liquidificador — bater com tudo desde o início",
+          "Adicione whey, creatina, banana e a pasta de amendoim",
+          "Leite de soja no lugar da água: mais proteína E isoflavonas. Sabor neutro no shake.",
+          "Bata 30–40s. A linhaça some no sabor completamente — você não vai sentir nada diferente.",
+          "Linhaça deve ser MOÍDA — inteira o corpo não absorve os lignanas (fitoestrógenos)."
+        ]
+      },
+      {
+        name: "Ovos + Pão Integral + Abacate",
+        kcal: 490, prot: 30, carb: 42, fat: 18,
+        fem: false,
+        ingredients: [
+          ["Ovos inteiros", "3 un."],
+          ["Pão integral", "2 fatias (~70g)"],
+          ["Abacate", "¼ (~60g)"],
+          ["Tomate + azeite", "livre"],
+          ["Queijo cottage", "3 col. sopa (opcional)"]
+        ],
+        prep: [
+          "Bata os ovos com sal, pimenta e ervas antes da frigideira",
+          "Frigideira antiaderente, fogo médio-baixo com fio de azeite — ovos mexidos ficam melhores em fogo baixo mexendo devagar",
+          "Amasse o abacate com limão e sal e espalhe no pão tostado",
+          "Azeite vai SOBRE a salada fria, nunca pra fritar"
+        ]
+      },
+      {
+        name: "Iogurte Grego + Granola + Linhaça",
+        kcal: 455, prot: 29, carb: 50, fat: 14,
+        fem: true,
+        ingredients: [
+          ["Iogurte grego natural integral", "200g"],
+          ["Granola sem açúcar", "40g"],
+          ["Banana ou manga", "1 porção"],
+          ["Linhaça dourada moída", "2 col. sopa"],
+          ["Whey em pó", "½ dose (15g) — misturar no iogurte"]
+        ],
+        prep: [
+          "Misture o whey e a linhaça diretamente no iogurte com garfo — linhaça moída some na textura",
+          "Monte em camadas: iogurte+whey+linhaça → fruta fatiada → granola por cima",
+          "Granola sempre por último pra não amolecer."
+        ]
+      }
+    ]
+  },
+  lanche1: {
+    id: "lanche1",
+    label: "Lanche manhã",
+    time: "10h-11h",
+    feminizacao: "Chá de spearmint: segunda xícara aqui. Feio em nome, poderoso no efeito — leve anti-androgênico acumulativo.",
+    options: [
+      {
+        name: "Edamame + Fruta",
+        kcal: 210, prot: 11, carb: 26, fat: 5,
+        fem: true,
+        ingredients: [
+          ["Edamame (soja verde) congelado", "100g — isoflavonas + proteína"],
+          ["Sal grosso + limão", "tempero"],
+          ["Fruta da época", "1 un."]
+        ],
+        prep: [
+          "Edamame: cozinhar na água por 5 min, escorrer, temperar com sal grosso e limão",
+          "Encontrar em supermercados maiores, seção de congelados (Carrefour, Extra). Preço: ~R$8–12 por pacote.",
+          "Comer na vagem ou tirar os grãos — ambos funcionam. Sabor parecido com feijão verde suave."
+        ]
+      },
+      {
+        name: "Iogurte Grego Natural",
+        kcal: 190, prot: 18, carb: 10, fat: 9,
+        fem: false,
+        ingredients: [
+          ["Iogurte grego natural integral", "170g"],
+          ["Canela em pó", "pitada"]
+        ],
+        prep: [
+          "Comer puro ou com canela — opção mais rápida e que bate bem proteína",
+          "Evite saborizados — têm muito açúcar. Procure: proteína >8g por 100g na tabela"
+        ]
+      },
+      {
+        name: "2 Ovos Cozidos + Fruta",
+        kcal: 210, prot: 13, carb: 20, fat: 9,
+        fem: false,
+        ingredients: [
+          ["Ovos", "2 un."],
+          ["Fruta da época", "1 un."],
+          ["Sal grosso", "pitada"]
+        ],
+        prep: [
+          "Cozinhe na véspera: 10 min água fervendo pra gema dura, 7 min pra mole",
+          "Geladeira com casca até 7 dias — praticidade máxima"
+        ]
+      }
+    ]
+  },
+  almoco: {
+    id: "almoco",
+    label: "Almoço",
+    time: "12h-13h",
+    feminizacao: null,
+    options: [
+      {
+        name: "Frango + Arroz + Feijão + Legumes",
+        kcal: 620, prot: 48, carb: 65, fat: 10,
+        fem: false,
+        ingredients: [
+          ["Peito ou sobrecoxa s/ pele", "180g"],
+          ["Arroz branco cozido", "4 col. sopa (~100g)"],
+          ["Feijão cozido", "4 col. sopa"],
+          ["Legumes (abobrinha, cenoura, chuchu)", "150g"],
+          ["Salada (alface, tomate, pepino)", "livre"],
+          ["Azeite sobre a salada", "1 col. chá"]
+        ],
+        prep: [
+          "Frango: tempere com limão, alho, sal. Frigideira quente, 4–5 min cada lado. Não furar com garfo — perde o suco",
+          "Legumes: refogar com pouco azeite e sal, ou vapor (mais nutritivo)",
+          "Feijão: refogar alho, juntar feijão cozido + sal + cominho",
+          "Azeite sempre frio sobre a salada — calor destrói os compostos bons"
+        ]
+      },
+      {
+        name: "Carne Moída + Batata-Doce + Brócolis",
+        kcal: 580, prot: 42, carb: 58, fat: 14,
+        fem: true,
+        ingredients: [
+          ["Carne moída patinho", "150g"],
+          ["Batata-doce", "200g (~1 média)"],
+          ["Brócolis ou couve-flor", "150g — DIM natural"],
+          ["Tomate pelado ou extrato", "2 col. sopa"],
+          ["Alho, cebola, sal, pimenta", "à gosto"]
+        ],
+        prep: [
+          "Carne: refogue cebola e alho, adicione a carne mexendo até dourar bem",
+          "Batata-doce: cozinhar com casca preserva mais nutrientes. 20–25 min na água",
+          "Brócolis: 5 min no vapor EXATO — não mais, senão perde cor, nutrientes e o DIM. Brócolis é uma das melhores fontes de DIM (modulador hormonal natural).",
+          "Couve-flor funciona igual ao brócolis — mesma família, mesmo composto"
+        ]
+      },
+      {
+        name: "Tofu Grelhado + Arroz + Legumes",
+        kcal: 520, prot: 36, carb: 58, fat: 14,
+        fem: true,
+        ingredients: [
+          ["Tofu firme", "200g — isoflavonas de soja"],
+          ["Arroz cozido", "4 col. sopa"],
+          ["Abobrinha + cenoura + pimentão", "150g"],
+          ["Shoyu / molho de soja", "1 col. sopa (pra marinar)"],
+          ["Alho, azeite, gergelim", "tempero"]
+        ],
+        prep: [
+          "Tofu: cortar em cubos ou fatias, marinar 15 min em shoyu + alho + limão — marinar é essencial, sem isso fica sem graça",
+          "Grelhar em frigideira quente com fio de azeite por 3–4 min de cada lado até dourar. Não mexer antes de soltar.",
+          "Legumes: refogar no mesmo azeite após o tofu, 5 min. Adicionar um fio de shoyu no final.",
+          "Tofu firme: encontrar em supermercados maiores ou lojas de produtos naturais. ~R$8–14 por bloco de 300g. Guardar na geladeira coberto de água e trocar a água diariamente."
+        ]
+      }
+    ]
+  },
+  pretreino: {
+    id: "pretreino",
+    label: "Pré-treino",
+    time: "15h-16h · 1h antes do treino",
+    feminizacao: null,
+    options: [
+      {
+        name: "Banana + Pasta de Amendoim",
+        kcal: 220, prot: 6, carb: 34, fat: 8,
+        fem: false,
+        ingredients: [
+          ["Banana média", "1 un."],
+          ["Pasta de amendoim", "1 col. sopa"]
+        ],
+        prep: [
+          "Comer 45–60 min antes — não muito próximo pra não pesar no estômago",
+          "A banana dá energia rápida, o amendoim segura por mais tempo. Dupla perfeita pré-treino."
+        ]
+      },
+      {
+        name: "Tapioca com Frango Desfiado",
+        kcal: 310, prot: 26, carb: 36, fat: 5,
+        fem: false,
+        ingredients: [
+          ["Goma de tapioca", "3 col. sopa (~50g)"],
+          ["Frango desfiado (sobra do almoço)", "80g"],
+          ["Requeijão light ou cottage", "1 col. sopa"]
+        ],
+        prep: [
+          "Frigideira antiaderente seca (zero óleo), fogo médio. Espalhar a goma em círculo",
+          "Esperar firmar (~2 min), virar delicadamente, mais 1 min",
+          "Rechear e dobrar. Dica: frango desfiado pronto na geladeira, separa uma parte no almoço."
+        ]
+      },
+      {
+        name: "Batata-Doce + 2 Ovos Cozidos",
+        kcal: 290, prot: 16, carb: 38, fat: 9,
+        fem: false,
+        ingredients: [
+          ["Batata-doce cozida", "150g"],
+          ["Ovos cozidos", "2 un."],
+          ["Sal + azeite + ervas", "pitada"]
+        ],
+        prep: [
+          "Cozinhar em lote na véspera — geladeira 5 dias",
+          "Come fria mesmo — fio de azeite e sal grosso ficam ótimos",
+          "Bom pra treinos longos ou mais intensos — mais sustentável"
+        ]
+      }
+    ]
+  },
+  jantar: {
+    id: "jantar",
+    label: "Jantar",
+    time: "20h-21h",
+    feminizacao: null,
+    options: [
+      {
+        name: "Frango + Arroz + Abobrinha Refogada",
+        kcal: 520, prot: 42, carb: 52, fat: 9,
+        fem: false,
+        ingredients: [
+          ["Frango (peito ou coxa desossada)", "160g"],
+          ["Arroz cozido", "3 col. sopa"],
+          ["Abobrinha", "200g"],
+          ["Alho, azeite, ervas", "tempero"]
+        ],
+        prep: [
+          "Abobrinha: refogar com alho no azeite por 5–7 min — manter levemente crocante",
+          "Jantar pode ter menos carb que o almoço se não foi dia de treino (2 col. de arroz)"
+        ]
+      },
+      {
+        name: "Peixe Assado + Purê de Batata-Doce",
+        kcal: 480, prot: 40, carb: 45, fat: 10,
+        fem: false,
+        ingredients: [
+          ["Filé de peixe", "200g"],
+          ["Batata-doce", "180g"],
+          ["Leite ou leite vegetal", "3 col. sopa (pro purê)"],
+          ["Limão, alho, azeite", "tempero"]
+        ],
+        prep: [
+          "Peixe: envolva em papel alumínio com tempero, 200°C por 15–18 min — suculento e sem louça pra lavar",
+          "Purê: amassar batata cozida com leite morno e sal — sem manteiga em excesso"
+        ]
+      },
+      {
+        name: "Tofu com Legumes + Couve Refogada",
+        kcal: 430, prot: 30, carb: 22, fat: 18,
+        fem: true,
+        ingredients: [
+          ["Tofu firme", "180g — isoflavonas"],
+          ["Couve ou espinafre", "80g — DIM leve"],
+          ["Cenoura + pimentão + cebola", "100g"],
+          ["Ovos (opcional, pra proteína extra)", "2 un."],
+          ["Shoyu, alho, azeite, gergelim", "tempero"]
+        ],
+        prep: [
+          "Tofu: fatiar e grelhar até dourar (3–4 min cada lado). Reservar.",
+          "Couve: refogar com alho no azeite por 2 min — não deixar murchar demais, perde os nutrientes",
+          "Legumes: refogar na mesma frigideira por 5 min. Juntar o tofu e um fio de shoyu no final.",
+          "Se quiser mais proteína: ovos mexidos na mesma frigideira, misturar tudo junto — estilo yakisoba de panela."
+        ]
+      }
+    ]
+  },
+  noturno: {
+    id: "noturno",
+    label: "Noturno (opcional)",
+    time: "22h-23h",
+    feminizacao: null,
+    options: [
+      {
+        name: "Iogurte Grego Natural",
+        kcal: 190, prot: 18, carb: 10, fat: 9,
+        fem: false,
+        ingredients: [
+          ["Iogurte grego integral", "170g"],
+          ["Canela", "pitada"]
+        ],
+        prep: [
+          "Proteína de digestão lenta (caseína) que trabalha durante o sono",
+          "Só vale se a proteína do dia não fechou — se já bateu 155g, não é necessário"
+        ]
+      },
+      {
+        name: "Whey com Leite + Canela",
+        kcal: 250, prot: 30, carb: 15, fat: 5,
+        fem: false,
+        ingredients: [
+          ["Whey Protein", "1 dose (30g)"],
+          ["Leite semidesnatado", "200ml"],
+          ["Canela", "pitada"]
+        ],
+        prep: [
+          "Misturar no shaker com leite — mais cremoso que com água",
+          "Comer 1h antes de dormir, não muito próximo"
+        ]
+      },
+      {
+        name: "Queijo Cottage + Frutas",
+        kcal: 180, prot: 20, carb: 14, fat: 4,
+        fem: false,
+        ingredients: [
+          ["Queijo cottage", "150g"],
+          ["Morangos ou kiwi", "100g"]
+        ],
+        prep: [
+          "Cottage é ~80% caseína — perfeito pro noturno sem ser pesado",
+          "Com frutas vermelhas adiciona vitamina C pra síntese de colágeno durante o sono"
+        ]
+      }
+    ]
+  }
+};
+
+// ─── 10. SUPPLEMENTS ──────────────────────────────────────────
+const SUPPLEMENTS = [
+  {
+    name: "Whey Protein",
+    dose: "1 dose (30g)",
+    when: "Café ✅",
+    note: "Correto. Shake da manhã está ótimo.",
+    intimate: "Sem impacto",
+    evidence: "Alta"
+  },
+  {
+    name: "Creatina",
+    dose: "5g",
+    when: "Qualquer hora ✅",
+    note: "Timing não importa — tomar todo dia.",
+    intimate: "Sem impacto",
+    evidence: "Alta"
+  },
+  {
+    name: "Ômega-3",
+    dose: "2-3 cápsulas",
+    when: "Almoço ou jantar ⚠️",
+    note: "Mova pra junto da refeição. Gordura aumenta absorção 50%.",
+    intimate: "Melhora circulação — efeito positivo",
+    evidence: "Alta"
+  },
+  {
+    name: "Multivitamínico",
+    dose: "dose do produto",
+    when: "Café ✅",
+    note: "Correto. Pasta de amendoim tem gordura pras vitaminas A, D, E, K.",
+    intimate: "Sem impacto",
+    evidence: "Alta"
+  },
+  {
+    name: "Vitamina D3 + K2",
+    dose: "D3: 2.000-4.000 UI/dia · K2: 100mcg/dia",
+    when: "Café ou almoço",
+    note: "Suporte hormonal geral, resultado de treino, humor. Deficiência quase universal no Brasil.",
+    intimate: "Nenhum impacto negativo",
+    evidence: "Alta"
+  },
+  {
+    name: "Chá de Spearmint",
+    dose: "2 xícaras/dia",
+    when: "Manhã + tarde",
+    note: "Leve efeito anti-androgênico — reduz testosterona livre modestamente.",
+    intimate: "Não afeta desempenho nas doses de chá",
+    evidence: "Moderada"
+  },
+  {
+    name: "Linhaça dourada moída",
+    dose: "2 col. sopa/dia",
+    when: "No shake ou iogurte",
+    note: "Fitoestrógenos (lignanas) — efeito estrogênico suave e acumulativo.",
+    intimate: "Zero impacto",
+    evidence: "Moderada"
+  },
+  {
+    name: "DIM (Diindolylmethane)",
+    dose: "100-200mg/dia com refeição",
+    when: "Almoço ou jantar",
+    note: "Modula metabolismo de estrogênio. Melhora pele. Encontrado em brócolis.",
+    intimate: "Não afeta testosterona diretamente",
+    evidence: "Moderada"
+  },
+  {
+    name: "Soja / Tofu / Edamame",
+    dose: "1-2 porções/dia (alimento)",
+    when: "Almoço ou jantar",
+    note: "Isoflavonas — fitoestrógenos com ligação fraca nos receptores de estrogênio.",
+    intimate: "Em doses alimentares: zero impacto",
+    evidence: "Moderada"
+  }
+];
+
+// ─── 11. RECIPES ──────────────────────────────────────────────
 const RECIPES = [
   {
     id: "omelete",
