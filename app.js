@@ -518,17 +518,15 @@ const Utils = {
     var streak = StorageManager.getValue('streak', 0);
     var phase = StorageManager.getValue('currentPhase', 1);
 
-    var days = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
-    var today = days[new Date().getDay()];
-    var phaseKey = 'fase' + phase;
-    var dayData = WORKOUTS[phaseKey] && WORKOUTS[phaseKey].days[today];
-    var workoutName = dayData && !dayData.restDay ? dayData.name : null;
+    var sched = (typeof WEEK_SCHEDULE !== 'undefined') ? WEEK_SCHEDULE[new Date().getDay()] : null;
+    var workoutLabel = sched ? sched.label : null;
+    var isRest = sched && sched.type === 'descanso';
 
     var parts = [base + ', Arthur!'];
 
-    if (workoutName) {
-      parts.push('Hoje: ' + workoutName + ' \uD83D\uDCAA');
-    } else if (dayData && dayData.restDay) {
+    if (sched && !isRest && workoutLabel) {
+      parts.push('Hoje: ' + workoutLabel + ' \uD83D\uDCAA');
+    } else if (isRest) {
       parts.push('Dia de descanso \uD83D\uDE0C');
     }
 
@@ -1418,6 +1416,18 @@ const WorkoutManager = {
   currentPhase: 1,
   selectedDay: null,
   workoutData: null,
+  currentSubTab: 'treino',
+  yogaLevel: 'iniciante',
+
+  // Sub-tab definitions
+  SUB_TABS: [
+    { key: 'treino', label: 'Treino' },
+    { key: 'gluteo', label: 'Gluteo Fix' },
+    { key: 'yoga', label: 'Yoga' },
+    { key: 'rebolar', label: 'Rebolar' },
+    { key: 'tecnica', label: 'Tecnica' },
+    { key: 'cardio', label: 'Cardio' }
+  ],
 
   // ── Lifecycle ──────────────────────────────────────────────
 
@@ -1433,13 +1443,20 @@ const WorkoutManager = {
     var container = document.getElementById('treino-content');
     if (container) {
       container.addEventListener('click', function(e) {
+        // Sub-tab clicks
+        var subTab = e.target.closest('.workout-subtab');
+        if (subTab) {
+          self.currentSubTab = subTab.dataset.subtab;
+          self.render();
+          return;
+        }
         // Phase tabs
         var phaseTab = e.target.closest('.phase-tab');
         if (phaseTab) {
           var phase = parseInt(phaseTab.dataset.phase);
           self.currentPhase = phase;
           StorageManager.setValue('currentPhase', phase);
-          BadgeManager.checkAll();
+          if (typeof BadgeManager !== 'undefined') BadgeManager.checkAll();
           self.render();
           return;
         }
@@ -1447,6 +1464,13 @@ const WorkoutManager = {
         var dayTab = e.target.closest('.day-tab');
         if (dayTab) {
           self.selectedDay = parseInt(dayTab.dataset.day);
+          self.render();
+          return;
+        }
+        // Yoga level tabs
+        var yogaTab = e.target.closest('.yoga-level-tab');
+        if (yogaTab) {
+          self.yogaLevel = yogaTab.dataset.level;
           self.render();
           return;
         }
@@ -1468,7 +1492,7 @@ const WorkoutManager = {
           e.stopPropagation();
           var videoKey = videoBtn.dataset.videoKey;
           var source = videoBtn.dataset.videoSource || 'exercise';
-          VideoModal.open(videoKey, source);
+          if (typeof VideoModal !== 'undefined') VideoModal.open(videoKey, source);
           return;
         }
         // Exercise header expand/collapse
@@ -1491,16 +1515,18 @@ const WorkoutManager = {
           var restSec = parseInt(vacuumBtn.dataset.rest);
           var sets = parseInt(vacuumBtn.dataset.sets);
           var exId = vacuumBtn.dataset.exercise;
-          TimerEngine.startVacuumSeries(holdSec, restSec, sets, function() {
-            var wData = self.getWorkoutData();
-            if (!wData.series[exId]) wData.series[exId] = {};
-            for (var s = 1; s <= sets; s++) {
-              wData.series[exId][s] = true;
-            }
-            self.saveWorkoutData(wData);
-            Toast.show('Vacuum concluído! \uD83D\uDCA8', 'success');
-            self.render();
-          });
+          if (typeof TimerEngine !== 'undefined') {
+            TimerEngine.startVacuumSeries(holdSec, restSec, sets, function() {
+              var wData = self.getWorkoutData();
+              if (!wData.series[exId]) wData.series[exId] = {};
+              for (var s = 1; s <= sets; s++) {
+                wData.series[exId][s] = true;
+              }
+              self.saveWorkoutData(wData);
+              Toast.show('Vacuum concluido!', 'success');
+              self.render();
+            });
+          }
           return;
         }
         // Cardio start buttons
@@ -1508,7 +1534,7 @@ const WorkoutManager = {
         if (cardioBtn) {
           var seconds = parseInt(cardioBtn.dataset.seconds);
           var label = cardioBtn.dataset.label || 'CARDIO';
-          TimerEngine.startCountUp(seconds, label);
+          if (typeof TimerEngine !== 'undefined') TimerEngine.startCountUp(seconds, label);
           return;
         }
         // Plank timer buttons
@@ -1517,7 +1543,7 @@ const WorkoutManager = {
           e.stopPropagation();
           var plankSec = parseInt(plankBtn.dataset.seconds);
           var plankName = plankBtn.dataset.exerciseName || 'Prancha';
-          TimerEngine.startCountdown(plankSec, plankName.toUpperCase(), null, null);
+          if (typeof TimerEngine !== 'undefined') TimerEngine.startCountdown(plankSec, plankName.toUpperCase(), null, null);
           return;
         }
         // Stretch timer buttons (no sides)
@@ -1525,7 +1551,7 @@ const WorkoutManager = {
         if (stretchBtn) {
           var stretchSec = parseInt(stretchBtn.dataset.seconds);
           var stretchName = stretchBtn.dataset.name || 'Alongamento';
-          TimerEngine.startCountdown(stretchSec, stretchName.toUpperCase(), null, null);
+          if (typeof TimerEngine !== 'undefined') TimerEngine.startCountdown(stretchSec, stretchName.toUpperCase(), null, null);
           return;
         }
         // Stretch with sides buttons
@@ -1533,7 +1559,7 @@ const WorkoutManager = {
         if (sidesBtn) {
           var sidesSec = parseInt(sidesBtn.dataset.seconds);
           var sidesName = sidesBtn.dataset.name || 'Alongamento';
-          TimerEngine.startStretchWithSides(sidesSec, sidesName, null);
+          if (typeof TimerEngine !== 'undefined') TimerEngine.startStretchWithSides(sidesSec, sidesName, null);
           return;
         }
         // Rest time selector buttons
@@ -1542,7 +1568,6 @@ const WorkoutManager = {
           var exId = restBtn.dataset.exercise;
           var seconds = parseInt(restBtn.dataset.restSeconds);
           self.setRestOverride(exId, seconds);
-          // Update visual: remove active from siblings, add to clicked
           var selector = restBtn.parentElement;
           selector.querySelectorAll('.rest-btn').forEach(function(b) { b.classList.remove('active'); });
           restBtn.classList.add('active');
@@ -1599,13 +1624,19 @@ const WorkoutManager = {
   },
 
   getPhaseData() {
-    return WORKOUTS[this.getPhaseKey()] || WORKOUTS.fase1;
+    return WORKOUTS_NEW[this.getPhaseKey()] || WORKOUTS_NEW.fase1;
+  },
+
+  getScheduleForDay(dayNum) {
+    var d = (dayNum !== null && dayNum !== undefined) ? dayNum : this.selectedDay;
+    return WEEK_SCHEDULE[d] || null;
   },
 
   getDayData() {
-    const phase = this.getPhaseData();
-    const dayName = Utils.getDayName(this.selectedDay);
-    return phase.days[dayName] || null;
+    var sched = this.getScheduleForDay(this.selectedDay);
+    if (!sched || !sched.workout) return null;
+    var phase = this.getPhaseData();
+    return (phase.days && phase.days[sched.workout]) || null;
   },
 
   getWorkoutData() {
@@ -1638,15 +1669,8 @@ const WorkoutManager = {
     return 'Cooldown';
   },
 
-  /**
-   * Progressive overload suggestion.
-   * Looks at last week's data for the same day-of-week.
-   * If ALL sets were completed and a weight was logged, suggests +2kg.
-   * Returns a suggestion string or null.
-   */
   getProgressionSuggestion(exerciseId, totalSets) {
     try {
-      // Calculate the date 7 days ago (same day of week, last week)
       var today = new Date();
       var lastWeek = new Date(today);
       lastWeek.setDate(today.getDate() - 7);
@@ -1658,12 +1682,10 @@ const WorkoutManager = {
       var prevSeries = prevData.series[exerciseId];
       if (!prevSeries) return null;
 
-      // Check if ALL sets were completed
       for (var s = 1; s <= totalSets; s++) {
         if (!prevSeries[s]) return null;
       }
 
-      // Find the weight used (check all sets, use the max logged weight)
       var maxWeight = 0;
       var foundWeight = false;
       for (var s = 1; s <= totalSets; s++) {
@@ -1687,10 +1709,6 @@ const WorkoutManager = {
     }
   },
 
-  /**
-   * Detect special exercise types by name/properties.
-   * Returns 'vacuum', 'cardio', 'plank', or 'normal'.
-   */
   getExerciseType(exercise) {
     var name = exercise.name.toLowerCase();
     if (name.indexOf('vacuum') !== -1) return 'vacuum';
@@ -1699,10 +1717,6 @@ const WorkoutManager = {
     return 'normal';
   },
 
-  /**
-   * Parse reps string for vacuum/plank to get seconds.
-   * E.g. "20-30seg" -> 25 (midpoint), "30seg" -> 30
-   */
   parseHoldSeconds(repsStr) {
     if (!repsStr) return 20;
     var rangeMatch = repsStr.match(/(\d+)-(\d+)/);
@@ -1712,10 +1726,6 @@ const WorkoutManager = {
     return 20;
   },
 
-  /**
-   * Parse cardio duration string to seconds.
-   * E.g. "20min" -> 1200, "30-40min" -> 2100 (midpoint)
-   */
   parseCardioSeconds(repsStr) {
     if (!repsStr) return 1200;
     var rangeMatch = repsStr.match(/(\d+)-(\d+)\s*min/);
@@ -1732,21 +1742,61 @@ const WorkoutManager = {
     if (!container) return;
 
     var html = '';
-    html += this.renderPhaseSelector();
-    html += this.renderDaySelector();
+    html += this.renderSubTabBar();
 
-    var dayData = this.getDayData();
-
-    if (!dayData || dayData.restDay) {
-      html += this.renderRestDay(dayData);
-    } else {
-      html += this.renderWorkoutProgress(dayData);
-      html += this.renderWarmup();
-      html += this.renderExercises(dayData.exercises || []);
-      html += this.renderCooldown();
+    switch (this.currentSubTab) {
+      case 'treino':   html += this.renderWorkoutTab(); break;
+      case 'gluteo':   html += this.renderGluteProtocol(); break;
+      case 'yoga':     html += this.renderYoga(); break;
+      case 'rebolar':  html += this.renderRebolar(); break;
+      case 'tecnica':  html += this.renderTechnique(); break;
+      case 'cardio':   html += this.renderCardioGuide(); break;
+      default:         html += this.renderWorkoutTab(); break;
     }
 
     container.innerHTML = html;
+  },
+
+  // ── Render: Sub-Tab Bar ────────────────────────────────────
+
+  renderSubTabBar() {
+    var self = this;
+    var html = '<div class="workout-subtab-bar">';
+    this.SUB_TABS.forEach(function(tab) {
+      var active = (tab.key === self.currentSubTab) ? ' active' : '';
+      html += '<button class="workout-subtab' + active + '" data-subtab="' + tab.key + '">' + tab.label + '</button>';
+    });
+    html += '</div>';
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // SUB-TAB: TREINO (main workout)
+  // ══════════════════════════════════════════════════════════
+
+  renderWorkoutTab() {
+    var html = '';
+    html += this.renderPhaseSelector();
+    html += this.renderDaySelector();
+
+    var sched = this.getScheduleForDay(this.selectedDay);
+    var dayData = this.getDayData();
+
+    if (!sched || !sched.workout || !dayData) {
+      html += this.renderRestDay(sched);
+    } else {
+      html += this.renderWorkoutProgress(dayData);
+      // Glute activation protocol before lower body warmups
+      if (sched.warmup === 'lower') {
+        html += this.renderGluteActivation();
+      }
+      html += this.renderWarmup(sched.warmup);
+      html += this.renderExercises(dayData.exercises || []);
+      html += this.renderCooldown(sched.cooldown);
+      html += this.renderProgressionRules();
+    }
+
+    return html;
   },
 
   // ── Render: Phase Selector ─────────────────────────────────
@@ -1756,8 +1806,6 @@ const WorkoutManager = {
     html += '<div class="phase-tabs">';
 
     for (var i = 1; i <= 4; i++) {
-      var faseKey = 'fase' + i;
-      var fase = WORKOUTS[faseKey];
       var activeClass = (i === this.currentPhase) ? ' active' : '';
       html += '<button class="phase-tab' + activeClass + '" data-phase="' + i + '">';
       html += '<span class="phase-num">Fase ' + i + '</span>';
@@ -1766,11 +1814,13 @@ const WorkoutManager = {
 
     html += '</div>';
 
-    // Phase description
     var phase = this.getPhaseData();
     html += '<div class="phase-description">';
     html += '<strong>' + this.escapeHtml(phase.name) + '</strong>';
-    html += '<p style="opacity:0.7; font-size:0.85rem; margin:0.3rem 0 0;">' + this.escapeHtml(phase.weeks) + ' — ' + this.escapeHtml(phase.objective) + '</p>';
+    html += '<p style="opacity:0.7; font-size:0.85rem; margin:0.3rem 0 0;">' + this.escapeHtml(phase.period) + ' — ' + this.escapeHtml(phase.objective) + '</p>';
+    if (phase.note) {
+      html += '<p style="opacity:0.6; font-size:0.8rem; margin:0.25rem 0 0;">' + this.escapeHtml(phase.note) + '</p>';
+    }
     html += '</div>';
     html += '</div>';
     return html;
@@ -1791,11 +1841,11 @@ const WorkoutManager = {
 
     html += '</div>';
 
-    // Day title
-    var dayData = this.getDayData();
-    if (dayData && !dayData.restDay) {
+    // Day title from WEEK_SCHEDULE
+    var sched = this.getScheduleForDay(this.selectedDay);
+    if (sched) {
       html += '<div style="text-align:center; padding: 0.5rem 0;">';
-      html += '<strong style="color: var(--primary);">' + this.escapeHtml(dayData.name) + '</strong>';
+      html += '<strong style="color: var(--primary);">' + this.escapeHtml(sched.label) + '</strong>';
       html += '</div>';
     }
 
@@ -1830,7 +1880,7 @@ const WorkoutManager = {
     var html = '<div class="card glass workout-overall-progress">';
     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">';
     html += '<strong>Progresso do Treino</strong>';
-    html += '<span>' + completedSeries + '/' + totalSeries + ' séries (' + pct + '%)</span>';
+    html += '<span>' + completedSeries + '/' + totalSeries + ' series (' + pct + '%)</span>';
     html += '</div>';
     html += '<div class="progress-bar-container">';
     html += '<div class="progress-bar" style="width:' + pct + '%"></div>';
@@ -1841,49 +1891,62 @@ const WorkoutManager = {
 
   // ── Render: Rest Day ───────────────────────────────────────
 
-  renderRestDay(dayData) {
-    var msg = (dayData && dayData.restMessage) ? dayData.restMessage : 'Dia de descanso. Foque em skincare, hidratação e autocuidado!';
+  renderRestDay(sched) {
+    var label = (sched && sched.label) ? sched.label : 'Dia de descanso';
     var html = '<div class="card glass" style="text-align:center; padding:2rem 1.5rem;">';
     html += '<div style="font-size:3rem; margin-bottom:1rem;">&#128524;</div>';
-    html += '<h3>Dia de Descanso</h3>';
-    html += '<p style="opacity:0.8; margin-top:0.5rem;">' + this.escapeHtml(msg) + '</p>';
+    html += '<h3>Dia de Descanso Ativo</h3>';
+    html += '<p style="opacity:0.8; margin-top:0.5rem;">' + this.escapeHtml(label) + '</p>';
+    html += '<p style="opacity:0.6; font-size:0.85rem; margin-top:0.5rem;">Aproveite as abas Yoga, Rebolar ou Gluteo Fix para atividades leves.</p>';
     html += '</div>';
 
-    // Still show cooldown/stretching on rest days
-    html += this.renderCooldown();
+    // Still show lower cooldown/stretching on rest days
+    html += this.renderCooldown('lower');
     return html;
   },
 
-  // ── Render: Warmup ─────────────────────────────────────────
+  // ── Render: Glute Activation (before lower warmup) ─────────
 
-  renderWarmup() {
+  renderGluteActivation() {
+    var html = '<div class="card glass" style="border-left: 3px solid var(--accent);">';
+    html += '<div class="collapsible-header" data-target="glute-activation-content">';
+    html += '<h3 style="margin:0;">Ativacao Gluteo Esquerdo (ANTES do treino)</h3>';
+    html += '<span class="expand-icon">&#9660;</span>';
+    html += '</div>';
+    html += '<div id="glute-activation-content" class="collapsible-body hidden">';
+    html += '<p style="font-size:0.82rem; opacity:0.7; margin-bottom:0.75rem;">' + this.escapeHtml(GLUTE_FIX_PROTOCOL.explanation) + '</p>';
+
+    GLUTE_FIX_PROTOCOL.daily_exercises.forEach(function(ex) {
+      html += '<div style="padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
+      html += '<strong style="font-size:0.85rem;">' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
+      html += '<span style="opacity:0.6; font-size:0.8rem;"> — ' + WorkoutManager.escapeHtml(ex.sets) + '</span>';
+      html += '<div style="font-size:0.78rem; opacity:0.6; margin-top:2px;">' + WorkoutManager.escapeHtml(ex.desc) + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div></div>';
+    return html;
+  },
+
+  // ── Render: Warmup (lower/upper) ───────────────────────────
+
+  renderWarmup(warmupType) {
+    if (!warmupType) return '';
+    var warmupList = warmupType === 'lower' ? WARMUP_LOWER : WARMUP_UPPER;
+    var title = warmupType === 'lower' ? 'Aquecimento Lower Body' : 'Aquecimento Upper Body';
+
     var html = '<div class="card glass warmup-card">';
     html += '<div class="collapsible-header" data-target="warmup-content">';
-    html += '<h3 style="margin:0;">' + this.escapeHtml(WARMUP.name) + ' (' + WARMUP.duration + ') — OBRIGATORIO</h3>';
+    html += '<h3 style="margin:0;">' + this.escapeHtml(title) + ' (' + warmupList.length + ' exercicios) — OBRIGATORIO</h3>';
     html += '<span class="expand-icon">&#9660;</span>';
     html += '</div>';
     html += '<div id="warmup-content" class="collapsible-body hidden">';
 
-    WARMUP.sections.forEach(function(section) {
-      html += '<div class="warmup-section">';
-      html += '<h4 style="color: var(--primary); margin:0.75rem 0 0.5rem;">';
-      html += WorkoutManager.escapeHtml(section.name);
-      if (section.duration) html += ' <small style="opacity:0.6;">(' + section.duration + ')</small>';
-      if (section.required) html += ' <span style="color: var(--accent);">*</span>';
-      html += '</h4>';
-
-      section.exercises.forEach(function(ex) {
-        html += '<div class="warmup-exercise">';
-        html += '<span class="warmup-name">' + WorkoutManager.escapeHtml(ex.name) + '</span>';
-        if (ex.reps) html += '<span class="warmup-meta"> — ' + WorkoutManager.escapeHtml(ex.reps) + '</span>';
-        if (ex.duration) html += '<span class="warmup-meta"> — ' + WorkoutManager.escapeHtml(ex.duration) + '</span>';
-        if (ex.tip) html += '<div class="warmup-tip" style="font-size:0.8rem; opacity:0.7; margin-left:0.5rem;">&#128161; ' + WorkoutManager.escapeHtml(ex.tip) + '</div>';
-        if (ex.videoKey) {
-          html += ' <button class="btn-icon video-btn" data-video-key="' + ex.videoKey + '" data-video-source="exercise">&#127916;</button>';
-        }
-        html += '</div>';
-      });
-
+    warmupList.forEach(function(ex) {
+      html += '<div style="padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
+      html += '<strong style="font-size:0.85rem;">' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
+      html += '<span style="opacity:0.6; font-size:0.8rem;"> — ' + WorkoutManager.escapeHtml(ex.time) + '</span>';
+      html += '<div style="font-size:0.78rem; opacity:0.6; margin-top:2px;">' + WorkoutManager.escapeHtml(ex.desc) + '</div>';
       html += '</div>';
     });
 
@@ -1907,7 +1970,6 @@ const WorkoutManager = {
     var wData = this.getWorkoutData();
     var exData = wData.series[exercise.id] || {};
     var exWeights = wData.weights || {};
-    var restSeconds = Utils.parseRest(exercise.rest);
 
     var cardClass = 'exercise-card card glass';
     if (type === 'vacuum') cardClass += ' exercise-vacuum';
@@ -1918,7 +1980,15 @@ const WorkoutManager = {
     html += '<div class="exercise-header" data-toggle="details-' + exercise.id + '">';
     html += '<span class="exercise-num">#' + (index + 1) + '</span>';
     html += '<div class="exercise-info">';
+    html += '<div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">';
     html += '<strong>' + this.escapeHtml(exercise.name) + '</strong>';
+    if (exercise.weight) {
+      html += '<span class="exercise-weight-badge">' + this.escapeHtml(exercise.weight) + '</span>';
+    }
+    if (exercise.startLeft) {
+      html += '<span class="exercise-left-badge">Esq primeiro</span>';
+    }
+    html += '</div>';
 
     // Meta line
     if (type === 'cardio') {
@@ -1926,19 +1996,11 @@ const WorkoutManager = {
     } else if (type === 'vacuum') {
       html += '<span class="exercise-meta">' + exercise.sets + 'x ' + this.escapeHtml(exercise.reps) + ' | Descanso: ' + this.escapeHtml(exercise.rest) + '</span>';
     } else {
-      html += '<span class="exercise-meta">' + exercise.sets + 'x' + this.escapeHtml(exercise.reps) + ' | Descanso: ' + this.escapeHtml(exercise.rest) + '</span>';
+      html += '<span class="exercise-meta">' + exercise.sets + 'x' + this.escapeHtml(String(exercise.reps)) + ' | Descanso: ' + this.escapeHtml(exercise.rest) + '</span>';
     }
 
     if (exercise.tip) {
       html += '<span class="exercise-tip">&#128161; ' + this.escapeHtml(exercise.tip) + '</span>';
-    }
-    // Weight suggestion badge
-    if (exercise.videoKey && typeof WEIGHT_GUIDE !== 'undefined') {
-      var guide = WEIGHT_GUIDE[exercise.videoKey];
-      var phaseKey = this.getPhaseKey();
-      if (guide && guide[phaseKey]) {
-        html += '<span class="weight-suggestion">\u2696 ' + this.escapeHtml(guide[phaseKey].suggestedKg) + '</span>';
-      }
     }
     html += '</div>'; // .exercise-info
 
@@ -1955,25 +2017,24 @@ const WorkoutManager = {
     if (exercise.details) {
       html += '<p style="font-size:0.85rem; opacity:0.85; line-height:1.5;">' + this.escapeHtml(exercise.details) + '</p>';
     }
-    // Weight progression info
     if (exercise.videoKey && typeof WEIGHT_GUIDE !== 'undefined') {
       var wGuide = WEIGHT_GUIDE[exercise.videoKey];
       var wPhaseKey = this.getPhaseKey();
       if (wGuide && wGuide[wPhaseKey]) {
         html += '<div class="weight-progression-info">';
-        html += '<span class="weight-progression-label">\uD83C\uDFCB Peso sugerido:</span> <strong>' + this.escapeHtml(wGuide[wPhaseKey].suggestedKg) + '</strong>';
+        html += '<span class="weight-progression-label">Peso sugerido:</span> <strong>' + this.escapeHtml(wGuide[wPhaseKey].suggestedKg) + '</strong>';
         if (wGuide[wPhaseKey].progression) {
-          html += '<br><span class="weight-progression-label">\uD83D\uDCC8 Quando progredir:</span> ' + this.escapeHtml(wGuide[wPhaseKey].progression);
+          html += '<br><span class="weight-progression-label">Quando progredir:</span> ' + this.escapeHtml(wGuide[wPhaseKey].progression);
         }
         html += '</div>';
       }
     }
     html += '</div>';
 
-    // Start left warning
+    // Start left warning (legacy prominent display)
     if (exercise.startLeft) {
       html += '<div class="start-left-indicator">';
-      html += '\uD83D\uDD34 COMECE PELO LADO ESQUERDO';
+      html += 'COMECE PELO LADO ESQUERDO';
       html += '</div>';
     }
 
@@ -1998,7 +2059,7 @@ const WorkoutManager = {
       var pct = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
 
       html += '<div class="exercise-progress">';
-      html += '<span>' + completedSets + '/' + totalSets + ' séries</span>';
+      html += '<span>' + completedSets + '/' + totalSets + ' series</span>';
       html += '<div class="progress-bar-container" style="height:4px;">';
       html += '<div class="progress-bar" style="width:' + pct + '%"></div>';
       html += '</div>';
@@ -2096,10 +2157,9 @@ const WorkoutManager = {
     html += '<button class="btn btn-primary vacuum-start-btn" data-hold="' + holdSec + '" data-rest="' + restSec + '" data-sets="' + totalSets + '" data-exercise="' + exercise.id + '">';
     html += '&#128168; Iniciar Vacuum (' + totalSets + 'x ' + holdSec + 'seg)';
     html += '</button>';
-    html += '<p style="font-size:0.8rem; opacity:0.6; margin-top:0.5rem;">' + completedSets + '/' + totalSets + ' séries feitas hoje</p>';
+    html += '<p style="font-size:0.8rem; opacity:0.6; margin-top:0.5rem;">' + completedSets + '/' + totalSets + ' series feitas hoje</p>';
     html += '</div>';
 
-    // Also show individual checkboxes for manual tracking
     html += '<div class="exercise-series">';
     for (var s2 = 1; s2 <= totalSets; s2++) {
       var checked = exData[s2] ? 'checked' : '';
@@ -2130,52 +2190,45 @@ const WorkoutManager = {
     html += '<label class="checkbox-wrapper" style="justify-content:center;">';
     html += '<input type="checkbox" class="cardio-done-checkbox" data-exercise="' + exercise.id + '" ' + (done ? 'checked' : '') + '>';
     html += '<span class="checkbox-custom"></span>';
-    html += '<span>Concluído</span>';
+    html += '<span>Concluido</span>';
     html += '</label>';
     html += '</div>';
     html += '</div>';
     return html;
   },
 
-  // ── Render: Cooldown ───────────────────────────────────────
+  // ── Render: Cooldown (lower/upper) ─────────────────────────
 
-  renderCooldown() {
+  renderCooldown(cooldownType) {
+    var cdType = cooldownType || 'lower';
+    var cooldownList = cdType === 'lower' ? COOLDOWN_LOWER : COOLDOWN_UPPER;
+    var title = cdType === 'lower' ? 'Alongamento Lower Body' : 'Alongamento Upper Body';
+
     var html = '<div class="card glass cooldown-card">';
     html += '<div class="collapsible-header" data-target="cooldown-content">';
-    html += '<h3 style="margin:0;">' + this.escapeHtml(COOLDOWN.name) + ' (' + COOLDOWN.duration + ') — OBRIGATORIO</h3>';
+    html += '<h3 style="margin:0;">' + this.escapeHtml(title) + ' (' + cooldownList.length + ' exercicios) — OBRIGATORIO</h3>';
     html += '<span class="expand-icon">&#9660;</span>';
     html += '</div>';
     html += '<div id="cooldown-content" class="collapsible-body hidden">';
 
-    COOLDOWN.exercises.forEach(function(ex) {
-      html += '<div class="cooldown-exercise" style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
+    cooldownList.forEach(function(ex) {
+      html += '<div style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
       html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
       html += '<div>';
       html += '<strong>' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
-      html += '<span style="opacity:0.6; font-size:0.85rem;"> — ' + WorkoutManager.escapeHtml(ex.duration) + '</span>';
-      if (ex.required) html += ' <span style="color: var(--accent); font-size:0.8rem;">obrigatorio</span>';
+      html += '<span style="opacity:0.6; font-size:0.85rem;"> — ' + WorkoutManager.escapeHtml(ex.time) + '</span>';
       html += '</div>';
       html += '<div style="display:flex; gap:0.3rem; align-items:center;">';
-
-      // Timer button
-      if (ex.sides) {
-        var secMatch = ex.duration.match(/(\d+)/);
-        var secPerSide = secMatch ? parseInt(secMatch[1]) : 30;
-        html += '<button class="btn btn-sm btn-outline stretch-sides-btn" data-seconds="' + secPerSide + '" data-name="' + WorkoutManager.escapeAttr(ex.name) + '">&#9201; E/D</button>';
+      var secMatch = ex.time.match(/(\d+)/);
+      var sec = secMatch ? parseInt(secMatch[1]) : 30;
+      if (ex.time.indexOf('cada') !== -1) {
+        html += '<button class="btn btn-sm btn-outline stretch-sides-btn" data-seconds="' + sec + '" data-name="' + WorkoutManager.escapeAttr(ex.name) + '">&#9201; E/D</button>';
       } else {
-        var secMatch2 = ex.duration.match(/(\d+)/);
-        var sec = secMatch2 ? parseInt(secMatch2[1]) : 30;
         html += '<button class="btn btn-sm btn-outline stretch-timer-btn" data-seconds="' + sec + '" data-name="' + WorkoutManager.escapeAttr(ex.name) + '">&#9201; ' + sec + 'seg</button>';
       }
-
-      if (ex.videoKey) {
-        html += '<button class="btn-icon video-btn" data-video-key="' + ex.videoKey + '" data-video-source="exercise">&#127916;</button>';
-      }
       html += '</div>';
       html += '</div>';
-      if (ex.tip) {
-        html += '<div style="font-size:0.8rem; opacity:0.65; margin-top:0.25rem;">&#128161; ' + WorkoutManager.escapeHtml(ex.tip) + '</div>';
-      }
+      html += '<div style="font-size:0.78rem; opacity:0.6; margin-top:2px;">' + WorkoutManager.escapeHtml(ex.desc) + '</div>';
       html += '</div>';
     });
 
@@ -2183,7 +2236,218 @@ const WorkoutManager = {
     return html;
   },
 
-  // Event listeners are now handled via delegation in init()
+  // ── Render: Progression Rules Card ─────────────────────────
+
+  renderProgressionRules() {
+    var html = '<div class="card glass" style="border-left: 3px solid var(--success);">';
+    html += '<h4 style="margin:0 0 0.5rem; color: var(--success);">Regras de Progressao</h4>';
+
+    GLUTE_FIX_PROTOCOL.rules.forEach(function(rule) {
+      html += '<div style="padding:0.35rem 0; border-bottom:1px solid rgba(255,255,255,0.04);">';
+      html += '<strong style="font-size:0.83rem;">' + WorkoutManager.escapeHtml(rule.name) + '</strong>';
+      html += '<span style="opacity:0.6; font-size:0.78rem;"> [' + WorkoutManager.escapeHtml(rule.rule) + ']</span>';
+      html += '<div style="font-size:0.78rem; opacity:0.65; margin-top:2px;">' + WorkoutManager.escapeHtml(rule.desc) + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div>';
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // SUB-TAB: GLUTEO FIX PROTOCOL
+  // ══════════════════════════════════════════════════════════
+
+  renderGluteProtocol() {
+    var html = '';
+
+    // Explanation card
+    html += '<div class="card glass">';
+    html += '<h3 style="margin:0 0 0.75rem; color: var(--accent);">Protocolo Correcao Gluteo Esquerdo</h3>';
+    html += '<p style="font-size:0.85rem; opacity:0.8; line-height:1.6;">' + this.escapeHtml(GLUTE_FIX_PROTOCOL.explanation) + '</p>';
+    html += '</div>';
+
+    // Daily exercises
+    html += '<div class="card glass">';
+    html += '<h4 style="margin:0 0 0.75rem;">Exercicios Diarios de Ativacao</h4>';
+
+    GLUTE_FIX_PROTOCOL.daily_exercises.forEach(function(ex) {
+      html += '<div style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
+      html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
+      html += '<strong style="font-size:0.85rem;">' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
+      html += '<span style="opacity:0.7; font-size:0.8rem; white-space:nowrap;">' + WorkoutManager.escapeHtml(ex.sets) + '</span>';
+      html += '</div>';
+      html += '<div style="font-size:0.8rem; opacity:0.6; margin-top:3px;">' + WorkoutManager.escapeHtml(ex.desc) + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div>';
+
+    // Rules
+    html += '<div class="card glass" style="border-left: 3px solid var(--primary);">';
+    html += '<h4 style="margin:0 0 0.75rem;">Regras de Ouro</h4>';
+
+    GLUTE_FIX_PROTOCOL.rules.forEach(function(rule) {
+      html += '<div style="padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.04);">';
+      html += '<strong style="font-size:0.83rem;">' + WorkoutManager.escapeHtml(rule.name) + '</strong>';
+      html += '<span style="background:var(--accent); color:var(--bg-dark); font-size:0.7rem; padding:1px 6px; border-radius:8px; margin-left:6px; font-weight:600;">' + WorkoutManager.escapeHtml(rule.rule) + '</span>';
+      html += '<div style="font-size:0.8rem; opacity:0.65; margin-top:3px;">' + WorkoutManager.escapeHtml(rule.desc) + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div>';
+
+    // Timeline
+    html += '<div class="card glass">';
+    html += '<h4 style="margin:0 0 0.75rem;">Timeline de Resultados</h4>';
+
+    GLUTE_FIX_PROTOCOL.timeline.forEach(function(item) {
+      html += '<div style="padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.04);">';
+      html += '<strong style="font-size:0.83rem; color: var(--primary);">' + WorkoutManager.escapeHtml(item[0]) + '</strong>';
+      html += '<div style="font-size:0.82rem; opacity:0.75; margin-top:2px;">' + WorkoutManager.escapeHtml(item[1]) + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div>';
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // SUB-TAB: YOGA
+  // ══════════════════════════════════════════════════════════
+
+  renderYoga() {
+    var self = this;
+    var html = '';
+
+    // Level selector
+    var levels = ['iniciante', 'intermediario', 'avancado'];
+    var levelLabels = { iniciante: 'Iniciante', intermediario: 'Intermediario', avancado: 'Avancado' };
+
+    html += '<div class="card glass">';
+    html += '<h3 style="margin:0 0 0.75rem;">Yoga — Mobilidade e Flexibilidade</h3>';
+    html += '<div style="display:flex; gap:6px; margin-bottom:1rem;">';
+
+    levels.forEach(function(lvl) {
+      var active = (lvl === self.yogaLevel) ? ' active' : '';
+      html += '<button class="workout-subtab yoga-level-tab' + active + '" data-level="' + lvl + '">' + levelLabels[lvl] + '</button>';
+    });
+
+    html += '</div>';
+
+    // Poses list
+    var poses = YOGA_LEVELS[this.yogaLevel] || [];
+    if (poses.length === 0) {
+      html += '<p style="opacity:0.6;">Nenhuma pose encontrada para este nivel.</p>';
+    } else {
+      poses.forEach(function(pose, idx) {
+        html += '<div style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">';
+        html += '<div>';
+        html += '<strong style="font-size:0.85rem;">' + (idx + 1) + '. ' + WorkoutManager.escapeHtml(pose[0]) + '</strong>';
+        html += '</div>';
+        html += '<span style="opacity:0.6; font-size:0.82rem; white-space:nowrap;">' + WorkoutManager.escapeHtml(pose[1]) + '</span>';
+        html += '</div>';
+      });
+    }
+
+    html += '</div>';
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // SUB-TAB: REBOLAR
+  // ══════════════════════════════════════════════════════════
+
+  renderRebolar() {
+    var html = '';
+
+    html += '<div class="card glass">';
+    html += '<h3 style="margin:0 0 0.5rem;">Aprender a Rebolar</h3>';
+    html += '<p style="opacity:0.6; font-size:0.82rem; margin-bottom:1rem;">Progressao em 3 fases — isolamento, ritmo, expressao.</p>';
+    html += '</div>';
+
+    REBOLAR_STEPS.forEach(function(phase) {
+      html += '<div class="card glass">';
+      html += '<h4 style="margin:0 0 0.5rem; color: var(--primary);">' + WorkoutManager.escapeHtml(phase.fase) + '</h4>';
+      html += '<ul style="margin:0; padding-left:1.2rem;">';
+
+      phase.steps.forEach(function(step) {
+        html += '<li style="font-size:0.83rem; opacity:0.8; margin-bottom:0.4rem; line-height:1.5;">' + WorkoutManager.escapeHtml(step) + '</li>';
+      });
+
+      html += '</ul>';
+      html += '</div>';
+    });
+
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // SUB-TAB: TECNICA
+  // ══════════════════════════════════════════════════════════
+
+  renderTechnique() {
+    var html = '';
+
+    html += '<div class="card glass">';
+    html += '<h3 style="margin:0 0 0.25rem;">Guia de Tecnica</h3>';
+    html += '<p style="opacity:0.6; font-size:0.82rem;">Dicas e alertas dos exercicios principais.</p>';
+    html += '</div>';
+
+    EXERCISE_TECHNIQUE.forEach(function(tech) {
+      html += '<div class="card glass">';
+      html += '<h4 style="margin:0 0 0.3rem;">' + WorkoutManager.escapeHtml(tech.exercise) + '</h4>';
+      html += '<p style="opacity:0.6; font-size:0.78rem; margin:0 0 0.5rem;">' + WorkoutManager.escapeHtml(tech.subtitle) + '</p>';
+
+      // Tips
+      html += '<ul style="margin:0 0 0.75rem; padding-left:1.2rem;">';
+      tech.tips.forEach(function(tip) {
+        html += '<li style="font-size:0.82rem; opacity:0.8; margin-bottom:0.3rem; line-height:1.5;">' + WorkoutManager.escapeHtml(tip) + '</li>';
+      });
+      html += '</ul>';
+
+      // Alerts
+      if (tech.alerts && tech.alerts.length > 0) {
+        tech.alerts.forEach(function(alert) {
+          html += '<div class="technique-alert">';
+          html += '<div class="technique-alert-signal">&#9888; ' + WorkoutManager.escapeHtml(alert.signal) + '</div>';
+          html += '<div class="technique-alert-fix">&#10140; ' + WorkoutManager.escapeHtml(alert.fix) + '</div>';
+          html += '</div>';
+        });
+      }
+
+      html += '</div>';
+    });
+
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // SUB-TAB: CARDIO GUIDE
+  // ══════════════════════════════════════════════════════════
+
+  renderCardioGuide() {
+    var html = '';
+
+    html += '<div class="card glass">';
+    html += '<h3 style="margin:0 0 0.25rem;">Guia de Cardio</h3>';
+    html += '<p style="opacity:0.6; font-size:0.82rem;">Qual cardio fazer sem atrapalhar os ganhos.</p>';
+    html += '</div>';
+
+    CARDIO_GUIDE.forEach(function(cg) {
+      html += '<div class="card glass">';
+      html += '<h4 style="margin:0 0 0.5rem;">' + WorkoutManager.escapeHtml(cg.title) + '</h4>';
+      html += '<div style="display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:0.82rem;">';
+      html += '<span style="opacity:0.5;">Ideal:</span><span style="opacity:0.8;">' + WorkoutManager.escapeHtml(cg.ideal) + '</span>';
+      html += '<span style="opacity:0.5;">Calorias:</span><span style="opacity:0.8;">' + WorkoutManager.escapeHtml(cg.kcal) + '</span>';
+      html += '<span style="opacity:0.5;">Impacto:</span><span style="opacity:0.8;">' + WorkoutManager.escapeHtml(cg.impact) + '</span>';
+      html += '<span style="opacity:0.5;">Quando:</span><span style="opacity:0.8;">' + WorkoutManager.escapeHtml(cg.when) + '</span>';
+      html += '</div>';
+      html += '</div>';
+    });
+
+    return html;
+  },
 
   // ── Event: Series Checked ──────────────────────────────────
 
@@ -2193,7 +2457,6 @@ const WorkoutManager = {
     wData.series[exerciseId][setNum] = checked;
     this.saveWorkoutData(wData);
 
-    // Update the exercise progress bar inline (without full re-render)
     this.updateExerciseProgress(exerciseId);
     this.updateProgressDisplay();
 
@@ -2215,7 +2478,7 @@ const WorkoutManager = {
 
         if (exercise) {
           var restSeconds = this.getRestOverride(exerciseId) || Utils.parseRest(exercise.rest);
-          if (restSeconds > 0) {
+          if (restSeconds > 0 && typeof TimerEngine !== 'undefined') {
             var nextName = this.getNextExerciseName(exercises, exIdx);
             TimerEngine.startRest(restSeconds, nextName, null);
           }
@@ -2247,10 +2510,9 @@ const WorkoutManager = {
 
     var progressSpan = card.querySelector('.exercise-progress span');
     var progressBar = card.querySelector('.exercise-progress .progress-bar');
-    if (progressSpan) progressSpan.textContent = completed + '/' + total + ' séries';
+    if (progressSpan) progressSpan.textContent = completed + '/' + total + ' series';
     if (progressBar) progressBar.style.width = (total > 0 ? Math.round((completed / total) * 100) : 0) + '%';
 
-    // Celebrate when all series are complete
     if (total > 0 && completed === total) {
       card.classList.add('celebrate');
       setTimeout(function() { card.classList.remove('celebrate'); }, 700);
@@ -2288,12 +2550,11 @@ const WorkoutManager = {
     var pct = totalSeries > 0 ? Math.round((completedSeries / totalSeries) * 100) : 0;
     var span = overallEl.querySelector('span');
     var bar = overallEl.querySelector('.progress-bar');
-    if (span) span.textContent = completedSeries + '/' + totalSeries + ' séries (' + pct + '%)';
+    if (span) span.textContent = completedSeries + '/' + totalSeries + ' series (' + pct + '%)';
     if (bar) bar.style.width = pct + '%';
 
-    // Check for workout completion badge
     if (pct >= 100) {
-      Toast.show('Treino concluido! Arrasou! \uD83D\uDCAA', 'success');
+      Toast.show('Treino concluido! Arrasou!', 'success');
     }
   },
 
