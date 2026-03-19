@@ -5034,7 +5034,7 @@ const SettingsManager = {
 
         // App Info
         '<div style="text-align:center; opacity:0.5; font-size:0.8rem; margin-top:1rem;">' +
-          '<p>Arthur -- Transformação Corporal v1.0</p>' +
+          '<p>Forja da Amazona v1.0</p>' +
           '<p>Feito com Claude Code</p>' +
         '</div>' +
       '</div>';
