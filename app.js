@@ -1443,9 +1443,16 @@ const WorkoutManager = {
     var container = document.getElementById('treino-content');
     if (container) {
       container.addEventListener('click', function(e) {
+        // Yoga level tabs — check BEFORE workout-subtab (shares the class)
+        var yogaTab = e.target.closest('.yoga-level-tab');
+        if (yogaTab) {
+          self.yogaLevel = yogaTab.dataset.level;
+          self.render();
+          return;
+        }
         // Sub-tab clicks
         var subTab = e.target.closest('.workout-subtab');
-        if (subTab) {
+        if (subTab && subTab.dataset.subtab) {
           self.currentSubTab = subTab.dataset.subtab;
           self.render();
           return;
@@ -1464,13 +1471,6 @@ const WorkoutManager = {
         var dayTab = e.target.closest('.day-tab');
         if (dayTab) {
           self.selectedDay = parseInt(dayTab.dataset.day);
-          self.render();
-          return;
-        }
-        // Yoga level tabs
-        var yogaTab = e.target.closest('.yoga-level-tab');
-        if (yogaTab) {
-          self.yogaLevel = yogaTab.dataset.level;
           self.render();
           return;
         }
