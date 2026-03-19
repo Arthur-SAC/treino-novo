@@ -1260,12 +1260,36 @@ const Dashboard = {
     html += '<div style="font-size:0.82rem; color:var(--text-muted); text-align:right;">' + workoutLabel + '</div>';
     html += '</div>';
 
+    // Power Move do dia
+    if (typeof POWER_MOVES !== 'undefined') {
+      var pmCategories = Object.keys(POWER_MOVES);
+      var pmRandCat = pmCategories[Math.floor(Math.random() * pmCategories.length)];
+      var pmCat = POWER_MOVES[pmRandCat];
+      var pmRandMove = pmCat.moves[Math.floor(Math.random() * pmCat.moves.length)];
+      html += '<div class="card glass" style="border-left:3px solid var(--accent);margin-bottom:12px;padding:12px 14px;">';
+      html += '<div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">' + pmCat.icon + ' Power Move \u00b7 ' + pmCat.label + '</div>';
+      html += '<div style="color:var(--text);font-size:0.88rem;font-weight:600;margin-bottom:4px;">' + pmRandMove.name + '</div>';
+      html += '<div style="color:var(--text-muted);font-size:0.8rem;line-height:1.5;">' + pmRandMove.how + '</div>';
+      if (pmRandMove.result) {
+        html += '<div style="color:var(--success);font-size:0.75rem;margin-top:4px;">' + pmRandMove.result + '</div>';
+      }
+      html += '</div>';
+    }
+
     // Macros summary bar
+    var nutPhase = 'deficit';
+    var targets = { kcal: 2300, prot: 150, carb: 230, fat: 65 };
+    if (typeof NUTRITION_PHASES !== 'undefined') {
+      var currentPhaseNum = StorageManager.getValue('currentPhase', 1);
+      nutPhase = (currentPhaseNum <= 2) ? 'deficit' : 'construcao';
+      targets = NUTRITION_PHASES[nutPhase][type] || NUTRITION_PHASES[nutPhase].treino;
+    }
+    var nutPhaseLabel = (nutPhase === 'deficit') ? 'D\u00e9ficit' : 'Constru\u00e7\u00e3o';
     html += '<div class="timeline-macros">';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.kcal + '</span><span class="timeline-macro-label">kcal</span></div>';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.prot + 'g</span><span class="timeline-macro-label">prote\u00edna</span></div>';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.carb + 'g</span><span class="timeline-macro-label">carb</span></div>';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.fat + 'g</span><span class="timeline-macro-label">gordura</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">~' + macros.kcal + ' / ' + targets.kcal + '</span><span class="timeline-macro-label">kcal \u00b7 ' + nutPhaseLabel + '</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.prot + ' / ' + targets.prot + 'g</span><span class="timeline-macro-label">prote\u00edna</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.carb + ' / ' + targets.carb + 'g</span><span class="timeline-macro-label">carb</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.fat + ' / ' + targets.fat + 'g</span><span class="timeline-macro-label">gordura</span></div>';
     html += '</div>';
 
     // Water tracker — 5 garrafinhas de 700ml = 3.5L
