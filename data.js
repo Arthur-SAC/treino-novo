@@ -2980,3 +2980,136 @@ const HAIR_PRODUCTS = [
   { name: "Touca/Bonnet de cetim", brand: "Shopee — 'touca cetim cachos'", price: "~R$15–25" },
   { name: "Fronha de cetim", brand: "Shopee", price: "~R$20–40" },
 ];
+
+// ─── NUTRITION_PHASES ─────────────────────────────────────────
+const NUTRITION_PHASES = {
+  deficit: {
+    label: "Fase de Déficit (Meses 1-5)",
+    description: "Perder gordura abdominal preservando músculo. 96kg → ~86kg.",
+    treino: { kcal: 2300, prot: 150, carb: 230, fat: 65 },
+    descanso: { kcal: 2100, prot: 140, carb: 190, fat: 65 },
+  },
+  construcao: {
+    label: "Fase de Construção (Meses 6-10)",
+    description: "Corpo mais leve, articulações saudáveis. Agora hipertrofia máxima.",
+    treino: { kcal: 2550, prot: 155, carb: 280, fat: 70 },
+    descanso: { kcal: 2300, prot: 145, carb: 230, fat: 65 },
+  }
+};
+
+// ─── SHOPPING_SYSTEM ──────────────────────────────────────────
+const SHOPPING_SYSTEM = {
+  mensal: {
+    label: "Compra mensal (delivery ou mercado grande)",
+    items: [
+      { item: "Frango (peito ou sobrecoxa)", qty: "3 kg", category: "freezer" },
+      { item: "Carne moída patinho", qty: "1 kg", category: "freezer" },
+      { item: "Edamame congelado 🌿", qty: "2 pacotes", category: "freezer" },
+      { item: "Mix legumes congelados (brócolis, couve-flor) 🌿", qty: "2 pacotes", category: "freezer" },
+      { item: "Arroz", qty: "2 kg", category: "despensa" },
+      { item: "Feijão", qty: "1 kg", category: "despensa" },
+      { item: "Aveia flocos finos", qty: "500g", category: "despensa" },
+      { item: "Pasta de amendoim", qty: "1 pote 500g", category: "despensa" },
+      { item: "Azeite extra virgem", qty: "500ml", category: "despensa" },
+      { item: "Linhaça dourada moída 🌿", qty: "300g", category: "despensa" },
+      { item: "Whey Protein", qty: "1 pote", category: "suplemento" },
+      { item: "Creatina", qty: "1 pote", category: "suplemento" },
+      { item: "Ômega-3", qty: "1 pote", category: "suplemento" },
+      { item: "Chá spearmint 🌿", qty: "2 caixas", category: "suplemento" },
+      { item: "Vitamina D3 + K2", qty: "1 pote", category: "suplemento" },
+    ]
+  },
+  semanal: {
+    label: "Compra semanal (~10 itens, rápida)",
+    items: [
+      { item: "Ovos", qty: "2 dúzias", category: "geladeira" },
+      { item: "Iogurte grego natural", qty: "6 potes", category: "geladeira" },
+      { item: "Tofu firme 🌿", qty: "2 blocos", category: "geladeira" },
+      { item: "Banana", qty: "1 cacho (~12)", category: "fruta" },
+      { item: "Fruta da época", qty: "7 un.", category: "fruta" },
+      { item: "Batata-doce", qty: "1.5 kg", category: "geladeira" },
+      { item: "Alface + tomate + pepino", qty: "livre", category: "geladeira" },
+      { item: "Queijo cottage", qty: "300g", category: "geladeira" },
+      { item: "Pão integral", qty: "1 pacote", category: "geladeira" },
+      { item: "Leite de soja 🌿", qty: "2L", category: "geladeira" },
+    ]
+  }
+};
+
+// ─── POWER_MOVES ──────────────────────────────────────────────
+const POWER_MOVES = {
+  banho: {
+    label: "No banho",
+    icon: "🚿",
+    moves: [
+      { name: "Círculos de quadril lentos", how: "Mãos na cintura, 10x cada sentido. Água batendo nas costas.", result: "Treina isolamento de quadril — base do rebolar.", alert: "Se o tronco mexer junto, diminuir o círculo." },
+      { name: "Figure-8 com quadril", how: "Desenhar um infinito (∞) com o quadril. Devagar, sentir cada parte.", result: "Fluidez de movimento. A Luiza Sonza faz isso naturalmente.", alert: null },
+      { name: "Ondulação de coluna (cobra)", how: "Da pélvis até o pescoço, ondular pra frente e pra trás.", result: "Flexibilidade de coluna + movimento sensual.", alert: "Tensão no pescoço = parar antes de chegar lá." },
+      { name: "Squeeze de glúteo isométrico", how: "Apertar os dois glúteos com força, segurar 10seg, soltar. 5x.", result: "Ativação sem esforço. Acorda o glúteo esquerdo.", alert: null },
+    ]
+  },
+  cozinha: {
+    label: "Esperando comida / café",
+    icon: "☕",
+    moves: [
+      { name: "Elevação de panturrilha", how: "Na ponta dos pés, subir e descer. 15x devagar.", result: "Pernas mais alongadas e definidas.", alert: "Segurar em algo se perder equilíbrio." },
+      { name: "Postura feminina", how: "Ombros pra trás e pra baixo. Peito aberto. Queixo nivelado. Peso num pé só, quadril levemente de lado.", result: "Treinar a stance feminina até virar natural.", alert: null },
+      { name: "Kegel discreto", how: "Qualquer dos 3 tipos (rápida, longa, elevador). Ninguém vê.", result: "Melhora ereção, controle e intensidade em 4-8 semanas.", alert: null },
+      { name: "Balanço sutil de quadril", how: "Peso alternando entre os pés, quadril balançando suave lado a lado.", result: "Gingado natural. Fica automático com o tempo.", alert: null },
+    ]
+  },
+  trabalho: {
+    label: "No trabalho (sentada, invisível)",
+    icon: "💼",
+    moves: [
+      { name: "Kegel (todos os 3 tipos)", how: "Contrair assoalho pélvico. 100% invisível.", result: "Acumula sessões ao longo do dia. Resultado em semanas.", alert: null },
+      { name: "Squeeze de glúteo na cadeira", how: "Apertar glúteos 5seg, soltar. 10x.", result: "Ativação constante, especialmente o esquerdo dormido.", alert: null },
+      { name: "Postura check", how: "Ombros baixos, coluna longa, pés no chão.", result: "Reduz tensão no pescoço/ombros. Cintura parece mais fina com postura boa.", alert: null },
+      { name: "Rotação de tornozelo", how: "10 círculos cada pé, sob a mesa.", result: "Circulação pras pernas — 8h sentada trava tudo.", alert: null },
+      { name: "Vacuum discreto", how: "Puxar umbigo pra dentro, segurar 10seg. Ninguém percebe.", result: "Marca cintura ao longo do tempo.", alert: null },
+    ]
+  },
+  cama: {
+    label: "Antes de dormir (na cama)",
+    icon: "🛏️",
+    moves: [
+      { name: "Borboleta deitada", how: "De costas, plantas dos pés juntas, joelhos abertos pro lado. 2min.", result: "Abre quadril enquanto relaxa. Prepara pro sono.", alert: "Se doer na virilha, afastar os pés do corpo." },
+      { name: "Hip flexor na cama", how: "Uma perna pendurada pra fora da cama, outra joelho ao peito. 1min cada.", result: "Destravar hip flexor = melhor circulação pélvica = melhor ereção.", alert: "Não forçar. Gravidade faz o trabalho." },
+      { name: "Respiração diafragmática", how: "Mão na barriga. Inspirar pelo nariz (barriga sobe), expirar pela boca (barriga desce). 5x devagar.", result: "Acalma sistema nervoso. Sono mais profundo.", alert: null },
+    ]
+  }
+};
+
+// ─── INTIMACY_GUIDE ───────────────────────────────────────────
+const INTIMACY_GUIDE = {
+  feminina: {
+    title: "Feminina no comando",
+    items: [
+      { topic: "Ondulação do quadril", desc: "O treino de isolamento de quadril (círculos, figure-8) se aplica diretamente. Em vez de movimentos retos, ondular — transforma qualquer posição.", how: "Praticar os círculos e ondulações nos micro-momentos até ficar natural. Na hora, o corpo já sabe." },
+      { topic: "Mãos no próprio corpo", desc: "Tocar a si mesma durante — cintura, coxas, cabelo. Mostra confiança e feminilidade sem perder o controle.", how: "Começar com uma mão enquanto a outra apoia. Com o tempo fica natural." },
+      { topic: "Contato visual", desc: "Olhar nos olhos da parceira durante, especialmente nos momentos intensos. Cria conexão e mostra presença.", how: "Se sentir vergonha, alternar: olhar → fechar os olhos → olhar de novo." },
+      { topic: "Lingerie como ferramenta", desc: "Não precisa tirar tudo. Manter peças durante é visual e tátil — especialmente renda e cetim.", how: "Peças que dão acesso sem tirar: body com abertura, calcinha de lado. Cores escuras e nude caramelo." },
+      { topic: "Quadril liderando", desc: "Em vez de usar só força de braço/perna, deixar o quadril liderar o ritmo. O treino de rebolar ensina exatamente isso.", how: "Ritmo vem do quadril, não das coxas empurrando. Mais lento e ondulado." },
+      { topic: "Posições femininas sendo ativa", desc: "Cowgirl reversa (de costas) permite controle total com visual feminino. De lado (spooning) permite ondulação suave. De quatro com ondulação de coluna.", how: "A flexibilidade de quadril que você está construindo abre essas posições." },
+    ]
+  },
+  confianca: {
+    title: "Confiança íntima",
+    items: [
+      { topic: "Técnica supera tamanho", desc: "Ângulo faz mais diferença que comprimento. Posições com as pernas da parceira mais fechadas aumentam a sensação pra ambos.", how: "Experimentar ângulos: pernas juntas (missionário com pernas fechadas), travesseiro embaixo do quadril dela." },
+      { topic: "Ritmo e variação", desc: "Alternar lento/profundo com rápido/superficial. Previsibilidade é o oposto de prazer.", how: "Regra 3-1: 3 movimentos lentos, 1 rápido. Repetir. Depois inverter." },
+      { topic: "Preliminares longas", desc: "80% da satisfação feminina acontece nas preliminares. Mais tempo aqui = menos pressão na penetração.", how: "Mínimo 15-20min. Sem pressa. O corpo da parceira precisa de tempo pra responder." },
+      { topic: "Mãos e boca", desc: "Complementam e amplificam. Usar durante a penetração, não só antes.", how: "Uma mão livre sempre pode estar fazendo algo — na cintura, no cabelo, estimulando." },
+      { topic: "Kegel forte", desc: "Kegel fortalecido = controle de quando gozar + sensação melhor pra parceira. Independe completamente de tamanho.", how: "O treino de kegel que você já faz 3x/dia é o caminho. Resultado em 4-8 semanas." },
+      { topic: "Profundidade sem comprimento", desc: "Posições que maximizam profundidade: pernas dela no peito (missionário profundo), travesseiro elevando quadril dela, cowgirl onde ela controla o ângulo.", how: "O ângulo do quadril muda tudo. Experimentar com travesseiro é o hack mais simples." },
+    ]
+  },
+  evolucao: {
+    title: "Evolução com o treino",
+    items: [
+      { topic: "Meses 1-2", desc: "Fôlego melhora — não cansa tão rápido. Kegel começa a dar resultado — mais controle. Hip flexor mais solto — menos dor de quadril durante." },
+      { topic: "Meses 3-5", desc: "Flexibilidade de quadril abre novas posições. Resistência sobe — consegue manter ritmo por mais tempo. Corpo começando a mudar — confiança sobe." },
+      { topic: "Meses 6+", desc: "Corpo visivelmente diferente — lingerie fica bem. Kegel forte — controle total. Fôlego de atleta. Ondulação de quadril é natural. A namorada vai notar." },
+    ]
+  }
+};
