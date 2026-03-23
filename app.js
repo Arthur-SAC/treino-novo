@@ -49,7 +49,7 @@ const App = {
     VideoModal.init();
     TimerEngine.init();
     BadgeManager.init();
-    Dashboard.init();
+    DayManager.init();
     WorkoutManager.init();
     NutritionManager.init();
     CareManager.init();         // Task 9
@@ -1112,25 +1112,34 @@ const TimerEngine = {
 };
 
 // =============================================
-// DASHBOARD — Home page / daily overview
+// DAY MANAGER — Home page / narrative day cards
 // =============================================
-// Renders the dashboard with greeting, streak, daily checklist,
-// water tracker, today's workout preview, meals preview, and daily tip.
+// Replaces the old Dashboard. Renders a mini-dashboard header
+// (greeting, streak, power move, macros bar, water tracker)
+// and collapsible narrative cards based on the day type.
 
-const Dashboard = {
+const DayManager = {
   init() {
     var self = this;
 
-    // Event delegation — set up ONCE, works for all future renders
-    var dashContainer = document.getElementById('dashboard-content');
-    if (dashContainer) {
-      dashContainer.addEventListener('click', function(e) {
+    var container = document.getElementById('dashboard-content');
+    if (container) {
+      container.addEventListener('click', function(e) {
+        // Card header collapse/expand
+        var header = e.target.closest('.day-card-header');
+        if (header) {
+          var card = header.closest('.day-card');
+          if (card) {
+            self.toggleCard(card.dataset.cardId);
+          }
+          return;
+        }
+
         // Water bottle click
         var bottle = e.target.closest('.timeline-bottle');
         if (bottle) {
           var bottleNum = parseInt(bottle.dataset.bottle);
           var currentWater = StorageManager.getForDate('water') || 0;
-          // If clicking the currently filled bottle, unfill it; otherwise fill up to that bottle
           if (bottleNum === currentWater) {
             StorageManager.setForDate('water', bottleNum - 1);
           } else {
@@ -1140,8 +1149,8 @@ const Dashboard = {
           return;
         }
 
-        // Meal option click
-        var mealOpt = e.target.closest('.timeline-meal-opt');
+        // Meal option click in day cards
+        var mealOpt = e.target.closest('.day-card-meal-opt');
         if (mealOpt) {
           e.stopPropagation();
           var mealId = mealOpt.dataset.mealId;
@@ -1151,17 +1160,10 @@ const Dashboard = {
           return;
         }
 
-        // Timeline block click
-        var block = e.target.closest('.timeline-block');
-        if (block) {
-          var blockId = block.dataset.blockId;
-          var blockType = block.dataset.blockType;
-          // Workout block navigates to treino tab
-          if (blockType === 'workout') {
-            Router.navigate('treino');
-            return;
-          }
-          self.toggleBlock(blockId);
+        // Workout card tap -> navigate to treino
+        var workoutLink = e.target.closest('.day-card-workout-link');
+        if (workoutLink) {
+          Router.navigate('treino');
           return;
         }
       });
@@ -1169,48 +1171,55 @@ const Dashboard = {
 
     this.render();
 
-    // Re-render when navigating to dashboard
     document.addEventListener('pageChange', function(e) {
       if (e.detail.page === 'inicio') self.render();
     });
   },
 
-  getTimelineType() {
+  getDayType() {
     var dayOfWeek = new Date().getDay();
     var schedule = WEEK_SCHEDULE[dayOfWeek];
-    if (!schedule) return 'descanso';
-    return schedule.type === 'treino' ? 'treino' : 'descanso';
+    return schedule ? schedule.type : 'descanso-total';
   },
 
-  getTodayWorkoutLabel() {
+  getTodaySchedule() {
     var dayOfWeek = new Date().getDay();
-    var schedule = WEEK_SCHEDULE[dayOfWeek];
-    return schedule ? schedule.label : '';
+    return WEEK_SCHEDULE[dayOfWeek] || { type: 'descanso-total', label: '😴 Descanso total', workout: null };
   },
 
-  getCompletedBlocks() {
-    return StorageManager.getForDate('timeline') || {};
+  getCardsForToday() {
+    var dayType = this.getDayType();
+    var layout = DAY_CARD_LAYOUTS[dayType] || DAY_CARD_LAYOUTS['descanso-total'];
+    return layout;
   },
 
-  toggleBlock(blockId) {
-    var completed = this.getCompletedBlocks();
-    completed[blockId] = !completed[blockId];
-    StorageManager.setForDate('timeline', completed);
-    this.updateStreak();
-    this.render();
+  getCollapsedState() {
+    return StorageManager.getForDate('dayCardsCollapsed') || {};
+  },
+
+  toggleCard(cardId) {
+    var collapsed = this.getCollapsedState();
+    collapsed[cardId] = !collapsed[cardId];
+    StorageManager.setForDate('dayCardsCollapsed', collapsed);
+    // Animate without full re-render
+    var cardEl = document.querySelector('.day-card[data-card-id="' + cardId + '"]');
+    if (cardEl) {
+      cardEl.classList.toggle('collapsed', !!collapsed[cardId]);
+    }
   },
 
   getMealChoice(mealId) {
     return StorageManager.getValue('mealChoice_' + mealId, 0);
   },
 
-  calculateDayMacros(timeline) {
+  calculateDayMacros() {
     var totals = { kcal: 0, prot: 0, carb: 0, fat: 0 };
-    for (var i = 0; i < timeline.length; i++) {
-      var block = timeline[i];
-      if (block.type === 'meal' && block.mealId && MEAL_OPTIONS[block.mealId]) {
-        var mealData = MEAL_OPTIONS[block.mealId];
-        var choiceIdx = this.getMealChoice(block.mealId);
+    var cardIds = this.getCardsForToday();
+    for (var i = 0; i < cardIds.length; i++) {
+      var card = DAILY_CARDS[cardIds[i]];
+      if (card && card.mealId && MEAL_OPTIONS[card.mealId]) {
+        var mealData = MEAL_OPTIONS[card.mealId];
+        var choiceIdx = this.getMealChoice(card.mealId);
         if (mealData.options && mealData.options[choiceIdx]) {
           var opt = mealData.options[choiceIdx];
           totals.kcal += opt.kcal || 0;
@@ -1223,77 +1232,118 @@ const Dashboard = {
     return totals;
   },
 
+  calculateStreak() {
+    var streak = 0;
+    var today = new Date();
+    for (var i = 0; i < 365; i++) {
+      var date = new Date(today);
+      date.setDate(date.getDate() - i);
+      var dateStr = date.toISOString().split('T')[0];
+      var data = StorageManager.getForDate('timeline', dateStr);
+      if (!data) {
+        data = StorageManager.getForDate('checklist', dateStr);
+      }
+      if (!data) {
+        if (i === 0) continue;
+        break;
+      }
+      var total = Object.keys(data).length;
+      var checked = Object.values(data).filter(function(v) { return v; }).length;
+      if (total > 0 && (checked / total) >= 0.5) {
+        streak++;
+      } else {
+        if (i === 0) continue;
+        break;
+      }
+    }
+    return streak;
+  },
+
+  updateStreak() {
+    var streak = this.calculateStreak();
+    StorageManager.setValue('streak', streak);
+    BadgeManager.checkAll();
+  },
+
   render() {
     var container = document.getElementById('dashboard-content');
     if (!container) return;
 
-    var type = this.getTimelineType();
-    var timeline = DAILY_TIMELINE[type] || [];
-    var completed = this.getCompletedBlocks();
+    var schedule = this.getTodaySchedule();
+    var dayType = schedule.type;
+    var cardIds = this.getCardsForToday();
+    var collapsed = this.getCollapsedState();
     var streak = this.calculateStreak();
     var waterCount = StorageManager.getForDate('water') || 0;
-    var macros = this.calculateDayMacros(timeline);
-    var workoutLabel = this.getTodayWorkoutLabel();
+    var macros = this.calculateDayMacros();
 
     var html = '';
 
-    // Greeting card
-    html += '<div class="card glass dashboard-hero" style="text-align:center; padding: 1.5rem;">';
-    html += '<h2 style="font-family: \'Playfair Display\', serif; margin-bottom: 0.5rem;">';
-    html += Utils.getContextGreeting();
-    html += '</h2>';
-    html += '<p style="opacity: 0.8; font-style: italic;">';
-    html += '"' + Utils.randomFrom(MOTIVATIONAL_QUOTES) + '"';
-    html += '</p>';
-    html += '</div>';
+    // Mini Dashboard
+    html += this.renderMiniDashboard(schedule, streak, waterCount, macros, dayType);
 
-    // Streak + today's workout label
-    html += '<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">';
-    if (streak > 0) {
-      html += '<div class="streak" style="margin:0;">';
-      html += '<span class="streak-fire">&#128293;</span>';
-      html += '<span class="streak-count">' + streak + '</span>';
-      html += '<span class="streak-label">dias seguidos</span>';
-      html += '</div>';
-    } else {
-      html += '<div></div>';
+    // Cards
+    for (var i = 0; i < cardIds.length; i++) {
+      var cardId = cardIds[i];
+      var cardData = DAILY_CARDS[cardId];
+      if (!cardData) continue;
+      var isCollapsed = !!collapsed[cardId];
+      html += this.renderCard(cardId, cardData, isCollapsed);
     }
-    html += '<div style="font-size:0.82rem; color:var(--text-muted); text-align:right;">' + workoutLabel + '</div>';
+
+    container.innerHTML = html;
+  },
+
+  renderMiniDashboard(schedule, streak, waterCount, macros, dayType) {
+    var html = '';
+
+    // Greeting + workout label
+    html += '<div class="card glass day-mini-dashboard">';
+    html += '<h2>' + Utils.getContextGreeting() + '</h2>';
+    html += '<div class="day-workout-label">' + schedule.label + '</div>';
+
+    if (streak > 0) {
+      html += '<div class="day-streak">';
+      html += '<span>🔥</span>';
+      html += '<span style="font-weight:700;">' + streak + '</span>';
+      html += '<span style="color:var(--text-muted);">dias seguidos</span>';
+      html += '</div>';
+    }
     html += '</div>';
 
-    // Power Move do dia
+    // Power Move
     if (typeof POWER_MOVES !== 'undefined') {
-      var pmCategories = Object.keys(POWER_MOVES);
-      var pmRandCat = pmCategories[Math.floor(Math.random() * pmCategories.length)];
-      var pmCat = POWER_MOVES[pmRandCat];
-      var pmRandMove = pmCat.moves[Math.floor(Math.random() * pmCat.moves.length)];
-      html += '<div class="card glass" style="border-left:3px solid var(--accent);margin-bottom:12px;padding:12px 14px;">';
-      html += '<div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">' + pmCat.icon + ' Power Move \u00b7 ' + pmCat.label + '</div>';
-      html += '<div style="color:var(--text);font-size:0.88rem;font-weight:600;margin-bottom:4px;">' + pmRandMove.name + '</div>';
-      html += '<div style="color:var(--text-muted);font-size:0.8rem;line-height:1.5;">' + pmRandMove.how + '</div>';
-      if (pmRandMove.result) {
-        html += '<div style="color:var(--success);font-size:0.75rem;margin-top:4px;">' + pmRandMove.result + '</div>';
+      var cats = Object.keys(POWER_MOVES);
+      var cat = POWER_MOVES[cats[Math.floor(Math.random() * cats.length)]];
+      var move = cat.moves[Math.floor(Math.random() * cat.moves.length)];
+      html += '<div class="card glass" style="border-left:3px solid var(--accent);margin-bottom:10px;padding:12px 14px;">';
+      html += '<div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">' + cat.icon + ' Power Move · ' + cat.label + '</div>';
+      html += '<div style="font-weight:600;font-size:0.88rem;margin-bottom:4px;">' + move.name + '</div>';
+      html += '<div style="color:var(--text-muted);font-size:0.8rem;line-height:1.5;">' + move.how + '</div>';
+      if (move.result) {
+        html += '<div style="color:var(--success);font-size:0.75rem;margin-top:4px;">' + move.result + '</div>';
       }
       html += '</div>';
     }
 
-    // Macros summary bar
+    // Macros bar
     var nutPhase = 'deficit';
     var targets = { kcal: 2300, prot: 150, carb: 230, fat: 65 };
     if (typeof NUTRITION_PHASES !== 'undefined') {
       var currentPhaseNum = StorageManager.getValue('currentPhase', 1);
       nutPhase = (currentPhaseNum <= 2) ? 'deficit' : 'construcao';
-      targets = NUTRITION_PHASES[nutPhase][type] || NUTRITION_PHASES[nutPhase].treino;
+      var timelineType = (dayType === 'treino') ? 'treino' : 'descanso';
+      targets = NUTRITION_PHASES[nutPhase][timelineType] || NUTRITION_PHASES[nutPhase].treino;
     }
-    var nutPhaseLabel = (nutPhase === 'deficit') ? 'D\u00e9ficit' : 'Constru\u00e7\u00e3o';
+    var nutPhaseLabel = (nutPhase === 'deficit') ? 'Déficit' : 'Construção';
     html += '<div class="timeline-macros">';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">~' + macros.kcal + ' / ' + targets.kcal + '</span><span class="timeline-macro-label">kcal \u00b7 ' + nutPhaseLabel + '</span></div>';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.prot + ' / ' + targets.prot + 'g</span><span class="timeline-macro-label">prote\u00edna</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">~' + macros.kcal + ' / ' + targets.kcal + '</span><span class="timeline-macro-label">kcal · ' + nutPhaseLabel + '</span></div>';
+    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.prot + ' / ' + targets.prot + 'g</span><span class="timeline-macro-label">proteína</span></div>';
     html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.carb + ' / ' + targets.carb + 'g</span><span class="timeline-macro-label">carb</span></div>';
     html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.fat + ' / ' + targets.fat + 'g</span><span class="timeline-macro-label">gordura</span></div>';
     html += '</div>';
 
-    // Water tracker — 5 garrafinhas de 700ml = 3.5L
+    // Water tracker
     var waterGoal = 5;
     var waterMl = waterCount * 700;
     html += '<div class="timeline-water">';
@@ -1303,130 +1353,238 @@ const Dashboard = {
     html += '<span class="timeline-water-label">' + (waterMl / 1000).toFixed(1) + 'L / 3.5L</span>';
     html += '</div>';
 
-    // Timeline blocks
-    for (var t = 0; t < timeline.length; t++) {
-      var block = timeline[t];
-      var isCompleted = !!completed[block.id];
-      var isMeal = block.type === 'meal' && block.mealId && MEAL_OPTIONS[block.mealId];
-      var isWorkout = block.type === 'workout';
+    return html;
+  },
 
-      html += '<div class="timeline-block' + (isCompleted ? ' completed' : '') + '" data-block-id="' + block.id + '" data-block-type="' + (block.type || '') + '">';
+  renderCard(cardId, cardData, isCollapsed) {
+    var html = '';
+    html += '<div class="day-card' + (isCollapsed ? ' collapsed' : '') + '" data-card-id="' + cardId + '">';
 
-      // Time
-      html += '<div class="timeline-block-time">' + block.time + '</div>';
+    // Header
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">' + cardData.icon + '</span>';
+    html += '<span class="day-card-time">' + cardData.time + '</span>';
+    html += '<span class="day-card-title">' + cardData.title + '</span>';
+    html += '<span class="day-card-arrow">▼</span>';
+    html += '</div>';
 
-      // Content
-      html += '<div class="timeline-block-content">';
-      html += '<div class="timeline-block-title">' + block.label + '</div>';
+    // Body
+    html += '<div class="day-card-body">';
 
-      // Items
-      if (block.items && block.items.length > 0) {
-        html += '<div class="timeline-block-items">';
-        for (var it = 0; it < block.items.length; it++) {
-          var item = block.items[it];
-          // Check for fem tags (items containing specific emoji)
-          if (item.indexOf('\uD83C\uDF3F') !== -1) {
-            var parts = item.split('\uD83C\uDF3F');
-            html += parts[0] + '<span class="fem-tag">\uD83C\uDF3F fem</span>';
-            if (parts[1]) html += parts[1];
-            html += '<br>';
-          } else {
-            html += item + '<br>';
-          }
-        }
-        html += '</div>';
+    // Intro
+    if (cardData.content && cardData.content.intro) {
+      var intro = cardData.content.intro;
+      if (intro === 'dynamic:workout_intro') {
+        intro = this.getWorkoutIntro();
       }
+      html += '<p class="day-card-intro">' + intro + '</p>';
+    }
 
-      // Meal options
-      if (isMeal) {
-        var mealData = MEAL_OPTIONS[block.mealId];
-        var choiceIdx = this.getMealChoice(block.mealId);
+    // Meal card
+    if (cardData.mealId) {
+      html += this.renderMealContent(cardData.mealId);
+    }
 
-        html += '<div class="timeline-meal-options">';
-        for (var mo = 0; mo < mealData.options.length; mo++) {
-          var opt = mealData.options[mo];
-          html += '<button class="timeline-meal-opt' + (mo === choiceIdx ? ' active' : '') + '" ';
-          html += 'data-meal-id="' + block.mealId + '" data-opt-idx="' + mo + '">';
-          html += 'Op\u00e7\u00e3o ' + (mo + 1);
-          html += '</button>';
-        }
-        html += '</div>';
+    // Supplements
+    if (cardData.content && cardData.content.supplements) {
+      html += '<div class="day-card-supplements">' + cardData.content.supplements.replace(/\n/g, '<br>') + '</div>';
+    }
 
-        // Show selected meal info
-        if (mealData.options[choiceIdx]) {
-          var selected = mealData.options[choiceIdx];
-          html += '<div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">';
-          html += selected.name;
-          if (selected.fem) html += ' <span class="fem-tag">fem</span>';
-          html += ' &mdash; ' + selected.kcal + ' kcal, ' + selected.prot + 'g prot';
-          html += '</div>';
-        }
+    // Steps
+    if (cardData.content && cardData.content.steps) {
+      if (cardData.content.steps === 'dynamic:skincare_morning') {
+        html += this.renderSkincareSteps(SKINCARE_ROUTINE.morning.steps);
+      } else if (cardData.content.steps === 'dynamic:workout') {
+        html += this.renderWorkoutSteps();
+      } else if (Array.isArray(cardData.content.steps)) {
+        html += this.renderSteps(cardData.content.steps);
       }
+    }
 
-      // Workout block extra info
-      if (isWorkout) {
-        html += '<div style="font-size:0.75rem; color:var(--accent); margin-top:4px;">Toque para ir ao treino &rarr;</div>';
-      }
+    html += '</div>'; // end body
+    html += '</div>'; // end card
+    return html;
+  },
 
-      html += '</div>'; // end content
-
-      // Check circle
-      html += '<div class="timeline-block-check">';
-      if (isCompleted) {
-        html += '&#10003;';
+  renderSteps(steps) {
+    var html = '';
+    for (var i = 0; i < steps.length; i++) {
+      var step = steps[i];
+      html += '<div class="day-card-step">';
+      html += '<div class="day-card-step-header">';
+      html += '<span class="day-card-step-number">' + (i + 1) + '</span>';
+      html += '<span class="day-card-step-name">' + step.name + '</span>';
+      if (step.duration) {
+        html += '<span class="day-card-step-duration">' + step.duration + '</span>';
       }
       html += '</div>';
 
-      html += '</div>'; // end timeline-block
-    }
+      var desc = step.description;
+      // Handle dynamic descriptions
+      if (desc === 'dynamic:skincare_night') {
+        html += this.renderSkincareSteps(SKINCARE_ROUTINE.night.steps);
+      } else if (desc === 'dynamic:cooldown') {
+        html += this.renderCooldownSteps();
+      } else {
+        html += '<div class="day-card-step-desc">' + desc + '</div>';
+      }
 
-    // Daily tip
-    html += '<div class="card glass" style="margin-top:8px;">';
-    html += '<h3>Dica do Dia</h3>';
-    html += '<p style="opacity:0.9;">' + Utils.randomFrom(DAILY_TIPS) + '</p>';
+      if (step.why) {
+        html += '<div class="day-card-why">' + step.why + '</div>';
+      }
+      html += '</div>';
+    }
+    return html;
+  },
+
+  renderMealContent(mealId) {
+    var mealData = MEAL_OPTIONS[mealId];
+    if (!mealData) return '';
+
+    var choiceIdx = this.getMealChoice(mealId);
+    var html = '';
+
+    // Option buttons
+    html += '<div class="day-card-meal-options">';
+    for (var i = 0; i < mealData.options.length; i++) {
+      html += '<button class="day-card-meal-opt' + (i === choiceIdx ? ' active' : '') + '" ';
+      html += 'data-meal-id="' + mealId + '" data-opt-idx="' + i + '">';
+      html += 'Opção ' + (i + 1);
+      html += '</button>';
+    }
     html += '</div>';
 
-    container.innerHTML = html;
-  },
+    // Selected option details
+    var opt = mealData.options[choiceIdx];
+    if (opt) {
+      html += '<div class="day-card-meal-info">';
+      html += '<strong>' + opt.name + '</strong>';
+      if (opt.fem) html += ' <span class="fem-tag">fem</span>';
+      html += '</div>';
+      html += '<div class="day-card-meal-macros">';
+      html += opt.kcal + ' kcal · ' + opt.prot + 'g prot · ' + opt.carb + 'g carb · ' + opt.fat + 'g fat';
+      html += '</div>';
 
-  calculateStreak() {
-    var streak = 0;
-    var today = new Date();
-
-    for (var i = 0; i < 365; i++) {
-      var date = new Date(today);
-      date.setDate(date.getDate() - i);
-      var dateStr = date.toISOString().split('T')[0];
-
-      // Check timeline data first, fall back to old checklist data
-      var data = StorageManager.getForDate('timeline', dateStr);
-      if (!data) {
-        data = StorageManager.getForDate('checklist', dateStr);
-      }
-      if (!data) {
-        if (i === 0) continue; // Today might not have data yet
-        break;
-      }
-
-      // Count checked items
-      var total = Object.keys(data).length;
-      var checked = Object.values(data).filter(function(v) { return v; }).length;
-
-      if (total > 0 && (checked / total) >= 0.5) {
-        streak++;
-      } else {
-        if (i === 0) continue; // Today in progress
-        break;
+      // Ingredients
+      if (opt.ingredients && opt.ingredients.length > 0) {
+        html += '<div style="margin-top:8px;font-size:0.8rem;color:var(--text);line-height:1.6;">';
+        for (var j = 0; j < opt.ingredients.length; j++) {
+          var ing = opt.ingredients[j];
+          html += '• ' + ing[0] + ' — ' + ing[1] + '<br>';
+        }
+        html += '</div>';
       }
     }
 
-    return streak;
+    return html;
   },
 
-  updateStreak() {
-    var streak = this.calculateStreak();
-    StorageManager.setValue('streak', streak);
-    BadgeManager.checkAll();
+  renderSkincareSteps(steps) {
+    var html = '';
+    var dayOfWeek = new Date().getDay();
+    for (var i = 0; i < steps.length; i++) {
+      var step = steps[i];
+      // Skip retinol if not the right day
+      if (step.days && step.days.indexOf(dayOfWeek) === -1) {
+        continue;
+      }
+      html += '<div class="day-card-skincare-step">';
+      html += '<div class="day-card-skincare-product">' + step.emoji + ' ' + step.product + '</div>';
+      html += '<div class="day-card-skincare-howto">' + step.howTo + '</div>';
+      html += '<div class="day-card-skincare-why">' + step.why + '</div>';
+      html += '</div>';
+    }
+    return html;
+  },
+
+  getWorkoutIntro() {
+    var schedule = this.getTodaySchedule();
+    var phase = StorageManager.getValue('currentPhase', 1);
+    if (!schedule.workout) return 'Hoje não tem treino de musculação.';
+    return 'Hoje: ' + schedule.label + ' (Fase ' + phase + '). Toque abaixo pra abrir o treino completo com séries, reps e timer.';
+  },
+
+  renderWorkoutSteps() {
+    var schedule = this.getTodaySchedule();
+    var phase = StorageManager.getValue('currentPhase', 1);
+    var html = '';
+
+    if (!schedule.workout) return '<p style="color:var(--text-muted);">Sem treino hoje.</p>';
+
+    // Link to full workout
+    html += '<div class="day-card-workout-link" style="padding:14px;text-align:center;border-radius:var(--radius-sm);background:rgba(194,58,58,0.1);cursor:pointer;margin-bottom:12px;">';
+    html += '<div style="font-size:1.2rem;margin-bottom:4px;">💪</div>';
+    html += '<div style="font-weight:600;color:var(--primary-light);">Abrir Treino Completo</div>';
+    html += '<div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">' + schedule.label + ' — Fase ' + phase + '</div>';
+    html += '</div>';
+
+    // Quick summary of exercises if available
+    var phaseKey = 'fase' + phase;
+    if (WORKOUTS[phaseKey]) {
+      var workoutKey = null;
+      var workouts = WORKOUTS[phaseKey];
+      // Find the workout matching today
+      for (var key in workouts) {
+        if (key === 'name' || key === 'objective' || key === 'frequency' || key === 'duration') continue;
+        if (workouts[key] && workouts[key].name && workouts[key].name.indexOf(schedule.workout) !== -1) {
+          workoutKey = key;
+          break;
+        }
+      }
+      // Fallback: try matching by workout key patterns
+      if (!workoutKey) {
+        var workoutMap = {
+          'Lower A': 'lowerA',
+          'Upper': 'upper',
+          'Lower B': 'lowerB',
+          'Gluteo Isolado': 'gluteoIsolado'
+        };
+        workoutKey = workoutMap[schedule.workout];
+      }
+
+      if (workoutKey && workouts[workoutKey] && workouts[workoutKey].exercises) {
+        var exercises = workouts[workoutKey].exercises;
+        html += '<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Exercícios de hoje:</div>';
+        html += '<div style="font-size:0.82rem;line-height:1.7;">';
+        for (var i = 0; i < exercises.length; i++) {
+          var ex = exercises[i];
+          html += (i + 1) + '. ' + ex.name;
+          if (ex.sets && ex.reps) {
+            html += ' <span style="color:var(--text-muted);">— ' + ex.sets + 'x' + ex.reps + '</span>';
+          }
+          html += '<br>';
+        }
+        html += '</div>';
+      }
+    }
+
+    return html;
+  },
+
+  renderCooldownSteps() {
+    var schedule = this.getTodaySchedule();
+    var html = '<div style="font-size:0.83rem;line-height:1.65;">';
+
+    if (schedule.cooldown === 'lower') {
+      html += '<strong>Alongamento Lower Body:</strong><br>';
+      html += '1. Flexor do quadril (30s cada lado) — ajoelhe, empurre quadril pra frente<br>';
+      html += '2. Posterior de coxa (30s cada lado) — perna esticada, incline o tronco<br>';
+      html += '3. Glúteo (Pombo) (30s cada lado) — perna cruzada na frente, desça o tronco<br>';
+      html += '4. Quadríceps (30s cada lado) — puxe o pé atrás até o glúteo<br>';
+      html += '5. Adutores (30s) — pernas abertas, incline pro lado<br>';
+    } else if (schedule.cooldown === 'upper') {
+      html += '<strong>Alongamento Upper Body:</strong><br>';
+      html += '1. Peito (30s cada lado) — braço na parede, gire o corpo pro lado oposto<br>';
+      html += '2. Costas (30s) — abrace os joelhos, arredonde as costas<br>';
+      html += '3. Ombros (30s cada lado) — braço cruzado na frente, puxe com o outro<br>';
+      html += '4. Tríceps (30s cada lado) — braço atrás da cabeça, puxe o cotovelo<br>';
+      html += '5. Pescoço (20s cada lado) — incline a cabeça pro ombro suavemente<br>';
+    } else {
+      html += 'Alongamento leve geral: 5 minutos de movimentos suaves.<br>';
+    }
+
+    html += '</div>';
+    return html;
   }
 };
 
