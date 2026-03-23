@@ -1765,12 +1765,12 @@ const DAILY_TIMELINE = {
 
 const WEEK_SCHEDULE = {
   1: { type: "treino", workout: "Lower A", label: "💪 Lower A (Glúteo heavy)", warmup: "lower", cooldown: "lower" },
-  2: { type: "descanso", workout: null, label: "🧘 Yoga + Rebolar", warmup: null, cooldown: null },
+  2: { type: "descanso-ativo", workout: null, label: "🧘 Yoga + Rebolar", warmup: null, cooldown: null },
   3: { type: "treino", workout: "Upper", label: "💪 Upper Body", warmup: "upper", cooldown: "upper" },
-  4: { type: "descanso", workout: null, label: "🟡 Ativação + Caminhada", warmup: null, cooldown: null },
+  4: { type: "ativacao-leve", workout: null, label: "🟡 Ativação + Caminhada", warmup: null, cooldown: null },
   5: { type: "treino", workout: "Lower B", label: "💪 Lower B (Coxas + Quadril)", warmup: "lower", cooldown: "lower" },
   6: { type: "treino", workout: "Gluteo Isolado", label: "💪 Glúteo Isolado + Core", warmup: "lower", cooldown: "lower" },
-  0: { type: "descanso", workout: null, label: "😴 Descanso total", warmup: null, cooldown: null },
+  0: { type: "descanso-total", workout: null, label: "😴 Descanso total", warmup: null, cooldown: null },
 };
 
 const KEGEL_PROTOCOL_TYPES = [

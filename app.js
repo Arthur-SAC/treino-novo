@@ -1178,7 +1178,8 @@ const Dashboard = {
   getTimelineType() {
     var dayOfWeek = new Date().getDay();
     var schedule = WEEK_SCHEDULE[dayOfWeek];
-    return schedule ? schedule.type : 'descanso';
+    if (!schedule) return 'descanso';
+    return schedule.type === 'treino' ? 'treino' : 'descanso';
   },
 
   getTodayWorkoutLabel() {
