@@ -1738,31 +1738,6 @@ const EDUCATIONAL_CONTENT = {
 };
 
 
-const DAILY_TIMELINE = {
-  treino: [
-    { id: "acordar", time: "6:00", label: "☀️ Acordar", icon: "☀️", items: ["Kegel matinal (3 tipos)", "1ª garrafinha de água (700ml)", "Mobilidade desk-worker (5min): hip flexor + torção torácica + pescoço", "Vacuum matinal (3x20seg)"] },
-    { id: "cafe", time: "7:00", label: "☕ Café da manhã", icon: "☕", type: "meal", mealId: "cafe", items: ["Suplementos: multivitamínico + (creatina e whey no shake)"] },
-    { id: "lanche1", time: "10:00", label: "🍎 Lanche manhã", icon: "🍎", type: "meal", mealId: "lanche1", items: ["Chá de spearmint — 1ª xícara 🌿"] },
-    { id: "almoco", time: "12:00", label: "🍽️ Almoço", icon: "🍽️", type: "meal", mealId: "almoco", items: ["Ômega-3 com a refeição (absorção melhor com gordura)"] },
-    { id: "pretreino", time: "16:00", label: "⚡ Pré-treino", icon: "⚡", type: "meal", mealId: "pretreino", items: ["Chá de spearmint — 2ª xícara 🌿", "Comer 45-60min antes do treino"] },
-    { id: "treino", time: "17:40", label: "💪 Treino", icon: "💪", type: "workout", items: ["Ativação glúteo esq (10min)", "Aquecimento", "Treino do dia", "Alongamento"] },
-    { id: "postreino", time: "19:00", label: "🐕 Pós-treino", icon: "🐕", items: ["Passeio com os cães (~25min — cardio leve)"] },
-    { id: "jantar", time: "20:00", label: "🌙 Jantar", icon: "🌙", type: "meal", mealId: "jantar", items: ["Vitamina D3+K2 com a refeição"] },
-    { id: "noturno", time: "22:00", label: "🌛 Noturno", icon: "🌛", type: "meal", mealId: "noturno", items: ["Skincare noite (passo a passo)", "Kegel noturno", "Meta: largar celular 22h, dormir 22:30", "Lembrete: luz azul + estímulo = sono ruim = cortisol alto"] },
-  ],
-  descanso: [
-    { id: "acordar", time: "6:00", label: "☀️ Acordar", icon: "☀️", items: ["Kegel matinal (3 tipos)", "1ª garrafinha de água (700ml)", "Mobilidade desk-worker (5min): hip flexor + torção torácica + pescoço", "Vacuum matinal (3x20seg)"] },
-    { id: "cafe", time: "7:00", label: "☕ Café da manhã", icon: "☕", type: "meal", mealId: "cafe", items: ["Suplementos: multivitamínico"] },
-    { id: "lanche1", time: "10:00", label: "🍎 Lanche manhã", icon: "🍎", type: "meal", mealId: "lanche1", items: ["Chá de spearmint — 1ª xícara 🌿"] },
-    { id: "almoco", time: "12:00", label: "🍽️ Almoço", icon: "🍽️", type: "meal", mealId: "almoco", items: ["Ômega-3 com a refeição"] },
-    { id: "lanche2", time: "16:00", label: "🍎 Lanche tarde", icon: "🍎", type: "meal", mealId: "pretreino", items: ["Chá de spearmint — 2ª xícara 🌿"] },
-    { id: "atividade", time: "17:40", label: "🚶 Atividade leve", icon: "🚶", items: ["✅ Ativação glúteo esq (10min) — fazer sempre, todo dia", "Escolha 1 ou 2 (ou ambas se tiver tempo):", "→ Caminhada 25-30min ou escada do prédio", "→ Yoga de quadril (20min)"] },
-    { id: "postreino", time: "19:00", label: "🐕 Passeio cães", icon: "🐕", items: ["Passeio com os cães (~25min)"] },
-    { id: "jantar", time: "20:00", label: "🌙 Jantar", icon: "🌙", type: "meal", mealId: "jantar", items: ["Vitamina D3+K2 com a refeição"] },
-    { id: "noturno", time: "22:00", label: "🌛 Noturno", icon: "🌛", type: "meal", mealId: "noturno", items: ["Skincare caprichado (rosto + corpo)", "Kegel noturno", "Ritual de corpo", "Meta: largar celular 22h, dormir 22:30"] },
-  ]
-};
-
 const WEEK_SCHEDULE = {
   1: { type: "treino", workout: "Lower A", label: "💪 Lower A (Glúteo heavy)", warmup: "lower", cooldown: "lower" },
   2: { type: "descanso-ativo", workout: null, label: "🧘 Yoga + Rebolar", warmup: null, cooldown: null },
