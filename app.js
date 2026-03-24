@@ -2626,8 +2626,8 @@ const WorkoutManager = {
 
     for (var i = 0; i < poses.length; i++) {
       var pose = poses[i];
-      var poseName = pose[0];
-      var poseTime = pose[1];
+      var poseName = pose.name || pose[0];
+      var poseTime = pose.time || pose[1];
       var poseSec = this.parseYogaSeconds(poseTime);
       var hasSides = (poseTime.indexOf('cada') !== -1 || poseTime.indexOf('lado') !== -1);
 
@@ -2637,7 +2637,13 @@ const WorkoutManager = {
       html += '<span class="day-card-step-name">' + this.escapeHtml(poseName) + '</span>';
       html += '<span class="day-card-step-duration">' + this.escapeHtml(poseTime) + '</span>';
       html += '</div>';
-      html += '<button class="exercise-card-timer-btn yoga-timer-btn" data-seconds="' + poseSec + '" data-name="' + this.escapeAttr(poseName) + '" data-sides="' + hasSides + '" style="margin-top:4px;">⏱ ' + this.escapeHtml(poseTime) + '</button>';
+      if (pose.narrative) {
+        html += '<div class="day-card-step-desc">' + this.escapeHtml(pose.narrative) + '</div>';
+      }
+      if (pose.why) {
+        html += '<div class="day-card-why">' + this.escapeHtml(pose.why) + '</div>';
+      }
+      html += '<button class="exercise-card-timer-btn yoga-timer-btn" data-seconds="' + poseSec + '" data-name="' + this.escapeAttr(poseName) + '" data-sides="' + hasSides + '" style="margin-top:6px;">⏱ ' + this.escapeHtml(poseTime) + '</button>';
       html += '</div>';
     }
 
