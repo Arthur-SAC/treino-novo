@@ -1749,10 +1749,10 @@ const WEEK_SCHEDULE = {
 };
 
 const DAY_CARD_LAYOUTS = {
-  "treino": ["acordar", "skincare_manha", "cafe", "lanche_manha", "almoco", "pre_treino", "treino", "pos_treino", "jantar", "rotina_noturna"],
-  "descanso-ativo": ["acordar", "skincare_manha", "cafe", "lanche_manha", "almoco", "lanche_tarde", "yoga_rebolar", "pos_atividade", "jantar", "rotina_noturna"],
-  "ativacao-leve": ["acordar", "skincare_manha", "cafe", "lanche_manha", "almoco", "lanche_tarde", "ativacao_leve", "jantar", "rotina_noturna"],
-  "descanso-total": ["acordar", "skincare_manha", "cafe", "lanche_manha", "almoco", "descanso", "jantar", "rotina_noturna"]
+  "treino": ["acordar", "skincare_manha", "cafe", "lanche_manha", "almoco", "pre_treino", "treino", "pos_treino", "bonus_sensual", "jantar", "rotina_noturna"],
+  "descanso-ativo": ["acordar", "skincare_manha", "cafe", "lanche_manha", "almoco", "lanche_tarde", "yoga_rebolar", "pos_atividade", "bonus_sensual", "jantar", "rotina_noturna"],
+  "ativacao-leve": ["acordar", "skincare_manha", "cafe", "lanche_manha", "almoco", "lanche_tarde", "ativacao_leve", "bonus_sensual", "jantar", "rotina_noturna"],
+  "descanso-total": ["acordar", "skincare_manha", "cafe", "lanche_manha", "almoco", "descanso", "bonus_sensual", "jantar", "rotina_noturna"]
 };
 
 const DAILY_CARDS = {
@@ -2030,6 +2030,16 @@ const DAILY_CARDS = {
           duration: null
         }
       ]
+    }
+  },
+
+  bonus_sensual: {
+    icon: "💃",
+    time: "19:30",
+    title: "Bônus: Movimento Sensual (opcional)",
+    content: {
+      intro: "dynamic:sensual_intro",
+      steps: "dynamic:sensual_steps"
     }
   }
 };
@@ -3282,117 +3292,84 @@ const REBOLAR_STEPS = [
   { fase: "Semanas 1-2 · Isolamento Base", steps: ["Pé paralelo, mãos na cintura — mover SÓ o quadril frente/trás sem mover o tronco. 3x30 reps.","Quadril esquerda/direita isolado: 3x30 reps.","Círculos lentos: 3x20 em cada sentido.","Objetivo real: o tronco não mexe. Só o quadril."] },
   { fase: "Semanas 3-4 · Ritmo", steps: ["Mesmos movimentos com música — funk, pagode, baile funk.","Adicionar leve balanço nos joelhos enquanto move o quadril.","Figura de 8 / infinito com o quadril: 3x20.","Praticar frente ao espelho — feedback visual acelera muito."] },
   { fase: "Mês 2+ · Expressão", steps: ["Adicionar movimento dos braços e expressão corporal.","YouTube: 'aprenda a rebolar do zero' — boas aulas gratuitas.","Bachata para iniciantes no YouTube — ensina isolamento naturalmente.","Gravar e comparar com semanas anteriores."] },
+  { fase: "Mês 6+ · Livre", steps: [
+    "Agora você tem controle e ritmo. Bota a música e deixa o corpo guiar.",
+    "Misture tudo: círculos, figura 8, ondulação, body wave, braços.",
+    "Grave e compare com os primeiros vídeos — a evolução vai te impressionar.",
+    "Dance sem espelho — sinta ao invés de ver. Confiança vem de dentro."
+  ]},
 ];
 
-// ─── DANCA_SENSUAL ──────────────────────────────────────────
-const DANCA_SENSUAL = {
-  intro: "Dança sensual é treino de expressão corporal + quadril + confiança. Cada estilo desenvolve um aspecto diferente. Comece pelo que te atrair mais — todos se complementam.",
-  estilos: [
-    {
-      name: "Twerk",
-      icon: "🍑",
-      what: "Isolamento de glúteo puro — contrai e solta rápido. O mais direto pra ativar e crescer a bunda.",
-      forYou: "Ativa glúteo de um jeito que nenhum exercício faz. Complementa o treino de hipertrofia e constrói conexão mente-músculo.",
-      progression: [
-        { level: "Nível 1 · Base", moves: ["Wall twerk: mãos na parede, pés afastados, arch (empinar) e tuck (recolher) o quadril. 3x20 devagar.", "Sumo twerk: posição de sumo squat, mesma coisa — arch e tuck. O peso nas pernas ajuda a sentir.", "Squeeze isolado: em pé, contrair só o glúteo ritmicamente sem mexer lombar. 3x30."] },
-        { level: "Nível 2 · Velocidade", moves: ["Wall twerk mais rápido — buscar a vibração.", "Adicionar bounce (joelhos dobram e estendem rápido enquanto o glúteo twerka).", "YouTube: buscar 'beginner twerk tutorial' — Lexy Panterra e Nicole Steen têm boas aulas."] },
-        { level: "Nível 3 · Flow", moves: ["Twerk em diferentes posições: de pé, agachada, no chão.", "Combinar com ondulação de coluna — twerk + wave.", "Freestyle com música — funk brasileiro, reggaeton, dancehall."] }
-      ]
-    },
-    {
-      name: "Bachata Sensual",
-      icon: "💃",
-      what: "Dança de casal com ondulações de corpo e isolamentos de quadril. O mais completo pra aprender fluidez feminina.",
-      forYou: "Ensina ondulação de corpo inteiro, conexão com outra pessoa, e expressão sensual. Pode dançar com a namorada.",
-      progression: [
-        { level: "Nível 1 · Passos básicos", moves: ["Passo lateral básico: 3 passos pro lado + tap. YouTube: 'bachata basic step'.", "Adicionar quadril: no tap, empurrar quadril pro lado.", "Praticar sozinha com música — Prince Royce, Romeo Santos."] },
-        { level: "Nível 2 · Ondulações", moves: ["Body wave frontal: onda do peito até o quadril.", "Body wave lateral: onda lateral passando pelo quadril.", "YouTube: buscar 'bachata sensual lady style' — muitas aulas gratuitas."] },
-        { level: "Nível 3 · Com a parceira", moves: ["Dançar junto com a namorada — ela conduz ou você conduz.", "Combinar body waves com os passos.", "Aulas presenciais de bachata em Aracaju se tiver — acelera muito."] }
-      ]
-    },
-    {
-      name: "Lady Style / Feminine Movement",
-      icon: "👠",
-      what: "Expressão corporal feminina — como andar, como se mover, como usar braços e mãos. É o mais 'do dia a dia'.",
-      forYou: "Constrói o gingado feminino natural que vai aparecer em tudo: andando, sentando, se movendo. A Luiza Sonza é referência direta.",
-      progression: [
-        { level: "Nível 1 · Braços e mãos", moves: ["Braços fluidos: estender um braço devagar como se tocasse água. Alternar. 10x cada.", "Mão no cabelo: passar a mão no cabelo/nuca com fluidez (gesto feminino clássico). Praticar até ficar natural.", "Toque no corpo: deslizar a mão da cintura até a coxa. Devagar, com intenção."] },
-        { level: "Nível 2 · Caminhar", moves: ["Caminhar cruzando levemente os pés (passarela) — quadril balança naturalmente.", "Peso no quadril ao parar: ficar em pé com peso num lado, quadril empurrado.", "YouTube: buscar 'feminine walk tutorial' ou 'model walk'."] },
-        { level: "Nível 3 · Expressão completa", moves: ["Combinar braços + quadril + caminhar numa música.", "YouTube: buscar 'lady style dance tutorial' ou 'Luiza Sonza dança'.", "Gravar a si mesma e comparar mês a mês — a evolução motiva."] }
-      ]
-    },
-    {
-      name: "Dancehall / Reggaeton",
-      icon: "🔥",
-      what: "Energia alta, muita movimentação de quadril e glúteo. O mais 'fitness' das danças sensuais — cansa e treina ao mesmo tempo.",
-      forYou: "Cardio que não parece cardio. Trabalha quadril, glúteo e abdômen enquanto se diverte. Queima muita caloria.",
-      progression: [
-        { level: "Nível 1 · Grooves básicos", moves: ["Wine: círculos de quadril contínuos no ritmo da música. 2min sem parar.", "Tick: quadril batendo no tempo — esquerda, direita, esquerda, direita. Com joelhos.", "YouTube: buscar 'beginner dancehall tutorial' ou 'reggaeton dance basic'."] },
-        { level: "Nível 2 · Combos", moves: ["Combinar wine + tick em sequência.", "Adicionar braços e expressão — energia alta.", "Praticar com reggaeton: Daddy Yankee, Bad Bunny, J Balvin."] },
-        { level: "Nível 3 · Freestyle", moves: ["Dançar livre numa música inteira sem parar (3-4min).", "Misturar estilos: um pouco de twerk, wine, ondulação.", "Filmar e comparar — dançar pra se divertir, não pra ser perfeita."] }
-      ]
-    }
-  ]
+const YOGA_PHASE_MAP = {
+  1: "iniciante",
+  2: "intermediario",
+  3: "avancado",
+  4: "avancado"
 };
 
-// ─── EXERCISE_TECHNIQUE ──────────────────────────────────────
-const EXERCISE_TECHNIQUE = [
-  {
-    exercise: "Hip Thrust", subtitle: "Glúteo — base de tudo",
-    tips: ["Banco atrás das escápulas, não da nuca","Pés paralelos ou levemente abertos, largura de quadril","No topo: quadril paralelo ao chão — não hiperextender a lombar","Pausa de 1-2s no topo com squeeze consciente","Descer controlado em 2s","Joelhos seguindo a linha dos pés"],
-    alerts: [
-      { signal: "Dor ou tensão na lombar baixa", fix: "Glúteo não ativou. Parar, fazer 10 glute bridges unilaterais esq, recomeçar." },
-      { signal: "Tensão no quadríceps", fix: "Pés muito à frente ou banco muito baixo." },
-      { signal: "Pontada no joelho", fix: "Joelho caindo pra dentro. Foque em empurrar joelhos pra fora." },
-      { signal: "Pescoço tenso", fix: "Banco na posição errada — deve estar nas escápulas." }
-    ]
-  },
-  {
-    exercise: "Agachamento", subtitle: "Coxa + Glúteo",
-    tips: ["Pés na largura dos ombros ou um pouco mais, levemente abertos (15-30°)","Descer como se fosse sentar numa cadeira atrás — não deixar os joelhos passarem muito à frente dos pés","Lombar neutra durante todo o movimento — nem arqueada demais, nem curvada","Olhar levemente pra frente e pra cima, não direto para baixo","Descer até coxa paralela ao chão no mínimo — agachamento raso não ativa o glúteo","Subir empurrando o chão, não pensando em joelhos — muda o recrutamento muscular"],
-    alerts: [
-      { signal: "Joelhos indo pra dentro na subida (valgismo)", fix: "Glúteo fraco ou mobilidade de tornozelo ruim. Reduzir carga, foque em empurrar joelhos pra fora conscientemente." },
-      { signal: "Lombar 'arredondando' no fundo", fix: "Falta de mobilidade de quadril ou carga alta demais. Reduzir peso, trabalhar mobilidade antes." },
-      { signal: "Elevação de calcanhar", fix: "Mobilidade de tornozelo insuficiente. Agachar com calcanhar em pequena elevação temporariamente." },
-      { signal: "Dor anterior no joelho", fix: "Carga alta demais ou movimento muito à frente. Recuar o padrão." }
-    ]
-  },
-  {
-    exercise: "RDL / Stiff", subtitle: "Posterior de coxa e glúteo",
-    tips: ["Movimento começa no quadril — dobrar o quadril pra trás, não curvar a coluna","Barra ou halteres deslizam rente ao corpo durante todo o movimento","Joelhos levemente dobrados e fixos — não é agachamento, não muda o ângulo do joelho","Descer até sentir o alongamento no posterior da coxa — cada pessoa tem um range diferente","Subir contraindo glúteo e posterior juntos, não usando a lombar para puxar","Escápulas juntas e lombar neutra durante todo o movimento"],
-    alerts: [
-      { signal: "Dor aguda na lombar", fix: "Coluna arredondando. Reduzir a amplitude e focar na neutralidade antes de aumentar range." },
-      { signal: "Não sentir o posterior da coxa", fix: "Joelhos dobrados demais — virou agachamento. Fixar os joelhos." },
-      { signal: "Barra ou halteres longe do corpo", fix: "Sobrecarrega a lombar. Deslizar rente às pernas." }
-    ]
-  },
-  {
-    exercise: "Elevação Lateral", subtitle: "Ombros arredondados",
-    tips: ["Peso MUITO mais leve do que parece necessário — é um músculo pequeno","Cotovelo levemente dobrado, não completamente estendido","Elevar até a altura do ombro — não acima, não recruta mais e lesiona","Imaginar que está despejando água de uma jarra — rotação interna leve no topo","Subida em 2s, descida em 3s controlada — a descida constrói tanto quanto a subida","Não usar o trapézio para 'ajudar' — se os ombros subirem junto, o peso está pesado demais"],
-    alerts: [
-      { signal: "Dor no topo do ombro (pinçamento)", fix: "Peso alto demais ou elevando acima da altura do ombro." },
-      { signal: "Trapézio (pescoço/ombro) ficando tenso", fix: "Compensação. Reduzir peso, focar em manter ombros abaixados." },
-      { signal: "Não sentir o deltóide lateral", fix: "Movimento errado — cotovelo liderando em vez do pulso." }
-    ]
-  },
-  {
-    exercise: "Búlgaro", subtitle: "Glúteo + coxa unilateral",
-    tips: ["Pé da frente longe o suficiente — se o joelho passar muito à frente dos dedos, o pé está próximo demais","Tronco levemente inclinado à frente (não reto) — ativa mais o glúteo","Descer controlado, joelho de trás quase tocando o chão","SEMPRE começa pelo lado esquerdo — o número do esquerdo define o máximo do direito","Segurar apoio nas primeiras semanas é ok — melhor fazer certo com apoio do que errado livre"],
-    alerts: [
-      { signal: "Joelho anterior batendo no chão com força", fix: "Descida sem controle — desacelerar a fase excêntrica." },
-      { signal: "Dor no joelho posterior (de trás)", fix: "Posição do banco muito alta. Baixar o apoio." },
-      { signal: "Instabilidade e queda lateral", fix: "Normal nas primeiras semanas. Usar apoio até o equilíbrio estabilizar." }
-    ]
-  },
-];
+const REBOLAR_PHASE_MAP = {
+  1: 0,
+  2: 1,
+  3: 2,
+  4: 3
+};
 
-// ─── CARDIO_GUIDE ────────────────────────────────────────────
-const CARDIO_GUIDE = [
-  { title: "Caminhada plana", ideal: "Recuperação ativa, dias de descanso", kcal: "~200-280 kcal/h", impact: "Zero impacto no músculo", when: "Terça e Quinta" },
-  { title: "Caminhada inclinada (10-15%)", ideal: "Máximo resultado com mínimo desgaste", kcal: "~350-450 kcal/h", impact: "Ativa glúteo durante o cardio", when: "Substituir caminhada plana após mês 2" },
-  { title: "Bike de baixa intensidade", ideal: "Cardio leve sem impacto articular", kcal: "~250-350 kcal/h", impact: "Muito baixo", when: "Opcional em qualquer dia" },
-  { title: "Escada do prédio (8 andares)", ideal: "Cardio + ativação de glúteo no dia a dia", kcal: "~400-500 kcal/h", impact: "Ativa glúteo e posterior a cada degrau — excelente", when: "Todo dia, progressivo: mês 1 sobe 2-3 andares (elevador o resto), mês 2 sobe 4-5, mês 3+ tenta os 8. Descer os 8 desde o dia 1." },
-  { title: "Corrida (EVITAR primeiros 6 meses)", ideal: "Não recomendado no início", kcal: "—", impact: "Consome músculo junto com gordura", when: "Só após base muscular estabelecida" },
+const SENSUAL_BONUS = {
+  1: {
+    title: "Movimento Sensual — Básico",
+    duration: "10min",
+    intro: "Coloque uma música que te faça sentir poderosa. Esses exercícios constroem controle de quadril e consciência corporal. Sem julgamento — é só você e a música.",
+    steps: [
+      { name: "Círculos de quadril", description: "De pé, mãos na cintura, pés na largura do quadril. Faça círculos amplos e lentos com o quadril — como se estivesse desenhando um círculo grande no chão. 10 pra cada lado.", duration: "2min", why: "Ensina o quadril a se mover independente do tronco. Base de todo movimento sensual." },
+      { name: "Ondulação frente/trás", description: "Mesma posição. Empurre o quadril pra frente (contraia o glúteo) e depois pra trás (empine). Devagar, sentindo cada posição. 20 repetições.", duration: "2min", why: "Isola o movimento pélvico. Melhora conexão mente-corpo na região do quadril." },
+      { name: "Ondulação lateral", description: "Agora mova o quadril pro lado direito e depois pro esquerdo. Joelhos levemente flexionados. O tronco fica parado. 20 repetições.", duration: "2min", why: "Completa os 4 eixos de movimento do quadril. Prepara pra movimentos mais complexos." },
+      { name: "Movimento livre", description: "Bota a música no volume e mexe como sentir vontade. Não tem certo ou errado. Misture os movimentos que aprendeu. Se olhe no espelho se tiver.", duration: "4min", why: "Aqui você sai do modo 'exercício' pro modo 'expressão'. A confiança corporal se constrói fazendo, não pensando." }
+    ]
+  },
+  2: {
+    title: "Movimento Sensual — Com Ritmo",
+    duration: "12min",
+    intro: "Você já sabe isolar o quadril. Agora vamos adicionar ritmo e novos movimentos. Coloque funk, pagode, reggaeton — o que te fizer mexer.",
+    steps: [
+      { name: "Body wave", description: "De pé, comece pelo peito empurrando pra frente, depois deixe a 'onda' descer pelo abdômen e quadril. Como uma onda do mar passando pelo corpo. Devagar primeiro, depois no ritmo da música. 10 repetições.", duration: "3min", why: "O body wave é o movimento mais sensual que existe. Trabalha fluidez corporal e consciência de cada segmento do corpo." },
+      { name: "Figura de 8 com quadril", description: "Imagine um 8 deitado (infinito) no chão. Desenhe esse 8 com o quadril. Pra frente-direita, pra trás-esquerda, e volta. Mantenha o tronco parado. 10 pra cada direção.", duration: "3min", why: "A figura de 8 é a base do rebolar. Quando esse movimento ficar natural, todo o resto fica fácil." },
+      { name: "Rebolar com música", description: "Junte tudo: círculos, ondulação, body wave, figura 8. Deixe a música guiar. Foque em mover o quadril no ritmo. Não precisa ser rápido — sensual é devagar e controlado.", duration: "4min", why: "Treina ritmo e expressão. O segredo não é velocidade, é controle e intenção em cada movimento." },
+      { name: "Passada sensual", description: "Caminhe devagar pelo quarto com postura ereta, quadril balançando naturalmente a cada passo. Ombros pra trás, queixo levemente erguido. Imagina que está numa passarela.", duration: "2min", why: "A forma como você anda comunica confiança. Treinar a passada muda a postura no dia a dia." }
+    ]
+  },
+  3: {
+    title: "Movimento Sensual — Coreografia",
+    duration: "15min",
+    intro: "Você já tem controle e ritmo. Agora vamos combinar movimentos em sequências e adicionar braços e expressão corporal. A meta é se sentir poderosa.",
+    steps: [
+      { name: "Sequência: wave + rebolar + pose", description: "Faça um body wave completo, emende com 4 círculos de quadril, termine numa pose com as mãos no cabelo ou na cintura. Segure a pose 3 segundos. Repita 5 vezes variando as poses.", duration: "4min", why: "Combinar movimentos cria fluidez. As poses constroem confiança — você aprende a 'parar' em posições que te valorizam." },
+      { name: "Movimentos de braços", description: "Enquanto o quadril se move, adicione: mãos subindo pelo corpo, dedos passando pelo cabelo, braços abrindo pro lado. O braço acompanha o quadril — quando o quadril vai pra direita, o braço oposto sobe.", duration: "3min", why: "Braços transformam um exercício em dança. Sem braços, parece treino. Com braços, parece arte." },
+      { name: "Dança no chão (floorwork)", description: "De joelhos, ondule o tronco pra frente e pra trás. Sente nos calcanhares e volte. Se sentir segura, deite de costas e faça ondulação deitada. Tudo devagar.", duration: "4min", why: "Floorwork trabalha músculos que não são ativados de pé. Também desenvolve sensualidade e confiança com o chão." },
+      { name: "Freestyle completo", description: "Música favorita, quarto fechado, você e o espelho. Misture TUDO: wave, rebolar, chão, braços, passada. Grave se quiser comparar depois.", duration: "4min", why: "Esse é o momento de ser você. Sem regras, sem coreografia. Confiança se constrói repetindo até se sentir natural." }
+    ]
+  },
+  4: {
+    title: "Movimento Sensual — Expressão Livre",
+    duration: "15min",
+    intro: "Você já sabe se mover. Agora é sobre expressão pessoal e sensualidade natural. Não existe mais 'exercício' — existe você dançando.",
+    steps: [
+      { name: "Aquecimento sensual", description: "Coloque uma música lenta. Feche os olhos. Mova o corpo como ele quiser. Sem pensar em técnica — sinta a música no corpo. 3 minutos de olhos fechados.", duration: "3min", why: "Desconectar a visão conecta você com as sensações. Sensualidade real vem de sentir, não de parecer." },
+      { name: "Sua coreografia", description: "Escolha uma música que você ama. Crie sua própria sequência de movimentos. Use tudo que aprendeu. Repita até decorar. Essa é SUA dança.", duration: "5min", why: "Criar sua própria coreografia é o nível máximo de confiança corporal. Ninguém dança como você." },
+      { name: "Performance", description: "Faça sua coreografia como se estivesse se apresentando. Com expressão facial, com intenção, com atitude. Grave se quiser. Dance pra sua namorada se sentir confiante.", duration: "4min", why: "A diferença entre mover o corpo e dançar é a intenção. Aqui você pratica a intenção." },
+      { name: "Cool down sensual", description: "Música lenta de novo. Movimentos suaves, alongamento com ondulação. Agradeça seu corpo por tudo que ele faz por você.", duration: "3min", why: "Fechar com gratidão pelo corpo muda a relação com ele. Você não treina PRA mudar — treina PORQUE se ama." }
+    ]
+  }
+};
+
+const FLEXIBILITY_MILESTONES = [
+  { id: "pombo-sem-dor", label: "Pombo sem dor (ambos os lados)", fase: 1 },
+  { id: "agachamento-profundo", label: "Agachamento profundo com calcanhar no chão", fase: 1 },
+  { id: "borboleta-joelhos-chao", label: "Borboleta com joelhos perto do chão", fase: 2 },
+  { id: "splits-50", label: "Splits 50% do caminho", fase: 2 },
+  { id: "frog-pose-confortavel", label: "Frog Pose confortável por 2min", fase: 2 },
+  { id: "splits-75", label: "Splits 75% do caminho", fase: 3 },
+  { id: "pancake-peito-chao", label: "Pancake com peito próximo ao chão", fase: 3 },
+  { id: "splits-completo", label: "Splits completo!", fase: 4 }
 ];
 
 // ─── COLOR_GUIDE ──────────────────────────────────────────────
