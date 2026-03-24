@@ -1598,19 +1598,6 @@ const DayManager = {
 const WorkoutManager = {
   currentPhase: 1,
   selectedDay: null,
-  workoutData: null,
-  currentSubTab: 'treino',
-  yogaLevel: 'iniciante',
-
-  // Sub-tab definitions
-  SUB_TABS: [
-    { key: 'treino', label: 'Treino' },
-    { key: 'gluteo', label: 'Gluteo Fix' },
-    { key: 'yoga', label: 'Yoga' },
-    { key: 'rebolar', label: 'Movimento' },
-    { key: 'tecnica', label: 'Tecnica' },
-    { key: 'cardio', label: 'Cardio' }
-  ],
 
   // ── Lifecycle ──────────────────────────────────────────────
 
@@ -1621,23 +1608,18 @@ const WorkoutManager = {
     }
     this.selectedDay = Utils.getDayOfWeek();
 
-    // Event delegation — set up ONCE on the container
     var self = this;
     var container = document.getElementById('treino-content');
     if (container) {
+      // ── Click delegation ──
       container.addEventListener('click', function(e) {
-        // Yoga level tabs — check BEFORE workout-subtab (shares the class)
-        var yogaTab = e.target.closest('.yoga-level-tab');
-        if (yogaTab) {
-          self.yogaLevel = yogaTab.dataset.level;
-          self.render();
-          return;
-        }
-        // Sub-tab clicks
-        var subTab = e.target.closest('.workout-subtab');
-        if (subTab && subTab.dataset.subtab) {
-          self.currentSubTab = subTab.dataset.subtab;
-          self.render();
+        // Day-card header collapse/expand
+        var header = e.target.closest('.day-card-header');
+        if (header) {
+          var card = header.closest('.day-card');
+          if (card) {
+            card.classList.toggle('collapsed');
+          }
           return;
         }
         // Phase tabs
@@ -1657,38 +1639,12 @@ const WorkoutManager = {
           self.render();
           return;
         }
-        // Collapsible headers (warmup / cooldown)
-        var collHeader = e.target.closest('.collapsible-header');
-        if (collHeader) {
-          var targetId = collHeader.dataset.target;
-          var body = document.getElementById(targetId);
-          if (body) {
-            body.classList.toggle('hidden');
-            var icon = collHeader.querySelector('.expand-icon');
-            if (icon) icon.textContent = body.classList.contains('hidden') ? '\u25BC' : '\u25B2';
-          }
-          return;
-        }
-        // Video buttons (check before exercise-header)
-        var videoBtn = e.target.closest('.video-btn');
-        if (videoBtn) {
+        // GIF / video buttons
+        var gifBtn = e.target.closest('.exercise-card-gif-btn');
+        if (gifBtn) {
           e.stopPropagation();
-          var videoKey = videoBtn.dataset.videoKey;
-          var source = videoBtn.dataset.videoSource || 'exercise';
-          if (typeof VideoModal !== 'undefined') VideoModal.open(videoKey, source);
-          return;
-        }
-        // Exercise header expand/collapse
-        var exHeader = e.target.closest('.exercise-header');
-        if (exHeader) {
-          if (e.target.closest('.btn-icon') || e.target.closest('.video-btn')) return;
-          var toggleId = exHeader.dataset.toggle;
-          var details = document.getElementById(toggleId);
-          if (details) {
-            details.classList.toggle('hidden');
-            var icon = exHeader.querySelector('.expand-icon');
-            if (icon) icon.textContent = details.classList.contains('hidden') ? '\u25BC' : '\u25B2';
-          }
+          var videoKey = gifBtn.dataset.videoKey;
+          if (typeof VideoModal !== 'undefined') VideoModal.open(videoKey, 'exercise');
           return;
         }
         // Vacuum start buttons
@@ -1706,7 +1662,7 @@ const WorkoutManager = {
                 wData.series[exId][s] = true;
               }
               self.saveWorkoutData(wData);
-              Toast.show('Vacuum concluido!', 'success');
+              Toast.show('Vacuum concluído!', 'success');
               self.render();
             });
           }
@@ -1748,16 +1704,46 @@ const WorkoutManager = {
         // Rest time selector buttons
         var restBtn = e.target.closest('.rest-btn');
         if (restBtn) {
-          var exId = restBtn.dataset.exercise;
-          var seconds = parseInt(restBtn.dataset.restSeconds);
-          self.setRestOverride(exId, seconds);
+          var rExId = restBtn.dataset.exercise;
+          var rSec = parseInt(restBtn.dataset.restSeconds);
+          self.setRestOverride(rExId, rSec);
           var selector = restBtn.parentElement;
           selector.querySelectorAll('.rest-btn').forEach(function(b) { b.classList.remove('active'); });
           restBtn.classList.add('active');
           return;
         }
+        // Rest timer inline button
+        var restTimerBtn = e.target.closest('.exercise-card-timer-btn');
+        if (restTimerBtn) {
+          var rtSec = parseInt(restTimerBtn.dataset.seconds);
+          var rtLabel = restTimerBtn.dataset.label || 'Descanso';
+          if (typeof TimerEngine !== 'undefined') TimerEngine.startCountdown(rtSec, rtLabel.toUpperCase(), null, null);
+          return;
+        }
+        // Yoga timer buttons
+        var yogaTimerBtn = e.target.closest('.yoga-timer-btn');
+        if (yogaTimerBtn) {
+          var ytSec = parseInt(yogaTimerBtn.dataset.seconds);
+          var ytName = yogaTimerBtn.dataset.name || 'Yoga';
+          if (typeof TimerEngine !== 'undefined') {
+            if (yogaTimerBtn.dataset.sides === 'true') {
+              TimerEngine.startStretchWithSides(ytSec, ytName, null);
+            } else {
+              TimerEngine.startCountdown(ytSec, ytName.toUpperCase(), null, null);
+            }
+          }
+          return;
+        }
+        // Monthly glute check buttons
+        var gluteCheckBtn = e.target.closest('.glute-check-btn');
+        if (gluteCheckBtn) {
+          var response = gluteCheckBtn.dataset.response;
+          self.saveGluteCheck(response);
+          self.render();
+          return;
+        }
       });
-      // Change events (checkboxes)
+      // ── Change delegation (checkboxes) ──
       container.addEventListener('change', function(e) {
         // Series checkboxes
         var seriesCb = e.target.closest('.series-checkbox');
@@ -1767,23 +1753,37 @@ const WorkoutManager = {
           var setNum = seriesCb.dataset.set;
           var exIndex = parseInt(seriesCb.dataset.exerciseIndex);
           self.onSeriesChecked(exId, setNum, seriesCb.checked, exIndex);
+          // Auto-expand next card when all series checked
+          if (seriesCb.checked) {
+            self.autoExpandNextCard(exId);
+          }
+          return;
+        }
+        // Glute activation checkboxes
+        var gluteActCb = e.target.closest('.glute-act-checkbox');
+        if (gluteActCb) {
+          var gIdx = gluteActCb.dataset.index;
+          var wData = self.getWorkoutData();
+          if (!wData.gluteAct) wData.gluteAct = {};
+          wData.gluteAct[gIdx] = gluteActCb.checked;
+          self.saveWorkoutData(wData);
           return;
         }
         // Cardio done checkbox
         var cardioCb = e.target.closest('.cardio-done-checkbox');
         if (cardioCb) {
           var cardioExId = cardioCb.dataset.exercise;
-          var wData = self.getWorkoutData();
-          if (!wData.series[cardioExId]) wData.series[cardioExId] = {};
-          wData.series[cardioExId]['done'] = cardioCb.checked;
-          self.saveWorkoutData(wData);
+          var cwData = self.getWorkoutData();
+          if (!cwData.series[cardioExId]) cwData.series[cardioExId] = {};
+          cwData.series[cardioExId]['done'] = cardioCb.checked;
+          self.saveWorkoutData(cwData);
           self.updateProgressDisplay();
           return;
         }
       });
-      // Input events (weight with debounce)
+      // ── Input delegation (weight with debounce) ──
       container.addEventListener('input', function(e) {
-        var weightInput = e.target.closest('.weight-input');
+        var weightInput = e.target.closest('.exercise-card-weight');
         if (weightInput) {
           if (weightInput._debounceTimer) clearTimeout(weightInput._debounceTimer);
           weightInput._debounceTimer = setTimeout(function() {
@@ -1819,6 +1819,10 @@ const WorkoutManager = {
     var sched = this.getScheduleForDay(this.selectedDay);
     if (!sched || !sched.workout) return null;
     var phase = this.getPhaseData();
+    // Fase 1 special: only has "Lower A", use it for ALL training days
+    if (this.currentPhase === 1) {
+      return (phase.days && phase.days['Lower A']) || null;
+    }
     return (phase.days && phase.days[sched.workout]) || null;
   },
 
@@ -1843,6 +1847,10 @@ const WorkoutManager = {
     if (!wData.restOverrides) wData.restOverrides = {};
     wData.restOverrides[exerciseId] = seconds;
     this.saveWorkoutData(wData);
+  },
+
+  getRestForExercise(exercise) {
+    return this.getRestOverride(exercise.id) || Utils.parseRest(exercise.rest);
   },
 
   getNextExerciseName(exercises, currentIndex) {
@@ -1886,13 +1894,16 @@ const WorkoutManager = {
       if (!foundWeight || maxWeight <= 0) return null;
 
       var suggested = maxWeight + 2;
-      return '\u2705 Semana passada completou tudo com ' + maxWeight + 'kg \u2014 tenta ' + suggested + 'kg!';
+      return 'Semana passada completou tudo com ' + maxWeight + 'kg — tenta ' + suggested + 'kg!';
     } catch (e) {
       return null;
     }
   },
 
   getExerciseType(exercise) {
+    if (exercise.type === 'vacuum') return 'vacuum';
+    if (exercise.type === 'plank') return 'plank';
+    if (exercise.type === 'cardio') return 'cardio';
     var name = exercise.name.toLowerCase();
     if (name.indexOf('vacuum') !== -1) return 'vacuum';
     if (name.indexOf('cardio') !== -1 || (exercise.sets === 1 && typeof exercise.reps === 'string' && exercise.reps.indexOf('min') !== -1)) return 'cardio';
@@ -1918,71 +1929,147 @@ const WorkoutManager = {
     return 1200;
   },
 
-  // ── Render: Main ───────────────────────────────────────────
+  parseYogaSeconds(timeStr) {
+    if (!timeStr) return 60;
+    var minMatch = timeStr.match(/(\d+)\s*min/);
+    if (minMatch) return parseInt(minMatch[1]) * 60;
+    var secMatch = timeStr.match(/(\d+)/);
+    if (secMatch) return parseInt(secMatch[1]);
+    return 60;
+  },
+
+  // ── Glute Check helpers ────────────────────────────────────
+
+  getGluteCheckHistory() {
+    return StorageManager.getValue('gluteCheckHistory', []);
+  },
+
+  saveGluteCheck(response) {
+    var history = this.getGluteCheckHistory();
+    history.push({ date: new Date().toISOString().split('T')[0], response: response });
+    StorageManager.setValue('gluteCheckHistory', history);
+  },
+
+  shouldShowGluteCheck() {
+    var history = this.getGluteCheckHistory();
+    if (history.length === 0) return true;
+    var lastCheck = history[history.length - 1];
+    var lastDate = new Date(lastCheck.date);
+    var now = new Date();
+    var diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+    return diffDays >= 30;
+  },
+
+  // ── Auto-expand next card ──────────────────────────────────
+
+  autoExpandNextCard(exerciseId) {
+    var card = document.querySelector('.day-card[data-card-id="exercise-' + exerciseId + '"]');
+    if (!card) return;
+    // Check if all series in this card are done
+    var checkboxes = card.querySelectorAll('.series-checkbox');
+    var allDone = true;
+    checkboxes.forEach(function(cb) { if (!cb.checked) allDone = false; });
+    if (!allDone) return;
+    // Find next collapsed card
+    var allCards = document.querySelectorAll('#treino-content .day-card');
+    var foundCurrent = false;
+    for (var i = 0; i < allCards.length; i++) {
+      if (allCards[i] === card) { foundCurrent = true; continue; }
+      if (foundCurrent && allCards[i].classList.contains('collapsed')) {
+        allCards[i].classList.remove('collapsed');
+        allCards[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        break;
+      }
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // RENDER — Main entry point
+  // ══════════════════════════════════════════════════════════
 
   render() {
     var container = document.getElementById('treino-content');
     if (!container) return;
 
     var html = '';
-    html += this.renderSubTabBar();
+    var sched = this.getScheduleForDay(this.selectedDay);
+    var dayType = sched ? sched.type : 'descanso-total';
 
-    switch (this.currentSubTab) {
-      case 'treino':   html += this.renderWorkoutTab(); break;
-      case 'gluteo':   html += this.renderGluteProtocol(); break;
-      case 'yoga':     html += this.renderYoga(); break;
-      case 'rebolar':  html += this.renderRebolar(); break;
-      case 'tecnica':  html += this.renderTechnique(); break;
-      case 'cardio':   html += this.renderCardioGuide(); break;
-      default:         html += this.renderWorkoutTab(); break;
+    if (dayType === 'descanso-total') {
+      html += this.renderPhaseSelector();
+      html += this.renderDaySelector();
+      html += this.renderRestDayMessage();
+    } else if (dayType === 'treino') {
+      html += this.renderNarrativeWorkout(sched);
+    } else if (dayType === 'descanso-ativo') {
+      html += this.renderTuesdayWorkout();
+    } else if (dayType === 'ativacao-leve') {
+      html += this.renderThursdayWorkout();
+    } else {
+      html += this.renderPhaseSelector();
+      html += this.renderDaySelector();
+      html += this.renderRestDayMessage();
     }
 
     container.innerHTML = html;
   },
 
-  // ── Render: Sub-Tab Bar ────────────────────────────────────
-
-  renderSubTabBar() {
-    var self = this;
-    var html = '<div class="workout-subtab-bar">';
-    this.SUB_TABS.forEach(function(tab) {
-      var active = (tab.key === self.currentSubTab) ? ' active' : '';
-      html += '<button class="workout-subtab' + active + '" data-subtab="' + tab.key + '">' + tab.label + '</button>';
-    });
-    html += '</div>';
-    return html;
-  },
-
   // ══════════════════════════════════════════════════════════
-  // SUB-TAB: TREINO (main workout)
+  // RENDER: Narrative Workout (treino days — Mon/Wed/Fri/Sat)
   // ══════════════════════════════════════════════════════════
 
-  renderWorkoutTab() {
+  renderNarrativeWorkout(sched) {
     var html = '';
     html += this.renderPhaseSelector();
     html += this.renderDaySelector();
 
-    var sched = this.getScheduleForDay(this.selectedDay);
     var dayData = this.getDayData();
-
-    if (!sched || !sched.workout || !dayData) {
-      html += this.renderRestDay(sched);
-    } else {
-      html += this.renderWorkoutProgress(dayData);
-      // Glute activation protocol before lower body warmups
-      if (sched.warmup === 'lower') {
-        html += this.renderGluteActivation();
-      }
-      html += this.renderWarmup(sched.warmup);
-      html += this.renderExercises(dayData.exercises || []);
-      html += this.renderCooldown(sched.cooldown);
-      html += this.renderProgressionRules();
+    if (!dayData) {
+      html += this.renderRestDayMessage();
+      return html;
     }
+
+    var exercises = dayData.exercises || [];
+    html += this.renderWorkoutProgress(dayData);
+    html += this.renderGluteoActivationCard();
+    if (this.shouldShowGluteCheck()) {
+      html += this.renderMonthlyGluteCheck();
+    }
+    html += this.renderWarmupCards(sched.warmup);
+    html += this.renderExerciseCards(exercises);
+    html += this.renderCooldownCards(sched.cooldown);
 
     return html;
   },
 
-  // ── Render: Phase Selector ─────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  // RENDER: Tuesday (descanso-ativo — yoga + rebolar)
+  // ══════════════════════════════════════════════════════════
+
+  renderTuesdayWorkout() {
+    var html = '';
+    html += this.renderPhaseSelector();
+    html += this.renderDaySelector();
+    html += this.renderGluteoActivationCard();
+    html += this.renderYogaCards();
+    html += this.renderRebolarCards();
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // RENDER: Thursday (ativacao-leve)
+  // ══════════════════════════════════════════════════════════
+
+  renderThursdayWorkout() {
+    var html = '';
+    html += this.renderPhaseIndicator();
+    html += this.renderDaySelector();
+    html += this.renderGluteoActivationCard();
+    html += this.renderLightActivityOptions();
+    return html;
+  },
+
+  // ── Phase Selector (interactive) ───────────────────────────
 
   renderPhaseSelector() {
     var html = '<div class="card glass phase-selector-card">';
@@ -2009,10 +2096,23 @@ const WorkoutManager = {
     return html;
   },
 
-  // ── Render: Day Selector ───────────────────────────────────
+  // ── Phase Indicator (read-only, no buttons) ────────────────
+
+  renderPhaseIndicator() {
+    var phase = this.getPhaseData();
+    var html = '<div class="card glass phase-selector-card">';
+    html += '<div class="phase-description" style="text-align:center;">';
+    html += '<strong>' + this.escapeHtml(phase.name) + '</strong>';
+    html += '<p style="opacity:0.7; font-size:0.85rem; margin:0.3rem 0 0;">' + this.escapeHtml(phase.period) + '</p>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+  },
+
+  // ── Day Selector ───────────────────────────────────────────
 
   renderDaySelector() {
-    var dayLabels = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+    var dayLabels = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
     var today = Utils.getDayOfWeek();
     var html = '<div class="day-selector">';
 
@@ -2024,7 +2124,6 @@ const WorkoutManager = {
 
     html += '</div>';
 
-    // Day title from WEEK_SCHEDULE
     var sched = this.getScheduleForDay(this.selectedDay);
     if (sched) {
       html += '<div style="text-align:center; padding: 0.5rem 0;">';
@@ -2035,7 +2134,7 @@ const WorkoutManager = {
     return html;
   },
 
-  // ── Render: Workout Progress ───────────────────────────────
+  // ── Workout Progress Bar ───────────────────────────────────
 
   renderWorkoutProgress(dayData) {
     var exercises = dayData.exercises || [];
@@ -2045,8 +2144,9 @@ const WorkoutManager = {
     var totalSeries = 0;
     var completedSeries = 0;
 
+    var self = this;
     exercises.forEach(function(ex) {
-      var type = WorkoutManager.getExerciseType(ex);
+      var type = self.getExerciseType(ex);
       if (type === 'cardio') {
         totalSeries += 1;
         if (wData.series[ex.id] && wData.series[ex.id]['done']) completedSeries++;
@@ -2063,7 +2163,7 @@ const WorkoutManager = {
     var html = '<div class="card glass workout-overall-progress">';
     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">';
     html += '<strong>Progresso do Treino</strong>';
-    html += '<span>' + completedSeries + '/' + totalSeries + ' series (' + pct + '%)</span>';
+    html += '<span>' + completedSeries + '/' + totalSeries + ' séries (' + pct + '%)</span>';
     html += '</div>';
     html += '<div class="progress-bar-container">';
     html += '<div class="progress-bar" style="width:' + pct + '%"></div>';
@@ -2072,74 +2172,168 @@ const WorkoutManager = {
     return html;
   },
 
-  // ── Render: Rest Day ───────────────────────────────────────
+  // ── Rest Day Message (descanso-total) ──────────────────────
 
-  renderRestDay(sched) {
-    var label = (sched && sched.label) ? sched.label : 'Dia de descanso';
-    var html = '<div class="card glass" style="text-align:center; padding:2rem 1.5rem;">';
-    html += '<div style="font-size:3rem; margin-bottom:1rem;">&#128524;</div>';
-    html += '<h3>Dia de Descanso Ativo</h3>';
-    html += '<p style="opacity:0.8; margin-top:0.5rem;">' + this.escapeHtml(label) + '</p>';
-    html += '<p style="opacity:0.6; font-size:0.85rem; margin-top:0.5rem;">Aproveite as abas Yoga, Rebolar ou Gluteo Fix para atividades leves.</p>';
+  renderRestDayMessage() {
+    var html = '<div class="day-card" data-card-id="rest-day">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">😴</span>';
+    html += '<span class="day-card-title">Dia de Descanso Total</span>';
+    html += '<span class="day-card-arrow">▼</span>';
     html += '</div>';
-
-    // Still show lower cooldown/stretching on rest days
-    html += this.renderCooldown('lower');
+    html += '<div class="day-card-body">';
+    html += '<p class="day-card-intro">Hoje é dia de descanso. Seu corpo está recuperando e crescendo. Músculo cresce no descanso, não no treino.</p>';
+    html += '<div class="day-card-why">O descanso total permite a reparação das microfibras musculares rompidas durante o treino, a reposição de glicogênio e a adaptação do sistema nervoso — sem ele, o corpo entra em overtraining e para de evoluir.</div>';
+    html += '</div>';
+    html += '</div>';
     return html;
   },
 
-  // ── Render: Glute Activation (before lower warmup) ─────────
+  // ══════════════════════════════════════════════════════════
+  // GLUTE ACTIVATION CARD
+  // ══════════════════════════════════════════════════════════
 
-  renderGluteActivation() {
-    var html = '<div class="card glass" style="border-left: 3px solid var(--accent);">';
-    html += '<div class="collapsible-header" data-target="glute-activation-content">';
-    html += '<h3 style="margin:0;">Ativacao Gluteo Esquerdo (ANTES do treino)</h3>';
-    html += '<span class="expand-icon">&#9660;</span>';
+  renderGluteoActivationCard() {
+    var wData = this.getWorkoutData();
+    var gluteAct = wData.gluteAct || {};
+
+    var html = '<div class="day-card" data-card-id="glute-activation">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">🍑</span>';
+    html += '<span class="day-card-time">ANTES</span>';
+    html += '<span class="day-card-title">Ativação Glúteo Esquerdo</span>';
+    html += '<span class="day-card-arrow">▼</span>';
     html += '</div>';
-    html += '<div id="glute-activation-content" class="collapsible-body hidden">';
-    html += '<p style="font-size:0.82rem; opacity:0.7; margin-bottom:0.75rem;">' + this.escapeHtml(GLUTE_FIX_PROTOCOL.explanation) + '</p>';
+    html += '<div class="day-card-body">';
 
-    GLUTE_FIX_PROTOCOL.daily_exercises.forEach(function(ex) {
-      html += '<div style="padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
-      html += '<strong style="font-size:0.85rem;">' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
-      html += '<span style="opacity:0.6; font-size:0.8rem;"> — ' + WorkoutManager.escapeHtml(ex.sets) + '</span>';
-      html += '<div style="font-size:0.78rem; opacity:0.6; margin-top:2px;">' + WorkoutManager.escapeHtml(ex.desc) + '</div>';
+    html += '<p class="day-card-intro">' + this.escapeHtml(GLUTE_FIX_PROTOCOL.explanation) + '</p>';
+
+    for (var i = 0; i < GLUTE_FIX_PROTOCOL.daily_exercises.length; i++) {
+      var ex = GLUTE_FIX_PROTOCOL.daily_exercises[i];
+      var checked = gluteAct[i] ? 'checked' : '';
+      html += '<div class="day-card-step">';
+      html += '<div class="day-card-step-header">';
+      html += '<label style="display:flex; align-items:center; gap:8px; cursor:pointer;">';
+      html += '<input type="checkbox" class="glute-act-checkbox" data-index="' + i + '" ' + checked + ' style="width:18px; height:18px; accent-color:var(--success);">';
+      html += '<span class="day-card-step-name">' + this.escapeHtml(ex.name) + '</span>';
+      html += '</label>';
+      html += '<span class="day-card-step-duration">' + this.escapeHtml(ex.sets) + '</span>';
       html += '</div>';
-    });
+      html += '<p class="day-card-step-desc">' + this.escapeHtml(ex.desc) + '</p>';
+      html += '</div>';
+    }
 
-    html += '</div></div>';
+    // Rules
+    html += '<div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--border-light);">';
+    html += '<strong style="font-size:0.82rem; color:var(--accent);">Regras de Ouro</strong>';
+    for (var r = 0; r < GLUTE_FIX_PROTOCOL.rules.length; r++) {
+      var rule = GLUTE_FIX_PROTOCOL.rules[r];
+      html += '<div style="padding:4px 0; font-size:0.78rem;">';
+      html += '<strong>' + this.escapeHtml(rule.name) + '</strong>';
+      html += ' <span style="color:var(--accent);">[' + this.escapeHtml(rule.rule) + ']</span>';
+      html += ' — <span style="opacity:0.7;">' + this.escapeHtml(rule.desc) + '</span>';
+      html += '</div>';
+    }
+    html += '</div>';
+
+    html += '</div>';
+    html += '</div>';
     return html;
   },
 
-  // ── Render: Warmup (lower/upper) ───────────────────────────
+  // ── Monthly Glute Check ────────────────────────────────────
 
-  renderWarmup(warmupType) {
+  renderMonthlyGluteCheck() {
+    var html = '<div class="day-card" data-card-id="monthly-glute-check">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">📋</span>';
+    html += '<span class="day-card-title">Checagem Mensal — Glúteo</span>';
+    html += '<span class="day-card-arrow">▼</span>';
+    html += '</div>';
+    html += '<div class="day-card-body">';
+    html += '<div class="exercise-card-monthly-check">';
+    html += '<p>Aperte o glúteo esquerdo e o direito separadamente. Ainda sente diferença?</p>';
+    html += '<div>';
+    html += '<button class="glute-check-btn" data-response="muita">Muita diferença</button>';
+    html += '<button class="glute-check-btn" data-response="pouca">Um pouco</button>';
+    html += '<button class="glute-check-btn" data-response="quase-igual">Quase igual</button>';
+    html += '<button class="glute-check-btn" data-response="igual">Igual!</button>';
+    html += '</div>';
+
+    // Show history
+    var history = this.getGluteCheckHistory();
+    if (history.length > 0) {
+      html += '<div style="margin-top:12px; text-align:left; font-size:0.75rem; opacity:0.7;">';
+      html += '<strong>Histórico:</strong>';
+      var start = Math.max(0, history.length - 4);
+      for (var h = start; h < history.length; h++) {
+        html += '<div>' + history[h].date + ' — ' + this.escapeHtml(history[h].response) + '</div>';
+      }
+      html += '</div>';
+    }
+
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // WARMUP CARDS
+  // ══════════════════════════════════════════════════════════
+
+  renderWarmupCards(warmupType) {
     if (!warmupType) return '';
     var warmupList = warmupType === 'lower' ? WARMUP_LOWER : WARMUP_UPPER;
     var title = warmupType === 'lower' ? 'Aquecimento Lower Body' : 'Aquecimento Upper Body';
+    var html = '';
 
-    var html = '<div class="card glass warmup-card">';
-    html += '<div class="collapsible-header" data-target="warmup-content">';
-    html += '<h3 style="margin:0;">' + this.escapeHtml(title) + ' (' + warmupList.length + ' exercicios) — OBRIGATORIO</h3>';
-    html += '<span class="expand-icon">&#9660;</span>';
+    html += '<div class="day-card collapsed" data-card-id="warmup-section">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">🔥</span>';
+    html += '<span class="day-card-time">' + warmupList.length + ' exercícios</span>';
+    html += '<span class="day-card-title">' + this.escapeHtml(title) + ' — OBRIGATÓRIO</span>';
+    html += '<span class="day-card-arrow">▼</span>';
     html += '</div>';
-    html += '<div id="warmup-content" class="collapsible-body hidden">';
+    html += '<div class="day-card-body">';
 
-    warmupList.forEach(function(ex) {
-      html += '<div style="padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
-      html += '<strong style="font-size:0.85rem;">' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
-      html += '<span style="opacity:0.6; font-size:0.8rem;"> — ' + WorkoutManager.escapeHtml(ex.time) + '</span>';
-      html += '<div style="font-size:0.78rem; opacity:0.6; margin-top:2px;">' + WorkoutManager.escapeHtml(ex.desc) + '</div>';
+    for (var i = 0; i < warmupList.length; i++) {
+      var ex = warmupList[i];
+      html += '<div class="day-card-step">';
+      html += '<div class="day-card-step-header">';
+      html += '<span class="day-card-step-number">' + (i + 1) + '</span>';
+      html += '<span class="day-card-step-name">' + this.escapeHtml(ex.name) + '</span>';
+      html += '<span class="day-card-step-duration">' + this.escapeHtml(ex.time) + '</span>';
       html += '</div>';
-    });
+      if (ex.narrative) {
+        html += '<p class="day-card-step-desc">' + this.escapeHtml(ex.narrative) + '</p>';
+      } else {
+        html += '<p class="day-card-step-desc">' + this.escapeHtml(ex.desc) + '</p>';
+      }
+      if (ex.why) {
+        html += '<div class="day-card-why">' + this.escapeHtml(ex.why) + '</div>';
+      }
+      // Timer button
+      var secMatch = ex.time.match(/(\d+)/);
+      var sec = secMatch ? parseInt(secMatch[1]) : 30;
+      if (ex.time.indexOf('cada') !== -1 || ex.time.indexOf('lado') !== -1) {
+        html += '<button class="exercise-card-timer-btn stretch-sides-btn" data-seconds="' + sec + '" data-name="' + this.escapeAttr(ex.name) + '" style="margin-top:6px;">⏱ ' + sec + 's cada lado</button>';
+      } else if (ex.time.indexOf('seg') !== -1 || ex.time.indexOf('min') !== -1) {
+        html += '<button class="exercise-card-timer-btn stretch-timer-btn" data-seconds="' + sec + '" data-name="' + this.escapeAttr(ex.name) + '" style="margin-top:6px;">⏱ ' + sec + 's</button>';
+      }
+      html += '</div>';
+    }
 
-    html += '</div></div>';
+    html += '</div>';
+    html += '</div>';
     return html;
   },
 
-  // ── Render: Exercise List ──────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  // EXERCISE CARDS (main workout exercises)
+  // ══════════════════════════════════════════════════════════
 
-  renderExercises(exercises) {
+  renderExerciseCards(exercises) {
     if (!exercises || exercises.length === 0) return '';
     var html = '';
     for (var i = 0; i < exercises.length; i++) {
@@ -2154,167 +2348,152 @@ const WorkoutManager = {
     var exData = wData.series[exercise.id] || {};
     var exWeights = wData.weights || {};
 
-    var cardClass = 'exercise-card card glass';
-    if (type === 'vacuum') cardClass += ' exercise-vacuum';
-
-    var html = '<div class="' + cardClass + '" data-exercise-id="' + exercise.id + '">';
-
-    // Header
-    html += '<div class="exercise-header" data-toggle="details-' + exercise.id + '">';
-    html += '<span class="exercise-num">#' + (index + 1) + '</span>';
-    html += '<div class="exercise-info">';
-    html += '<div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">';
-    html += '<strong>' + this.escapeHtml(exercise.name) + '</strong>';
-    if (exercise.weight) {
-      html += '<span class="exercise-weight-badge">' + this.escapeHtml(exercise.weight) + '</span>';
-    }
-    if (exercise.startLeft) {
-      html += '<span class="exercise-left-badge">Esq primeiro</span>';
-    }
-    html += '</div>';
-
-    // Meta line
+    // First exercise expanded, rest collapsed
+    var isCollapsed = (index > 0) ? ' collapsed' : '';
+    var setsReps = '';
     if (type === 'cardio') {
-      html += '<span class="exercise-meta">' + this.escapeHtml(exercise.reps) + ' | Sem descanso</span>';
+      setsReps = this.escapeHtml(exercise.reps);
     } else if (type === 'vacuum') {
-      html += '<span class="exercise-meta">' + exercise.sets + 'x ' + this.escapeHtml(exercise.reps) + ' | Descanso: ' + this.escapeHtml(exercise.rest) + '</span>';
+      setsReps = exercise.sets + 'x ' + this.escapeHtml(exercise.reps);
     } else {
-      html += '<span class="exercise-meta">' + exercise.sets + 'x' + this.escapeHtml(String(exercise.reps)) + ' | Descanso: ' + this.escapeHtml(exercise.rest) + '</span>';
+      setsReps = exercise.sets + 'x' + this.escapeHtml(String(exercise.reps));
     }
 
-    if (exercise.tip) {
-      html += '<span class="exercise-tip">&#128161; ' + this.escapeHtml(exercise.tip) + '</span>';
-    }
-    html += '</div>'; // .exercise-info
+    var iconMap = { normal: '💪', vacuum: '💨', plank: '🧘', cardio: '🏃' };
+    var icon = iconMap[type] || '💪';
 
-    // Video button
-    if (exercise.videoKey) {
-      html += '<button class="btn-icon video-btn" data-video-key="' + exercise.videoKey + '" data-video-source="exercise" title="Ver video">&#127916;</button>';
+    var html = '<div class="day-card' + isCollapsed + '" data-card-id="exercise-' + exercise.id + '">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">' + icon + '</span>';
+    html += '<span class="day-card-time">' + setsReps + '</span>';
+    html += '<span class="day-card-title">' + this.escapeHtml(exercise.name) + '</span>';
+    if (exercise.startLeft) {
+      html += '<span style="font-size:0.65rem; background:var(--accent); color:var(--bg-dark); padding:2px 6px; border-radius:8px; font-weight:700;">ESQ</span>';
     }
-
-    html += '<span class="expand-icon">&#9660;</span>';
-    html += '</div>'; // .exercise-header
-
-    // Details (hidden by default)
-    html += '<div class="exercise-details hidden" id="details-' + exercise.id + '">';
-    if (exercise.details) {
-      html += '<p style="font-size:0.85rem; opacity:0.85; line-height:1.5;">' + this.escapeHtml(exercise.details) + '</p>';
-    }
+    html += '<span class="day-card-arrow">▼</span>';
     html += '</div>';
 
-    // Start left warning (legacy prominent display)
-    if (exercise.startLeft) {
-      html += '<div class="start-left-indicator">';
-      html += 'COMECE PELO LADO ESQUERDO';
-      html += '</div>';
+    html += '<div class="day-card-body">';
+
+    // Narrative
+    if (exercise.narrative) {
+      html += '<p class="day-card-intro">' + this.escapeHtml(exercise.narrative) + '</p>';
     }
 
-    // Type-specific content
+    // Why
+    if (exercise.why) {
+      html += '<div class="day-card-why">' + this.escapeHtml(exercise.why) + '</div>';
+    }
+
+    // Common mistakes from EXERCISE_VIDEOS
+    if (exercise.videoKey && EXERCISE_VIDEOS[exercise.videoKey] && EXERCISE_VIDEOS[exercise.videoKey].commonMistakes) {
+      html += '<div class="exercise-card-mistakes">' + this.escapeHtml(EXERCISE_VIDEOS[exercise.videoKey].commonMistakes) + '</div>';
+    }
+
+    // GIF button
+    if (exercise.videoKey) {
+      html += '<button class="exercise-card-gif-btn" data-video-key="' + this.escapeAttr(exercise.videoKey) + '" style="margin-top:8px;">▶ Ver GIF</button>';
+    }
+
+    // Type-specific controls
     if (type === 'vacuum') {
-      html += this.renderVacuumControls(exercise, exData);
+      html += this.renderVacuumBody(exercise, exData);
     } else if (type === 'cardio') {
-      html += this.renderCardioControls(exercise, exData);
+      html += this.renderCardioBody(exercise, exData);
     } else if (type === 'plank') {
-      html += this.renderPlankControls(exercise, index, allExercises, exData, exWeights);
+      html += this.renderPlankBody(exercise, index, exData);
     } else {
-      html += this.renderNormalSeries(exercise, index, allExercises, exData, exWeights);
+      html += this.renderNormalBody(exercise, index, exData, exWeights);
     }
 
-    // Progress indicator (for non-cardio)
-    if (type !== 'cardio') {
-      var completedSets = 0;
-      var totalSets = exercise.sets || 1;
-      for (var s = 1; s <= totalSets; s++) {
-        if (exData[s]) completedSets++;
-      }
-      var pct = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
-
-      html += '<div class="exercise-progress">';
-      html += '<span>' + completedSets + '/' + totalSets + ' series</span>';
-      html += '<div class="progress-bar-container" style="height:4px;">';
-      html += '<div class="progress-bar" style="width:' + pct + '%"></div>';
-      html += '</div>';
-      html += '</div>';
-    }
-
-    html += '</div>'; // .exercise-card
+    html += '</div>'; // .day-card-body
+    html += '</div>'; // .day-card
     return html;
   },
 
-  // ── Render: Normal Series (checkboxes + weight input) ──────
+  // ── Normal exercise body (series checkboxes + weight) ──────
 
-  renderNormalSeries(exercise, index, allExercises, exData, exWeights) {
-    var self = this;
-    var html = '<div class="exercise-series">';
+  renderNormalBody(exercise, index, exData, exWeights) {
+    var html = '';
     var totalSets = exercise.sets || 1;
 
-    // Rest time selector
-    var defaultRest = Utils.parseRest(exercise.rest);
-    var currentRest = self.getRestOverride(exercise.id) || defaultRest;
-    var restOptions = [30, 45, 60, 90, 120];
-
-    html += '<div class="rest-selector">';
-    html += '<span class="rest-selector-label">\u23F1 Descanso:</span>';
-    restOptions.forEach(function(sec) {
-      var activeClass = (sec === currentRest) ? ' active' : '';
-      html += '<button class="rest-btn' + activeClass + '" data-exercise="' + exercise.id + '" data-rest-seconds="' + sec + '">' + sec + 's</button>';
-    });
-    html += '</div>';
-
-    for (var s = 1; s <= totalSets; s++) {
-      var checked = exData[s] ? 'checked' : '';
-      var weightKey = exercise.id + '_' + s;
-      var savedWeight = (exWeights[weightKey] !== undefined && exWeights[weightKey] !== null) ? exWeights[weightKey] : '';
-
-      html += '<div class="series-row">';
-      html += '<label class="checkbox-wrapper">';
-      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s + '" data-exercise-index="' + index + '" ' + checked + '>';
-      html += '<span class="checkbox-custom"></span>';
-      html += '<span>Serie ' + s + '/' + totalSets + '</span>';
-      html += '</label>';
-      html += '<input type="number" class="weight-input" placeholder="Peso (kg)" data-exercise="' + exercise.id + '" data-set="' + s + '" value="' + savedWeight + '" inputmode="decimal" step="0.5">';
-      html += '</div>';
+    // Weight badge
+    if (exercise.weight) {
+      html += '<div class="exercise-card-sets-reps" style="margin-top:8px;">Peso sugerido: ' + this.escapeHtml(exercise.weight) + '</div>';
     }
 
     // Progressive overload suggestion
     var suggestion = this.getProgressionSuggestion(exercise.id, totalSets);
     if (suggestion) {
-      html += '<div style="font-size:0.75rem; color:var(--success); margin-top:0.25rem; opacity:0.9; padding:0.25rem 0.5rem;">';
-      html += suggestion;
-      html += '</div>';
+      html += '<div style="font-size:0.78rem; color:var(--success); margin-top:6px; padding:4px 8px; background:rgba(76,175,80,0.08); border-radius:var(--radius-sm);">✅ ' + suggestion + '</div>';
     }
 
+    // Series checkboxes
+    html += '<div class="exercise-card-series">';
+    for (var s = 1; s <= totalSets; s++) {
+      var checked = exData[s] ? ' checked' : '';
+      html += '<label' + (exData[s] ? ' class="checked"' : '') + '>';
+      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s + '" data-exercise-index="' + index + '"' + (exData[s] ? ' checked' : '') + '>';
+      html += 'Série ' + s;
+      html += '</label>';
+    }
     html += '</div>';
+
+    // Weight input + rest timer row
+    html += '<div class="exercise-card-weight-row">';
+    for (var s2 = 1; s2 <= totalSets; s2++) {
+      var weightKey = exercise.id + '_' + s2;
+      var savedWeight = (exWeights[weightKey] !== undefined && exWeights[weightKey] !== null) ? exWeights[weightKey] : '';
+      html += '<input type="number" class="exercise-card-weight" placeholder="S' + s2 + ' kg" data-exercise="' + exercise.id + '" data-set="' + s2 + '" value="' + savedWeight + '" inputmode="decimal" step="0.5">';
+    }
+    // Rest timer button
+    var restSec = this.getRestForExercise(exercise);
+    if (restSec > 0) {
+      html += '<button class="exercise-card-timer-btn" data-seconds="' + restSec + '" data-label="Descanso — ' + this.escapeAttr(exercise.name) + '">⏱ ' + restSec + 's</button>';
+    }
+    html += '</div>';
+
+    // Rest time selector
+    var defaultRest = Utils.parseRest(exercise.rest);
+    var currentRest = this.getRestOverride(exercise.id) || defaultRest;
+    var restOptions = [30, 45, 60, 90, 120];
+    html += '<div style="display:flex; gap:4px; align-items:center; margin-top:6px; flex-wrap:wrap;">';
+    html += '<span style="font-size:0.72rem; opacity:0.6;">⏱ Descanso:</span>';
+    for (var ro = 0; ro < restOptions.length; ro++) {
+      var activeClass = (restOptions[ro] === currentRest) ? ' active' : '';
+      html += '<button class="rest-btn' + activeClass + '" data-exercise="' + exercise.id + '" data-rest-seconds="' + restOptions[ro] + '" style="font-size:0.7rem; padding:3px 8px; border-radius:12px; border:1px solid var(--border-light); background:' + (restOptions[ro] === currentRest ? 'var(--primary)' : 'transparent') + '; color:' + (restOptions[ro] === currentRest ? '#fff' : 'var(--text-muted)') + '; cursor:pointer;">' + restOptions[ro] + 's</button>';
+    }
+    html += '</div>';
+
     return html;
   },
 
-  // ── Render: Plank Controls ─────────────────────────────────
+  // ── Plank exercise body ────────────────────────────────────
 
-  renderPlankControls(exercise, index, allExercises, exData, exWeights) {
+  renderPlankBody(exercise, index, exData) {
+    var html = '';
     var holdSec = this.parseHoldSeconds(exercise.reps);
-    var html = '<div class="exercise-series">';
     var totalSets = exercise.sets || 1;
 
+    html += '<div class="exercise-card-series">';
     for (var s = 1; s <= totalSets; s++) {
-      var checked = exData[s] ? 'checked' : '';
-
-      html += '<div class="series-row">';
-      html += '<label class="checkbox-wrapper">';
-      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s + '" data-exercise-index="' + index + '" ' + checked + '>';
-      html += '<span class="checkbox-custom"></span>';
-      html += '<span>Serie ' + s + '/' + totalSets + '</span>';
+      html += '<label' + (exData[s] ? ' class="checked"' : '') + '>';
+      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s + '" data-exercise-index="' + index + '"' + (exData[s] ? ' checked' : '') + '>';
+      html += 'Série ' + s;
       html += '</label>';
-      html += '<button class="btn btn-sm btn-outline plank-timer-btn" data-seconds="' + holdSec + '" data-exercise-name="' + this.escapeAttr(exercise.name) + '">&#9201; ' + holdSec + 'seg</button>';
-      html += '</div>';
     }
-
     html += '</div>';
+
+    html += '<div class="exercise-card-weight-row">';
+    html += '<button class="exercise-card-timer-btn plank-timer-btn" data-seconds="' + holdSec + '" data-exercise-name="' + this.escapeAttr(exercise.name) + '">⏱ Iniciar ' + holdSec + 's</button>';
+    html += '</div>';
+
     return html;
   },
 
-  // ── Render: Vacuum Controls ────────────────────────────────
+  // ── Vacuum exercise body ───────────────────────────────────
 
-  renderVacuumControls(exercise, exData) {
+  renderVacuumBody(exercise, exData) {
     var holdSec = this.parseHoldSeconds(exercise.reps);
     var restSec = Utils.parseRest(exercise.rest) || 30;
     var totalSets = exercise.sets || 5;
@@ -2324,355 +2503,229 @@ const WorkoutManager = {
       if (exData[s]) completedSets++;
     }
 
-    var html = '<div class="vacuum-controls" style="text-align:center; padding:1rem 0;">';
-    html += '<button class="btn btn-primary vacuum-start-btn" data-hold="' + holdSec + '" data-rest="' + restSec + '" data-sets="' + totalSets + '" data-exercise="' + exercise.id + '">';
-    html += '&#128168; Iniciar Vacuum (' + totalSets + 'x ' + holdSec + 'seg)';
-    html += '</button>';
-    html += '<p style="font-size:0.8rem; opacity:0.6; margin-top:0.5rem;">' + completedSets + '/' + totalSets + ' series feitas hoje</p>';
+    var html = '';
+    html += '<div style="text-align:center; margin:12px 0;">';
+    html += '<button class="exercise-card-timer-btn vacuum-start-btn" data-hold="' + holdSec + '" data-rest="' + restSec + '" data-sets="' + totalSets + '" data-exercise="' + exercise.id + '" style="padding:10px 20px; font-size:0.85rem;">💨 Iniciar Vacuum (' + totalSets + 'x ' + holdSec + 's)</button>';
+    html += '<p style="font-size:0.75rem; opacity:0.6; margin-top:6px;">' + completedSets + '/' + totalSets + ' séries feitas hoje</p>';
     html += '</div>';
 
-    html += '<div class="exercise-series">';
+    html += '<div class="exercise-card-series">';
     for (var s2 = 1; s2 <= totalSets; s2++) {
-      var checked = exData[s2] ? 'checked' : '';
-      html += '<div class="series-row">';
-      html += '<label class="checkbox-wrapper">';
-      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s2 + '" data-exercise-index="-1" ' + checked + '>';
-      html += '<span class="checkbox-custom"></span>';
-      html += '<span>Serie ' + s2 + '/' + totalSets + '</span>';
+      html += '<label' + (exData[s2] ? ' class="checked"' : '') + '>';
+      html += '<input type="checkbox" class="series-checkbox" data-exercise="' + exercise.id + '" data-set="' + s2 + '" data-exercise-index="-1"' + (exData[s2] ? ' checked' : '') + '>';
+      html += 'Série ' + s2;
       html += '</label>';
-      html += '</div>';
     }
     html += '</div>';
 
     return html;
   },
 
-  // ── Render: Cardio Controls ────────────────────────────────
+  // ── Cardio exercise body ───────────────────────────────────
 
-  renderCardioControls(exercise, exData) {
+  renderCardioBody(exercise, exData) {
     var durationSec = this.parseCardioSeconds(exercise.reps);
     var done = exData['done'] ? true : false;
 
-    var html = '<div class="cardio-controls" style="text-align:center; padding:1rem 0;">';
-    html += '<button class="btn btn-primary cardio-start-btn" data-seconds="' + durationSec + '" data-label="' + this.escapeAttr(exercise.name) + '">';
-    html += '&#127939; Iniciar Cardio (' + exercise.reps + ')';
-    html += '</button>';
-    html += '<div style="margin-top:0.75rem;">';
-    html += '<label class="checkbox-wrapper" style="justify-content:center;">';
-    html += '<input type="checkbox" class="cardio-done-checkbox" data-exercise="' + exercise.id + '" ' + (done ? 'checked' : '') + '>';
-    html += '<span class="checkbox-custom"></span>';
-    html += '<span>Concluido</span>';
+    var html = '';
+    html += '<div style="text-align:center; margin:12px 0;">';
+    html += '<button class="exercise-card-timer-btn cardio-start-btn" data-seconds="' + durationSec + '" data-label="' + this.escapeAttr(exercise.name) + '" style="padding:10px 20px; font-size:0.85rem;">🏃 Iniciar Cardio (' + this.escapeHtml(exercise.reps) + ')</button>';
+    html += '</div>';
+
+    html += '<div class="exercise-card-series">';
+    html += '<label' + (done ? ' class="checked"' : '') + '>';
+    html += '<input type="checkbox" class="cardio-done-checkbox" data-exercise="' + exercise.id + '"' + (done ? ' checked' : '') + '>';
+    html += 'Concluído';
     html += '</label>';
     html += '</div>';
-    html += '</div>';
+
     return html;
   },
 
-  // ── Render: Cooldown (lower/upper) ─────────────────────────
+  // ══════════════════════════════════════════════════════════
+  // COOLDOWN CARDS
+  // ══════════════════════════════════════════════════════════
 
-  renderCooldown(cooldownType) {
+  renderCooldownCards(cooldownType) {
     var cdType = cooldownType || 'lower';
     var cooldownList = cdType === 'lower' ? COOLDOWN_LOWER : COOLDOWN_UPPER;
     var title = cdType === 'lower' ? 'Alongamento Lower Body' : 'Alongamento Upper Body';
+    var html = '';
 
-    var html = '<div class="card glass cooldown-card">';
-    html += '<div class="collapsible-header" data-target="cooldown-content">';
-    html += '<h3 style="margin:0;">' + this.escapeHtml(title) + ' (' + cooldownList.length + ' exercicios) — OBRIGATORIO</h3>';
-    html += '<span class="expand-icon">&#9660;</span>';
+    html += '<div class="day-card collapsed" data-card-id="cooldown-section">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">🧘</span>';
+    html += '<span class="day-card-time">' + cooldownList.length + ' exercícios</span>';
+    html += '<span class="day-card-title">' + this.escapeHtml(title) + ' — OBRIGATÓRIO</span>';
+    html += '<span class="day-card-arrow">▼</span>';
     html += '</div>';
-    html += '<div id="cooldown-content" class="collapsible-body hidden">';
+    html += '<div class="day-card-body">';
 
-    cooldownList.forEach(function(ex) {
-      html += '<div style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
-      html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
-      html += '<div>';
-      html += '<strong>' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
-      html += '<span style="opacity:0.6; font-size:0.85rem;"> — ' + WorkoutManager.escapeHtml(ex.time) + '</span>';
+    for (var i = 0; i < cooldownList.length; i++) {
+      var ex = cooldownList[i];
+      html += '<div class="day-card-step">';
+      html += '<div class="day-card-step-header">';
+      html += '<span class="day-card-step-number">' + (i + 1) + '</span>';
+      html += '<span class="day-card-step-name">' + this.escapeHtml(ex.name) + '</span>';
+      html += '<span class="day-card-step-duration">' + this.escapeHtml(ex.time) + '</span>';
       html += '</div>';
-      html += '<div style="display:flex; gap:0.3rem; align-items:center;">';
+      if (ex.narrative) {
+        html += '<p class="day-card-step-desc">' + this.escapeHtml(ex.narrative) + '</p>';
+      } else {
+        html += '<p class="day-card-step-desc">' + this.escapeHtml(ex.desc) + '</p>';
+      }
+      if (ex.why) {
+        html += '<div class="day-card-why">' + this.escapeHtml(ex.why) + '</div>';
+      }
+      // Timer button
       var secMatch = ex.time.match(/(\d+)/);
       var sec = secMatch ? parseInt(secMatch[1]) : 30;
-      if (ex.time.indexOf('cada') !== -1) {
-        html += '<button class="btn btn-sm btn-outline stretch-sides-btn" data-seconds="' + sec + '" data-name="' + WorkoutManager.escapeAttr(ex.name) + '">&#9201; E/D</button>';
-      } else {
-        html += '<button class="btn btn-sm btn-outline stretch-timer-btn" data-seconds="' + sec + '" data-name="' + WorkoutManager.escapeAttr(ex.name) + '">&#9201; ' + sec + 'seg</button>';
+      if (ex.time.indexOf('cada') !== -1 || ex.time.indexOf('lado') !== -1) {
+        html += '<button class="exercise-card-timer-btn stretch-sides-btn" data-seconds="' + sec + '" data-name="' + this.escapeAttr(ex.name) + '" style="margin-top:6px;">⏱ ' + sec + 's cada lado</button>';
+      } else if (sec > 0) {
+        html += '<button class="exercise-card-timer-btn stretch-timer-btn" data-seconds="' + sec + '" data-name="' + this.escapeAttr(ex.name) + '" style="margin-top:6px;">⏱ ' + sec + 's</button>';
       }
       html += '</div>';
-      html += '</div>';
-      html += '<div style="font-size:0.78rem; opacity:0.6; margin-top:2px;">' + WorkoutManager.escapeHtml(ex.desc) + '</div>';
-      html += '</div>';
-    });
-
-    html += '</div></div>';
-    return html;
-  },
-
-  // ── Render: Progression Rules Card ─────────────────────────
-
-  renderProgressionRules() {
-    var html = '<div class="card glass" style="border-left: 3px solid var(--success);">';
-    html += '<h4 style="margin:0 0 0.5rem; color: var(--success);">Regras de Progressao</h4>';
-
-    GLUTE_FIX_PROTOCOL.rules.forEach(function(rule) {
-      html += '<div style="padding:0.35rem 0; border-bottom:1px solid rgba(255,255,255,0.04);">';
-      html += '<strong style="font-size:0.83rem;">' + WorkoutManager.escapeHtml(rule.name) + '</strong>';
-      html += '<span style="opacity:0.6; font-size:0.78rem;"> [' + WorkoutManager.escapeHtml(rule.rule) + ']</span>';
-      html += '<div style="font-size:0.78rem; opacity:0.65; margin-top:2px;">' + WorkoutManager.escapeHtml(rule.desc) + '</div>';
-      html += '</div>';
-    });
-
-    html += '</div>';
-    return html;
-  },
-
-  // ══════════════════════════════════════════════════════════
-  // SUB-TAB: GLUTEO FIX PROTOCOL
-  // ══════════════════════════════════════════════════════════
-
-  renderGluteProtocol() {
-    var html = '';
-
-    // Explanation card
-    html += '<div class="card glass">';
-    html += '<h3 style="margin:0 0 0.75rem; color: var(--accent);">Protocolo Correcao Gluteo Esquerdo</h3>';
-    html += '<p style="font-size:0.85rem; opacity:0.8; line-height:1.6;">' + this.escapeHtml(GLUTE_FIX_PROTOCOL.explanation) + '</p>';
-    html += '</div>';
-
-    // Daily exercises
-    html += '<div class="card glass">';
-    html += '<h4 style="margin:0 0 0.75rem;">Exercicios Diarios de Ativacao</h4>';
-
-    GLUTE_FIX_PROTOCOL.daily_exercises.forEach(function(ex) {
-      html += '<div style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">';
-      html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
-      html += '<strong style="font-size:0.85rem;">' + WorkoutManager.escapeHtml(ex.name) + '</strong>';
-      html += '<span style="opacity:0.7; font-size:0.8rem; white-space:nowrap;">' + WorkoutManager.escapeHtml(ex.sets) + '</span>';
-      html += '</div>';
-      html += '<div style="font-size:0.8rem; opacity:0.6; margin-top:3px;">' + WorkoutManager.escapeHtml(ex.desc) + '</div>';
-      html += '</div>';
-    });
-
-    html += '</div>';
-
-    // Rules
-    html += '<div class="card glass" style="border-left: 3px solid var(--primary);">';
-    html += '<h4 style="margin:0 0 0.75rem;">Regras de Ouro</h4>';
-
-    GLUTE_FIX_PROTOCOL.rules.forEach(function(rule) {
-      html += '<div style="padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.04);">';
-      html += '<strong style="font-size:0.83rem;">' + WorkoutManager.escapeHtml(rule.name) + '</strong>';
-      html += '<span style="background:var(--accent); color:var(--bg-dark); font-size:0.7rem; padding:1px 6px; border-radius:8px; margin-left:6px; font-weight:600;">' + WorkoutManager.escapeHtml(rule.rule) + '</span>';
-      html += '<div style="font-size:0.8rem; opacity:0.65; margin-top:3px;">' + WorkoutManager.escapeHtml(rule.desc) + '</div>';
-      html += '</div>';
-    });
-
-    html += '</div>';
-
-    // Timeline
-    html += '<div class="card glass">';
-    html += '<h4 style="margin:0 0 0.75rem;">Timeline de Resultados</h4>';
-
-    GLUTE_FIX_PROTOCOL.timeline.forEach(function(item) {
-      html += '<div style="padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.04);">';
-      html += '<strong style="font-size:0.83rem; color: var(--primary);">' + WorkoutManager.escapeHtml(item[0]) + '</strong>';
-      html += '<div style="font-size:0.82rem; opacity:0.75; margin-top:2px;">' + WorkoutManager.escapeHtml(item[1]) + '</div>';
-      html += '</div>';
-    });
-
-    html += '</div>';
-    return html;
-  },
-
-  // ══════════════════════════════════════════════════════════
-  // SUB-TAB: YOGA
-  // ══════════════════════════════════════════════════════════
-
-  renderYoga() {
-    var self = this;
-    var html = '';
-
-    // Level selector
-    var levels = ['iniciante', 'intermediario', 'avancado'];
-    var levelLabels = { iniciante: 'Iniciante', intermediario: 'Intermediario', avancado: 'Avancado' };
-
-    html += '<div class="card glass">';
-    html += '<h3 style="margin:0 0 0.75rem;">Yoga — Mobilidade e Flexibilidade</h3>';
-    html += '<div style="display:flex; gap:6px; margin-bottom:1rem;">';
-
-    levels.forEach(function(lvl) {
-      var active = (lvl === self.yogaLevel) ? ' active' : '';
-      html += '<button class="workout-subtab yoga-level-tab' + active + '" data-level="' + lvl + '">' + levelLabels[lvl] + '</button>';
-    });
-
-    html += '</div>';
-
-    // Poses list
-    var poses = YOGA_LEVELS[this.yogaLevel] || [];
-    if (poses.length === 0) {
-      html += '<p style="opacity:0.6;">Nenhuma pose encontrada para este nivel.</p>';
-    } else {
-      poses.forEach(function(pose, idx) {
-        html += '<div style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">';
-        html += '<div>';
-        html += '<strong style="font-size:0.85rem;">' + (idx + 1) + '. ' + WorkoutManager.escapeHtml(pose[0]) + '</strong>';
-        html += '</div>';
-        html += '<span style="opacity:0.6; font-size:0.82rem; white-space:nowrap;">' + WorkoutManager.escapeHtml(pose[1]) + '</span>';
-        html += '</div>';
-      });
     }
 
     html += '</div>';
+    html += '</div>';
     return html;
   },
 
   // ══════════════════════════════════════════════════════════
-  // SUB-TAB: REBOLAR
+  // YOGA CARDS (for Tuesday)
   // ══════════════════════════════════════════════════════════
 
-  renderRebolar() {
-    var html = '';
+  renderYogaCards() {
+    var yogaLevel = YOGA_PHASE_MAP[this.currentPhase] || 'iniciante';
+    var poses = YOGA_LEVELS[yogaLevel] || [];
+    if (poses.length === 0) return '';
 
-    html += '<div class="card glass">';
-    html += '<h3 style="margin:0 0 0.5rem;">Aprender a Rebolar</h3>';
-    html += '<p style="opacity:0.6; font-size:0.82rem; margin-bottom:1rem;">Progressao em 3 fases — isolamento, ritmo, expressao.</p>';
+    var html = '<div class="day-card" data-card-id="yoga-section">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">🧘</span>';
+    html += '<span class="day-card-time">' + poses.length + ' poses</span>';
+    html += '<span class="day-card-title">Yoga — ' + this.escapeHtml(yogaLevel.charAt(0).toUpperCase() + yogaLevel.slice(1)) + '</span>';
+    html += '<span class="day-card-arrow">▼</span>';
     html += '</div>';
+    html += '<div class="day-card-body">';
 
-    REBOLAR_STEPS.forEach(function(phase) {
-      html += '<div class="card glass">';
-      html += '<h4 style="margin:0 0 0.5rem; color: var(--primary);">' + WorkoutManager.escapeHtml(phase.fase) + '</h4>';
-      html += '<ul style="margin:0; padding-left:1.2rem;">';
+    html += '<p class="day-card-intro">Mobilidade e flexibilidade — o corpo precisa se abrir para crescer. Respire fundo em cada posição e não force além do confortável.</p>';
 
-      phase.steps.forEach(function(step) {
-        html += '<li style="font-size:0.83rem; opacity:0.8; margin-bottom:0.4rem; line-height:1.5;">' + WorkoutManager.escapeHtml(step) + '</li>';
-      });
+    for (var i = 0; i < poses.length; i++) {
+      var pose = poses[i];
+      var poseName = pose[0];
+      var poseTime = pose[1];
+      var poseSec = this.parseYogaSeconds(poseTime);
+      var hasSides = (poseTime.indexOf('cada') !== -1 || poseTime.indexOf('lado') !== -1);
 
-      html += '</ul>';
+      html += '<div class="day-card-step">';
+      html += '<div class="day-card-step-header">';
+      html += '<span class="day-card-step-number">' + (i + 1) + '</span>';
+      html += '<span class="day-card-step-name">' + this.escapeHtml(poseName) + '</span>';
+      html += '<span class="day-card-step-duration">' + this.escapeHtml(poseTime) + '</span>';
       html += '</div>';
-    });
-
-    // Dança Sensual
-    if (typeof DANCA_SENSUAL !== 'undefined') {
-      html += '<h3 style="font-family:var(--font-title);margin:20px 0 10px;">Dan\u00e7a Sensual</h3>';
-      html += '<div style="color:var(--text-muted);font-size:0.82rem;margin-bottom:12px;line-height:1.55;">' + DANCA_SENSUAL.intro + '</div>';
-      for (var ds = 0; ds < DANCA_SENSUAL.estilos.length; ds++) {
-        var estilo = DANCA_SENSUAL.estilos[ds];
-        html += '<div class="card glass" style="margin-bottom:10px;">';
-        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
-        html += '<span style="font-size:1.2rem;">' + estilo.icon + '</span>';
-        html += '<div>';
-        html += '<div style="color:var(--text);font-weight:600;font-size:0.92rem;">' + estilo.name + '</div>';
-        html += '<div style="color:var(--text-muted);font-size:0.78rem;">' + estilo.what + '</div>';
-        html += '</div></div>';
-        html += '<div style="color:var(--primary);font-size:0.8rem;margin-bottom:8px;line-height:1.5;">' + estilo.forYou + '</div>';
-        for (var lv = 0; lv < estilo.progression.length; lv++) {
-          var level = estilo.progression[lv];
-          html += '<div style="margin-bottom:8px;">';
-          html += '<div style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">' + level.level + '</div>';
-          for (var mv = 0; mv < level.moves.length; mv++) {
-            html += '<div style="padding:3px 0;font-size:0.82rem;color:var(--text-muted);line-height:1.5;">\u203A ' + level.moves[mv] + '</div>';
-          }
-          html += '</div>';
-        }
-        html += '</div>';
-      }
+      html += '<button class="exercise-card-timer-btn yoga-timer-btn" data-seconds="' + poseSec + '" data-name="' + this.escapeAttr(poseName) + '" data-sides="' + hasSides + '" style="margin-top:4px;">⏱ ' + this.escapeHtml(poseTime) + '</button>';
+      html += '</div>';
     }
 
-    if (typeof POWER_MOVES !== 'undefined') {
-      html += '<h3 style="font-family:var(--font-title);margin:20px 0 10px;">Power Moves \u2014 Micro-Momentos</h3>';
-      html += '<div style="color:var(--text-muted);font-size:0.82rem;margin-bottom:12px;line-height:1.5;">Movimentos r\u00e1pidos pra fazer em momentos mortos do dia. N\u00e3o \u00e9 treino formal \u2014 \u00e9 construir o gingado natural.</div>';
-      var pmCats = Object.keys(POWER_MOVES);
-      for (var pc = 0; pc < pmCats.length; pc++) {
-        var pmCat = POWER_MOVES[pmCats[pc]];
-        html += '<div class="card glass" style="margin-bottom:10px;">';
-        html += '<div style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">' + pmCat.icon + ' ' + pmCat.label + '</div>';
-        for (var pm = 0; pm < pmCat.moves.length; pm++) {
-          var move = pmCat.moves[pm];
-          html += '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);">';
-          html += '<div style="color:var(--text);font-weight:600;font-size:0.86rem;">' + move.name + '</div>';
-          html += '<div style="color:var(--text-muted);font-size:0.8rem;margin-top:2px;">' + move.how + '</div>';
-          if (move.result) {
-            html += '<div style="color:var(--success);font-size:0.75rem;margin-top:2px;">' + move.result + '</div>';
-          }
-          if (move.alert) {
-            html += '<div style="color:var(--danger);font-size:0.75rem;margin-top:2px;">\u26a0 ' + move.alert + '</div>';
-          }
-          html += '</div>';
-        }
-        html += '</div>';
-      }
+    html += '</div>';
+    html += '</div>';
+    return html;
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // REBOLAR CARDS (for Tuesday)
+  // ══════════════════════════════════════════════════════════
+
+  renderRebolarCards() {
+    var rebolarIndex = REBOLAR_PHASE_MAP[this.currentPhase];
+    if (rebolarIndex === undefined || rebolarIndex === null) rebolarIndex = 0;
+    var phase = REBOLAR_STEPS[rebolarIndex];
+    if (!phase) return '';
+
+    var html = '<div class="day-card" data-card-id="rebolar-section">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">💃</span>';
+    html += '<span class="day-card-title">Movimento — ' + this.escapeHtml(phase.fase) + '</span>';
+    html += '<span class="day-card-arrow">▼</span>';
+    html += '</div>';
+    html += '<div class="day-card-body">';
+
+    html += '<p class="day-card-intro">Controle de quadril e expressão corporal. Coloque uma música que te faça sentir poderosa e pratique cada movimento devagar.</p>';
+
+    for (var i = 0; i < phase.steps.length; i++) {
+      html += '<div class="day-card-step">';
+      html += '<div class="day-card-step-header">';
+      html += '<span class="day-card-step-number">' + (i + 1) + '</span>';
+      html += '<span class="day-card-step-name" style="font-size:0.83rem;">' + this.escapeHtml(phase.steps[i]) + '</span>';
+      html += '</div>';
+      html += '</div>';
     }
 
+    html += '</div>';
+    html += '</div>';
     return html;
   },
 
   // ══════════════════════════════════════════════════════════
-  // SUB-TAB: TECNICA
+  // LIGHT ACTIVITY OPTIONS (for Thursday)
   // ══════════════════════════════════════════════════════════
 
-  renderTechnique() {
-    var html = '';
+  renderLightActivityOptions() {
+    var html = '<div class="day-card" data-card-id="light-activity">';
+    html += '<div class="day-card-header">';
+    html += '<span class="day-card-icon">🟡</span>';
+    html += '<span class="day-card-title">Atividade Leve — Escolha Uma</span>';
+    html += '<span class="day-card-arrow">▼</span>';
+    html += '</div>';
+    html += '<div class="day-card-body">';
 
-    html += '<div class="card glass">';
-    html += '<h3 style="margin:0 0 0.25rem;">Guia de Tecnica</h3>';
-    html += '<p style="opacity:0.6; font-size:0.82rem;">Dicas e alertas dos exercicios principais.</p>';
+    html += '<p class="day-card-intro">Dia de ativação leve — o objetivo é mover o corpo sem gerar fadiga. Escolha uma das opções abaixo e faça no seu ritmo.</p>';
+
+    // Option 1: Caminhada
+    html += '<div class="day-card-step">';
+    html += '<div class="day-card-step-header">';
+    html += '<span class="day-card-step-number">1</span>';
+    html += '<span class="day-card-step-name">Caminhada ao ar livre</span>';
+    html += '<span class="day-card-step-duration">20-30 min</span>';
+    html += '</div>';
+    html += '<p class="day-card-step-desc">Caminhe em ritmo confortável, sem pressa. Aproveite para tomar sol (vitamina D) e relaxar a mente. Se tiver escada no trajeto, suba usando mais o calcanhar — ativa o glúteo.</p>';
+    html += '<div class="day-card-why">Caminhada aumenta o fluxo sanguíneo para os músculos em recuperação, acelera a remoção de metabólitos e melhora o humor — tudo sem gerar estresse adicional para o sistema nervoso.</div>';
+    html += '<button class="exercise-card-timer-btn cardio-start-btn" data-seconds="1500" data-label="Caminhada" style="margin-top:6px;">⏱ 25 min</button>';
     html += '</div>';
 
-    EXERCISE_TECHNIQUE.forEach(function(tech) {
-      html += '<div class="card glass">';
-      html += '<h4 style="margin:0 0 0.3rem;">' + WorkoutManager.escapeHtml(tech.exercise) + '</h4>';
-      html += '<p style="opacity:0.6; font-size:0.78rem; margin:0 0 0.5rem;">' + WorkoutManager.escapeHtml(tech.subtitle) + '</p>';
-
-      // Tips
-      html += '<ul style="margin:0 0 0.75rem; padding-left:1.2rem;">';
-      tech.tips.forEach(function(tip) {
-        html += '<li style="font-size:0.82rem; opacity:0.8; margin-bottom:0.3rem; line-height:1.5;">' + WorkoutManager.escapeHtml(tip) + '</li>';
-      });
-      html += '</ul>';
-
-      // Alerts
-      if (tech.alerts && tech.alerts.length > 0) {
-        tech.alerts.forEach(function(alert) {
-          html += '<div class="technique-alert">';
-          html += '<div class="technique-alert-signal">&#9888; ' + WorkoutManager.escapeHtml(alert.signal) + '</div>';
-          html += '<div class="technique-alert-fix">&#10140; ' + WorkoutManager.escapeHtml(alert.fix) + '</div>';
-          html += '</div>';
-        });
-      }
-
-      html += '</div>';
-    });
-
-    return html;
-  },
-
-  // ══════════════════════════════════════════════════════════
-  // SUB-TAB: CARDIO GUIDE
-  // ══════════════════════════════════════════════════════════
-
-  renderCardioGuide() {
-    var html = '';
-
-    html += '<div class="card glass">';
-    html += '<h3 style="margin:0 0 0.25rem;">Guia de Cardio</h3>';
-    html += '<p style="opacity:0.6; font-size:0.82rem;">Qual cardio fazer sem atrapalhar os ganhos.</p>';
+    // Option 2: Yoga leve
+    html += '<div class="day-card-step">';
+    html += '<div class="day-card-step-header">';
+    html += '<span class="day-card-step-number">2</span>';
+    html += '<span class="day-card-step-name">Yoga leve / mobilidade</span>';
+    html += '<span class="day-card-step-duration">15-20 min</span>';
+    html += '</div>';
+    html += '<p class="day-card-step-desc">Faça as poses do nível iniciante com calma: Pigeon Pose, Happy Baby, Borboleta, Cat-Cow. Foque na respiração e em soltar a tensão muscular do treino anterior.</p>';
+    html += '<div class="day-card-why">Yoga leve no dia de descanso ativo melhora a flexibilidade sem interferir na recuperação muscular — o corpo se abre e se prepara para treinar com mais amplitude no dia seguinte.</div>';
     html += '</div>';
 
-    CARDIO_GUIDE.forEach(function(cg) {
-      html += '<div class="card glass">';
-      html += '<h4 style="margin:0 0 0.5rem;">' + WorkoutManager.escapeHtml(cg.title) + '</h4>';
-      html += '<div style="display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:0.82rem;">';
-      html += '<span style="opacity:0.5;">Ideal:</span><span style="opacity:0.8;">' + WorkoutManager.escapeHtml(cg.ideal) + '</span>';
-      html += '<span style="opacity:0.5;">Calorias:</span><span style="opacity:0.8;">' + WorkoutManager.escapeHtml(cg.kcal) + '</span>';
-      html += '<span style="opacity:0.5;">Impacto:</span><span style="opacity:0.8;">' + WorkoutManager.escapeHtml(cg.impact) + '</span>';
-      html += '<span style="opacity:0.5;">Quando:</span><span style="opacity:0.8;">' + WorkoutManager.escapeHtml(cg.when) + '</span>';
-      html += '</div>';
-      html += '</div>';
-    });
+    // Option 3: Subir escada
+    html += '<div class="day-card-step">';
+    html += '<div class="day-card-step-header">';
+    html += '<span class="day-card-step-number">3</span>';
+    html += '<span class="day-card-step-name">Subir escada</span>';
+    html += '<span class="day-card-step-duration">10-15 min</span>';
+    html += '</div>';
+    html += '<p class="day-card-step-desc">Suba e desça as escadas do prédio em ritmo leve. Empurre pelos calcanhares a cada degrau pra ativar o glúteo. Pode fazer 4-6 subidas com descanso entre elas.</p>';
+    html += '<div class="day-card-why">Cada degrau é uma mini-extensão de quadril com carga corporal — ativa o glúteo de forma funcional e eleva a frequência cardíaca só o suficiente para acelerar a recuperação.</div>';
+    html += '</div>';
 
+    html += '</div>';
+    html += '</div>';
     return html;
   },
 
-  // ── Event: Series Checked ──────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  // EVENT HANDLERS
+  // ══════════════════════════════════════════════════════════
 
   onSeriesChecked(exerciseId, setNum, checked, exerciseIndex) {
     var wData = this.getWorkoutData();
@@ -2680,7 +2733,22 @@ const WorkoutManager = {
     wData.series[exerciseId][setNum] = checked;
     this.saveWorkoutData(wData);
 
-    this.updateExerciseProgress(exerciseId);
+    // Update label style inline
+    var card = document.querySelector('.day-card[data-card-id="exercise-' + exerciseId + '"]');
+    if (card) {
+      var labels = card.querySelectorAll('.exercise-card-series label');
+      labels.forEach(function(label) {
+        var cb = label.querySelector('.series-checkbox');
+        if (cb) {
+          if (cb.checked) {
+            label.classList.add('checked');
+          } else {
+            label.classList.remove('checked');
+          }
+        }
+      });
+    }
+
     this.updateProgressDisplay();
 
     // Auto-start rest timer when a series is checked
@@ -2700,7 +2768,7 @@ const WorkoutManager = {
         }
 
         if (exercise) {
-          var restSeconds = this.getRestOverride(exerciseId) || Utils.parseRest(exercise.rest);
+          var restSeconds = this.getRestForExercise(exercise);
           if (restSeconds > 0 && typeof TimerEngine !== 'undefined') {
             var nextName = this.getNextExerciseName(exercises, exIdx);
             TimerEngine.startRest(restSeconds, nextName, null);
@@ -2710,36 +2778,12 @@ const WorkoutManager = {
     }
   },
 
-  // ── Event: Weight Changed ──────────────────────────────────
-
   onWeightChanged(exerciseId, setNum, weight) {
     var wData = this.getWorkoutData();
     if (!wData.weights) wData.weights = {};
     var key = exerciseId + '_' + setNum;
     wData.weights[key] = weight;
     this.saveWorkoutData(wData);
-  },
-
-  // ── Update: Exercise Progress (inline, no full re-render) ──
-
-  updateExerciseProgress(exerciseId) {
-    var card = document.querySelector('.exercise-card[data-exercise-id="' + exerciseId + '"]');
-    if (!card) return;
-
-    var checkboxes = card.querySelectorAll('.series-checkbox');
-    var total = checkboxes.length;
-    var completed = 0;
-    checkboxes.forEach(function(cb) { if (cb.checked) completed++; });
-
-    var progressSpan = card.querySelector('.exercise-progress span');
-    var progressBar = card.querySelector('.exercise-progress .progress-bar');
-    if (progressSpan) progressSpan.textContent = completed + '/' + total + ' series';
-    if (progressBar) progressBar.style.width = (total > 0 ? Math.round((completed / total) * 100) : 0) + '%';
-
-    if (total > 0 && completed === total) {
-      card.classList.add('celebrate');
-      setTimeout(function() { card.classList.remove('celebrate'); }, 700);
-    }
   },
 
   // ── Update: Overall Workout Progress (inline) ──────────────
@@ -2773,11 +2817,11 @@ const WorkoutManager = {
     var pct = totalSeries > 0 ? Math.round((completedSeries / totalSeries) * 100) : 0;
     var span = overallEl.querySelector('span');
     var bar = overallEl.querySelector('.progress-bar');
-    if (span) span.textContent = completedSeries + '/' + totalSeries + ' series (' + pct + '%)';
+    if (span) span.textContent = completedSeries + '/' + totalSeries + ' séries (' + pct + '%)';
     if (bar) bar.style.width = pct + '%';
 
     if (pct >= 100) {
-      Toast.show('Treino concluido! Arrasou!', 'success');
+      Toast.show('Treino concluído! Arrasou!', 'success');
     }
   },
 
