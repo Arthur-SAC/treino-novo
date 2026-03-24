@@ -115,9 +115,9 @@ const EXERCISE_VIDEOS = {
   "triceps-testa": { youtubeId: "d_KZxkY_0cM", gifUrl: null, title: "Tríceps Testa", tips: "Cotovelos apontando pro teto, fixos", commonMistakes: "Cotovelos abrindo. Descer rápido demais. Lombar arqueando." },
   "panturrilha": { youtubeId: "gwLzBJYoWlI", gifUrl: null, title: "Panturrilha em Pé", tips: "Extensão máxima, pausa 1s no topo", commonMistakes: "Amplitude curta. Velocidade rápida. Não pausar no topo." },
   "crunch-bicicleta": { youtubeId: "9FGilxCbdz8", gifUrl: null, title: "Crunch Bicicleta", tips: "Cotovelo toca joelho oposto, devagar", commonMistakes: "Puxar o pescoço. Fazer rápido demais." },
-  "band-pull-apart": { youtubeId: "JObYtU7Y7ag", gifUrl: null, title: "Band Pull-Apart (Elástico)", tips: "Escápulas juntas, braços estendidos", commonMistakes: "Braços dobrados. Usar impulso." },
+  "band-pull-apart": { youtubeId: "JObYtU7Y7ag", gifUrl: null, title: "Crucifixo Inverso com Halteres", tips: "Curvada pra frente, braços abertos. Escápulas juntas no topo", commonMistakes: "Braços dobrados. Usar impulso." },
   "agachamento": { youtubeId: "aclHkVaku9U", gifUrl: null, title: "Agachamento com Barra", tips: "Pés largura dos ombros, descer até coxa paralela", commonMistakes: "Joelhos caindo pra dentro. Lombar arredondando. Calcanhar subindo." },
-  "clamshell": { youtubeId: "cC7RUFwh2Ew", gifUrl: null, title: "Clamshell com Elástico", tips: "Deitado de lado, abrir joelhos mantendo pés juntos", commonMistakes: "Girar o tronco. Separar os pés. Fazer rápido demais." },
+  "clamshell": { youtubeId: "cC7RUFwh2Ew", gifUrl: null, title: "Clamshell com Caneleira", tips: "Deitado de lado, caneleira no joelho. Abrir joelhos mantendo pés juntos", commonMistakes: "Girar o tronco. Separar os pés. Fazer rápido demais." },
   "donkey-kick-caneleira": { youtubeId: "VKGClPYoJCE", gifUrl: null, title: "Donkey Kick com Caneleira", tips: "Quadrupede, chutar pé pra cima mantendo joelho 90°", commonMistakes: "Arquear a lombar. Girar o quadril. Não controlar." }
 };
 
@@ -2047,7 +2047,7 @@ const WORKOUTS = {
     period: "Meses 1-2",
     frequency: "3x/semana",
     objective: "Ativar glúteos dormentes, aprender os movimentos, criar o hábito",
-    note: "Pode fazer no prédio: elástico + halteres. Glúteo esq mais dormido: 5 reps extras de ativação unilateral esquerda ANTES de cada exercício bilateral.",
+    note: "Pode fazer no prédio: caneleira + halteres. Glúteo esq mais dormido: 5 reps extras de ativação unilateral esquerda ANTES de cada exercício bilateral.",
     days: {
       "Lower A": {
         name: "Treino A · Full Body (Seg/Qua/Sex)",
@@ -2055,7 +2055,7 @@ const WORKOUTS = {
           { id: "f1-glute-bridge", name: "Glute Bridge no chão", sets: 3, reps: "15", rest: "90seg", weight: "0 kg → haltere leve no quadril", tip: "Empurre o quadril pro teto, squeeze 2-3seg no topo. Começar sem peso.", videoKey: "glute-bridge", unilateral: false, startLeft: false },
           { id: "f1-bridge-uni-esq", name: "Glute Bridge Unilateral ESQUERDO", sets: 3, reps: "12", rest: "60seg", weight: "0 kg", tip: "Pé esquerdo no chão, direito suspenso. Segurar 3seg no topo.", videoKey: "glute-bridge", unilateral: true, startLeft: true },
           { id: "f1-bridge-uni-dir", name: "Glute Bridge Unilateral DIREITO", sets: 3, reps: "12", rest: "60seg", weight: "0 kg", tip: "Mesmo número de reps que o esquerdo. Nunca mais.", videoKey: "glute-bridge", unilateral: true, startLeft: false },
-          { id: "f1-abducao-elastico", name: "Abdução deitada com elástico", sets: 3, reps: "20", rest: "60seg", weight: "elástico leve/médio", tip: "Deitada de lado, elevar perna. Sentir queimar no glúteo.", videoKey: "abducao-deitada", unilateral: false, startLeft: false },
+          { id: "f1-abducao-caneleira", name: "Abdução deitada com caneleira", sets: 3, reps: "20", rest: "60seg", weight: "caneleira 2-4 kg", tip: "Deitada de lado, elevar perna. Sentir queimar no glúteo.", videoKey: "abducao-deitada", unilateral: false, startLeft: false },
           { id: "f1-wall-sit", name: "Wall Sit (agachamento na parede)", sets: 3, reps: "20-30seg", rest: "60seg", weight: "0 kg", tip: "Costas na parede, coxas paralelas ao chão. Protege joelhos.", videoKey: "agachamento", unilateral: false, startLeft: false, type: "plank" },
           { id: "f1-rdl", name: "RDL com halteres leves", sets: 3, reps: "12", rest: "90seg", weight: "5-8 kg cada", tip: "Dobrar no quadril, NÃO na coluna. Sentir posterior da coxa.", videoKey: "stiff", unilateral: false, startLeft: false },
           { id: "f1-prancha", name: "Prancha", sets: 3, reps: "20-30seg", rest: "45seg", weight: "0 kg", tip: "Corpo reto. Apertar glúteo e abdômen.", videoKey: "prancha", unilateral: false, startLeft: false, type: "plank" },
@@ -2136,11 +2136,11 @@ const WORKOUTS = {
           },
           {
             id: "f2-abducao-maquina",
-            name: "Abdução Máquina ou Elástico",
+            name: "Abdução Máquina",
             sets: 4,
             reps: "20",
             rest: "45seg",
-            weight: "10-30 kg / elástico médio",
+            weight: "10-30 kg",
             tip: "Lento, sentir queimar.",
             videoKey: "abdutora",
             unilateral: false,
@@ -2189,13 +2189,13 @@ const WORKOUTS = {
             startLeft: false
           },
           {
-            id: "f2-band-pull-apart",
-            name: "Band Pull-Apart com Elástico",
+            id: "f2-crucifixo-inverso",
+            name: "Crucifixo Inverso com Halteres",
             sets: 3,
             reps: "20",
             rest: "45seg",
-            weight: "elástico leve/médio",
-            tip: "Postura e ombros saudáveis.",
+            weight: "2-4 kg halteres",
+            tip: "Curvada pra frente, braços abertos. Escápulas juntas no topo.",
             videoKey: "band-pull-apart",
             unilateral: false,
             startLeft: false
@@ -2326,7 +2326,7 @@ const WORKOUTS = {
             sets: 4,
             reps: "20",
             rest: "45seg",
-            weight: "elástico / 3-8 kg caneleira",
+            weight: "3-8 kg caneleira",
             tip: "Sempre comece pelo lado esquerdo.",
             videoKey: "abducao-deitada",
             unilateral: false,
@@ -2474,13 +2474,13 @@ const WORKOUTS = {
             startLeft: false
           },
           {
-            id: "f3-band-pull-apart",
-            name: "Band Pull-Apart com Elástico",
+            id: "f3-crucifixo-inverso",
+            name: "Crucifixo Inverso com Halteres",
             sets: 3,
             reps: "20",
             rest: "45seg",
-            weight: "elástico médio/forte",
-            tip: "Postura e ombros saudáveis.",
+            weight: "3-6 kg halteres",
+            tip: "Curvada pra frente, braços abertos. Escápulas juntas no topo.",
             videoKey: "band-pull-apart",
             unilateral: false,
             startLeft: false
@@ -2606,12 +2606,12 @@ const WORKOUTS = {
             startLeft: false
           },
           {
-            id: "f3-abducao-pe-band",
-            name: "Abdução com Elástico em Pé",
+            id: "f3-abducao-pe-caneleira",
+            name: "Abdução em Pé com Caneleira",
             sets: 3,
             reps: "20",
             rest: "45seg",
-            weight: "elástico médio/forte",
+            weight: "3-5 kg caneleira",
             tip: "Sempre comece pelo lado esquerdo.",
             videoKey: "abducao-pe",
             unilateral: false,
@@ -2736,13 +2736,13 @@ const WORKOUTS = {
             startLeft: false
           },
           {
-            id: "f4-band-pull-apart",
-            name: "Band Pull-Apart com Elástico",
+            id: "f4-crucifixo-inverso",
+            name: "Crucifixo Inverso com Halteres",
             sets: 3,
             reps: "20",
             rest: "45seg",
-            weight: "elástico médio/forte",
-            tip: "Postura e ombros saudáveis.",
+            weight: "4-8 kg halteres",
+            tip: "Curvada pra frente, braços abertos. Escápulas juntas no topo.",
             videoKey: "band-pull-apart",
             unilateral: false,
             startLeft: false
@@ -2861,7 +2861,7 @@ const WORKOUTS = {
             sets: 3,
             reps: "20",
             rest: "45seg",
-            weight: "elástico / 3-8 kg caneleira",
+            weight: "3-8 kg caneleira",
             tip: "Sempre comece pelo lado esquerdo.",
             videoKey: "abducao-deitada",
             unilateral: false,
@@ -2908,8 +2908,8 @@ const WARMUP_LOWER = [
   { name: "Leg swing frente/trás", desc: "Pêndulo solto — não forçar", time: "15x cada perna" },
   { name: "Leg swing lateral", desc: "Plano lateral — abre o quadril", time: "15x cada perna" },
   { name: "Agachamento com pausa no fundo", desc: "3s no fundo, mobilidade de tornozelo e quadril", time: "10 reps" },
-  { name: "Clamshell esquerdo com elástico ⭐", desc: "Ativa o glúteo esq antes do treino — crítico", time: "2x15" },
-  { name: "Clamshell bilateral com elástico", desc: "Dois lados, ativa glúteo médio", time: "2x20" },
+  { name: "Clamshell esquerdo com caneleira ⭐", desc: "Ativa o glúteo esq antes do treino — crítico. Caneleira no joelho", time: "2x15" },
+  { name: "Clamshell bilateral com caneleira", desc: "Dois lados, ativa glúteo médio. Caneleira no joelho", time: "2x20" },
   { name: "Cat-cow no quadrupede", desc: "Mobilidade lombar — arquear e curvar devagar", time: "10 lentos" },
 ];
 
@@ -2921,7 +2921,7 @@ const WARMUP_UPPER = [
   { name: "Jumping jack ou pular corda", desc: "Elevar frequência cardíaca base", time: "2 min" },
   { name: "Círculos de ombro", desc: "Braços estendidos, amplos — frente e trás", time: "15x cada direção" },
   { name: "T-spine rotation", desc: "Deitado de lado, joelhos dobrados: abrir o braço pra trás", time: "10x cada lado" },
-  { name: "Band pull-apart (ou toalha)", desc: "Elástico na frente, abrir até tocar o peito por trás", time: "2x15" },
+  { name: "Crucifixo inverso leve (halteres ou garrafas)", desc: "Curvada pra frente, abrir braços pros lados. Escápulas juntas", time: "2x15" },
   { name: "Supino com peso leve (50%)", desc: "Aquecimento específico do padrão de empurrar", time: "2x15" },
 ];
 
@@ -2948,7 +2948,7 @@ const COOLDOWN_UPPER = [
 const GLUTE_FIX_PROTOCOL = {
   explanation: "Desequilíbrio de glúteo é quase universal em sedentários. O lado dominante assume o trabalho. O esquerdo vai ficando dormido. É um problema de conexão nervo-músculo, não de tamanho.",
   daily_exercises: [
-    { name: "Clamshell com elástico — ESQUERDO", sets: "3x20 lentos", desc: "Deitado de lado, elástico nos joelhos. Abrir e fechar como concha. Só o esquerdo neste bloco." },
+    { name: "Clamshell com caneleira — ESQUERDO", sets: "3x20 lentos", desc: "Deitado de lado, caneleira no joelho. Abrir e fechar como concha. Só o esquerdo neste bloco." },
     { name: "Glute bridge unilateral — ESQUERDO", sets: "3x15 com pausa 3s", desc: "Pé esquerdo no chão, direito suspenso. Elevar quadril, SEGURAR 3s no topo." },
     { name: "Donkey kick — ESQUERDO", sets: "3x20", desc: "Quadrupede, chutar o pé esquerdo para cima e trás. Joelho dobrado 90°." },
     { name: "Side-lying abduction — ESQUERDO", sets: "3x20 lentos", desc: "Deitado de lado, elevar a perna esquerda estendida. Segurar 1s no topo." },
@@ -3041,7 +3041,7 @@ const EXERCISE_TECHNIQUE = [
     alerts: [
       { signal: "Dor ou tensão na lombar baixa", fix: "Glúteo não ativou. Parar, fazer 10 glute bridges unilaterais esq, recomeçar." },
       { signal: "Tensão no quadríceps", fix: "Pés muito à frente ou banco muito baixo." },
-      { signal: "Pontada no joelho", fix: "Joelho caindo pra dentro. Usar elástico." },
+      { signal: "Pontada no joelho", fix: "Joelho caindo pra dentro. Foque em empurrar joelhos pra fora." },
       { signal: "Pescoço tenso", fix: "Banco na posição errada — deve estar nas escápulas." }
     ]
   },
@@ -3049,7 +3049,7 @@ const EXERCISE_TECHNIQUE = [
     exercise: "Agachamento", subtitle: "Coxa + Glúteo",
     tips: ["Pés na largura dos ombros ou um pouco mais, levemente abertos (15-30°)","Descer como se fosse sentar numa cadeira atrás — não deixar os joelhos passarem muito à frente dos pés","Lombar neutra durante todo o movimento — nem arqueada demais, nem curvada","Olhar levemente pra frente e pra cima, não direto para baixo","Descer até coxa paralela ao chão no mínimo — agachamento raso não ativa o glúteo","Subir empurrando o chão, não pensando em joelhos — muda o recrutamento muscular"],
     alerts: [
-      { signal: "Joelhos indo pra dentro na subida (valgismo)", fix: "Glúteo fraco ou mobilidade de tornozelo ruim. Reduzir carga, usar elástico nos joelhos para treinar o padrão." },
+      { signal: "Joelhos indo pra dentro na subida (valgismo)", fix: "Glúteo fraco ou mobilidade de tornozelo ruim. Reduzir carga, foque em empurrar joelhos pra fora conscientemente." },
       { signal: "Lombar 'arredondando' no fundo", fix: "Falta de mobilidade de quadril ou carga alta demais. Reduzir peso, trabalhar mobilidade antes." },
       { signal: "Elevação de calcanhar", fix: "Mobilidade de tornozelo insuficiente. Agachar com calcanhar em pequena elevação temporariamente." },
       { signal: "Dor anterior no joelho", fix: "Carga alta demais ou movimento muito à frente. Recuar o padrão." }
