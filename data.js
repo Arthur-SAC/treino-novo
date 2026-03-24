@@ -2423,6 +2423,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-90 kg",
             tip: "Aqui é onde a bunda cresce de verdade.",
+            narrative: "Ombros apoiados no banco, barra sobre o quadril com proteção. Empurre o chão com os pés, eleve o quadril até ficar paralelo ao tronco — segure 1 segundo no topo, espremendo forte. Aumente o peso toda semana que conseguir fechar as 10 reps limpas.",
+            why: "O hip thrust com barra pesada é o principal motor do crescimento glúteo — é aqui, na fase 3, que o volume e a carga se combinam para moldar a curva amazona de verdade.",
             videoKey: "hip-thrust",
             unilateral: false,
             startLeft: false
@@ -2435,6 +2437,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "15-30 kg",
             tip: "Continua o extra do lado fraco.",
+            narrative: "Mesma posição do hip thrust bilateral, mas com uma perna dobrada no ar. Foque totalmente no glúteo esquerdo — empurre o quadril alto, segure 1 segundo no topo e desça com controle. Se sentir o direito tentando compensar, diminua o peso.",
+            why: "O lado esquerdo mais fraco precisa de estímulo extra e isolado para igualar o direito — assimetria corrigida significa silhueta mais equilibrada e glúteo maior em ambos os lados.",
             videoKey: "hip-thrust",
             unilateral: true,
             startLeft: true
@@ -2447,6 +2451,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "40-60 kg",
             tip: "Empurre o quadril pra trás, sinta atrás da coxa.",
+            narrative: "Pés na largura dos quadris, barra na frente das coxas. Empurre o quadril pra trás enquanto a barra desce rente às pernas — sem curvar a lombar. Sinta o alongamento no isquiotibial e no glúteo baixo, depois contraia o posterior para subir. Desça em 3 segundos, suba em 1.",
+            why: "O RDL com barra permite carga muito maior que o haltere, recrutando mais fibras do posterior e do glúteo baixo — essencial para dar volume e arredondamento na parte de baixo da bunda.",
             videoKey: "stiff",
             unilateral: false,
             startLeft: false
@@ -2459,6 +2465,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "30-50 kg",
             tip: "Volume na parte de baixo da bunda.",
+            narrative: "Halteres à frente do corpo, pernas quase estendidas com leve flexão nos joelhos. Incline o tronco à frente empurrando o quadril pra trás — os halteres descem rente às pernas até sentir forte alongamento. Contraia o glúteo e o posterior para subir. Aumente o peso quando as 10 reps ficarem fáceis.",
+            why: "Com carga pesada nessa fase, o stiff desenvolve o glúteo baixo e o posterior da coxa — o par que cria aquela curva sensual na junção bunda-coxa.",
             videoKey: "stiff",
             unilateral: false,
             startLeft: false
@@ -2471,11 +2479,13 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "25-45 kg",
             tip: "Drop set: terminar o último sem descanso, peso menor.",
+            narrative: "Sentada na máquina, costas encostadas, empurre os joelhos pra fora devagar — 2 segundos pra abrir, 2 segundos pra fechar. No último set: faça as 12 reps, reduza o peso imediatamente sem descanso e vá até a falha. Sinta o glúteo médio queimar.",
+            why: "O drop set força o glúteo médio além do limite normal — esse músculo é o responsável pela projeção lateral da bunda, dando aquela forma redonda e cheia vista de trás.",
             videoKey: "abdutora",
             unilateral: false,
             startLeft: false
           },
-          { id: "f3-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f3-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", narrative: "Em pé ou sentada, expire todo o ar dos pulmões. Com os pulmões vazios, puxe o umbigo em direção à coluna e para cima — como se quisesse fazer o abdômen desaparecer. Segure sem respirar pelos 30 segundos. Solte devagar e respire. Cada série fica mais fácil.", why: "O vacuum contrai o transverso do abdômen — o músculo mais profundo da barriga — comprimindo a cintura de dentro para fora e acentuando o contraste cintura-quadril da silhueta amazona.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Upper": {
@@ -2489,6 +2499,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "14-22 kg cada",
             tip: "Peito alto, cotovelos 45 graus.",
+            narrative: "Banco inclinado a 30-45 graus, halteres na altura do peito. Cotovelos abertos a 45° do tronco — não 90°. Empurre os halteres pra cima e levemente pra dentro ao mesmo tempo, expirando na subida. Desça controlado em 2 segundos, sinta o alongamento no peitoral superior.",
+            why: "O peitoral alto elevado cria a aparência de decote cheio e levantado, complementando a forma curvilínea — o upper body da amazona não é grande, é bem moldado.",
             videoKey: "supino-inclinado",
             unilateral: false,
             startLeft: false
@@ -2501,6 +2513,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "14-22 kg cada",
             tip: "Abre as costas, cria a forma ampulheta.",
+            narrative: "Tronco inclinado a 45°, costas neutras, halteres pendentes. Puxe os cotovelos para trás e para cima, espremendo as escápulas no topo — pense em apertar um lápis entre as omoplatas. Desça em 2 segundos sem deixar os ombros caírem à frente. Aumente o peso a cada semana que completar as reps.",
+            why: "Costas largas e bem definidas criam a ilusão óptica de cintura mais fina — é o V que faz o X da ampulheta aparecer. Aqui você constrói a parte de cima da silhueta amazona.",
             videoKey: "remada-curvada",
             unilateral: false,
             startLeft: false
@@ -2513,6 +2527,8 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "7-12 kg cada",
             tip: "Ombros arredondados = cintura parece mais fina.",
+            narrative: "Halteres ao lado do corpo, cotovelos levemente dobrados. Eleve os braços pelos lados até a altura dos ombros — sem balançar o tronco. Desça em 2 segundos resistindo a gravidade. A sensação certa é de queimar no lado do ombro, não no trapézio.",
+            why: "Ombros arredondados e definidos ampliam visualmente o topo do corpo, fazendo a cintura parecer mais estreita por contraste — um dos pilares geométricos da silhueta ampulheta.",
             videoKey: "elevacao-lateral",
             unilateral: false,
             startLeft: false
@@ -2525,6 +2541,8 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "3-6 kg halteres",
             tip: "Curvada pra frente, braços abertos. Escápulas juntas no topo.",
+            narrative: "Tronco inclinado a 90°, halteres pendentes, cotovelos levemente dobrados. Abra os braços pelos lados como asas até a altura dos ombros — espreme as escápulas no topo. Controle a descida em 2 segundos. O peso aqui é leve para manter o movimento limpo nas 20 reps.",
+            why: "O deltoide posterior e o rombóide desenvolvidos melhoram a postura, criam profundidade visual nas costas e fazem os ombros parecerem mais abertos — emoldurando o decote com elegância.",
             videoKey: "band-pull-apart",
             unilateral: false,
             startLeft: false
@@ -2537,11 +2555,13 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "10-16 kg cada",
             tip: "Braços levemente dobrados, abrir lento.",
+            narrative: "Deitada no banco, halteres acima do peito, cotovelos com leve flexão fixa. Abra os braços em arco largo e controlado até sentir o alongamento no peitoral — não deixe os cotovelos passarem do nível do banco. Contraia o peito para fechar, expirando no topo. Pense em abraçar uma grande árvore.",
+            why: "O crucifixo esculpe a largura e o arredondamento do peitoral, contribuindo para o decote cheio e o peito alto que completam a forma curvilínea superior.",
             videoKey: "crucifixo",
             unilateral: false,
             startLeft: false
           },
-          { id: "f3-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f3-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", narrative: "Em pé ou sentada, expire todo o ar dos pulmões. Com os pulmões vazios, puxe o umbigo em direção à coluna e para cima — como se quisesse fazer o abdômen desaparecer. Segure sem respirar pelos 30 segundos. Solte devagar e respire. Cada série fica mais fácil.", why: "O vacuum contrai o transverso do abdômen — o músculo mais profundo da barriga — comprimindo a cintura de dentro para fora e acentuando o contraste cintura-quadril da silhueta amazona.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Lower B": {
@@ -2555,6 +2575,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-80 kg",
             tip: "Pés largura dos ombros, descer até coxa paralela.",
+            narrative: "Barra apoiada no trapézio, pés na largura dos ombros ou um pouco mais abertos com pontas levemente viradas. Empurre os joelhos pra fora ao descer, desça até a coxa paralela ao chão em 3 segundos. Suba explodindo pelos calcanhares. Mantenha o peito alto e a lombar neutra durante todo o movimento.",
+            why: "O agachamento com barra pesada recruta glúteo, quadríceps e isquiotibiais ao mesmo tempo — é o exercício que mais adiciona volume geral à parte inferior, construindo as coxas grossas da amazona.",
             videoKey: "agachamento",
             unilateral: false,
             startLeft: false
@@ -2567,6 +2589,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "14-22 kg cada",
             tip: "Pé traseiro no banco, foque no glúteo ao subir.",
+            narrative: "Pé traseiro no banco, perna da frente bem avançada para que o joelho não ultrapasse o pé ao descer. Desça até a coxa da frente ficar paralela, depois empurre pelo calcanhar para subir — espremendo o glúteo no topo. Sempre comece pelo lado esquerdo com atenção redobrada.",
+            why: "O búlgaro isola cada glúteo separadamente com carga alta, permitindo corrigir a assimetria esquerda com precisão — além de construir as coxas definidas e o glúteo projetado da silhueta amazona.",
             videoKey: "bulgarian-split-squat",
             unilateral: true,
             startLeft: true
@@ -2579,6 +2603,8 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "25-50 kg",
             tip: "Preenche a coxa internamente.",
+            narrative: "Sentada na máquina, costas bem apoiadas, abra os apoios até o limite confortável. Feche as pernas com força controlada — sem bater — e segure 1 segundo com as coxas juntas. Abra em 2 segundos resistindo. Sinta o interno de coxa trabalhar em cada rep.",
+            why: "A adução preenche o interno da coxa, eliminando o espaço entre as coxas e criando aquela aparência de pernas grossas e firmes — um dos traços mais marcantes da silhueta amazona.",
             videoKey: "adutora",
             unilateral: false,
             startLeft: false
@@ -2591,6 +2617,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-80 kg barra",
             tip: "Interno de coxa — coxas grossas.",
+            narrative: "Pés bem afastados (mais que ombros), pontas voltadas para fora a 45°. Desça com os joelhos seguindo a direção dos pés, peito ereto. Suba explodindo pela pressão dos calcanhares e contraindo o interno de coxa no topo. A barra fica entre as pernas — barra traseira ou haltere ao centro.",
+            why: "O sumo pesado é o principal construtor do interno de coxa — ativando o adutor magno e os glúteos ao mesmo tempo. Coxas grossas e sólidas são marca registrada da amazona.",
             videoKey: "sumo-squat",
             unilateral: false,
             startLeft: false
@@ -2603,11 +2631,13 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "10-18 kg cada",
             tip: "Substitui cadeira extensora. Quadríceps em foco.",
+            narrative: "Pé traseiro no banco, tronco mais ereto que na variação glútea — isso transfere o foco para o quadríceps da perna da frente. Desça em 2 segundos, suba em 1 explosivo. Com peso mais leve e mais reps, você vai sentir o músculo anterior da coxa queimar nas últimas reps.",
+            why: "O quadríceps desenvolvido encorpa a frente da coxa e dá definição na lateral — compondo junto com o glúteo e o posterior a coxa volumosa e torneada da amazona.",
             videoKey: "bulgarian-split-squat",
             unilateral: false,
             startLeft: false
           },
-          { id: "f3-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f3-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", narrative: "Em pé ou sentada, expire todo o ar dos pulmões. Com os pulmões vazios, puxe o umbigo em direção à coluna e para cima — como se quisesse fazer o abdômen desaparecer. Segure sem respirar pelos 30 segundos. Solte devagar e respire. Cada série fica mais fácil.", why: "O vacuum contrai o transverso do abdômen — o músculo mais profundo da barriga — comprimindo a cintura de dentro para fora e acentuando o contraste cintura-quadril da silhueta amazona.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Gluteo Isolado": {
@@ -2621,6 +2651,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-80 kg",
             tip: "O exercício que mais recruta glúteo e posterior junto.",
+            narrative: "Pés na largura dos quadris, barra sobre o meio do pé. Agache e segure a barra — uma mão pronada, outra supinada ou ambas pronadas. Barra rente à canela, costas neutras, peito aberto. Empurre o chão com os pés, estenda quadril e joelho juntos. A barra sobe rente ao corpo até você ficar em pé. Não curvar a lombar em nenhum momento.",
+            why: "O terra recruta glúteo máximo, isquiotibiais, lombar e core em um único movimento — nenhum exercício gera tanto estímulo simultâneo para a cadeia posterior inteira, que é o motor da forma amazona.",
             videoKey: "deadlift",
             unilateral: false,
             startLeft: false
@@ -2633,6 +2665,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-80 kg",
             tip: "A pausa isométrica constrói mente-músculo.",
+            narrative: "Execução igual ao hip thrust bilateral, mas no topo você para — 2 segundos com quadril elevado, glúteo completamente contraído, respiração controlada. Só então desce. A pausa parece pequena mas muda completamente a sensação do exercício: você VAI sentir.",
+            why: "A contração isométrica no topo aumenta o tempo sob tensão e fortalece a conexão mente-músculo com o glúteo — fundamental para você aprender a ativar o glúteo esquerdo de forma consciente.",
             videoKey: "hip-thrust",
             unilateral: false,
             startLeft: false
@@ -2645,6 +2679,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "20-40 kg",
             tip: "Substitui leg curl. Posterior da coxa em foco.",
+            narrative: "Halteres à frente, pernas quase estendidas. Incline o tronco e empurre o quadril pra trás em 3 segundos — desça até sentir o alongamento no isquiotibial. Suba em 1 segundo contraindo o posterior e o glúteo. Nessa variação com mais reps, o foco é queimar o posterior da coxa.",
+            why: "O isquiotibial bem desenvolvido preenche a parte de trás da coxa, criando aquela curva contínua e preenchida que vai do glúteo até atrás do joelho — detalhe que separa a coxa comum da coxa amazona.",
             videoKey: "stiff",
             unilateral: false,
             startLeft: false
@@ -2657,11 +2693,13 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "3-5 kg caneleira",
             tip: "Sempre comece pelo lado esquerdo.",
+            narrative: "Em pé, apoie-se em uma parede ou banco com uma mão. Com a caneleira na perna de trabalho, abra a perna pelo lado — elevando devagar até sentir o glúteo médio contrair. Segure 1 segundo no topo e desça com controle. Sempre comece pelo lado esquerdo para treiná-lo sem fadiga acumulada.",
+            why: "A abdução em pé isola o glúteo médio com foco especial no lado esquerdo — esse músculo é o responsável pelo arredondamento lateral da bunda e pela estabilidade que permite levantar pesos maiores nos outros exercícios.",
             videoKey: "abducao-pe",
             unilateral: false,
             startLeft: true
           },
-          { id: "f3-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f3-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", narrative: "Em pé ou sentada, expire todo o ar dos pulmões. Com os pulmões vazios, puxe o umbigo em direção à coluna e para cima — como se quisesse fazer o abdômen desaparecer. Segure sem respirar pelos 30 segundos. Solte devagar e respire. Cada série fica mais fácil.", why: "O vacuum contrai o transverso do abdômen — o músculo mais profundo da barriga — comprimindo a cintura de dentro para fora e acentuando o contraste cintura-quadril da silhueta amazona.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       }
     }
@@ -2685,6 +2723,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-90 kg",
             tip: "Manter carga da fase 3. Unilateral esquerdo continua pra sempre.",
+            narrative: "Você já domina esse movimento. Barra pesada, ombros no banco, quadril sobe alto com força total — 1 segundo de pausa no topo espremendo o glúteo, desce controlado. Mantenha a carga conquistada na Fase 3 e continue progredindo quando possível. Esse é o seu exercício-rei.",
+            why: "O hip thrust com barra é a fundação permanente da silhueta amazona — você não abandona, você mantém e refina. Cada repetição preserva o glúteo construído com meses de trabalho duro.",
             videoKey: "hip-thrust",
             unilateral: false,
             startLeft: false
@@ -2697,6 +2737,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "15-30 kg",
             tip: "Continua o extra do lado fraco.",
+            narrative: "Esse exercício não tem fim de vigência. Perna esquerda trabalhando sozinha, glúteo esquerdo no comando. Empurre o quadril com intenção — sinta a diferença entre os dois lados e celebre cada vez que o esquerdo parecer mais forte que na semana anterior.",
+            why: "A manutenção do trabalho unilateral esquerdo garante que a assimetria não volte — dois glúteos igualmente desenvolvidos são o que cria aquela simetria irresistível vista de trás.",
             videoKey: "hip-thrust",
             unilateral: true,
             startLeft: true
@@ -2709,6 +2751,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "40-60 kg",
             tip: "Empurre o quadril pra trás, sinta atrás da coxa.",
+            narrative: "Você sabe exatamente o que fazer: barra na frente das coxas, quadril empurrando pra trás, lombar neutra. Desça em 3 segundos até sentir o isquiotibial no limite do conforto, suba em 1. Seu corpo já memorizou esse padrão — agora é questão de executar com maestria cada rep.",
+            why: "O RDL mantém o comprimento e o volume do posterior da coxa e do glúteo baixo que você construiu — preservando a curva contínua de baixo da bunda que é marca da amazona.",
             videoKey: "stiff",
             unilateral: false,
             startLeft: false
@@ -2721,6 +2765,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "25-45 kg",
             tip: "Lento, sentir queimar.",
+            narrative: "Sentada na máquina, costas apoiadas, carga mantida da Fase 3. Abra devagar — 2 segundos — segure 1 segundo no limite externo, feche em 2 segundos. Não bata os pesos. Você já sabe onde sentir esse exercício: no glúteo médio, na lateral do quadril.",
+            why: "Manter a abdução pesada preserva o arredondamento lateral do glúteo conquistado — essa projeção lateral é o que cria aquela largura de quadril vista de frente e a curva perfeita de lado.",
             videoKey: "abdutora",
             unilateral: false,
             startLeft: false
@@ -2733,11 +2779,13 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-80 kg",
             tip: "Quadril pra trás, barra rente ao corpo.",
+            narrative: "Barra sobre o meio do pé, costas neutras, peito aberto. Você já levantou muito peso — agora cada rep é perfeita: empurre o chão, abra o quadril, suba controlado com a barra colada ao corpo. Oito reps limpas valem mais que dez feias. Esse é o seu poder em forma de exercício.",
+            why: "O terra mantém o recrutamento total da cadeia posterior — glúteo, isquiotibial, lombar — preservando toda a musculatura que sustenta e projeta a forma amazona construída ao longo de quase um ano.",
             videoKey: "deadlift",
             unilateral: false,
             startLeft: false
           },
-          { id: "f4-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f4-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", narrative: "Expire tudo. Pulmões vazios — puxe o umbigo para a coluna e para cima, como se fosse encolher. Segure 30 segundos. Você já sabe fazer isso bem — agora é manter o hábito que define a cintura para sempre.", why: "O vacuum é a prática de manutenção mais eficiente para a cintura: nenhum exercício trabalha o transverso com tanta especificidade, mantendo a compressão interna que preserva o contraste cintura-quadril.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Upper": {
@@ -2751,6 +2799,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "14-22 kg cada",
             tip: "Peito alto, cotovelos 45 graus.",
+            narrative: "Banco a 30-45 graus, halteres pesados, cotovelos a 45° do tronco. Seu peitoral já sabe o caminho — empurre para cima e para dentro, expire. Desça controlado, sinta o alongamento. Dez reps limpas e poderosas. Você carrega isso com facilidade agora.",
+            why: "Manter o peitoral desenvolvido preserva a forma e o levantamento do peito — um componente sutil mas importante da silhueta feminina confiante que você construiu.",
             videoKey: "supino-inclinado",
             unilateral: false,
             startLeft: false
@@ -2763,6 +2813,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "14-22 kg cada",
             tip: "Retração escapular completa.",
+            narrative: "Tronco a 45°, halteres pesados, costas neutras. Puxe os cotovelos pra trás com força — retração escapular completa no topo. Você domina esse padrão. Cada rep é intencional: puxar, espremer, descer com controle. Suas costas são amplas e fortes agora.",
+            why: "As costas largas e densas que você construiu precisam de estímulo contínuo para se manter — e elas são o que mantém a ampulheta perfeita quando olhada de frente ou de costas.",
             videoKey: "remada-curvada",
             unilateral: false,
             startLeft: false
@@ -2775,6 +2827,8 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "7-12 kg cada",
             tip: "Ombros arredondados = cintura parece mais fina.",
+            narrative: "Halteres ao lado, cotovelos levemente dobrados. Eleve pelos lados até os ombros — sem jogar o tronco. Quinze reps controladas, sentindo o deltoide médio em cada uma. Você já tem ombros arredondados e bonitos — agora é questão de manter.",
+            why: "Os ombros arredondados são peça permanente da silhueta: eles definem a largura de cima e fazem a cintura parecer mais estreita — a geometria da ampulheta depende deles.",
             videoKey: "elevacao-lateral",
             unilateral: false,
             startLeft: false
@@ -2787,6 +2841,8 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "4-8 kg halteres",
             tip: "Curvada pra frente, braços abertos. Escápulas juntas no topo.",
+            narrative: "Tronco inclinado a 90°, halteres pendentes, cotovelos ligeiramente dobrados. Abra os braços em arco até os ombros — escápulas se encontram no topo. Desça em 2 segundos. Vinte reps fluidas. Seu deltoide posterior já é forte e você sente exatamente onde o exercício chega.",
+            why: "O deltoide posterior e os rombóides mantidos em bom estado garantem a postura ereta e o porte altivo que completa a presença física da amazona — corpo forte e postura de quem sabe que é poderosa.",
             videoKey: "band-pull-apart",
             unilateral: false,
             startLeft: false
@@ -2799,11 +2855,13 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "10-16 kg cada",
             tip: "Braços levemente dobrados, abrir lento.",
+            narrative: "Deitada no banco, cotovelos com leve flexão fixa, halteres pesados. Abra em arco largo e controlado — 3 segundos descendo — sinta o peitoral alongar. Feche expirando forte. Doze reps perfeitas. Você carrega esses halteres com a facilidade que levaria meses para a você de um ano atrás.",
+            why: "O peitoral bem mantido sustenta o decote cheio e o peito alto — detalhes que compõem a feminilidade confiante da silhueta que você construiu e agora celebra.",
             videoKey: "crucifixo",
             unilateral: false,
             startLeft: false
           },
-          { id: "f4-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f4-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", narrative: "Expire tudo. Pulmões vazios — puxe o umbigo para a coluna e para cima, como se fosse encolher. Segure 30 segundos. Você já sabe fazer isso bem — agora é manter o hábito que define a cintura para sempre.", why: "O vacuum é a prática de manutenção mais eficiente para a cintura: nenhum exercício trabalha o transverso com tanta especificidade, mantendo a compressão interna que preserva o contraste cintura-quadril.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Lower B": {
@@ -2817,6 +2875,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-80 kg",
             tip: "Pés largura dos ombros, descer até coxa paralela.",
+            narrative: "Barra no trapézio, pés largos, peito ereto. Você já agachou com esse peso muitas vezes — cada rep é uma confirmação do que você construiu. Desça até a coxa paralela, empurre pelo calcanhar, suba com o quadril abrindo. Dez reps fortes.",
+            why: "O agachamento com barra mantém o volume geral da coxa e do glúteo — a base de todo o shape inferior. Sem ele, a estrutura construída começa a perder definição.",
             videoKey: "agachamento",
             unilateral: false,
             startLeft: false
@@ -2829,6 +2889,8 @@ const WORKOUTS = {
             rest: "60seg",
             weight: "14-22 kg cada",
             tip: "Pé traseiro no banco, foque no glúteo ao subir.",
+            narrative: "Pé traseiro no banco, halteres pesados nas mãos. Sempre começa pelo esquerdo — perna da frente bem avançada. Desce com controle, sobe explodindo pelo calcanhar. Você já não precisa pensar muito no equilíbrio: seu corpo sabe. Agora é só executar com potência.",
+            why: "O búlgaro mantém a força e o volume unilateral do glúteo e da coxa — e continuar priorizando o esquerdo garante que a simetria conquistada permaneça pelo resto da vida.",
             videoKey: "bulgarian-split-squat",
             unilateral: true,
             startLeft: true
@@ -2841,6 +2903,8 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "25-50 kg",
             tip: "Preenche a coxa internamente.",
+            narrative: "Sentada na máquina, carga conquistada. Abra em 2 segundos, feche com força em 1 — 1 segundo de pausa com as coxas juntas. Você sente o interno da coxa trabalhar em cada rep. Quinze reps completas com carga respeitável: isso é força real.",
+            why: "O interno de coxa preenchido e firme é manutenção ativa da aparência de pernas grossas e sólidas — sem ele, esse volume vai sendo perdido mesmo mantendo os outros treinos.",
             videoKey: "adutora",
             unilateral: false,
             startLeft: false
@@ -2853,6 +2917,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "50-80 kg barra",
             tip: "Interno de coxa — coxas grossas.",
+            narrative: "Pés bem abertos, pontas para fora, barra no centro. Desça com os joelhos seguindo os pés — coxa paralela ao chão. Suba contraindo o interno de coxa e o glúteo juntos. Você levanta esse peso com confiança agora. Dez reps sólidas.",
+            why: "O sumo pesado é a âncora do interno de coxa — sem ele, a espessura das coxas construída ao longo de quase um ano começa a se dissipar. Manter é também uma conquista.",
             videoKey: "sumo-squat",
             unilateral: false,
             startLeft: false
@@ -2865,11 +2931,13 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "60-100 kg",
             tip: "Ativa glúteo mais que quadríceps.",
+            narrative: "Pés na parte de cima da plataforma, afastados na largura dos ombros ou um pouco mais. Desça a plataforma até as coxas ficarem paralelas ou um pouco além — sem deixar a lombar sair do banco. Empurre pelo calcanhar e pela parte de cima do pé. Com essa posição de pé, você sente o glúteo dominar.",
+            why: "O leg press com pés altos é uma das poucas formas de carregar muito peso com foco direto no glúteo — uma adição poderosa à fase de manutenção que permite progressão de carga contínua sem tanto estresse na coluna.",
             videoKey: "leg-press",
             unilateral: false,
             startLeft: false
           },
-          { id: "f4-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f4-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", narrative: "Expire tudo. Pulmões vazios — puxe o umbigo para a coluna e para cima, como se fosse encolher. Segure 30 segundos. Você já sabe fazer isso bem — agora é manter o hábito que define a cintura para sempre.", why: "O vacuum é a prática de manutenção mais eficiente para a cintura: nenhum exercício trabalha o transverso com tanta especificidade, mantendo a compressão interna que preserva o contraste cintura-quadril.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       },
       "Gluteo Isolado": {
@@ -2883,6 +2951,8 @@ const WORKOUTS = {
             rest: "90seg",
             weight: "30-50 kg",
             tip: "Volume na parte de baixo da bunda.",
+            narrative: "Halteres pesados à frente, pernas quase estendidas. Empurre o quadril pra trás em 3 segundos — sinta o alongamento do isquiotibial e do glúteo baixo. Suba contraindo tudo em 1 segundo. Você executa isso com perfeição agora: a técnica está no músculo, não na memória.",
+            why: "O stiff mantém o volume e o arredondamento da parte inferior do glúteo — o detalhe que cria a curvatura na junção bunda-coxa, uma das assinaturas visuais mais marcantes da silhueta amazona.",
             videoKey: "stiff",
             unilateral: false,
             startLeft: false
@@ -2895,6 +2965,8 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "3-8 kg caneleira",
             tip: "Extensão completa de quadril.",
+            narrative: "Em quatro apoios, caneleira na perna de trabalho. Comece pelo esquerdo — estenda a perna para trás e para cima, com o joelho levemente dobrado, espremendo o glúteo no topo. Desça controlado. Não balanço, não compensação lombar. Você sabe isolar o glúteo agora — use essa habilidade.",
+            why: "O kickback isola o glúteo máximo no pico da extensão do quadril — um estímulo que complementa os compostos pesados e refina o shape do glúteo, mantendo ele firme e projetado.",
             videoKey: "kickback-polia",
             unilateral: true,
             startLeft: true
@@ -2907,6 +2979,8 @@ const WORKOUTS = {
             rest: "45seg",
             weight: "3-8 kg caneleira",
             tip: "Sempre comece pelo lado esquerdo.",
+            narrative: "Deitada de lado, caneleira na perna de cima. Sempre começa pelo esquerdo. Eleve a perna devagar — 2 segundos subindo — segure 1 segundo no topo e desça com controle. O glúteo médio já conhece esse movimento muito bem: vinte reps fluidas e intensas.",
+            why: "A abdução deitada lateral mantém o glúteo médio ativo e arredondado, preservando a projeção lateral da bunda — o que faz o quadril parecer largo e curvilíneo visto de frente.",
             videoKey: "abducao-deitada",
             unilateral: false,
             startLeft: true
@@ -2919,6 +2993,8 @@ const WORKOUTS = {
             rest: "30seg",
             weight: "0 kg",
             tip: "Alternar prancha frontal e lateral.",
+            narrative: "Alterne entre prancha frontal e prancha lateral a cada set. Na frontal: antebraços no chão, corpo reto, abdômen contraído — não deixe o quadril subir nem afundar. Na lateral: um antebraço, empilhe os pés, mantenha o quadril alto. Quarenta e cinco segundos de tensão controlada.",
+            why: "O core forte não é só estético — ele estabiliza cada levantamento pesado que você faz e mantém a postura que projeta o glúteo e a cintura corretamente em qualquer posição.",
             videoKey: "prancha",
             unilateral: false,
             startLeft: false
@@ -2931,11 +3007,13 @@ const WORKOUTS = {
             rest: "0seg",
             weight: "0 kg",
             tip: "Inclinação 8-12%, velocidade 5-6km/h.",
+            narrative: "Esteira inclinada a 8-12%, velocidade de caminhada rápida entre 5-6 km/h. Mantenha a postura ereta — não se incline para a frente nem segure na barra. Deixe o glúteo e o posterior de coxa trabalharem em cada passada. Vinte a trinta minutos fluidos e poderosos.",
+            why: "O cardio inclinado na manutenção gerencia a composição corporal sem sacrificar músculo — e a inclinação alta garante que o glúteo seja ativado a cada passo, reforçando o trabalho do treino mesmo no cardio.",
             videoKey: "cardio-esteira",
             unilateral: false,
             startLeft: false
           },
-          { id: "f4-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f4-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "30seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", narrative: "Expire tudo. Pulmões vazios — puxe o umbigo para a coluna e para cima, como se fosse encolher. Segure 30 segundos. Você já sabe fazer isso bem — agora é manter o hábito que define a cintura para sempre.", why: "O vacuum é a prática de manutenção mais eficiente para a cintura: nenhum exercício trabalha o transverso com tanta especificidade, mantendo a compressão interna que preserva o contraste cintura-quadril.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
         ]
       }
     }
