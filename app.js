@@ -1377,6 +1377,11 @@ const DayManager = {
       if (intro === 'dynamic:workout_intro') {
         intro = this.getWorkoutIntro();
       }
+      if (intro === 'dynamic:sensual_intro') {
+        var phase = StorageManager.getValue('currentPhase', 1);
+        var sensual = (typeof SENSUAL_BONUS !== 'undefined') ? SENSUAL_BONUS[phase] : null;
+        intro = sensual ? sensual.intro : 'Coloque uma música e mova o corpo!';
+      }
       html += '<p class="day-card-intro">' + intro + '</p>';
     }
 
@@ -1396,6 +1401,12 @@ const DayManager = {
         html += this.renderSkincareSteps(SKINCARE_ROUTINE.morning.steps);
       } else if (cardData.content.steps === 'dynamic:workout') {
         html += this.renderWorkoutSteps();
+      } else if (cardData.content.steps === 'dynamic:sensual_steps') {
+        var phase = StorageManager.getValue('currentPhase', 1);
+        var sensual = (typeof SENSUAL_BONUS !== 'undefined') ? SENSUAL_BONUS[phase] : null;
+        if (sensual && sensual.steps) {
+          html += this.renderSteps(sensual.steps);
+        }
       } else if (Array.isArray(cardData.content.steps)) {
         html += this.renderSteps(cardData.content.steps);
       }
