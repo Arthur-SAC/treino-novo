@@ -2084,7 +2084,9 @@ const WORKOUTS = {
             tip: "Principal do dia. Progressão de carga toda semana.",
             videoKey: "hip-thrust",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Apoie as escápulas no banco, pés apoiados no chão com largura do quadril e joelhos dobrados a 90°. Suba o quadril empurrando forte pelos calcanhares, contraindo os glúteos no topo por 2 segundos — quadril não pode girar. Desça em 3 segundos controlados até quase tocar o chão e suba de novo.",
+            why: "É o exercício que mais recruta glúteo máximo com carga, sendo o motor principal do crescimento da bunda nessa fase. Progressão de peso semanal aqui é o que transforma a silhueta amazona."
           },
           {
             id: "f2-hip-thrust-uni-esq",
@@ -2096,7 +2098,9 @@ const WORKOUTS = {
             tip: "Extra pro lado fraco — começa pelo esquerdo.",
             videoKey: "hip-thrust",
             unilateral: true,
-            startLeft: true
+            startLeft: true,
+            narrative: "Mesma posição do hip thrust normal, mas com a perna direita dobrada e levantada do chão. Empurre o quadril para cima só com a força do glúteo esquerdo, pressionando pelo calcanhar esquerdo. Segure 2 segundos no topo com contração total, depois desça devagar em 3 segundos.",
+            why: "Seu glúteo esquerdo é mais fraco que o direito — essa série extra garante estímulo adicional para corrigir a assimetria e desenvolver os dois lados de forma equilibrada."
           },
           {
             id: "f2-hip-thrust-uni-dir",
@@ -2108,7 +2112,9 @@ const WORKOUTS = {
             tip: "Igual ao esquerdo, nem uma a mais.",
             videoKey: "hip-thrust",
             unilateral: true,
-            startLeft: false
+            startLeft: false,
+            narrative: "Agora troca: levanta a perna esquerda e trabalha só com o glúteo direito. Mesmo peso, mesmo número de reps e mesma qualidade de execução que fez no lado esquerdo. Não compensa nem adiciona reps — o objetivo é igualar o estímulo.",
+            why: "Manter o volume igual nos dois lados evita que o lado direito (mais forte) domine ainda mais. O glúteo esquerdo recebe estímulo extra; o direito, apenas manutenção — e juntos constroem a curva simétrica que define a silhueta amazona."
           },
           {
             id: "f2-rdl",
@@ -2120,7 +2126,9 @@ const WORKOUTS = {
             tip: "Dobrar quadril, não a coluna.",
             videoKey: "stiff",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "De pé, halteres na frente das coxas. Empurre o quadril para trás (como se fosse fechar uma gaveta com o bumbum) mantendo a coluna reta e neutra. Desça os halteres junto às pernas até sentir um alongamento forte na parte de trás da coxa, depois empurre o quadril pra frente para voltar — a força vem do quadril, não das costas.",
+            why: "O RDL estira o glúteo máximo e o isquiotibial em carga, estimulando o crescimento da parte inferior e lateral da bunda — criando o arredondamento que compõe a silhueta amazona na vista lateral."
           },
           {
             id: "f2-stiff",
@@ -2132,7 +2140,9 @@ const WORKOUTS = {
             tip: "Volume na parte de baixo da bunda.",
             videoKey: "stiff",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Pernas levemente flexionadas, halteres descendo pelo trajeto das pernas com a coluna reta. Desça devagar em 3 segundos sentindo o alongamento total na parte de baixo da bunda e atrás da coxa. Na subida, contraia os glúteos e empurre o quadril pra frente — não use as costas.",
+            why: "O stiff trabalha a inserção inferior do glúteo máximo e os isquiotibiais, preenchendo o volume embaixo da bunda e criando aquela curva de transição entre coxa e glúteo que define o formato amazona."
           },
           {
             id: "f2-abducao-maquina",
@@ -2144,9 +2154,11 @@ const WORKOUTS = {
             tip: "Lento, sentir queimar.",
             videoKey: "abdutora",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Sente na máquina com as costas bem apoiadas no encosto e os pés na plataforma. Abra as pernas devagar em 3 segundos até o limite confortável, sinta o glúteo médio e o lateral queimar, e feche em 2 segundos sem bater o peso. Não use impulso — cada rep conta.",
+            why: "O glúteo médio é o músculo lateral da bunda que cria aquela curva de quadril vista de frente. Trabalhar ele com volume alto (20 reps) gera o inchaço lateral que define a proporção amazona."
           },
-          { id: "f2-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f2-vacuum-lower-a", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum", narrative: "Expire todo o ar dos pulmões completamente, depois puxe o umbigo em direção à coluna e para cima, como se quisesse esconder a barriga. Segure por 25 segundos respirando superficialmente pelo nariz. Faça entre os exercícios ou no final do treino.", why: "O vacuum ativa o transverso do abdômen — o músculo mais interno da barriga. Fortalecê-lo aperta a cintura de dentro pra fora, acentuando a curva da ampulheta sem adicionar volume." }
         ]
       },
       "Upper": {
@@ -2162,7 +2174,9 @@ const WORKOUTS = {
             tip: "Peito alto e ombros arredondados.",
             videoKey: "supino-inclinado",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Banco inclinado a 30-45°, halteres na altura do peito com cotovelos a 45° do tronco — não abra demais. Empurre os halteres para cima e levemente para dentro, espremendo o peito no topo por 1 segundo. Desça em 3 segundos controlados sentindo o alongamento no peito.",
+            why: "O supino inclinado desenvolve a parte superior do peito, criando volume no tórax que alarga visualmente a parte de cima do corpo — quanto mais larga a parte superior, mais fina a cintura parece em comparação, formando o V da ampulheta."
           },
           {
             id: "f2-remada-curvada",
@@ -2174,7 +2188,9 @@ const WORKOUTS = {
             tip: "Retração escapular completa.",
             videoKey: "remada-curvada",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Incline o tronco a 45° com a coluna reta, halteres pendurados com os braços estendidos. Puxe os halteres em direção ao abdômen comprimindo as escápulas no topo por 1 segundo — pense em juntar as pontas das omoplatas. Desça devagar em 3 segundos sem curvar as costas.",
+            why: "Costas largas criam a ilusão de cintura mais fina, elemento essencial da proporção ampulheta. A remada desenvolve o latíssimo e o meio das costas, que abrem a silhueta de trás e definem o formato das costas."
           },
           {
             id: "f2-elevacao-lateral",
@@ -2186,7 +2202,9 @@ const WORKOUTS = {
             tip: "Ombros redondos = silhueta mais feminina.",
             videoKey: "elevacao-lateral",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "De pé, halteres leves nas laterais do corpo. Eleve os braços levemente dobrados até a altura dos ombros, como se fosse derramar água de dois copos. Suba em 2 segundos, segure 1 segundo no topo com os deltoides contraídos, e desça em 3 segundos — sem balançar o tronco.",
+            why: "Ombros arredondados e bem definidos alargam a parte superior do corpo, acentuando a curva da cintura e criando a proporção feminina da ampulheta. É o detalhe que muda completamente como a silhueta aparece com uma blusa."
           },
           {
             id: "f2-crucifixo-inverso",
@@ -2198,7 +2216,9 @@ const WORKOUTS = {
             tip: "Curvada pra frente, braços abertos. Escápulas juntas no topo.",
             videoKey: "band-pull-apart",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Incline o tronco a 90° para frente com a coluna reta, halteres pendurados com os cotovelos levemente flexionados. Abra os braços como asas para os lados até sentir as escápulas se juntarem, mantendo 1 segundo no topo. Desça devagar e sem balançar — o peso é leve porque o ângulo é difícil.",
+            why: "Trabalha o deltoide posterior e o meio das costas — músculos que corrigem a postura curvada para frente e criam o bom porte. Uma postura ereta e ombros para trás definem instantaneamente uma silhueta mais feminina e confiante."
           },
           {
             id: "f2-rosca-triceps",
@@ -2210,9 +2230,11 @@ const WORKOUTS = {
             tip: "Bônus de braços.",
             videoKey: "rosca-direta",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Faça 15 reps de rosca direta primeiro — cotovelos fixos no corpo, suba os halteres girando o punho para cima e desça devagar. Sem descanso, vira os halteres e faz 15 reps de tríceps testa deitada — desce os halteres em direção à testa em 3 segundos e estende os braços de volta.",
+            why: "Bíceps e tríceps tonificados completam a proporção do braço feminino. Braços definidos sem volume excessivo reforçam a feminilidade da silhueta amazona e ficam lindos com regata e vestido."
           },
-          { id: "f2-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f2-vacuum-upper", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum", narrative: "Expire todo o ar dos pulmões completamente, depois puxe o umbigo em direção à coluna e para cima, como se quisesse esconder a barriga. Segure por 25 segundos respirando superficialmente pelo nariz. Faça entre os exercícios ou no final do treino.", why: "O vacuum ativa o transverso do abdômen — o músculo mais interno da barriga. Fortalecê-lo aperta a cintura de dentro pra fora, acentuando a curva da ampulheta sem adicionar volume." }
         ]
       },
       "Lower B": {
@@ -2228,7 +2250,9 @@ const WORKOUTS = {
             tip: "Começar pelo lado esquerdo sempre.",
             videoKey: "bulgarian-split-squat",
             unilateral: true,
-            startLeft: true
+            startLeft: true,
+            narrative: "Pé de trás apoiado no banco, pé da frente distante o suficiente para o joelho não passar muito da ponta do pé. Desça em 3 segundos até a coxa ficar paralela ao chão, sentindo o glúteo e a coxa da perna da frente trabalhando. Suba empurrando pelo calcanhar da frente sem travar o joelho no topo. Começa sempre pelo esquerdo.",
+            why: "O búlgaro é um dos exercícios mais eficazes para coxa e glúteo juntos com carga alta — desenvolve a espessura da coxa e o volume lateral do glúteo que cria aquela curva de quadril vista de perfil. Começar pelo esquerdo garante que o lado mais fraco não seja prejudicado pela fadiga."
           },
           {
             id: "f2-agachamento-barra",
@@ -2240,7 +2264,9 @@ const WORKOUTS = {
             tip: "Pés abertos, joelhos seguindo o pé.",
             videoKey: "agachamento",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Pés na largura dos ombros ou um pouco mais abertos, pontas levemente para fora. Desça em 3 segundos como se fosse sentar em uma cadeira baixa, joelhos acompanhando a direção dos pés. Desça até a coxa ficar paralela ao chão, depois sobe empurrando pelos calcanhares e contraindo os glúteos no topo.",
+            why: "O agachamento com carga é o movimento composto que mais gera volume total em coxa e glúteo. Na fase 2, ele sinaliza ao corpo que chegou a hora de crescer — é o exercício-base que garante espessura nas coxas e o arredondamento que define a silhueta amazona."
           },
           {
             id: "f2-sumo",
@@ -2252,7 +2278,9 @@ const WORKOUTS = {
             tip: "Interno de coxa — coxas grossas.",
             videoKey: "sumo-squat",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Pés bem abertos (mais que a largura dos ombros), pontas viradas para fora a 45°. Segure o haltere ou barra no centro do corpo e desça em 3 segundos mantendo o tronco ereto e os joelhos empurrando para fora sobre os pés. Sinta o esticão no interno da coxa. Na subida, pressione os joelhos para fora e aperte os glúteos.",
+            why: "A pegada sumo ativa o adutor e o glúteo médio de forma que o agachamento normal não alcança, preenchendo o interno e o lateral da coxa. Coxas grossas por todos os ângulos são a base da silhueta amazona."
           },
           {
             id: "f2-leg-press",
@@ -2264,7 +2292,9 @@ const WORKOUTS = {
             tip: "Ativa glúteo mais que quadríceps.",
             videoKey: "leg-press",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Coloque os pés na plataforma mais altos e mais abertos que o normal — no limite superior da plataforma, afastados além da largura dos ombros, pontas levemente para fora. Desça a plataforma em 3 segundos deixando os joelhos se abrirem para os lados. Na subida, empurre pelos calcanhares e sinta o glúteo contrair — não trave o joelho.",
+            why: "Com os pés altos e abertos no leg press, o ângulo de força muda completamente e o glúteo e isquiotibial assumem o trabalho em vez do quadríceps. É a maneira de usar a máquina para construir bunda, não só coxa."
           },
           {
             id: "f2-aducao",
@@ -2276,7 +2306,9 @@ const WORKOUTS = {
             tip: "Preenche a coxa internamente.",
             videoKey: "adutora",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Sente na máquina com as costas apoiadas e os pés nas plataformas laterais. Feche as pernas em 2 segundos contraindo o interno da coxa — imagine espremer uma bola entre elas. Abra devagar em 3 segundos sem deixar o peso bater. Não use impulso, controle cada centímetro.",
+            why: "A adutora preenche o interno da coxa, a área que vai da virilha até o joelho. Coxas grossas por dentro criam aquela silhueta de curvas contínuas que define a parte de baixo de uma figura amazona."
           },
           {
             id: "f2-panturrilha",
@@ -2288,9 +2320,11 @@ const WORKOUTS = {
             tip: "Pernas completas.",
             videoKey: "panturrilha",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "De pé com os calcanhares na borda de um degrau ou plataforma, suba na ponta dos pés em 2 segundos até sentir a panturrilha completamente contraída. Segure 1 segundo no topo, depois desça em 3 segundos passando da posição neutra até o alongamento total do calcanhar abaixo do nível do degrau.",
+            why: "Panturrilhas definidas completam a estética das pernas — da coxa até o tornozelo. Elas dão a aparência de pernas mais longas e proporcionais, que é o que finaliza a silhueta amazona de corpo inteiro."
           },
-          { id: "f2-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f2-vacuum-lower-b", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum", narrative: "Expire todo o ar dos pulmões completamente, depois puxe o umbigo em direção à coluna e para cima, como se quisesse esconder a barriga. Segure por 25 segundos respirando superficialmente pelo nariz. Faça entre os exercícios ou no final do treino.", why: "O vacuum ativa o transverso do abdômen — o músculo mais interno da barriga. Fortalecê-lo aperta a cintura de dentro pra fora, acentuando a curva da ampulheta sem adicionar volume." }
         ]
       },
       "Gluteo Isolado": {
@@ -2306,7 +2340,9 @@ const WORKOUTS = {
             tip: "Extensão completa de quadril.",
             videoKey: "kickback-polia",
             unilateral: true,
-            startLeft: true
+            startLeft: true,
+            narrative: "De quatro apoios, joelhos abaixo do quadril e mãos abaixo dos ombros. Mantendo o joelho dobrado a 90°, empurre o calcanhar esquerdo em direção ao teto até a coxa ficar paralela ao chão — nunca além, para não jogar o trabalho para a lombar. Contraia o glúteo esquerdo no topo por 1 segundo e desça devagar. Sempre começa pelo esquerdo.",
+            why: "O kickback de 4 apoios isola o glúteo máximo sem envolver outros músculos, gerando queima localizada e conexão mente-músculo profunda. Começar pelo esquerdo dá a série mais qualificada ao lado mais fraco, corrigindo a assimetria ao longo do tempo."
           },
           {
             id: "f2-hip-thrust-uni-core",
@@ -2318,7 +2354,9 @@ const WORKOUTS = {
             tip: "Esquerdo começa.",
             videoKey: "hip-thrust",
             unilateral: true,
-            startLeft: true
+            startLeft: true,
+            narrative: "Apoie as escápulas no banco, perna de trabalho com o pé no chão e calcanhar pressionando forte, perna de folga dobrada e levantada. Suba o quadril empurrando só com o glúteo da perna de trabalho, contraindo no topo por 2 segundos. Desça em 3 segundos sem tocar o quadril no chão — a contração não para. Esquerdo sempre começa.",
+            why: "Neste dia de isolamento, o hip thrust unilateral aprofunda a conexão mente-músculo com cada glúteo individualmente, garantindo que o esquerdo (mais fraco) receba atenção máxima e comece a fechar o gap em relação ao direito."
           },
           {
             id: "f2-abducao-deitada",
@@ -2330,7 +2368,9 @@ const WORKOUTS = {
             tip: "Sempre comece pelo lado esquerdo.",
             videoKey: "abducao-deitada",
             unilateral: false,
-            startLeft: true
+            startLeft: true,
+            narrative: "Deite de lado com o corpo alinhado, perna de baixo levemente dobrada para equilíbrio. Levante a perna de cima até uns 60° em 2 segundos mantendo o pé em flexão (paralelo ao chão, não apontando para cima). Segure 1 segundo no topo sentindo o glúteo médio queimar, depois desça devagar em 3 segundos. Faz os 20 de um lado, vira e faz do outro — sempre começa pelo esquerdo.",
+            why: "A abdução deitada isola o glúteo médio e o tensor da fáscia lata, os músculos que criam a curva lateral do quadril vista de frente. É a queima que molda o lado da bunda."
           },
           {
             id: "f2-prancha-variacoes",
@@ -2342,7 +2382,9 @@ const WORKOUTS = {
             tip: "Alternar prancha frontal e lateral.",
             videoKey: "prancha",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Alterne entre prancha frontal e prancha lateral a cada série. Na frontal: cotovelos abaixo dos ombros, corpo reto da cabeça ao calcanhar — aperte o abdômen, os glúteos e não deixe o quadril cair nem subir demais. Na lateral: cotovelo abaixo do ombro, quadril elevado, corpo em linha reta, braço livre pode ficar no quadril.",
+            why: "A prancha frontal fortalece o core inteiro (especialmente o transverso) e a lateral ativa os oblíquos — juntos, são os responsáveis pela cintura fina e definida que cria o efeito de ampulheta quando tudo cresce ao redor."
           },
           {
             id: "f2-crunch-bicicleta",
@@ -2354,9 +2396,11 @@ const WORKOUTS = {
             tip: "Cotovelo toca joelho oposto, devagar.",
             videoKey: "crunch-bicicleta",
             unilateral: false,
-            startLeft: false
+            startLeft: false,
+            narrative: "Deitada de costas, mãos atrás da cabeça sem puxar o pescoço. Traga o joelho direito em direção ao peito enquanto gira o cotovelo esquerdo em direção a ele — o toque não precisa ser total, o que importa é a rotação do tronco. Enquanto um joelho dobra, o outro se estende. Faça devagar, sentindo cada lado trabalhar separadamente.",
+            why: "O crunch bicicleta ativa os oblíquos internos e externos, que são os músculos da lateral da cintura. Oblíquos fortes criam a curvatura lateral que define o contorno da cintura na vista frontal — parte essencial da silhueta ampulheta."
           },
-          { id: "f2-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum" }
+          { id: "f2-vacuum-gluteo", name: "Vacuum Abdominal", sets: 3, reps: "25seg", rest: "30seg", weight: "0 kg", tip: "Soltar TODO o ar, puxar umbigo pra dentro e cima. Marca a cintura.", videoKey: "vacuum", unilateral: false, startLeft: false, type: "vacuum", narrative: "Expire todo o ar dos pulmões completamente, depois puxe o umbigo em direção à coluna e para cima, como se quisesse esconder a barriga. Segure por 25 segundos respirando superficialmente pelo nariz. Faça entre os exercícios ou no final do treino.", why: "O vacuum ativa o transverso do abdômen — o músculo mais interno da barriga. Fortalecê-lo aperta a cintura de dentro pra fora, acentuando a curva da ampulheta sem adicionar volume." }
         ]
       }
     }
