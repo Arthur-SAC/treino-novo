@@ -4334,6 +4334,16 @@ const ProgressManager = {
           }
           return;
         }
+        // Flexibility milestone toggle
+        var milestone = e.target.closest('.flex-milestone');
+        if (milestone) {
+          var mid = milestone.dataset.milestoneId;
+          var state = StorageManager.getValue('flexibilityMilestones', {});
+          state[mid] = !state[mid];
+          StorageManager.setValue('flexibilityMilestones', state);
+          self.render();
+          return;
+        }
       });
       container.addEventListener('change', function(e) {
         // Photo upload inputs
@@ -4838,6 +4848,21 @@ const ProgressManager = {
       html += '</div>';
     });
     html += '</div>';
+
+    // Flexibility milestones
+    if (typeof FLEXIBILITY_MILESTONES !== 'undefined') {
+      html += '<h3 style="margin-top:24px;margin-bottom:12px;font-family:var(--font-title);font-size:0.95rem;">Marcos de Flexibilidade</h3>';
+      var flexState = StorageManager.getValue('flexibilityMilestones', {});
+      for (var i = 0; i < FLEXIBILITY_MILESTONES.length; i++) {
+        var m = FLEXIBILITY_MILESTONES[i];
+        var checked = !!flexState[m.id];
+        html += '<label class="flex-milestone' + (checked ? ' achieved' : '') + '" data-milestone-id="' + m.id + '">';
+        html += '<input type="checkbox"' + (checked ? ' checked' : '') + ' style="margin-right:8px;"> ';
+        html += m.label;
+        html += ' <span style="color:var(--text-muted);font-size:0.75rem;margin-left:auto;">(Fase ' + m.fase + ')</span>';
+        html += '</label>';
+      }
+    }
 
     return html;
   },
