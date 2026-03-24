@@ -3566,6 +3566,143 @@
     font-style: italic;
     margin-top: 2px;
   }
+  /* ============================================
+   EXERCISE CARDS — Treino tab functional elements
+   ============================================ */
+.exercise-card-series {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+.exercise-card-series label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border-light);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+.exercise-card-series label.checked {
+  background: var(--success);
+  color: #fff;
+  border-color: var(--success);
+}
+.exercise-card-series input[type="checkbox"] {
+  display: none;
+}
+.exercise-card-weight-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.exercise-card-weight {
+  width: 80px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+  text-align: center;
+}
+.exercise-card-weight:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+.exercise-card-timer-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+}
+.exercise-card-timer-btn:active {
+  background: var(--accent);
+  color: #fff;
+}
+.exercise-card-gif-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--info);
+  background: transparent;
+  color: var(--info);
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+.exercise-card-mistakes {
+  font-size: 0.78rem;
+  color: var(--danger);
+  line-height: 1.5;
+  padding: 6px 10px;
+  background: rgba(232, 113, 113, 0.08);
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+}
+.exercise-card-mistakes::before {
+  content: "⚠️ Erros comuns: ";
+  font-weight: 600;
+}
+.exercise-card-sets-reps {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+.exercise-card-monthly-check {
+  padding: 14px;
+  background: rgba(196, 149, 106, 0.1);
+  border-radius: var(--radius-sm);
+  margin-top: 12px;
+  text-align: center;
+}
+.exercise-card-monthly-check p {
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+}
+.exercise-card-monthly-check button {
+  padding: 8px 14px;
+  margin: 4px;
+  border-radius: 20px;
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+.exercise-card-monthly-check button:active,
+.exercise-card-monthly-check button.selected {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.flex-milestone {
+  display: block;
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.flex-milestone.achieved {
+  border-color: var(--success);
+  background: rgba(110, 203, 139, 0.08);
+}
   </style>
 </head>
 <body>
