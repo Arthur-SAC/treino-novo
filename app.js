@@ -3339,7 +3339,7 @@ const NutritionManager = {
   renderShoppingList() {
     if (typeof SHOPPING_SYSTEM === 'undefined') return '<div class="card glass"><p>Dados de compras n\u00e3o encontrados.</p></div>';
     var html = '';
-    var types = ['mensal', 'semanal'];
+    var types = ['mensal', 'semanal', 'skincare', 'cabelo', 'depilacao'];
     for (var t = 0; t < types.length; t++) {
       var key = types[t];
       var data = SHOPPING_SYSTEM[key];

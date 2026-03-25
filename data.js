@@ -3625,6 +3625,10 @@ const SHOPPING_SYSTEM = {
       { item: "Ômega-3", qty: "1 pote", category: "suplemento" },
       { item: "Chá spearmint 🌿", qty: "2 caixas", category: "suplemento" },
       { item: "Vitamina D3 + K2", qty: "1 pote", category: "suplemento" },
+      { item: "Multivitamínico", qty: "1 pote", category: "suplemento" },
+      { item: "Colágeno hidrolisado", qty: "1 pote", category: "suplemento" },
+      { item: "Melatonina", qty: "1 pote", category: "suplemento" },
+      { item: "Biotina 5000mcg (cabelo)", qty: "1 pote", category: "suplemento" },
     ]
   },
   semanal: {
@@ -3640,6 +3644,40 @@ const SHOPPING_SYSTEM = {
       { item: "Queijo cottage", qty: "300g", category: "geladeira" },
       { item: "Pão integral", qty: "1 pacote", category: "geladeira" },
       { item: "Leite de soja 🌿", qty: "2L", category: "geladeira" },
+      { item: "Hortelã-verde fresca (spearmint)", qty: "1 maço", category: "geladeira" },
+    ]
+  },
+  skincare: {
+    label: "Skincare — repor quando acabar",
+    items: [
+      { item: "Sabonete facial (Cerave ou Cetaphil)", qty: "1", category: "rosto" },
+      { item: "Vitamina C sérum", qty: "1", category: "rosto" },
+      { item: "Hidratante facial (Cerave ou Neutrogena)", qty: "1", category: "rosto" },
+      { item: "Protetor solar FPS 50+ (sem white cast)", qty: "1", category: "rosto" },
+      { item: "Água micelar", qty: "1", category: "rosto" },
+      { item: "Niacinamida sérum", qty: "1", category: "rosto" },
+      { item: "Retinol sérum", qty: "1", category: "rosto" },
+      { item: "Sabonete ácido salicílico (corpo)", qty: "1", category: "corpo" },
+      { item: "Hidratante com ureia (corpo)", qty: "1", category: "corpo" },
+      { item: "Niacinamida corpo (axilas/íntima)", qty: "1", category: "corpo" },
+    ]
+  },
+  cabelo: {
+    label: "Cabelo — repor quando acabar",
+    items: [
+      { item: "Shampoo sem sulfato (cachos)", qty: "1", category: "lavagem" },
+      { item: "Condicionador para cachos", qty: "1", category: "lavagem" },
+      { item: "Máscara de hidratação", qty: "1", category: "tratamento" },
+      { item: "Creme para pentear/leave-in", qty: "1", category: "finalização" },
+      { item: "Gel ou gelatina capilar", qty: "1", category: "finalização" },
+    ]
+  },
+  depilacao: {
+    label: "Depilação — itens de apoio",
+    items: [
+      { item: "Refil de cabeça do epilador (se precisar)", qty: "1", category: "equipamento" },
+      { item: "Loção pós-depilação ou aloe vera", qty: "1", category: "pos-depilacao" },
+      { item: "Esfoliante corporal suave", qty: "1", category: "pos-depilacao" },
     ]
   }
 };
