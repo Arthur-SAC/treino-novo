@@ -3665,11 +3665,11 @@ const SHOPPING_SYSTEM = {
   cabelo: {
     label: "Cabelo — repor quando acabar",
     items: [
-      { item: "Shampoo sem sulfato (cachos)", qty: "1", category: "lavagem" },
-      { item: "Condicionador para cachos", qty: "1", category: "lavagem" },
-      { item: "Máscara de hidratação", qty: "1", category: "tratamento" },
-      { item: "Creme para pentear/leave-in", qty: "1", category: "finalização" },
-      { item: "Gel ou gelatina capilar", qty: "1", category: "finalização" },
+      { item: "Shampoo Juba (Widi Care)", qty: "1", category: "lavagem" },
+      { item: "Condicionador Juba (Widi Care)", qty: "1", category: "lavagem" },
+      { item: "Máscara Hidro-nutritiva Juba (ou Salon Line SOS Cachos)", qty: "1", category: "tratamento" },
+      { item: "Creme de pentear Juba (Widi Care)", qty: "1", category: "finalização" },
+      { item: "Gelatina Salon Line (pote verde)", qty: "1", category: "finalização" },
     ]
   },
   depilacao: {
