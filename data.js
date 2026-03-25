@@ -3669,7 +3669,7 @@ const SHOPPING_SYSTEM = {
       { item: "Condicionador Juba (Widi Care)", qty: "1", category: "lavagem" },
       { item: "Máscara Hidro-nutritiva Juba (ou Salon Line SOS Cachos)", qty: "1", category: "tratamento" },
       { item: "Creme de pentear Juba (Widi Care)", qty: "1", category: "finalização" },
-      { item: "Gelatina Salon Line (pote verde)", qty: "1", category: "finalização" },
+      { item: "Gelatina Super Definição Juba (Widi Care)", qty: "1", category: "finalização" },
     ]
   },
   depilacao: {
