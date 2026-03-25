@@ -3670,6 +3670,9 @@ const SHOPPING_SYSTEM = {
       { item: "Máscara Hidro-nutritiva Juba (ou Salon Line SOS Cachos)", qty: "1", category: "tratamento" },
       { item: "Creme de pentear Juba (Widi Care)", qty: "1", category: "finalização" },
       { item: "Gelatina Super Definição Juba (Widi Care)", qty: "1", category: "finalização" },
+      { item: "Pente de dentes largos (plástico simples)", qty: "1", category: "acessórios" },
+      { item: "Touca de cetim pra dormir", qty: "1", category: "acessórios" },
+      { item: "Borrifador de água (spray)", qty: "1", category: "acessórios" },
     ]
   },
   depilacao: {
