@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'arthur-app-v9';
+const CACHE_VERSION = 'arthur-app-v10';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,7 @@ const STATIC_ASSETS = [
   './data.js',
   './firebase-config.js',
   './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nunito:wght@400;600;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Quicksand:wght@300;400;500;600&display=swap'
 ];
 
 // App files that should use network-first (always get latest when online)

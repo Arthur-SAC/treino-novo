@@ -83,7 +83,7 @@ const EXERCISE_VIDEOS = {
   "stiff": { youtubeId: "CN_7cz3P-1U", gifUrl: "https://static.exercisedb.dev/media/hrVQWvE.gif", title: "Stiff com Halteres", tips: "Empurre o quadril PRA TRÁS, sinta atrás da coxa", commonMistakes: "Arredondar as costas. Dobrar os joelhos demais. Não empurrar o quadril pra trás." },
   "prancha": { youtubeId: "ASdvN_XEl_c", gifUrl: null, title: "Prancha Abdominal", tips: "Aperte abdômen e glúteo, corpo RETO", commonMistakes: "Quadril subindo (montanha). Quadril descendo (banana). Não ativar o core." },
   "prancha-lateral": { youtubeId: "zt7PjySXWCw", gifUrl: null, title: "Prancha Lateral", tips: "Marca a cintura", commonMistakes: "Quadril caindo. Ombro não alinhado com o pulso. Não ativar o oblíquo." },
-  "hip-thrust": { youtubeId: "WA2Q1auA1zY", gifUrl: null, title: "Hip Thrust", tips: "Apoie costas no banco, empurre quadril pro teto", commonMistakes: "Hiperextender a lombar. Posição errada das costas no banco. Pés muito perto ou longe." },
+  "hip-thrust": { youtubeId: "hCm-70-9_XE", gifUrl: null, title: "Hip Thrust", tips: "Apoie costas no banco, empurre quadril pro teto", commonMistakes: "Hiperextender a lombar. Posição errada das costas no banco. Pés muito perto ou longe." },
   "bulgarian-split-squat": { youtubeId: "HTedLXOg89Y", gifUrl: null, title: "Agachamento Búlgaro", tips: "Pé traseiro no banco, foque no glúteo ao subir", commonMistakes: "Joelho passando do pé. Tronco inclinado demais. Pé traseiro muito tenso." },
   "step-up": { youtubeId: "7AtIjR-QqVA", gifUrl: "https://static.exercisedb.dev/media/gFyFj9z.gif", title: "Step Up com Halter", tips: "Empurre pelo calcanhar", commonMistakes: "Empurrar com o pé de baixo. Não subir pelo calcanhar. Tronco inclinado." },
   "good-morning": { youtubeId: "aAvJCDyG0m0", gifUrl: "https://static.exercisedb.dev/media/XlZ4lAC.gif", title: "Good Morning", tips: "Barra atrás do pescoço, flexione no quadril", commonMistakes: "Arredondar as costas. Dobrar os joelhos demais. Descer rápido demais." },
@@ -101,13 +101,13 @@ const EXERCISE_VIDEOS = {
   "agachamento-profundo": { youtubeId: "iUnwcn6f_7Y", gifUrl: null, title: "Agachamento Profundo — Mobilidade", tips: "Segure embaixo 30seg, cotovelos empurram joelhos pra fora", commonMistakes: "" },
   "polichinelo": { youtubeId: "yDSMdd8hiFg", gifUrl: "https://static.exercisedb.dev/media/HtfCpfi.gif", title: "Polichinelo — Aquecimento Cardio", tips: "Cardio leve pra aquecer o corpo", commonMistakes: "" },
   "fire-hydrant-ativacao": { youtubeId: "BLx5wSzafxg", gifUrl: null, title: "Fire Hydrant — Ativação Glúteo", tips: "Sem caneleira, só ativação do glúteo médio", commonMistakes: "" },
-  "donkey-kick": { youtubeId: "NPVIiAvi1hM", gifUrl: null, title: "Donkey Kick — Ativação Glúteo", tips: "De quatro, chuta pra cima apertando o glúteo", commonMistakes: "" },
+  "donkey-kick": { youtubeId: "Zmi989h1m8k", gifUrl: null, title: "Donkey Kick — Ativação Glúteo", tips: "De quatro, chuta pra cima apertando o glúteo", commonMistakes: "" },
   "cat-cow": { youtubeId: "40Y1rukJs4E", gifUrl: null, title: "Gato e Vaca — Mobilidade Coluna", tips: "Arredonda e arqueia as costas alternando", commonMistakes: "" },
   "pombo-alongamento": { youtubeId: "fASdWDluHrc", gifUrl: null, title: "Pombo — Alongamento Quadril", tips: "Perna cruzada na frente, desça o tronco devagar", commonMistakes: "" },
   "borboleta-alongamento": { youtubeId: "6XT60SbKR3s", gifUrl: "https://static.exercisedb.dev/media/bWlZvXh.gif", title: "Borboleta — Alongamento", tips: "Solas dos pés juntas, pressione joelhos pra baixo", commonMistakes: "" },
   "glute-bridge-ativacao": { youtubeId: "eu5oejYxPBQ", gifUrl: "https://static.exercisedb.dev/media/u0cNiij.gif", title: "Glute Bridge — Ativação", tips: "Sem peso, foque em sentir o glúteo", commonMistakes: "" },
   "deadlift": { youtubeId: "ytGaGIn3SjE", gifUrl: null, title: "Levantamento Terra (Deadlift)", tips: "Quadril pra trás, barra rente ao corpo", commonMistakes: "Arredondar as costas. Subir com a lombar. Barra longe do corpo." },
-  "remada-curvada": { youtubeId: "kBraFNjSJWQ", gifUrl: null, title: "Remada Curvada com Halteres", tips: "Retração escapular completa", commonMistakes: "Usar impulso. Costas arredondadas. Cotovelos muito abertos." },
+  "remada-curvada": { youtubeId: "6TSP1TRMUzs", gifUrl: null, title: "Remada Curvada com Halteres", tips: "Retração escapular completa", commonMistakes: "Usar impulso. Costas arredondadas. Cotovelos muito abertos." },
   "supino-inclinado": { youtubeId: "8iPEnn-ltC8", gifUrl: null, title: "Supino Inclinado com Halteres", tips: "Peito alto, cotovelos 45 graus", commonMistakes: "Banco muito inclinado. Peso caindo rápido. Ombros subindo." },
   "elevacao-lateral": { youtubeId: "3VcKaXpzqRo", gifUrl: null, title: "Elevação Lateral", tips: "Peso leve, cotovelo levemente dobrado, até altura do ombro", commonMistakes: "Peso pesado demais. Usar trapézio. Elevar acima do ombro." },
   "crucifixo": { youtubeId: "eozdVDA78K0", gifUrl: null, title: "Crucifixo com Halteres", tips: "Braços levemente dobrados, abrir lento", commonMistakes: "Braços retos. Peso pesado demais. Perder controle na descida." },
@@ -117,8 +117,10 @@ const EXERCISE_VIDEOS = {
   "crunch-bicicleta": { youtubeId: "9FGilxCbdz8", gifUrl: null, title: "Crunch Bicicleta", tips: "Cotovelo toca joelho oposto, devagar", commonMistakes: "Puxar o pescoço. Fazer rápido demais." },
   "band-pull-apart": { youtubeId: "JObYtU7Y7ag", gifUrl: null, title: "Crucifixo Inverso com Halteres", tips: "Curvada pra frente, braços abertos. Escápulas juntas no topo", commonMistakes: "Braços dobrados. Usar impulso." },
   "agachamento": { youtubeId: "aclHkVaku9U", gifUrl: null, title: "Agachamento com Barra", tips: "Pés largura dos ombros, descer até coxa paralela", commonMistakes: "Joelhos caindo pra dentro. Lombar arredondando. Calcanhar subindo." },
-  "clamshell": { youtubeId: "cC7RUFwh2Ew", gifUrl: null, title: "Clamshell com Caneleira", tips: "Deitado de lado, caneleira no joelho. Abrir joelhos mantendo pés juntos", commonMistakes: "Girar o tronco. Separar os pés. Fazer rápido demais." },
-  "donkey-kick-caneleira": { youtubeId: "VKGClPYoJCE", gifUrl: null, title: "Donkey Kick com Caneleira", tips: "Quadrupede, chutar pé pra cima mantendo joelho 90°", commonMistakes: "Arquear a lombar. Girar o quadril. Não controlar." }
+  "clamshell": { youtubeId: "oHjBwnfpcQs", gifUrl: null, title: "Clamshell com Caneleira", tips: "Deitado de lado, caneleira no joelho. Abrir joelhos mantendo pés juntos", commonMistakes: "Girar o tronco. Separar os pés. Fazer rápido demais." },
+  "donkey-kick-caneleira": { youtubeId: "Zmi989h1m8k", gifUrl: null, title: "Donkey Kick com Caneleira", tips: "Quadrupede, chutar pé pra cima mantendo joelho 90°", commonMistakes: "Arquear a lombar. Girar o quadril. Não controlar." },
+  "frog-pump": { youtubeId: "7-M-HpCVIkA", gifUrl: null, title: "Frog Pump — Ativação Glúteo", tips: "Solas dos pés juntas (posição borboleta), empurre quadril pro teto apertando o glúteo", commonMistakes: "Empurrar com as costas. Não juntar as solas dos pés. Não apertar o glúteo no topo." },
+  "side-lunge": { youtubeId: "3BRKE0-l7mg", gifUrl: null, title: "Afundo Lateral (Side Lunge)", tips: "Passo largo pro lado, flexionar um joelho mantendo o outro esticado", commonMistakes: "Joelho passando do pé. Tronco caindo pra frente. Passo curto demais." }
 };
 
 
@@ -2063,6 +2065,7 @@ const WORKOUTS = {
         name: "Treino A · Full Body (Seg/Qua/Sex)",
         exercises: [
           { id: "f1-glute-bridge", name: "Glute Bridge no chão", sets: 3, reps: "15", rest: "90seg", weight: "0 kg → haltere leve no quadril", tip: "Empurre o quadril pro teto, squeeze 2-3seg no topo. Começar sem peso.", videoKey: "glute-bridge", unilateral: false, startLeft: false, narrative: "Deita de costas no chão, joelhos dobrados, pés apoiados na largura do quadril. Empurra os calcanhares contra o chão e levanta o quadril até o corpo ficar em linha reta dos ombros aos joelhos. No topo, aperta com tudo o glúteo por 2-3 segundos antes de descer devagar.", why: "É o exercício mais importante de ativação de glúteo — se ele não dispara aqui, não vai disparar em nenhum outro movimento. O squeeze no topo é o sinal que treina o seu cérebro a recrutar as fibras do glúteo que ficaram dormentes." },
+          { id: "f1-frog-pump", name: "Frog Pump (ativação borboleta)", sets: 3, reps: "20", rest: "60seg", weight: "0 kg", tip: "Solas dos pés juntas, joelhos abertos. Empurre o quadril pro teto apertando o glúteo.", videoKey: "frog-pump", unilateral: false, startLeft: false, narrative: "Deita de costas no chão e junta as solas dos pés, deixando os joelhos caírem abertos para os lados como uma borboleta. Com os pés juntos perto do bumbum, empurra o quadril pro teto apertando o glúteo com tudo no topo por 2 segundos. Desce devagar. A posição dos pés impede as pernas de ajudarem — o glúteo faz TODO o trabalho sozinho.", why: "O frog pump é um dos melhores exercícios de ativação de glúteo porque a posição borboleta dos pés elimina a participação dos isquiotibiais e quadríceps, forçando o glúteo a trabalhar isolado. Recomendado por especialistas em treino feminizante como ativação essencial antes de exercícios pesados." },
           { id: "f1-bridge-uni-esq", name: "Glute Bridge Unilateral ESQUERDO", sets: 3, reps: "12", rest: "60seg", weight: "0 kg", tip: "Pé esquerdo no chão, direito suspenso. Segurar 3seg no topo.", videoKey: "glute-bridge", unilateral: true, startLeft: true, narrative: "Mesma posição do glute bridge, mas desta vez você dobra o pé direito e deixa ele suspenso no ar, apoiando apenas o pé esquerdo no chão. Empurra com o calcanhar esquerdo, levanta o quadril e segura 3 segundos no topo, sentindo o glúteo esquerdo trabalhar com força.", why: "Seu glúteo esquerdo é mais dorminhoco que o direito — fazer o unilateral esquerdo primeiro e com mais foco corrige essa assimetria ao longo do tempo, garantindo que os dois lados cresçam juntos e que a silhueta fique equilibrada." },
           { id: "f1-bridge-uni-dir", name: "Glute Bridge Unilateral DIREITO", sets: 3, reps: "12", rest: "60seg", weight: "0 kg", tip: "Mesmo número de reps que o esquerdo. Nunca mais.", videoKey: "glute-bridge", unilateral: true, startLeft: false, narrative: "Igual ao lado esquerdo, mas agora com o pé direito no chão e o esquerdo suspenso. Faz exatamente o mesmo número de repetições que fez no lado esquerdo — nem uma a mais, nem uma a menos. O tempo de squeeze no topo também é o mesmo: 3 segundos.", why: "Equilibrar os dois lados é essencial nessa fase. O lado direito não precisa de volume extra — ele já está mais ativo. Igualar as reps evita que o lado dominante compense ainda mais e que a assimetria piore." },
           { id: "f1-abducao-caneleira", name: "Abdução deitada com caneleira", sets: 3, reps: "20", rest: "60seg", weight: "caneleira 2-4 kg", tip: "Deitada de lado, elevar perna. Sentir queimar no glúteo.", videoKey: "abducao-deitada", unilateral: false, startLeft: false, narrative: "Deita de lado no chão com a caneleira na perna de cima. Mantém o corpo alinhado, braço dobrado apoiando a cabeça. Levanta a perna de cima em direção ao teto até uns 45 graus, sem rodar o quadril pra frente, e desce devagar controlando o movimento. Comece sempre pelo lado esquerdo.", why: "Esse movimento isola o glúteo médio, que é o músculo responsável pela curva lateral do quadril — a parte que dá aquela forma arredondada e cheia da silhueta amazona. Trabalhar o lado esquerdo com atenção extra corrige a assimetria entre os glúteos." },
@@ -2291,6 +2294,20 @@ const WORKOUTS = {
             startLeft: false,
             narrative: "Pés bem abertos (mais que a largura dos ombros), pontas viradas para fora a 45°. Segure o haltere ou barra no centro do corpo e desça em 3 segundos mantendo o tronco ereto e os joelhos empurrando para fora sobre os pés. Sinta o esticão no interno da coxa. Na subida, pressione os joelhos para fora e aperte os glúteos.",
             why: "A pegada sumo ativa o adutor e o glúteo médio de forma que o agachamento normal não alcança, preenchendo o interno e o lateral da coxa. Coxas grossas por todos os ângulos são a base da silhueta amazona."
+          },
+          {
+            id: "f2-side-lunge",
+            name: "Afundo Lateral com Halteres",
+            sets: 3,
+            reps: "12 cada lado",
+            rest: "60seg",
+            weight: "8-14 kg cada",
+            tip: "Passo largo pro lado, começar pelo esquerdo. Interno de coxa + glúteo médio.",
+            videoKey: "side-lunge",
+            unilateral: false,
+            startLeft: true,
+            narrative: "De pé com halteres nas mãos ao lado do corpo, dê um passo largo para o lado esquerdo, flexionando o joelho esquerdo e empurrando o quadril pra trás enquanto mantém a perna direita esticada. Desça até a coxa esquerda ficar paralela ao chão, sentindo o alongamento forte no interno da coxa direita. Empurre pelo calcanhar esquerdo pra voltar à posição inicial. Faça todas as reps de um lado antes de trocar — sempre comece pelo esquerdo.",
+            why: "O afundo lateral trabalha o interno de coxa e o glúteo médio em um plano de movimento que nenhum agachamento ou hip thrust alcança — o plano lateral. Preenche a coxa por dentro e arredonda o quadril por fora, criando volume nas áreas que mais definem a silhueta amazona vista de frente."
           },
           {
             id: "f2-leg-press",
@@ -2634,6 +2651,20 @@ const WORKOUTS = {
             startLeft: false
           },
           {
+            id: "f3-side-lunge",
+            name: "Afundo Lateral com Halteres",
+            sets: 3,
+            reps: "12 cada lado",
+            rest: "60seg",
+            weight: "12-18 kg cada",
+            tip: "Passo largo pro lado, começar pelo esquerdo. Complementa o sumo no plano lateral.",
+            videoKey: "side-lunge",
+            unilateral: false,
+            startLeft: true,
+            narrative: "De pé com halteres pesados ao lado do corpo, dê um passo largo para o lado, flexionando o joelho e empurrando o quadril pra trás enquanto mantém a perna oposta esticada. Desça até a coxa ficar paralela ao chão. Empurre pelo calcanhar pra voltar. Todas as reps de um lado antes de trocar — esquerdo primeiro.",
+            why: "O afundo lateral trabalha o interno de coxa e o glúteo médio no plano frontal — um ângulo que nem o sumo nem o agachamento alcançam. Arredonda o quadril lateralmente e preenche a coxa por dentro, completando a silhueta amazona vista de frente."
+          },
+          {
             id: "f3-bulgaro-dir",
             name: "Agachamento Búlgaro com Halteres — substituição cadeira extensora",
             sets: 3,
@@ -2934,6 +2965,20 @@ const WORKOUTS = {
             startLeft: false
           },
           {
+            id: "f4-side-lunge",
+            name: "Afundo Lateral com Halteres",
+            sets: 3,
+            reps: "10 cada lado",
+            rest: "60seg",
+            weight: "12-18 kg cada",
+            tip: "Manutenção do plano lateral. Esquerdo primeiro.",
+            videoKey: "side-lunge",
+            unilateral: false,
+            startLeft: true,
+            narrative: "Passo largo pro lado com halteres, flexionar o joelho e empurrar o quadril pra trás. Coxa paralela ao chão, perna oposta esticada. Empurre pelo calcanhar pra voltar. Você já domina esse movimento — mantenha a qualidade e a carga.",
+            why: "Manter o afundo lateral preserva o volume do interno de coxa e a curva lateral do quadril construída nas fases anteriores. O plano lateral é o primeiro a perder definição se parar de treinar."
+          },
+          {
             id: "f4-leg-press",
             name: "Leg Press (pés altos e abertos)",
             sets: 3,
@@ -3087,6 +3132,13 @@ const WARMUP_LOWER = [
     time: "10 reps",
     narrative: "Desça para a posição mais funda de agachamento que conseguir sem os calcanhares levantarem — os pés podem estar um pouco abertos. Segure 3 segundos no fundo respirando, com as mãos juntas à frente para contrapeso se precisar. Ao subir, empurre forte o chão e aperte os glúteos no topo.",
     why: "Prepara tornozelo, joelho e quadril para amplitude total antes do treino com carga, enquanto já começa a criar a conexão mente-glúteo no padrão de empurrar o chão — fazer isso sem peso é a forma mais segura de calibrar o movimento."
+  },
+  {
+    name: "Frog Pump (ativação borboleta) ⭐",
+    desc: "Solas dos pés juntas, joelhos abertos. Empurre quadril pro teto. Isola o glúteo 100%.",
+    time: "2x15",
+    narrative: "Deita de costas, junta as solas dos pés e deixa os joelhos abertos pros lados (posição borboleta). Empurra o quadril pro teto apertando o glúteo com força no topo por 2 segundos, depois desce devagar. A posição dos pés elimina a ajuda das pernas — o glúteo trabalha sozinho.",
+    why: "O frog pump é a ativação mais eficiente de glúteo que existe — a posição borboleta dos pés impede os isquiotibiais e quadríceps de compensarem, garantindo que o glúteo desperta de verdade antes do treino pesado. Fazer isso antes dos clamshells e do treino principal muda completamente a qualidade da contração."
   },
   {
     name: "Clamshell esquerdo com caneleira ⭐",

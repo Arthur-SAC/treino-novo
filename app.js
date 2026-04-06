@@ -1337,10 +1337,22 @@ const DayManager = {
     }
     var nutPhaseLabel = (nutPhase === 'deficit') ? 'Déficit' : 'Construção';
     html += '<div class="timeline-macros">';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">~' + macros.kcal + ' / ' + targets.kcal + '</span><span class="timeline-macro-label">kcal · ' + nutPhaseLabel + '</span></div>';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.prot + ' / ' + targets.prot + 'g</span><span class="timeline-macro-label">proteína</span></div>';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.carb + ' / ' + targets.carb + 'g</span><span class="timeline-macro-label">carb</span></div>';
-    html += '<div class="timeline-macro-item"><span class="timeline-macro-value">' + macros.fat + ' / ' + targets.fat + 'g</span><span class="timeline-macro-label">gordura</span></div>';
+    var macroItems = [
+      { val: macros.kcal, target: targets.kcal, label: 'kcal', cls: 'kcal', suffix: '' },
+      { val: macros.prot, target: targets.prot, label: 'prote\u00edna', cls: 'prot', suffix: 'g' },
+      { val: macros.carb, target: targets.carb, label: 'carb', cls: 'carb', suffix: 'g' },
+      { val: macros.fat, target: targets.fat, label: 'gordura', cls: 'fat', suffix: 'g' }
+    ];
+    for (var mi = 0; mi < macroItems.length; mi++) {
+      var m = macroItems[mi];
+      var pct = m.target > 0 ? Math.min(Math.round((m.val / m.target) * 100), 100) : 0;
+      var overClass = m.val > m.target ? ' over' : '';
+      html += '<div class="timeline-macro-item">';
+      html += '<span class="timeline-macro-value">' + m.val + m.suffix + '</span>';
+      html += '<span class="timeline-macro-label">' + m.label + '</span>';
+      html += '<div class="timeline-macro-bar"><div class="timeline-macro-fill ' + m.cls + overClass + '" style="width:' + pct + '%"></div></div>';
+      html += '</div>';
+    }
     html += '</div>';
 
     // Water tracker
@@ -1350,7 +1362,7 @@ const DayManager = {
     for (var w = 1; w <= waterGoal; w++) {
       html += '<div class="timeline-bottle' + (w <= waterCount ? ' filled' : '') + '" data-bottle="' + w + '"></div>';
     }
-    html += '<span class="timeline-water-label">' + (waterMl / 1000).toFixed(1) + 'L / 3.5L</span>';
+    html += '<span class="timeline-water-label"><strong>' + (waterMl / 1000).toFixed(1) + 'L</strong> / 3.5L</span>';
     html += '</div>';
 
     return html;
@@ -4444,6 +4456,15 @@ const ProgressManager = {
     html += '<div class="card glass">';
     html += '<h3>\uD83D\uDCF8 Registrar Progresso</h3>';
     html += '<p style="opacity:0.7;">Tire fotos de frente, lateral e costas a cada 15 dias</p>';
+    if (photos.length > 0) {
+      var pctUsed = Math.round((photos.length / 30) * 100);
+      var barColor = pctUsed > 80 ? 'var(--danger)' : pctUsed > 50 ? 'var(--warning)' : 'var(--success)';
+      html += '<div style="margin:8px 0 12px;font-size:0.78rem;color:var(--text-muted);">';
+      html += photos.length + '/30 fotos salvas';
+      html += '<div style="height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:4px;">';
+      html += '<div style="height:100%;width:' + pctUsed + '%;background:' + barColor + ';border-radius:2px;transition:width 0.3s;"></div>';
+      html += '</div></div>';
+    }
     html += '<div style="display:flex; gap:0.5rem; flex-wrap:wrap;">';
     html += '<label class="btn btn-primary" style="cursor:pointer;">';
     html += '\uD83D\uDCF7 Frente';
@@ -4875,18 +4896,34 @@ const ProgressManager = {
 
   // ── Photo handling ─────────────────────────────────────────
 
+  _photoLock: false,
+
   handlePhotoUpload: function(file, angle) {
+    if (this._photoLock) {
+      Toast.show('Aguarde a foto anterior salvar...', 'info');
+      return;
+    }
+    this._photoLock = true;
     var self = this;
     this.compressImage(file, 800, function(base64) {
       var photos = StorageManager.getValue('photos', []);
       var today = new Date().toISOString().split('T')[0];
+
+      // Limitar a 30 fotos (10 meses x 3 angulos) pra nao estourar localStorage
+      if (photos.length >= 30) {
+        self._photoLock = false;
+        Toast.show('Limite de 30 fotos atingido! Apague fotos antigas na aba Progresso.', 'warning');
+        return;
+      }
+
       photos.push({ date: today, angle: angle, data: base64 });
       try {
         StorageManager.setValue('photos', photos);
         StorageManager.setValue('lastPhotoDate', new Date().toISOString().slice(0, 10));
       } catch(err) {
         photos.pop();
-        Toast.show('Sem espa\u00e7o! Apague fotos antigas primeiro.', 'error');
+        self._photoLock = false;
+        Toast.show('Sem espa\u00e7o! Apague fotos antigas na aba Progresso.', 'error');
         return;
       }
 
@@ -4896,7 +4933,8 @@ const ProgressManager = {
       var uniqueDates = Object.keys(dateSet).length;
       if (uniqueDates >= 2) BadgeManager.unlock('first-comparison');
 
-      Toast.show('\uD83D\uDCF8 Foto de ' + angle + ' salva!', 'success');
+      self._photoLock = false;
+      Toast.show('\uD83D\uDCF8 Foto de ' + angle + ' salva! (' + photos.length + '/30)', 'success');
       self.render();
     });
   },
@@ -4926,15 +4964,48 @@ const ProgressManager = {
   // ── Measurement handling ───────────────────────────────────
 
   saveMeasurements: function() {
-    var peso = parseFloat(document.getElementById('measure-peso').value) || null;
-    var cintura = parseFloat(document.getElementById('measure-cintura').value) || null;
-    var quadril = parseFloat(document.getElementById('measure-quadril').value) || null;
-    var coxa = parseFloat(document.getElementById('measure-coxa').value) || null;
-    var braco = parseFloat(document.getElementById('measure-braco').value) || null;
-    var peito = parseFloat(document.getElementById('measure-peito').value) || null;
+    var pesoEl = document.getElementById('measure-peso');
+    var cinturaEl = document.getElementById('measure-cintura');
+    var quadrilEl = document.getElementById('measure-quadril');
+    var coxaEl = document.getElementById('measure-coxa');
+    var bracoEl = document.getElementById('measure-braco');
+    var peitoEl = document.getElementById('measure-peito');
+
+    var peso = pesoEl ? (parseFloat(pesoEl.value) || null) : null;
+    var cintura = cinturaEl ? (parseFloat(cinturaEl.value) || null) : null;
+    var quadril = quadrilEl ? (parseFloat(quadrilEl.value) || null) : null;
+    var coxa = coxaEl ? (parseFloat(coxaEl.value) || null) : null;
+    var braco = bracoEl ? (parseFloat(bracoEl.value) || null) : null;
+    var peito = peitoEl ? (parseFloat(peitoEl.value) || null) : null;
 
     if (!peso && !cintura && !quadril && !coxa && !braco && !peito) {
       Toast.show('Preencha pelo menos uma medida!', 'warning');
+      return;
+    }
+
+    // Validacao de ranges
+    if (peso && (peso < 30 || peso > 300)) {
+      Toast.show('Peso deve ser entre 30 e 300 kg', 'warning');
+      return;
+    }
+    if (cintura && (cintura < 40 || cintura > 200)) {
+      Toast.show('Cintura deve ser entre 40 e 200 cm', 'warning');
+      return;
+    }
+    if (quadril && (quadril < 50 || quadril > 200)) {
+      Toast.show('Quadril deve ser entre 50 e 200 cm', 'warning');
+      return;
+    }
+    if (coxa && (coxa < 20 || coxa > 100)) {
+      Toast.show('Coxa deve ser entre 20 e 100 cm', 'warning');
+      return;
+    }
+    if (braco && (braco < 15 || braco > 60)) {
+      Toast.show('Bra\u00e7o deve ser entre 15 e 60 cm', 'warning');
+      return;
+    }
+    if (peito && (peito < 50 || peito > 200)) {
+      Toast.show('Peito deve ser entre 50 e 200 cm', 'warning');
       return;
     }
 
@@ -5025,9 +5096,12 @@ const ProgressManager = {
   },
 
   updateRatioDisplay: function() {
-    var cintura = parseFloat(document.getElementById('measure-cintura').value);
-    var quadril = parseFloat(document.getElementById('measure-quadril').value);
+    var cinturaEl = document.getElementById('measure-cintura');
+    var quadrilEl = document.getElementById('measure-quadril');
     var ratioDiv = document.getElementById('ratio-display');
+    if (!cinturaEl || !quadrilEl) return;
+    var cintura = parseFloat(cinturaEl.value);
+    var quadril = parseFloat(quadrilEl.value);
     if (!ratioDiv) return;
 
     if (cintura && quadril && quadril > 0) {
