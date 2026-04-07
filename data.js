@@ -60,7 +60,7 @@ const DAILY_TIPS = [
   "Coloque alarme pra beber água a cada 2 horas. Desidratação afeta TUDO.",
   "Tire fotos de progresso a cada 15 dias. O espelho engana, a foto não.",
   "Levante a cada 50min do computador. Seu flexor do quadril agradece e o glúteo ativa.",
-  "Melatonina: tome 30-60min ANTES de deitar. Dose baixa (0.5-1mg) já funciona.",
+  "Melatonina: dose ANVISA é 0.21mg/dia. Acima disso, só com orientação médica. Tomar 30-60min antes de deitar.",
   "Multivitamínico com zinco e selênio ajuda na função íntima e recuperação muscular.",
   "Colágeno hidrolisado (10g/dia) melhora pele, cabelo e articulações.",
   "Distribua proteína ao longo do dia (a cada 3-4h). Corpo absorve melhor ~40g por vez.",
@@ -565,7 +565,7 @@ const SUPPLEMENTS = [
     name: "DIM (Diindolylmethane)",
     dose: "100-200mg/dia com refeição",
     when: "Almoço ou jantar",
-    note: "Modula metabolismo de estrogênio. Melhora pele. Encontrado em brócolis.",
+    note: "Modula metabolismo de estrogênio. Melhora pele. Encontrado em brócolis. ⚠️ Pode alterar como o fígado processa medicamentos — se tomar qualquer remédio, consulte médico antes.",
     intimate: "Não afeta testosterona diretamente",
     evidence: "Moderada"
   },
@@ -1585,7 +1585,7 @@ const HAIR_CARE = {
   supplements: {
     name: "Biotina",
     dose: "5000mcg/dia",
-    notes: "Ajuda no crescimento do cabelo. Resultado visível em 3-6 meses de uso consistente. Pode ser encontrada em farmácias."
+    notes: "Ajuda no crescimento do cabelo. Resultado visível em 3-6 meses de uso consistente. ⚠️ IMPORTANTE: se for fazer exame de sangue, parar 3-5 dias antes — biotina interfere nos resultados de tireoide e outros exames."
   }
 };
 
@@ -1743,7 +1743,7 @@ const EDUCATIONAL_CONTENT = {
       "Whey Protein: 1 scoop/dia pra atingir meta de proteína (já tá no shake \u2713)",
       "Creatina: 5g/dia todo dia, qualquer horário (já tá no shake \u2713)",
       "Multivitamínico (Vita Supraz): tá ótimo, o zinco e selênio ajudam na performance íntima",
-      "Melatonina: 0.5-1mg, 30-60min antes de dormir, dose baixa funciona melhor",
+      "Melatonina: dose ANVISA é 0.21mg/dia como suplemento. Acima disso, consultar médico",
       "Colágeno hidrolisado: 10g/dia (pele + cabelo + articulações)",
       "Ômega-3: 1g/dia se não come peixe 2x/semana",
       "Vitamina D3: 2000-4000 UI/dia — pele parda produz menos vitamina D pelo sol. Essencial pra humor, energia, recuperação muscular e ossos. Barata (~R$15/mês)"
@@ -1763,6 +1763,82 @@ const EDUCATIONAL_CONTENT = {
   }
 };
 
+
+// ─── OPTIMIZATION — Maximizar resultados sem TH ─────────────
+const OPTIMIZATION = {
+  sleepProtocol: {
+    title: "Protocolo de Sono — O Hack #1",
+    why: "Sono ruim = +38% de cortisol = gordura abdominal NÃO sai. GH (hormônio de crescimento) é liberado 70% durante sono profundo. Sem sono bom, treino e dieta rendem metade.",
+    rules: [
+      "Magnésio bisglicerinato 300mg — 30min antes de deitar (relaxa musculatura e SNC)",
+      "Melatonina na dose ANVISA (0.21mg) — 30-60min antes de deitar",
+      "Telas: modo noturno/filtro azul no celular das 21h em diante, ou parar 30min antes",
+      "Quarto: o mais escuro e frio possível. Ventilador > ar-condicionado seco",
+      "Horário fixo: deitar e acordar no mesmo horário todo dia (inclusive fim de semana)",
+      "Colágeno 10g em água — tomar junto antes de dormir (melhor absorção em jejum)",
+      "Zinco 30mg no jantar — auxilia qualidade do sono"
+    ]
+  },
+  proteinTiming: {
+    title: "Distribuição de Proteína — Absorção Máxima",
+    why: "O corpo absorve ~40g de proteína por refeição pra síntese muscular. Comer 150g de uma vez é desperdício. Distribuir em 4-5 refeições maximiza o crescimento.",
+    distribution: [
+      { meal: "Café (7h)", target: "35-40g", source: "Shake de whey + aveia" },
+      { meal: "Lanche (10h)", target: "15-20g", source: "Iogurte grego ou ovos" },
+      { meal: "Almoço (12h)", target: "40-48g", source: "Frango/carne/tofu + feijão" },
+      { meal: "Pré-treino (16h)", target: "15-25g", source: "Ovos ou tapioca com frango" },
+      { meal: "Jantar (20h)", target: "35-42g", source: "Frango/peixe/tofu + legumes" },
+      { meal: "Noturno (22h)", target: "18-20g", source: "Iogurte ou cottage (caseína = digestão lenta)" }
+    ]
+  },
+  tempoTraining: {
+    title: "Tempo Sob Tensão — Mais Resultado por Rep",
+    why: "Cada repetição deve durar 4-5 segundos (2-3s descendo + 1-2s subindo + 1s squeeze). Isso DOBRA o tempo que o músculo fica sob carga. Mais tempo sob tensão = mais fibras recrutadas = mais crescimento.",
+    rules: [
+      "DESCIDA (excêntrica): 3 segundos contando na cabeça — isso é o que mais causa hipertrofia",
+      "PAUSA EMBAIXO: 1 segundo — elimina o impulso e força contração pura",
+      "SUBIDA (concêntrica): 1-2 segundos — explosão controlada",
+      "SQUEEZE NO TOPO: 1-2 segundos apertando o glúteo com TUDO — é aqui que a mágica acontece",
+      "No hip thrust: segure 3 segundos no topo a cada rep. Brutal mas funciona",
+      "Se não sentir o músculo queimando, o peso tá pesado demais e você tá compensando"
+    ]
+  },
+  neatProtocol: {
+    title: "NEAT — Queimar Gordura Sem Esforço",
+    why: "NEAT (gasto fora do treino) responde por 15-30% do gasto calórico total. 10.000 passos = ~400kcal extras/dia = ~1.6kg de gordura a menos por mês. É o acelerador mais subestimado.",
+    target: 10000,
+    tips: [
+      "Meta: 8.000-10.000 passos/dia",
+      "Passear com os cães (19h) já conta — usar o celular pra contar passos",
+      "Ir a pé quando possível",
+      "Escada em vez de elevador — cada degrau ativa glúteo",
+      "Andar no intervalo do trabalho (5-10min a cada 2h sentada)",
+      "Caminhada de 15min pós-jantar = ajuda na digestão + passos extras"
+    ]
+  },
+  supplementSchedule: {
+    title: "Horário Otimizado dos Suplementos",
+    schedule: [
+      { time: "07h (café)", items: "Whey + Creatina 5g + Multivitamínico + Vitamina D3+K2 + Rhodiola Rosea" },
+      { time: "10h (lanche)", items: "Chá de hortelã (1ª xícara)" },
+      { time: "12h (almoço)", items: "Ômega-3 (com gordura da refeição) + DIM 100mg" },
+      { time: "15h (lanche)", items: "Chá de hortelã (2ª xícara)" },
+      { time: "20h (jantar)", items: "Zinco 30mg" },
+      { time: "22h (antes de dormir)", items: "Magnésio 300mg + Melatonina 0.21mg + Colágeno 10g" }
+    ]
+  },
+  mindMuscle: {
+    title: "Conexão Mente-Músculo — Técnica Avançada",
+    why: "Estudos mostram que PENSAR no músculo durante o exercício aumenta a ativação em 20-30%. Parece bobagem, mas é ciência. Pro glúteo (especialmente o esquerdo dormido), isso faz diferença enorme.",
+    techniques: [
+      "TOQUE: antes de cada série, coloque a mão no glúteo e aperte. Sinta ele contrair. Isso cria o 'caminho neural'.",
+      "VISUALIZE: feche os olhos 3 segundos antes da série e imagine o glúteo contraindo forte",
+      "SQUEEZE TEST: no topo de cada rep, pergunte 'tô sentindo o glúteo ou a perna?'. Se for perna, reduza o peso.",
+      "ESQUERDO PRIMEIRO: sempre começar exercícios unilaterais pelo lado esquerdo quando está mais fresca e focada",
+      "PRÉ-FADIGA: fazer frog pump (20 reps) ANTES do hip thrust força o glúteo a já estar ligado"
+    ]
+  }
+};
 
 const WEEK_SCHEDULE = {
   1: { type: "treino", workout: "Lower A", label: "💪 Lower A (Glúteo heavy)", warmup: "lower", cooldown: "lower" },
@@ -2045,7 +2121,7 @@ const DAILY_CARDS = {
         },
         {
           name: "Suplementos Noturnos",
-          description: "Tome a melatonina (0.5-1mg) 30-60 minutos ANTES de deitar. Se tomar colágeno, é agora também — 10g dissolvido em água.",
+          description: "Tome a melatonina (dose ANVISA: 0.21mg) 30-60 minutos ANTES de deitar. Se tomar colágeno, é agora também — 10g dissolvido em água.",
           why: "Melatonina regula o ciclo do sono. Não é sonífero — é um sinal pro corpo de que está na hora de desacelerar. Colágeno é melhor absorvido em jejum/estômago vazio.",
           duration: "1min"
         },

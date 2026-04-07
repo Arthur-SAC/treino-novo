@@ -3019,6 +3019,7 @@ const NutritionManager = {
         break;
       case 'suplementos':
         html += this.renderSupplements();
+        html += this.renderOptimization();
         break;
       case 'receitas':
         html += this.currentRecipe ? this.renderRecipeDetail() : this.renderRecipeGrid();
@@ -3435,6 +3436,91 @@ const NutritionManager = {
   },
 
   // Event listeners are now handled via delegation in init()
+
+  renderOptimization() {
+    if (typeof OPTIMIZATION === 'undefined') return '';
+    var html = '';
+    var opt = OPTIMIZATION;
+
+    html += '<div class="section-divider-line"></div>';
+
+    // Sleep Protocol
+    if (opt.sleepProtocol) {
+      html += '<div class="card glass">';
+      html += '<h3>\uD83D\uDCA4 ' + opt.sleepProtocol.title + '</h3>';
+      html += '<p class="day-card-intro">' + opt.sleepProtocol.why + '</p>';
+      html += '<ul style="padding-left:16px;">';
+      opt.sleepProtocol.rules.forEach(function(r) {
+        html += '<li style="margin-bottom:6px;font-size:0.85rem;">' + r + '</li>';
+      });
+      html += '</ul></div>';
+    }
+
+    // Supplement Schedule
+    if (opt.supplementSchedule) {
+      html += '<div class="card glass">';
+      html += '<h3>\u23F0 ' + opt.supplementSchedule.title + '</h3>';
+      opt.supplementSchedule.schedule.forEach(function(s) {
+        html += '<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);">';
+        html += '<span style="color:var(--accent);font-weight:700;min-width:40px;font-size:0.82rem;">' + s.time + '</span>';
+        html += '<span style="font-size:0.84rem;color:var(--text-muted);">' + s.items + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Protein Timing
+    if (opt.proteinTiming) {
+      html += '<div class="card glass">';
+      html += '<h3>\uD83E\uDD69 ' + opt.proteinTiming.title + '</h3>';
+      html += '<p class="day-card-intro">' + opt.proteinTiming.why + '</p>';
+      opt.proteinTiming.distribution.forEach(function(d) {
+        html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.84rem;">';
+        html += '<span>' + d.meal + '</span>';
+        html += '<span style="color:var(--primary);font-weight:700;">' + d.target + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // NEAT
+    if (opt.neatProtocol) {
+      html += '<div class="card glass">';
+      html += '<h3>\uD83D\uDEB6 ' + opt.neatProtocol.title + '</h3>';
+      html += '<p class="day-card-intro">' + opt.neatProtocol.why + '</p>';
+      html += '<ul style="padding-left:16px;">';
+      opt.neatProtocol.tips.forEach(function(t) {
+        html += '<li style="margin-bottom:6px;font-size:0.85rem;">' + t + '</li>';
+      });
+      html += '</ul></div>';
+    }
+
+    // Tempo Training
+    if (opt.tempoTraining) {
+      html += '<div class="card glass">';
+      html += '<h3>\u23F1\uFE0F ' + opt.tempoTraining.title + '</h3>';
+      html += '<p class="day-card-intro">' + opt.tempoTraining.why + '</p>';
+      html += '<ul style="padding-left:16px;">';
+      opt.tempoTraining.rules.forEach(function(r) {
+        html += '<li style="margin-bottom:6px;font-size:0.85rem;">' + r + '</li>';
+      });
+      html += '</ul></div>';
+    }
+
+    // Mind-Muscle Connection
+    if (opt.mindMuscle) {
+      html += '<div class="card glass">';
+      html += '<h3>\uD83E\uDDE0 ' + opt.mindMuscle.title + '</h3>';
+      html += '<p class="day-card-intro">' + opt.mindMuscle.why + '</p>';
+      html += '<ul style="padding-left:16px;">';
+      opt.mindMuscle.techniques.forEach(function(t) {
+        html += '<li style="margin-bottom:6px;font-size:0.85rem;">' + t + '</li>';
+      });
+      html += '</ul></div>';
+    }
+
+    return html;
+  }
 };
 
 // =============================================
