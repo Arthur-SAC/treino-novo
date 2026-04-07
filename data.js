@@ -576,6 +576,30 @@ const SUPPLEMENTS = [
     note: "Isoflavonas — fitoestrógenos com ligação fraca nos receptores de estrogênio.",
     intimate: "Em doses alimentares: zero impacto",
     evidence: "Moderada"
+  },
+  {
+    name: "Magnésio Bisglicerinato",
+    dose: "300-400mg",
+    when: "Antes de dormir",
+    note: "Melhora qualidade do sono profundo, recuperação muscular, reduz cortisol. Maioria dos brasileiros é deficiente.",
+    intimate: "Sem impacto",
+    evidence: "Alta"
+  },
+  {
+    name: "Zinco Quelado",
+    dose: "15-30mg",
+    when: "Jantar",
+    note: "Recuperação muscular, saúde da pele, imunidade. Não tomar junto com cálcio.",
+    intimate: "Melhora testosterona se deficiente",
+    evidence: "Alta"
+  },
+  {
+    name: "Ashwagandha (KSM-66)",
+    dose: "300-600mg",
+    when: "Antes de dormir ou manhã",
+    note: "Adaptógeno — reduz cortisol, melhora composição corporal, sono e ansiedade.",
+    intimate: "Melhora desempenho e libido",
+    evidence: "Alta"
   }
 ];
 
@@ -3592,6 +3616,7 @@ const SHOPPING_LIST = {
     { item: "Chá de spearmint (hortelã) 🌿", qty: "2 caixas", checked: false },
     { item: "Edamame congelado 🌿", qty: "2 pacotes", checked: false },
     { item: "Vitamina D3 + K2", qty: "1 pote (mensal)", checked: false },
+    { item: "DIM 100mg (extrato de brócolis)", qty: "1 pote (mensal)", checked: false },
   ],
 };
 
@@ -3681,6 +3706,10 @@ const SHOPPING_SYSTEM = {
       { item: "Colágeno hidrolisado", qty: "1 pote", category: "suplemento" },
       { item: "Melatonina", qty: "1 pote", category: "suplemento" },
       { item: "Biotina 5000mcg (cabelo)", qty: "1 pote", category: "suplemento" },
+      { item: "DIM 100mg (extrato de brócolis)", qty: "1 pote", category: "suplemento" },
+      { item: "Magnésio bisglicerinato 300mg", qty: "1 pote", category: "suplemento" },
+      { item: "Zinco quelado 30mg", qty: "1 pote", category: "suplemento" },
+      { item: "Ashwagandha 300mg", qty: "1 pote", category: "suplemento" },
     ]
   },
   semanal: {

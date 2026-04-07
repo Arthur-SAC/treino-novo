@@ -1282,11 +1282,29 @@ const DayManager = {
     // Mini Dashboard
     html += this.renderMiniDashboard(schedule, streak, waterCount, macros, dayType);
 
-    // Cards
+    // Cards grouped by period
+    var periodHeaders = {
+      'acordar': '\u2600\uFE0F Manh\u00e3',
+      'pre_treino': '\u26A1 Tarde',
+      'lanche_tarde': '\u26A1 Tarde',
+      'treino': '\uD83D\uDCAA Treino',
+      'yoga_rebolar': '\uD83E\uDDD8 Atividade',
+      'ativacao_leve': '\uD83D\uDFE1 Atividade Leve',
+      'descanso': '\uD83D\uDE34 Descanso',
+      'bonus_sensual': '\uD83C\uDF19 Noite'
+    };
+    var currentPeriod = null;
     for (var i = 0; i < cardIds.length; i++) {
       var cardId = cardIds[i];
       var cardData = DAILY_CARDS[cardId];
       if (!cardData) continue;
+
+      // Insert period header when entering new section
+      if (periodHeaders[cardId] && periodHeaders[cardId] !== currentPeriod) {
+        currentPeriod = periodHeaders[cardId];
+        html += '<div class="day-period-header">' + currentPeriod + '</div>';
+      }
+
       var isCollapsed = !!collapsed[cardId];
       html += this.renderCard(cardId, cardData, isCollapsed);
     }
@@ -3017,10 +3035,10 @@ const NutritionManager = {
 
   renderSubTabs() {
     var tabs = [
-      { id: 'plano', label: 'Plano' },
-      { id: 'suplementos', label: 'Suplem.' },
-      { id: 'receitas', label: 'Receitas' },
-      { id: 'compras', label: 'Compras' }
+      { id: 'plano', label: '\uD83C\uDF7D\uFE0F Plano' },
+      { id: 'suplementos', label: '\uD83D\uDC8A Suplem.' },
+      { id: 'receitas', label: '\uD83D\uDCD6 Receitas' },
+      { id: 'compras', label: '\uD83D\uDED2 Compras' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
@@ -3497,14 +3515,12 @@ const CareManager = {
         break;
       case 'depilacao':
         html += this.renderDepilation();
-        break;
-      case 'kegel':
+        html += '<div class="section-divider-line"></div>';
         html += this.renderKegel();
         break;
       case 'intimidade':
         html += this.renderIntimidade();
-        break;
-      case 'cores':
+        html += '<div class="section-divider-line"></div>';
         html += this.renderCores();
         break;
     }
@@ -3516,12 +3532,10 @@ const CareManager = {
 
   renderSubTabs() {
     var tabs = [
-      { id: 'skincare', label: 'Skincare' },
-      { id: 'cabelo', label: 'Cabelo' },
-      { id: 'depilacao', label: 'Depila\u00E7\u00E3o' },
-      { id: 'kegel', label: 'Kegel' },
-      { id: 'intimidade', label: 'Intimidade' },
-      { id: 'cores', label: 'Cores' }
+      { id: 'skincare', label: '\uD83E\uDDF4 Pele' },
+      { id: 'cabelo', label: '\uD83D\uDC87 Cabelo' },
+      { id: 'depilacao', label: '\u2728 Corpo' },
+      { id: 'intimidade', label: '\uD83D\uDC8B \u00CDntimo' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
@@ -4404,14 +4418,12 @@ const ProgressManager = {
         break;
       case 'medidas':
         html += this.renderMeasurements();
-        break;
-      case 'graficos':
+        html += '<div class="section-divider-line"></div>';
         html += this.renderCharts();
         break;
       case 'conquistas':
         html += this.renderBadges();
-        break;
-      case 'projecao':
+        html += '<div class="section-divider-line"></div>';
         html += this.renderProjection();
         break;
     }
@@ -4419,7 +4431,7 @@ const ProgressManager = {
     container.innerHTML = html;
 
     // Init charts after DOM is painted
-    if (this.currentSubTab === 'graficos') {
+    if (this.currentSubTab === 'medidas') {
       requestAnimationFrame(function() {
         requestAnimationFrame(function() { self.initCharts(); });
       });
@@ -4430,11 +4442,9 @@ const ProgressManager = {
 
   renderSubTabs() {
     var tabs = [
-      { id: 'fotos', label: 'Fotos' },
-      { id: 'medidas', label: 'Medidas' },
-      { id: 'graficos', label: 'Gr\u00e1ficos' },
-      { id: 'conquistas', label: 'Conquistas' },
-      { id: 'projecao', label: 'Proje\u00e7\u00e3o' }
+      { id: 'fotos', label: '\uD83D\uDCF8 Fotos' },
+      { id: 'medidas', label: '\uD83D\uDCCF Corpo' },
+      { id: 'conquistas', label: '\uD83C\uDFC6 Metas' }
     ];
     var self = this;
     var html = '<div class="sub-tabs">';
