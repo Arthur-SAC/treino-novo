@@ -594,12 +594,12 @@ const SUPPLEMENTS = [
     evidence: "Alta"
   },
   {
-    name: "Ashwagandha (KSM-66)",
-    dose: "300-600mg",
-    when: "Antes de dormir ou manhã",
-    note: "Adaptógeno — reduz cortisol, melhora composição corporal, sono e ansiedade.",
-    intimate: "Melhora desempenho e libido",
-    evidence: "Alta"
+    name: "Rhodiola Rosea",
+    dose: "200-400mg",
+    when: "Manhã (com café)",
+    note: "Adaptógeno legal no Brasil — reduz cortisol e fadiga, melhora disposição e foco. Não tomar à noite (pode atrapalhar sono).",
+    intimate: "Sem impacto negativo",
+    evidence: "Moderada-Alta"
   }
 ];
 
@@ -3709,7 +3709,7 @@ const SHOPPING_SYSTEM = {
       { item: "DIM 100mg (extrato de brócolis)", qty: "1 pote", category: "suplemento" },
       { item: "Magnésio bisglicerinato 300mg", qty: "1 pote", category: "suplemento" },
       { item: "Zinco quelado 30mg", qty: "1 pote", category: "suplemento" },
-      { item: "Ashwagandha 300mg", qty: "1 pote", category: "suplemento" },
+      { item: "Rhodiola Rosea 200mg", qty: "1 pote", category: "suplemento" },
     ]
   },
   semanal: {
