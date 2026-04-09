@@ -82,6 +82,10 @@ var Router = {
       }
     });
 
+    // Fechar modal ao trocar de pagina
+    var modal = document.getElementById('exercise-modal');
+    if (modal) modal.classList.add('hidden');
+
     // Emit custom event so feature modules can react
     var event = new CustomEvent('pageChange', {
       detail: { page: page, prev: prev },

@@ -78,8 +78,8 @@ var App = {
         icon: '<svg class="icon icon--lg" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>' },
       { id: 'hairgrowth', label: 'Cabelo', enabled: true,
         icon: '<svg class="icon icon--lg" viewBox="0 0 24 24"><path d="M20 7c0-3-2.5-5-5.5-5S9 4 9 7c0 1.5.5 2.8 1.3 3.8L7 14l-3-1-1 3 3 1-1 3 3 1 1-3 3-1 3.2-3.2c1-.8 2.3-1.3 3.8-1.3 0 0 1-.5 1-2.5z"/></svg>' },
-      { id: 'settings', label: 'Configuracoes', enabled: false,
-        icon: '<svg class="icon icon--lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' }
+      { id: 'estilo', label: 'Meu Estilo', enabled: true,
+        icon: '<svg class="icon icon--lg" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' }
     ];
 
     var html = '<h2 style="margin-bottom:16px;">Menu</h2><div class="menu-grid">';
@@ -125,6 +125,12 @@ var App = {
         var wrapper = document.createElement('div');
         container.appendChild(wrapper);
         CareManager.renderHairGrowth(wrapper);
+      }
+      if (item.dataset.menu === 'estilo' && typeof StyleManager !== 'undefined') {
+        container.innerHTML = backHeader;
+        var wrapper = document.createElement('div');
+        container.appendChild(wrapper);
+        StyleManager.render(wrapper);
       }
     };
   }
