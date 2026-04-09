@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/home.css">
   <link rel="stylesheet" href="css/workout.css">
+  <link rel="stylesheet" href="css/body.css">
 </head>
 <body>
 
@@ -43,8 +44,28 @@
 
   <!-- Page: Corpo -->
   <main class="page" id="page-corpo">
-    <div id="corpo-container">
-      <p class="text-muted">Em breve — Medidas, fotos e progresso</p>
+    <!-- Tabs -->
+    <nav class="corpo-tabs" role="tablist" aria-label="Secoes do corpo">
+      <button class="corpo-tab corpo-tab--active" data-corpo-tab="medidas" role="tab" aria-selected="true">Medidas</button>
+      <button class="corpo-tab" data-corpo-tab="fase" role="tab" aria-selected="false">Minha Fase</button>
+      <button class="corpo-tab" data-corpo-tab="estilo" role="tab" aria-selected="false">Estilo</button>
+    </nav>
+
+    <!-- Panel: Medidas (BodyManager) -->
+    <div class="corpo-tab-panel corpo-tab-panel--active" id="corpo-panel-medidas" role="tabpanel">
+      <div id="corpo-container">
+        <p class="body-empty">Carregando...</p>
+      </div>
+    </div>
+
+    <!-- Panel: Fase (PhaseManager) -->
+    <div class="corpo-tab-panel" id="corpo-panel-fase" role="tabpanel">
+      <div id="phase-container" style="padding:var(--space-4)"></div>
+    </div>
+
+    <!-- Panel: Estilo (StyleManager) -->
+    <div class="corpo-tab-panel" id="corpo-panel-estilo" role="tabpanel">
+      <div id="style-container" style="padding:var(--space-4)"></div>
     </div>
   </main>
 
@@ -115,12 +136,16 @@
   <script src="data/schedule.js"></script>
   <script src="data/exercises.js"></script>
   <script src="data/warmup-cooldown.js"></script>
+  <script src="data/style.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/router.js"></script>
   <script src="js/timer.js"></script>
   <script src="js/home.js"></script>
   <script src="js/workout.js"></script>
+  <script src="js/body.js"></script>
+  <script src="js/phase.js"></script>
+  <script src="js/style.js"></script>
   <script src="js/app.js"></script>
 
 </body>

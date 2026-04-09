@@ -4,8 +4,65 @@ var App = {
     Router.init();
     HomeManager.init();
     WorkoutManager.init();
+    BodyManager.init();
+    this._initCorpoTabs();
     this.renderMenu();
     console.log('App v2 iniciado');
+  },
+
+  /* ---- Corpo tab switching ---- */
+
+  _initCorpoTabs: function() {
+    var tabs    = document.querySelectorAll('[data-corpo-tab]');
+    var panels  = document.querySelectorAll('.corpo-tab-panel');
+
+    function showTab(tabKey) {
+      tabs.forEach(function(t) {
+        var active = t.dataset.corpoTab === tabKey;
+        t.classList.toggle('corpo-tab--active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach(function(p) {
+        var active = p.id === 'corpo-panel-' + tabKey;
+        p.classList.toggle('corpo-tab-panel--active', active);
+      });
+
+      // Lazy-render phase / style panels on first show
+      if (tabKey === 'fase') {
+        var phaseContainer = document.getElementById('phase-container');
+        if (phaseContainer) PhaseManager.render(phaseContainer);
+      }
+      if (tabKey === 'estilo') {
+        var styleContainer = document.getElementById('style-container');
+        if (styleContainer) StyleManager.render(styleContainer);
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        showTab(tab.dataset.corpoTab);
+      });
+    });
+
+    // Re-render corpo panels when navigating to the page
+    document.addEventListener('pageChange', function(e) {
+      if (e.detail && e.detail.page === 'corpo') {
+        // BodyManager.init already handles medidas re-render via pageChange
+        // Re-render whichever sub-tab is currently active
+        var activeTab = document.querySelector('.corpo-tab--active');
+        if (activeTab) {
+          var key = activeTab.dataset.corpoTab;
+          if (key === 'fase') {
+            var pc = document.getElementById('phase-container');
+            if (pc) PhaseManager.render(pc);
+          }
+          if (key === 'estilo') {
+            var sc = document.getElementById('style-container');
+            if (sc) StyleManager.render(sc);
+          }
+        }
+      }
+    });
   },
 
   renderMenu: function() {

@@ -1,0 +1,174 @@
+/* =============================================
+   CARE.CSS — Skincare & Hair Care Step-by-Step
+   ============================================= */
+
+/* ---- Flashcard Step Container ---- */
+.care-step {
+  padding: 20px;
+}
+
+/* ---- Counter ---- */
+.care-step__counter {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ---- Step Name ---- */
+.care-step__name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-skincare);
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+/* Hair variant — purple */
+.care-step__name--hair {
+  color: var(--color-corpo);
+}
+
+/* ---- Product ---- */
+.care-step__product {
+  background: rgba(65, 105, 225, 0.08);
+  border: 1px solid rgba(65, 105, 225, 0.18);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+/* Hair variant */
+.care-step__product--hair {
+  background: rgba(106, 90, 205, 0.08);
+  border-color: rgba(106, 90, 205, 0.18);
+}
+
+/* ---- Amount ---- */
+.care-step__amount {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+/* ---- How-to Text ---- */
+.care-step__howto {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+
+/* ---- Wait Time Warning ---- */
+.care-step__wait {
+  background: var(--color-warning-muted);
+  border-left: 3px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  color: var(--color-warning);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* ---- Tip Box ---- */
+.care-step__tip {
+  background: rgba(65, 105, 225, 0.07);
+  border-left: 3px solid var(--color-skincare);
+  border-radius: var(--radius-sm);
+  color: var(--color-skincare);
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/* Hair tip — purple */
+.care-step__tip--hair {
+  background: rgba(106, 90, 205, 0.07);
+  border-left-color: var(--color-corpo);
+  color: var(--color-corpo);
+}
+
+/* ---- Navigation ---- */
+.care-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.care-nav .btn {
+  flex: 1;
+}
+
+/* ── Body Care (scrollable list) ─────────────────────────── */
+
+/* ---- Section Wrapper ---- */
+.body-care-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.body-care-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* ---- Section Title ---- */
+.body-care-section__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+/* ---- Frequency Badge ---- */
+.body-care-section__freq {
+  font-size: 0.8rem;
+  color: var(--color-skincare);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+/* ---- Daily Habit / List Item ---- */
+.body-care-item {
+  padding: 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  line-height: 1.4;
+}
+
+.body-care-item:last-child {
+  border-bottom: none;
+}
+
+/* ---- Warning Box ---- */
+.body-care-warning {
+  background: var(--color-danger-muted);
+  border-left: 3px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  padding: 10px 14px;
+}
+
+.body-care-warning p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Timeline ---- */
+.body-care-timeline {
+  font-size: 0.85rem;
+  color: var(--color-success);
+  font-weight: 500;
+}
