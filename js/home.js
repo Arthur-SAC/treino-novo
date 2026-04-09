@@ -147,14 +147,108 @@ var HomeManager = {
   /* ---- Navigation / Detail ---- */
 
   openItem: function(itemId) {
-    if (itemId === 'treino' ||
-        itemId === 'yoga_rebolar' ||
-        itemId === 'ativacao_leve') {
+    var self = this;
+
+    // Treino
+    if (itemId === 'treino' || itemId === 'yoga_rebolar' || itemId === 'ativacao_leve') {
       Router.navigate('treino');
-    } else {
-      // Bloco 2/3 will expand this; for now just toggle
-      this.toggleItem(itemId);
+      return;
     }
+
+    // Refeicoes
+    var mealMap = {
+      cafe: 'cafe',
+      lanche_manha: 'lanche1',
+      almoco: 'almoco',
+      pre_treino: 'pretreino',
+      lanche_tarde: 'pretreino',
+      jantar: 'jantar'
+    };
+    if (mealMap[itemId] !== undefined) {
+      this.showItemDetail(itemId, function(container) {
+        if (typeof NutritionManager !== 'undefined') {
+          NutritionManager.renderMealDetail(mealMap[itemId], container);
+        } else {
+          container.innerHTML = '<p style="padding:20px; color:var(--text-muted);">Nutricao em breve</p>';
+        }
+      });
+      return;
+    }
+
+    // Skincare manha
+    if (itemId === 'skincare_manha') {
+      this.showItemDetail(itemId, function(container) {
+        if (typeof CareManager !== 'undefined') {
+          CareManager.renderSkincare('morning', container);
+        } else {
+          container.innerHTML = '<p style="padding:20px; color:var(--text-muted);">Skincare em breve</p>';
+        }
+      });
+      return;
+    }
+
+    // Rotina noturna (skincare noite)
+    if (itemId === 'rotina_noturna') {
+      this.showItemDetail(itemId, function(container) {
+        if (typeof CareManager !== 'undefined') {
+          CareManager.renderSkincare('night', container);
+        } else {
+          container.innerHTML = '<p style="padding:20px; color:var(--text-muted);">Skincare em breve</p>';
+        }
+      });
+      return;
+    }
+
+    // Acordar (mobilidade matinal)
+    if (itemId === 'acordar') {
+      var card = DAILY_CARDS[itemId];
+      if (card && card.content && card.content.steps) {
+        this.showItemDetail(itemId, function(container) {
+          var html = '<div style="padding:16px;"><h3 style="margin-bottom:16px;">' + card.title + '</h3>';
+          html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">' + card.content.intro + '</p>';
+          card.content.steps.forEach(function(step, i) {
+            html += '<div class="card" style="margin-bottom:8px; padding:12px;">';
+            html += '<strong>' + step.name + '</strong>';
+            if (step.duration) html += ' <span style="color:var(--text-muted); font-size:0.8rem;">(' + step.duration + ')</span>';
+            html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:6px; line-height:1.4;">' + step.description + '</p>';
+            html += '</div>';
+          });
+          html += '</div>';
+          container.innerHTML = html;
+        });
+        return;
+      }
+    }
+
+    // Pos-treino
+    if (itemId === 'pos_treino') {
+      var card = DAILY_CARDS[itemId];
+      if (card && card.content && card.content.steps) {
+        this.showItemDetail(itemId, function(container) {
+          var html = '<div style="padding:16px;"><h3 style="margin-bottom:16px;">' + card.title + '</h3>';
+          html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">' + card.content.intro + '</p>';
+          card.content.steps.forEach(function(step) {
+            html += '<div class="card" style="margin-bottom:8px; padding:12px;">';
+            html += '<strong>' + step.name + '</strong>';
+            if (step.duration) html += ' <span style="color:var(--text-muted); font-size:0.8rem;">(' + step.duration + ')</span>';
+            html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:6px; line-height:1.4;">' + step.description + '</p>';
+            html += '</div>';
+          });
+          html += '</div>';
+          container.innerHTML = html;
+        });
+        return;
+      }
+    }
+
+    // Bonus sensual
+    if (itemId === 'bonus_sensual') {
+      this.toggleItem(itemId);
+      return;
+    }
+
+    // Default: toggle
+    this.toggleItem(itemId);
   },
 
   showItemDetail: function(itemId, renderFn) {

@@ -70,9 +70,9 @@ var App = {
     if (!grid) return;
 
     var items = [
-      { id: 'shopping', label: 'Compras', icon: 'cart', enabled: false },
-      { id: 'phase', label: 'Minha Fase', icon: 'trending', enabled: false },
-      { id: 'style', label: 'Meu Estilo', icon: 'shirt', enabled: false },
+      { id: 'shopping', label: 'Compras', icon: 'cart', enabled: true },
+      { id: 'bodycare', label: 'Cuidados Corpo', icon: 'shirt', enabled: true },
+      { id: 'hairgrowth', label: 'Cabelo', icon: 'trending', enabled: true },
       { id: 'settings', label: 'Configuracoes', icon: 'gear', enabled: false }
     ];
 
@@ -92,6 +92,23 @@ var App = {
       '</div>';
     });
     grid.innerHTML = html;
+
+    var self = this;
+    grid.onclick = function(e) {
+      var item = e.target.closest('[data-menu]');
+      if (!item || item.classList.contains('menu-item--disabled')) return;
+      var menuContainer = document.getElementById('menu-container');
+
+      if (item.dataset.menu === 'shopping' && typeof ShoppingManager !== 'undefined') {
+        ShoppingManager.render(menuContainer);
+      }
+      if (item.dataset.menu === 'bodycare' && typeof CareManager !== 'undefined') {
+        CareManager.renderBodyCare(menuContainer);
+      }
+      if (item.dataset.menu === 'hairgrowth' && typeof CareManager !== 'undefined') {
+        CareManager.renderHairGrowth(menuContainer);
+      }
+    };
   }
 };
 
