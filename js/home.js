@@ -199,56 +199,58 @@ var HomeManager = {
       return;
     }
 
-    // Acordar (mobilidade matinal)
-    if (itemId === 'acordar') {
-      var card = DAILY_CARDS[itemId];
-      if (card && card.content && card.content.steps) {
-        this.showItemDetail(itemId, function(container) {
-          var html = '<div style="padding:16px;"><h3 style="margin-bottom:16px;">' + card.title + '</h3>';
-          html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">' + card.content.intro + '</p>';
-          card.content.steps.forEach(function(step, i) {
-            html += '<div class="card" style="margin-bottom:8px; padding:12px;">';
-            html += '<strong>' + step.name + '</strong>';
-            if (step.duration) html += ' <span style="color:var(--text-muted); font-size:0.8rem;">(' + step.duration + ')</span>';
-            html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:6px; line-height:1.4;">' + step.description + '</p>';
-            html += '</div>';
-          });
-          html += '</div>';
-          container.innerHTML = html;
-        });
-        return;
-      }
-    }
-
-    // Pos-treino
-    if (itemId === 'pos_treino') {
-      var card = DAILY_CARDS[itemId];
-      if (card && card.content && card.content.steps) {
-        this.showItemDetail(itemId, function(container) {
-          var html = '<div style="padding:16px;"><h3 style="margin-bottom:16px;">' + card.title + '</h3>';
-          html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">' + card.content.intro + '</p>';
-          card.content.steps.forEach(function(step) {
-            html += '<div class="card" style="margin-bottom:8px; padding:12px;">';
-            html += '<strong>' + step.name + '</strong>';
-            if (step.duration) html += ' <span style="color:var(--text-muted); font-size:0.8rem;">(' + step.duration + ')</span>';
-            html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:6px; line-height:1.4;">' + step.description + '</p>';
-            html += '</div>';
-          });
-          html += '</div>';
-          container.innerHTML = html;
-        });
-        return;
-      }
-    }
-
-    // Bonus sensual
-    if (itemId === 'bonus_sensual') {
-      this.toggleItem(itemId);
+    // Cards com steps (acordar, pos_treino, yoga_rebolar, etc)
+    var cardData = DAILY_CARDS[itemId];
+    if (cardData && cardData.content && Array.isArray(cardData.content.steps)) {
+      this.showItemDetail(itemId, function(container) {
+        container.innerHTML = HomeManager.renderCardSteps(cardData);
+      });
       return;
     }
 
     // Default: toggle
     this.toggleItem(itemId);
+  },
+
+  formatText: function(text) {
+    if (!text) return '';
+    // Converte \n em <br>, **negrito** em <strong>
+    return text
+      .replace(/\n/g, '<br>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  },
+
+  renderCardSteps: function(cardData) {
+    var self = this;
+    var html = '<div style="padding:16px;">';
+    html += '<h3 style="margin-bottom:12px; font-size:1.2rem;">' + cardData.title + '</h3>';
+
+    if (cardData.content.intro) {
+      html += '<p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">' + self.formatText(cardData.content.intro) + '</p>';
+    }
+
+    cardData.content.steps.forEach(function(step, i) {
+      html += '<div class="card" style="margin-bottom:10px; padding:14px;">';
+      html += '<div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">';
+      html += '<div style="width:28px; height:28px; border-radius:50%; background:var(--color-treino-dark); color:white; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; flex-shrink:0;">' + (i + 1) + '</div>';
+      html += '<strong style="font-size:0.95rem;">' + step.name + '</strong>';
+      if (step.duration) {
+        html += '<span style="color:var(--text-muted); font-size:0.75rem; margin-left:auto;">' + step.duration + '</span>';
+      }
+      html += '</div>';
+      html += '<p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.6; margin-bottom:8px;">' + self.formatText(step.description) + '</p>';
+      if (step.why) {
+        html += '<p style="font-size:0.8rem; color:var(--color-skincare); background:rgba(65,105,225,0.06); padding:8px 10px; border-radius:6px; line-height:1.4;">' + self.formatText(step.why) + '</p>';
+      }
+      html += '</div>';
+    });
+
+    if (cardData.content.supplements) {
+      html += '<div style="padding:10px 14px; background:rgba(155,48,255,0.08); border-radius:8px; font-size:0.85rem; color:var(--color-nutricao); line-height:1.5;">' + self.formatText(cardData.content.supplements) + '</div>';
+    }
+
+    html += '</div>';
+    return html;
   },
 
   showItemDetail: function(itemId, renderFn) {
