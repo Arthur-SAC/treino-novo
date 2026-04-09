@@ -153,9 +153,12 @@ var PhaseManager = {
 
     // Max phase state
     if (result.maxPhase) {
-      html += '<p class="text-success text-sm">Voce atingiu a fase maxima — Femme Fatale. Incrivel!</p>';
+      html += '<p style="color:var(--color-success); font-size:0.9rem;">Voce atingiu a fase maxima — Femme Fatale. Incrivel!</p>';
       html += '</div>';
+      // Ainda mostra seletor manual
+      html += self._renderPhaseSelector(current);
       containerEl.innerHTML = html;
+      self._bindPhaseButtons(containerEl);
       return;
     }
 
@@ -195,22 +198,7 @@ var PhaseManager = {
 
     html += '</div>';
 
-    // Seletor manual de fase
-    html += '<div style="margin-top:24px; padding:16px; background:var(--bg-card); border-radius:12px; border:1px solid var(--border-color);">';
-    html += '<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Trocar fase manualmente:</p>';
-    html += '<div style="display:flex; gap:8px; flex-wrap:wrap;">';
-    for (var i = 1; i <= 4; i++) {
-      var isActive = i === current;
-      var btnStyle = isActive
-        ? 'background:var(--color-treino); color:white; border-color:var(--color-treino);'
-        : '';
-      html += '<button class="btn btn--ghost" data-set-phase="' + i + '" style="flex:1; min-width:60px; ' + btnStyle + '">' +
-        'Fase ' + i +
-      '</button>';
-    }
-    html += '</div>';
-    html += '</div>';
-
+    html += self._renderPhaseSelector(current);
     containerEl.innerHTML = html;
 
     // Bind advance button
@@ -222,11 +210,31 @@ var PhaseManager = {
       });
     }
 
-    // Bind manual phase buttons
+    self._bindPhaseButtons(containerEl);
+  },
+
+  _renderPhaseSelector: function(current) {
+    var html = '<div style="margin-top:24px; padding:16px; background:var(--bg-card); border-radius:12px; border:1px solid var(--border-color);">';
+    html += '<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Trocar fase:</p>';
+    html += '<div style="display:flex; gap:8px;">';
+    for (var i = 1; i <= 4; i++) {
+      var isActive = i === current;
+      var btnStyle = isActive
+        ? 'background:var(--color-treino); color:white; border-color:var(--color-treino);'
+        : '';
+      html += '<button class="btn btn--ghost" data-set-phase="' + i + '" style="flex:1; ' + btnStyle + '">' + i + '</button>';
+    }
+    html += '</div></div>';
+    return html;
+  },
+
+  _bindPhaseButtons: function(containerEl) {
+    var self = this;
     containerEl.querySelectorAll('[data-set-phase]').forEach(function(btn) {
       btn.addEventListener('click', function() {
         var newPhase = parseInt(btn.dataset.setPhase);
         StorageManager.setPhase(newPhase);
+        self.phase = newPhase;
         self.render(containerEl);
       });
     });
