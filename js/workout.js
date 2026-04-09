@@ -45,7 +45,25 @@ var WorkoutManager = {
     var day      = Utils.getDayOfWeek();
     var schedule = WEEK_SCHEDULE[day];
 
-    if (!schedule || schedule.type !== 'treino' || !schedule.workout) {
+    if (!schedule) {
+      this.renderNoWorkout(schedule);
+      return;
+    }
+
+    // Dias especiais
+    if (schedule.type === 'descanso-ativo') {
+      this.renderYogaRebolar();
+      return;
+    }
+    if (schedule.type === 'ativacao-leve') {
+      this.renderAtivacaoLeve();
+      return;
+    }
+    if (schedule.type === 'descanso-total') {
+      this.renderNoWorkout(schedule);
+      return;
+    }
+    if (schedule.type !== 'treino' || !schedule.workout) {
       this.renderNoWorkout(schedule);
       return;
     }
@@ -134,6 +152,116 @@ var WorkoutManager = {
   },
 
   /* ---- Render: No Workout Today ---- */
+
+  renderYogaRebolar: function() {
+    var container = document.getElementById('workout-container');
+    if (!container) return;
+
+    var yogaLevel = 'iniciante';
+    var yogaPoses = (typeof YOGA_LEVELS !== 'undefined') ? (YOGA_LEVELS[yogaLevel] || []) : [];
+    var rebolarSteps = (typeof REBOLAR_STEPS !== 'undefined') ? REBOLAR_STEPS : [];
+
+    var html = '<div style="padding:16px;">';
+    html += '<button style="background:none; border:none; color:var(--text-primary); padding:8px 0; margin-bottom:8px;" onclick="Router.navigate(\'home\')">';
+    html += '<svg class="icon" viewBox="0 0 24 24" style="vertical-align:middle;"><polyline points="15 18 9 12 15 6"/></svg> Voltar';
+    html += '</button>';
+
+    // Yoga
+    html += '<h2 style="margin-bottom:12px; color:var(--color-skincare);">Yoga — Flexibilidade</h2>';
+    html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">Flexibilidade te deixa mais sexy nos movimentos, previne lesoes e melhora amplitude nos exercicios. Quanto mais flexivel, mais feminino o corpo se move.</p>';
+
+    yogaPoses.forEach(function(pose) {
+      html += '<div class="card" style="margin-bottom:8px; padding:14px;">';
+      html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">';
+      html += '<strong style="font-size:0.95rem;">' + pose.name + '</strong>';
+      html += '<span style="font-size:0.75rem; color:var(--color-skincare);">' + pose.time + '</span>';
+      html += '</div>';
+      html += '<p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">' + (pose.narrative || '') + '</p>';
+      if (pose.why) {
+        html += '<p style="font-size:0.8rem; color:var(--color-skincare); background:rgba(65,105,225,0.06); padding:8px 10px; border-radius:6px; margin-top:8px; line-height:1.4;">' + pose.why + '</p>';
+      }
+      html += '</div>';
+    });
+
+    // Ativacao gluteo esquerdo
+    html += '<h3 style="margin-top:24px; margin-bottom:12px; color:var(--color-treino);">Ativacao Gluteo Esquerdo (obrigatorio)</h3>';
+    html += '<div class="card" style="margin-bottom:8px; padding:14px;">';
+    html += '<strong>Abducao perna esquerda</strong> <span style="color:var(--text-muted);">2x15</span>';
+    html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Deitada de lado, levantar perna esquerda</p>';
+    html += '</div>';
+    html += '<div class="card" style="margin-bottom:8px; padding:14px;">';
+    html += '<strong>Hidrante esquerdo</strong> <span style="color:var(--text-muted);">2x15</span>';
+    html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">De quatro, abrir joelho esquerdo pro lado</p>';
+    html += '</div>';
+
+    // Rebolar
+    html += '<h2 style="margin-top:24px; margin-bottom:12px; color:var(--color-estilo);">Rebolar — Movimento de Quadril</h2>';
+    html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">Rebolar treina controle do quadril, ativa musculos que a musculacao nao pega, e constroi a confianca corporal da femme fatale.</p>';
+
+    rebolarSteps.forEach(function(fase) {
+      html += '<div class="card" style="margin-bottom:8px; padding:14px;">';
+      html += '<strong style="color:var(--color-estilo);">' + fase.fase + '</strong>';
+      html += '<ul style="margin-top:8px; padding-left:20px; font-size:0.85rem; color:var(--text-secondary); line-height:1.6;">';
+      fase.steps.forEach(function(step) {
+        html += '<li style="margin-bottom:4px;">' + step + '</li>';
+      });
+      html += '</ul></div>';
+    });
+
+    html += '</div>';
+    container.innerHTML = html;
+  },
+
+  renderAtivacaoLeve: function() {
+    var container = document.getElementById('workout-container');
+    if (!container) return;
+
+    var html = '<div style="padding:16px;">';
+    html += '<button style="background:none; border:none; color:var(--text-primary); padding:8px 0; margin-bottom:8px;" onclick="Router.navigate(\'home\')">';
+    html += '<svg class="icon" viewBox="0 0 24 24" style="vertical-align:middle;"><polyline points="15 18 9 12 15 6"/></svg> Voltar';
+    html += '</button>';
+
+    html += '<h2 style="margin-bottom:12px; color:var(--color-success);">Ativacao Leve + Caminhada</h2>';
+    html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">Dia de recuperacao ativa. O corpo cresce no descanso — hoje voce ajuda a recuperacao com movimento leve sem sobrecarregar.</p>';
+
+    // Caminhada
+    html += '<div class="card" style="margin-bottom:12px; padding:16px; border-left:3px solid var(--color-success);">';
+    html += '<h3 style="margin-bottom:8px;">Caminhada Inclinada</h3>';
+    html += '<div style="display:flex; gap:16px; margin-bottom:8px; font-size:0.9rem;">';
+    html += '<span><strong>20-30 min</strong></span>';
+    html += '<span>Inclinacao: <strong>8-12%</strong></span>';
+    html += '<span>Velocidade: <strong>5-6 km/h</strong></span>';
+    html += '</div>';
+    html += '<p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">Na esteira do predio. Postura ereta — nao se incline pra frente nem segure na barra. Deixe os bracos balancarem naturalmente. A inclinacao ativa o gluteo em cada passada.</p>';
+    html += '<p style="font-size:0.8rem; color:var(--color-success); margin-top:8px;">Ativa gluteo sem sobrecarregar + melhora composicao corporal</p>';
+    html += '</div>';
+
+    // Ativacao gluteo esquerdo
+    html += '<h3 style="margin-top:20px; margin-bottom:12px; color:var(--color-treino);">Ativacao Gluteo Esquerdo</h3>';
+    var ativacoes = [
+      { name: 'Abertura de concha esquerdo', reps: '2x15', desc: 'Deitada de lado, joelhos dobrados, abrir joelho de cima' },
+      { name: 'Elevacao pelvica unilateral esquerdo', reps: '2x12', desc: 'Deitada, so pe esquerdo no chao, subir quadril e segurar 3s' },
+    ];
+    ativacoes.forEach(function(ex) {
+      html += '<div class="card" style="margin-bottom:8px; padding:14px;">';
+      html += '<div style="display:flex; justify-content:space-between;">';
+      html += '<strong style="font-size:0.9rem;">' + ex.name + '</strong>';
+      html += '<span style="color:var(--text-muted); font-size:0.8rem;">' + ex.reps + '</span>';
+      html += '</div>';
+      html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">' + ex.desc + '</p>';
+      html += '</div>';
+    });
+
+    // Kegel
+    html += '<h3 style="margin-top:20px; margin-bottom:12px;">Kegel</h3>';
+    html += '<div class="card" style="padding:14px;">';
+    html += '<strong>3 series de 10 contracoes</strong>';
+    html += '<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Contraia o musculo do assoalho pelvico (como se fosse segurar o xixi) por 1 segundo, solte 1 segundo. 10x. Descanse 10s. Repita 3x.</p>';
+    html += '</div>';
+
+    html += '</div>';
+    container.innerHTML = html;
+  },
 
   renderNoWorkout: function(schedule) {
     var container = document.getElementById('workout-container');
