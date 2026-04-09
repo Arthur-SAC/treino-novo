@@ -198,6 +198,9 @@ var PhaseManager = {
 
     html += '</div>';
 
+    // Exercicios da fase atual
+    html += self._renderPhaseExercises(current);
+
     html += self._renderPhaseSelector(current);
     containerEl.innerHTML = html;
 
@@ -210,7 +213,63 @@ var PhaseManager = {
       });
     }
 
+    // Bind toggle exercicios
+    containerEl.querySelectorAll('[data-toggle-day]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var panel = containerEl.querySelector('#day-exercises-' + btn.dataset.toggleDay);
+        if (panel) {
+          var isHidden = panel.style.display === 'none';
+          panel.style.display = isHidden ? 'block' : 'none';
+          btn.querySelector('.phase-day-arrow').textContent = isHidden ? '▲' : '▼';
+        }
+      });
+    });
+
     self._bindPhaseButtons(containerEl);
+  },
+
+  _renderPhaseExercises: function(phase) {
+    if (typeof WORKOUTS === 'undefined') return '';
+    var faseKey = 'fase' + phase;
+    var phaseData = WORKOUTS[faseKey];
+    if (!phaseData || !phaseData.days) return '';
+
+    var html = '<div style="margin-top:20px;">';
+    html += '<p style="font-size:0.85rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">Treinos desta fase</p>';
+
+    var dayNames = {
+      'Lower A': 'Inferior A (Segunda)',
+      'Upper': 'Superior (Quarta)',
+      'Lower B': 'Inferior B (Sexta)',
+      'Gluteo Isolado': 'Gluteo Isolado (Sabado)'
+    };
+
+    for (var dayKey in phaseData.days) {
+      var day = phaseData.days[dayKey];
+      var dayLabel = dayNames[dayKey] || dayKey;
+      var safeKey = dayKey.replace(/\s/g, '-').toLowerCase();
+
+      html += '<div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:12px; margin-bottom:8px; overflow:hidden;">';
+      html += '<button data-toggle-day="' + safeKey + '" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:none; border:none; color:var(--text-primary); font-size:0.9rem; font-weight:500; cursor:pointer;">';
+      html += '<span>' + dayLabel + '</span>';
+      html += '<span class="phase-day-arrow" style="font-size:0.7rem; color:var(--text-muted);">▼</span>';
+      html += '</button>';
+
+      html += '<div id="day-exercises-' + safeKey + '" style="display:none; padding:0 16px 12px;">';
+      if (day.exercises) {
+        day.exercises.forEach(function(ex) {
+          html += '<div style="padding:6px 0; border-bottom:1px solid var(--border-color); font-size:0.8rem;">';
+          html += '<span style="color:var(--text-primary);">' + ex.name + '</span>';
+          html += '<span style="color:var(--text-muted); margin-left:8px;">' + ex.sets + 'x' + ex.reps + '</span>';
+          if (ex.weight) html += '<span style="color:var(--color-treino); margin-left:8px; font-size:0.75rem;">' + ex.weight + '</span>';
+          html += '</div>';
+        });
+      }
+      html += '</div></div>';
+    }
+
+    html += '</div>';
+    return html;
   },
 
   _renderPhaseSelector: function(current) {

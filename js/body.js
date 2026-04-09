@@ -9,12 +9,16 @@ var BodyManager = {
   /* ---- Config ---- */
 
   measurementFields: [
-    { key: 'cintura',   label: 'Cintura'  },
-    { key: 'quadril',   label: 'Quadril'  },
-    { key: 'coxa_esq',  label: 'Coxa Esq' },
-    { key: 'coxa_dir',  label: 'Coxa Dir' },
-    { key: 'busto',     label: 'Busto'    },
-    { key: 'braco',     label: 'Braco'    }
+    { key: 'pescoco',    label: 'Pescoco',    howTo: 'Enrole a fita no meio do pescoco, logo abaixo do pomo de adao. Nao aperte — so encoste.' },
+    { key: 'ombro',      label: 'Ombros',     howTo: 'Passe a fita ao redor dos dois ombros, na parte mais larga (onde o braco comeca). Mantenha os bracos soltos ao lado do corpo.' },
+    { key: 'busto',      label: 'Busto',      howTo: 'Passe a fita ao redor do peito na parte mais larga (na altura dos mamilos). Nao aperte. Respire normalmente.' },
+    { key: 'cintura',    label: 'Cintura',    howTo: 'Ache a parte mais fina do tronco (geralmente 2-3 dedos acima do umbigo). Passe a fita ao redor sem apertar. Expire normalmente e meça.' },
+    { key: 'quadril',    label: 'Quadril',    howTo: 'Fique de pe com os pes juntos. Passe a fita na parte mais larga do quadril/bumbum. Olhe no espelho de lado pra garantir que a fita ta reta.' },
+    { key: 'coxa_esq',   label: 'Coxa Esq',   howTo: 'Fique de pe, peso distribuido nos dois pes. Meça na parte mais grossa da coxa esquerda (geralmente logo abaixo da virilha).' },
+    { key: 'coxa_dir',   label: 'Coxa Dir',   howTo: 'Mesmo que a esquerda, agora na coxa direita. Compare os dois lados.' },
+    { key: 'braco',      label: 'Braco',      howTo: 'Braço relaxado ao lado do corpo. Meça na parte mais grossa do braco (no meio do biceps).' },
+    { key: 'antebraco',  label: 'Antebraco',  howTo: 'Braco estendido, punho fechado. Meça na parte mais grossa do antebraco.' },
+    { key: 'panturrilha',label: 'Panturrilha', howTo: 'Fique de pe. Meça na parte mais grossa da panturrilha (batata da perna).' }
   ],
 
   photoSlots: [
@@ -209,6 +213,7 @@ var BodyManager = {
           '<label class="measure-input-group__label" for="measure-' + f.key + '">' + f.label + '</label>' +
           '<input class="input" type="number" inputmode="decimal" id="measure-' + f.key + '" ' +
             'name="' + f.key + '" placeholder="0.0" value="' + val + '" step="0.1" min="0" max="200">' +
+          (f.howTo ? '<p style="font-size:0.7rem; color:var(--text-muted); margin-top:2px; line-height:1.3;">' + f.howTo + '</p>' : '') +
         '</div>'
       );
     }).join('');
