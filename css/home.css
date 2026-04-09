@@ -1,4 +1,177 @@
 /* =============================================
    HOME.CSS — Home Page Styles
-   Content added in Task 3
    ============================================= */
+
+/* ---- Page header ---- */
+.page__header {
+  padding: var(--space-6) var(--space-5) var(--space-4);
+}
+
+.page__header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.page__header .text-muted {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-top: var(--space-1);
+}
+
+/* ---- Task sections ---- */
+.task-section {
+  padding: 0 var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.task-section h2 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
+}
+
+/* ---- Items container ---- */
+#todo-items,
+#done-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---- Card ---- */
+.todo-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast),
+              opacity var(--transition-fast);
+  will-change: transform, opacity;
+}
+
+.todo-card:active {
+  transform: scale(0.98);
+  background-color: var(--bg-elevated);
+}
+
+/* ---- Checkbox circle ---- */
+.todo-card__check {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color-mild);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.todo-card__check-icon {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+/* Done state — green checkbox */
+.todo-card--done .todo-card__check {
+  background: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.todo-card--done .todo-card__check-icon {
+  opacity: 1;
+  color: #fff;
+}
+
+/* ---- Category icon badge ---- */
+.todo-card__icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.todo-card__icon--treino {
+  background: var(--color-treino-muted);
+  color: var(--color-treino);
+}
+
+.todo-card__icon--nutricao {
+  background: var(--color-nutricao-muted);
+  color: var(--color-nutricao);
+}
+
+.todo-card__icon--skincare {
+  background: var(--color-skincare-muted);
+  color: var(--color-skincare);
+}
+
+.todo-card__icon--rotina {
+  background: var(--color-success-muted);
+  color: var(--color-success);
+}
+
+/* ---- Text info ---- */
+.todo-card__info {
+  flex: 1;
+  min-width: 0;
+  /* stretch to fill so entire right side is tappable */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.todo-card__title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.todo-card__time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+/* Done state — crossed-out title */
+.todo-card--done .todo-card__title {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.todo-card--done .todo-card__time {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* ---- Empty state ---- */
+.todo-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  padding: var(--space-4) 0;
+}
