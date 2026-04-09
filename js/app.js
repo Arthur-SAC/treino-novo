@@ -82,10 +82,10 @@ var App = {
         icon: '<svg class="icon icon--lg" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' }
     ];
 
-    var html = '<h2 style="margin-bottom:16px;">Menu</h2><div style="display:flex; flex-direction:column; gap:8px;">';
+    var html = '<h2 style="text-align:center; margin-bottom:20px;">Menu</h2><div style="display:flex; flex-direction:column; gap:10px; max-width:320px; margin:0 auto;">';
     items.forEach(function(item) {
-      html += '<div class="' + (item.enabled ? '' : 'menu-item--disabled') + '" data-menu="' + item.id + '" style="display:flex; align-items:center; gap:14px; padding:14px 16px; background:var(--bg-card); border:1px solid var(--border-color); border-radius:12px; cursor:pointer;">' +
-        '<div style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; color:var(--text-primary);">' + item.icon + '</div>' +
+      html += '<div class="' + (item.enabled ? '' : 'menu-item--disabled') + '" data-menu="' + item.id + '" style="display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; background:var(--bg-card); border:1px solid var(--border-color); border-radius:12px; cursor:pointer;">' +
+        '<div style="width:24px; height:24px; display:flex; align-items:center; justify-content:center; color:var(--text-primary);">' + item.icon + '</div>' +
         '<span style="font-size:0.95rem; font-weight:500;">' + item.label + '</span>' +
       '</div>';
     });
