@@ -275,6 +275,13 @@ var HomeManager = {
     if (greetingEl) greetingEl.textContent = Utils.getGreeting() + ', Arthur';
     if (dayEl)      dayEl.textContent      = Utils.getDayName(Utils.getDayOfWeek());
 
+    // Render silhouette widget
+    var silMount = document.getElementById('silhouette-mount');
+    if (silMount && typeof SilhouetteManager !== 'undefined') {
+      silMount.innerHTML = SilhouetteManager.render();
+      SilhouetteManager.bind();
+    }
+
     // Partition items
     var todo = [];
     var done = [];

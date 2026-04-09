@@ -175,3 +175,106 @@
   font-size: var(--text-sm);
   padding: var(--space-4) 0;
 }
+
+/* =============================================
+   Silhouette Widget
+   ============================================= */
+
+.silhouette-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0 8px;
+  margin: 0 var(--space-4) var(--space-4);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    180deg,
+    rgba(220, 20, 60, 0.03) 0%,
+    rgba(220, 20, 60, 0.01) 50%,
+    transparent 100%
+  );
+  border: 1px solid rgba(220, 20, 60, 0.08);
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.silhouette-container:active {
+  transform: scale(0.98);
+  background: rgba(220, 20, 60, 0.05);
+}
+
+.silhouette-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.silhouette-svg {
+  width: 160px;
+  height: 280px;
+}
+
+.silhouette-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 13, 13, 0.4);
+  border-radius: var(--radius-md);
+}
+
+.silhouette-overlay__text {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.5;
+  padding: 8px 16px;
+  background: rgba(26, 26, 26, 0.85);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.silhouette-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.silhouette-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.silhouette-legend__swatch {
+  display: inline-block;
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.silhouette-legend__swatch--current {
+  background: #DC143C;
+}
+
+.silhouette-legend__swatch--target {
+  background: transparent;
+  border-top: 1px dashed rgba(255, 255, 255, 0.4);
+  height: 0;
+  width: 16px;
+}
+
+.silhouette-link {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
