@@ -12,57 +12,63 @@
 */
 
 var BODY_POINTS = [
-  { y: 0,   part: 'head_top',    baseX: 21, fixed: true },
-  { y: 14,  part: 'head_upper',  baseX: 24, fixed: true },
-  { y: 28,  part: 'head_mid',    baseX: 23, fixed: true },
-  { y: 42,  part: 'jaw',         baseX: 19, fixed: true },
-  { y: 50,  part: 'chin',        baseX: 15, fixed: true },
-  { y: 58,  part: 'neck',        baseX: 11, key: 'pescoco',     refCm: 38 },
-  { y: 65,  part: 'neck_base',   baseX: 14, key: 'pescoco',     refCm: 38 },
-  { y: 72,  part: 'shoulder',    baseX: 48, key: 'ombro',       refCm: 105 },
-  { y: 78,  part: 'delt',        baseX: 50, key: 'ombro',       refCm: 105 },
-  { y: 95,  part: 'upper_chest', baseX: 44, key: 'busto',       refCm: 100 },
-  { y: 108, part: 'bust',        baseX: 46, key: 'busto',       refCm: 100 },
-  { y: 122, part: 'underbust',   baseX: 40, key: 'busto',       refCm: 100 },
-  { y: 138, part: 'mid_torso',   baseX: 37, key: 'cintura',     refCm: 80 },
-  { y: 152, part: 'waist',       baseX: 34, key: 'cintura',     refCm: 80 },
-  { y: 165, part: 'above_hip',   baseX: 38, key: 'quadril',     refCm: 105 },
-  { y: 178, part: 'hip',         baseX: 48, key: 'quadril',     refCm: 105 },
-  { y: 192, part: 'hip_widest',  baseX: 52, key: 'quadril',     refCm: 105 },
-  { y: 206, part: 'upper_thigh', baseX: 44, key: 'quadril',     refCm: 105 },
-  { y: 215, part: 'crotch',      baseX: 30, key: 'coxa_esq',    refCm: 62 }
+  // Cabeca — rosto mais redondo, masculino no ponto de partida
+  { y: 0,   part: 'head_top',    baseX: 22, fixed: true },
+  { y: 12,  part: 'head_upper',  baseX: 25, fixed: true },
+  { y: 26,  part: 'head_mid',    baseX: 24, fixed: true },
+  { y: 38,  part: 'jaw',         baseX: 22, fixed: true },
+  { y: 48,  part: 'chin',        baseX: 16, fixed: true },
+  // Pescoco — mais grosso (masculino)
+  { y: 56,  part: 'neck',        baseX: 13, key: 'pescoco',     refCm: 40 },
+  { y: 64,  part: 'neck_base',   baseX: 16, key: 'pescoco',     refCm: 40 },
+  // Ombros — mais largos que quadril (masculino)
+  { y: 72,  part: 'shoulder',    baseX: 52, key: 'ombro',       refCm: 113 },
+  { y: 79,  part: 'delt',        baseX: 54, key: 'ombro',       refCm: 113 },
+  // Peito — reto, sem curva de busto
+  { y: 96,  part: 'upper_chest', baseX: 48, key: 'busto',       refCm: 106 },
+  { y: 110, part: 'bust',        baseX: 48, key: 'busto',       refCm: 106 },
+  { y: 122, part: 'underbust',   baseX: 46, key: 'busto',       refCm: 106 },
+  // Barriga — mais larga que quadril (gordura abdominal)
+  { y: 138, part: 'mid_torso',   baseX: 44, key: 'cintura',     refCm: 96 },
+  { y: 152, part: 'waist',       baseX: 44, key: 'cintura',     refCm: 96 },
+  // Quadril — reto, quase mesmo tamanho da cintura (masculino)
+  { y: 166, part: 'above_hip',   baseX: 44, key: 'quadril',     refCm: 106 },
+  { y: 180, part: 'hip',         baseX: 46, key: 'quadril',     refCm: 106 },
+  { y: 194, part: 'hip_widest',  baseX: 46, key: 'quadril',     refCm: 106 },
+  { y: 208, part: 'upper_thigh', baseX: 40, key: 'quadril',     refCm: 106 },
+  { y: 218, part: 'crotch',      baseX: 28, key: 'coxa_esq',    refCm: 64 }
 ];
 
 /* Leg points — from crotch down */
 var LEG_POINTS = [
-  { y: 215, part: 'crotch',     baseX: 30, key: 'coxa_esq',    refCm: 62 },
-  { y: 228, part: 'upper_thigh',baseX: 28, key: 'coxa_esq',    refCm: 62 },
-  { y: 248, part: 'mid_thigh',  baseX: 25, key: 'coxa_esq',    refCm: 62 },
-  { y: 272, part: 'lower_thigh',baseX: 20, key: 'coxa_esq',    refCm: 62 },
-  { y: 295, part: 'knee',       baseX: 16, fixed: true },
-  { y: 310, part: 'upper_calf', baseX: 17, key: 'panturrilha', refCm: 38 },
-  { y: 330, part: 'calf',       baseX: 17, key: 'panturrilha', refCm: 38 },
-  { y: 352, part: 'lower_calf', baseX: 13, fixed: true },
-  { y: 375, part: 'ankle',      baseX: 9,  fixed: true },
-  { y: 388, part: 'heel',       baseX: 9,  fixed: true },
-  { y: 395, part: 'foot',       baseX: 12, fixed: true }
+  { y: 218, part: 'crotch',     baseX: 28, key: 'coxa_esq',    refCm: 64 },
+  { y: 232, part: 'upper_thigh',baseX: 26, key: 'coxa_esq',    refCm: 64 },
+  { y: 252, part: 'mid_thigh',  baseX: 23, key: 'coxa_esq',    refCm: 64 },
+  { y: 276, part: 'lower_thigh',baseX: 19, key: 'coxa_esq',    refCm: 64 },
+  { y: 298, part: 'knee',       baseX: 16, fixed: true },
+  { y: 315, part: 'upper_calf', baseX: 17, key: 'panturrilha', refCm: 40 },
+  { y: 334, part: 'calf',       baseX: 16, key: 'panturrilha', refCm: 40 },
+  { y: 356, part: 'lower_calf', baseX: 12, fixed: true },
+  { y: 378, part: 'ankle',      baseX: 9,  fixed: true },
+  { y: 390, part: 'heel',       baseX: 8,  fixed: true },
+  { y: 398, part: 'foot',       baseX: 11, fixed: true }
 ];
 
 /* Arm control points — one side, will be mirrored.
    offsetFromBody = gap between body edge and arm inner edge.
    width = arm thickness at that point. */
 var ARM_POINTS = [
-  { y: 72,  part: 'shoulder',   offsetFromBody: 0,  width: 0,   key: 'braco',     refCm: 32 },
-  { y: 82,  part: 'upper_arm1', offsetFromBody: 3,  width: 6.5, key: 'braco',     refCm: 32 },
-  { y: 105, part: 'upper_arm2', offsetFromBody: 5,  width: 6,   key: 'braco',     refCm: 32 },
-  { y: 130, part: 'mid_arm',    offsetFromBody: 6,  width: 5.5, key: 'braco',     refCm: 32 },
-  { y: 155, part: 'elbow',      offsetFromBody: 7,  width: 5,   fixed: true },
-  { y: 180, part: 'forearm1',   offsetFromBody: 6,  width: 4.5, key: 'antebraco', refCm: 25 },
-  { y: 205, part: 'forearm2',   offsetFromBody: 5,  width: 4,   key: 'antebraco', refCm: 25 },
-  { y: 225, part: 'wrist',      offsetFromBody: 4,  width: 3,   fixed: true },
-  { y: 238, part: 'hand_top',   offsetFromBody: 3,  width: 4,   fixed: true },
-  { y: 252, part: 'hand_mid',   offsetFromBody: 2.5,width: 3.5, fixed: true },
-  { y: 262, part: 'fingertip',  offsetFromBody: 2,  width: 1.5, fixed: true }
+  { y: 72,  part: 'shoulder',   offsetFromBody: 0,  width: 0,   key: 'braco',     refCm: 35 },
+  { y: 83,  part: 'upper_arm1', offsetFromBody: 3,  width: 7,   key: 'braco',     refCm: 35 },
+  { y: 106, part: 'upper_arm2', offsetFromBody: 5,  width: 6.5, key: 'braco',     refCm: 35 },
+  { y: 132, part: 'mid_arm',    offsetFromBody: 6,  width: 6,   key: 'braco',     refCm: 35 },
+  { y: 158, part: 'elbow',      offsetFromBody: 7,  width: 5,   fixed: true },
+  { y: 184, part: 'forearm1',   offsetFromBody: 6,  width: 5,   key: 'antebraco', refCm: 27 },
+  { y: 208, part: 'forearm2',   offsetFromBody: 5,  width: 4.5, key: 'antebraco', refCm: 27 },
+  { y: 228, part: 'wrist',      offsetFromBody: 4,  width: 3.5, fixed: true },
+  { y: 240, part: 'hand_top',   offsetFromBody: 3,  width: 4,   fixed: true },
+  { y: 254, part: 'hand_mid',   offsetFromBody: 2.5,width: 3.5, fixed: true },
+  { y: 264, part: 'fingertip',  offsetFromBody: 2,  width: 1.5, fixed: true }
 ];
 
 /* ---- Phase Targets ---- */
@@ -455,11 +461,11 @@ var SilhouetteManager = {
     if (targetMeas) {
       svg += this._buildBodyGroup(targetMeas, {
         fill: 'none',
-        stroke: 'rgba(255,255,255,0.25)',
+        stroke: 'rgba(76,175,80,0.6)',
         strokeWidth: '0.8',
         dash: '4,3',
         armFill: 'none',
-        armStroke: 'rgba(255,255,255,0.2)',
+        armStroke: 'rgba(76,175,80,0.5)',
         armStrokeWidth: '0.8',
         armDash: '4,3',
         showHair: false,
@@ -487,10 +493,10 @@ var SilhouetteManager = {
       for (var g = 0; g < guides.length; g++) {
         var gy = guides[g].y;
         svg += '<line x1="15" y1="' + _silR(gy) + '" x2="185" y2="' + _silR(gy) +
-               '" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" stroke-dasharray="2,4"/>';
+               '" stroke="rgba(76,175,80,0.15)" stroke-width="0.5" stroke-dasharray="2,4"/>';
         if (guides[g].value) {
           svg += '<text x="186" y="' + _silR(gy - 2) +
-                 '" fill="rgba(255,255,255,0.2)" font-size="6.5" font-family="Inter,sans-serif" text-anchor="end">' +
+                 '" fill="rgba(76,175,80,0.5)" font-size="6.5" font-family="Inter,sans-serif" text-anchor="end">' +
                  guides[g].label + ' ' + guides[g].value + '</text>';
         }
       }
