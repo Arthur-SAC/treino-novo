@@ -253,6 +253,23 @@ var HomeManager = {
     return html;
   },
 
+  checkMeasurementReminder: function() {
+    var measurements = StorageManager.getMeasurements();
+    // Nunca mediu — lembrar
+    if (!measurements || measurements.length === 0) return 'nunca';
+
+    var latest = measurements[measurements.length - 1];
+    if (!latest.date) return 14;
+
+    var lastDate = new Date(latest.date);
+    var now = new Date();
+    var diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+
+    // Lembrar a cada 14 dias
+    if (diffDays >= 14) return diffDays;
+    return null;
+  },
+
   showItemDetail: function(itemId, renderFn) {
     var modal   = document.getElementById('exercise-modal');
     var content = document.getElementById('modal-content');
@@ -280,6 +297,25 @@ var HomeManager = {
     if (silMount && typeof SilhouetteManager !== 'undefined') {
       silMount.innerHTML = SilhouetteManager.render();
       SilhouetteManager.bind();
+    }
+
+    // Lembrete de medicao a cada 2 semanas
+    var measureReminder = self.checkMeasurementReminder();
+    if (measureReminder) {
+      var reminderEl = document.getElementById('measure-reminder');
+      if (!reminderEl) {
+        var silContainer = document.getElementById('silhouette-mount');
+        if (silContainer) {
+          var div = document.createElement('div');
+          div.id = 'measure-reminder';
+          div.style.cssText = 'margin:0 0 16px; padding:12px 16px; background:rgba(76,175,80,0.1); border:1px solid rgba(76,175,80,0.3); border-radius:12px; display:flex; align-items:center; gap:12px; cursor:pointer;';
+          div.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#4CAF50" stroke-width="2"><path d="M1 12h4l3-9 4 18 3-9h4"/><circle cx="18" cy="12" r="3"/></svg>' +
+            '<div style="flex:1;"><p style="font-size:0.85rem; font-weight:500; color:var(--color-success);">Hora de atualizar suas medidas!</p>' +
+            '<p style="font-size:0.75rem; color:var(--text-muted);">Faz ' + measureReminder + ' dias desde a ultima medicao</p></div>';
+          div.onclick = function() { Router.navigate('corpo'); };
+          silContainer.parentNode.insertBefore(div, silContainer.nextSibling);
+        }
+      }
     }
 
     // Partition items
